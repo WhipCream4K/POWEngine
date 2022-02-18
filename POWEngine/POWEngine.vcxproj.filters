@@ -27,6 +27,24 @@
     <ClInclude Include="POWEngine\Window\Window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="POWEngine\Window\WindowContext.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Window\SFML\WindowSFML.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Window\WindowImpl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Logger\Logger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Core\Thread\SimpleThreadPool.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Core\LockFree\LFQueue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PCH\pch.cpp">
@@ -38,7 +56,19 @@
     <ClCompile Include="POWEngine\Window\Window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="POWEngine\Window\SFML\Window_SFML.cpp">
+    <ClCompile Include="POWEngine\Window\SFML\WindowSFML.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="POWEngine\Window\WindowImpl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="POWEngine\Logger\Logger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="POWEngine\Core\Thread\SimpleThreadPool.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="POWEngine\Core\LockFree\LFQueue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

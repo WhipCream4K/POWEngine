@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros">
+    <VLD>C:\Program Files (x86)\Visual Leak Detector\include</VLD>
+    <VLD_LIB>C:\Program Files (x86)\Visual Leak Detector\lib</VLD_LIB>
+  </PropertyGroup>
+  <PropertyGroup />
+  <ItemDefinitionGroup />
+  <ItemGroup>
+    <BuildMacro Include="VLD">
+      <Value>$(VLD)</Value>
+    </BuildMacro>
+    <BuildMacro Include="VLD_LIB">
+      <Value>$(VLD_LIB)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>

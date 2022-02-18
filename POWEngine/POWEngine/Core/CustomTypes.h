@@ -4,6 +4,9 @@
 #include <memory>
 #include <array>
 #include <type_traits>
+#include <vector>
+
+//#include "../Window/WindowContext.h"
 
 template<typename UserClass>
 using SharedPtr = std::shared_ptr<UserClass>;
@@ -34,12 +37,36 @@ using RefWrap = std::reference_wrapper<T>;
 
 using Any = std::any;
 
-namespace powe
+template<typename FnType>
+struct FnTraits{};
+
+template<typename Ret,typename ...Args>
+struct FnTraits<Ret(*)(Args...)> : FnTraits<Ret(Args...)>{};
+
+template<typename Ret, typename ...Args>
+struct FnTraits<Ret(Args...)>
 {
-	struct MessageBus
-	{
-		std::any data{};
-		int size = 0;
-		uint8_t eventId = 0;
-	};
-}
+	using return_type = Ret;
+	using fn_type = Ret(Args...);
+	using tuple_args = std::tuple<Args...>;
+};
+
+template<typename Ret, typename UserClass,typename ...Args>
+struct FnTraits<Ret(UserClass::*)(Args...)> : FnTraits<Ret(UserClass&,Args...)>
+{
+	using return_type = Ret;
+	using fn_type = Ret(Args...);
+	using tuple_args = std::tuple<Args...>;
+	using class_type = UserClass;
+};
+
+template<typename Ret, typename UserClass, typename ...Args>
+struct FnTraits<Ret(UserClass::*)(Args...) const> : FnTraits<Ret(UserClass&, Args...)>
+{
+	using return_type = Ret;
+	using fn_type = Ret(Args...);
+	using tuple_args = std::tuple<Args...>;
+	using class_type = UserClass;
+};
+
+#define UNREF_PARAM(param) param

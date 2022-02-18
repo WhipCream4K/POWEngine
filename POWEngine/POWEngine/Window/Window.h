@@ -1,41 +1,29 @@
 #pragma once
 
-#include "../Core/CustomTypes.h"
-
-#include <SFML/Graphics.hpp>
-using WindowHandle = sf::RenderWindow;
-#if USE_SFML_WINDOW
-
-
-#endif
-
-constexpr int MinimumWindowEventCnt = 23;
-
-struct WindowMessages
-{
-	std::array<Any, MinimumWindowEventCnt> wndMessages{};
-	int totalMessages{};
-};
+#include "POWEngine/Core/CustomTypes.h"
+#include "WindowContext.h"
 
 namespace powe
 {
-	class Window
+	class WindowImpl;
+	class Window final
 	{
 	public:
 
-		Window(uint32_t width, uint32_t height, const std::string& title);
-		const WindowMessages& PollWindowMessages(bool& shouldEarlyExit);
+		Window(uint32_t width, uint32_t height, const std::string& title,const OtherWindowParams& others = {});
 
+		const WindowMessages& PollWindowMessages(bool& shouldEarlyExit) const;
 		void Resize(uint32_t width, uint32_t height);
+		void SetTitle(const std::string& newTitle);
+
+		[[nodiscard]] uint32_t GetHeight() const { return m_Height; }
+		[[nodiscard]] uint32_t GetWidth() const { return m_Width; }
+
+		~Window();
 
 	protected:
 
-		void InternResize(uint32_t width, uint32_t height);
-
-	private:
-
-		WindowHandle m_WndHandle;
-		WindowMessages m_WndMessages;
+		OwnedPtr<WindowImpl> m_WindowImpl;
 
 		std::string m_Title;
 		uint32_t m_Width;
