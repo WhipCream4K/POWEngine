@@ -48,6 +48,7 @@ namespace powe
 		[[nodiscard]] std::optional<T> PopReturn(); // maybe has data or not c++17
 		T& Front();
 		void Pop() noexcept;
+		bool Empty() const noexcept;
 
 		LFQueue()
 			: m_Tail(std::make_shared<Node<T>>(T{}))
@@ -67,8 +68,7 @@ namespace powe
 	template <typename T>
 	void LFQueue<T>::Push(T&& data) noexcept
 	{
-
-		SharedPtr<Node<T>> newNode{ std::make_shared<Node<T>>(std::forward<T>(data)) };
+		const SharedPtr<Node<T>> newNode{ std::make_shared<Node<T>>(std::forward<T>(data)) };
 		SharedPtr<Node<T>> oldTail{ m_Tail.load() };
 
 		while (!m_Tail.compare_exchange_weak(oldTail, newNode))
@@ -81,7 +81,7 @@ namespace powe
 	template <typename T>
 	void LFQueue<T>::Push(const T& data) noexcept
 	{
-		SharedPtr<Node<T>> newNode{ std::make_shared<Node<T>>(data)};
+		const SharedPtr<Node<T>> newNode{ std::make_shared<Node<T>>(data)};
 		SharedPtr<Node<T>> oldTail{ m_Tail.load() };
 
 		while (!m_Tail.compare_exchange_weak(oldTail, newNode))
@@ -95,18 +95,18 @@ namespace powe
 	std::optional<T> LFQueue<T>::PopReturn()
 	{
 		SharedPtr<Node<T>> oldHead{ m_Head.load() };
-		SharedPtr<Node<T>> newHead{ oldHead->pNextNode };
+		//const SharedPtr<Node<T>> newHead{ oldHead->pNextNode };
 
 		// we never remove the first node
-		if (!newHead)
-			return std::nullopt;
+		//if (!newHead)
+		//	return std::nullopt;
 
-		while (oldHead &&
-			!m_Head.compare_exchange_weak(oldHead, newHead))
+		while (oldHead && oldHead->pNextNode &&
+			!m_Head.compare_exchange_weak(oldHead, oldHead->pNextNode))
 		{
 		}
 
-		return newHead ? std::optional<T>{newHead->data} : std::nullopt;
+		return oldHead->pNextNode ? std::optional<T>{ oldHead->pNextNode->data } : std::nullopt;
 	}
 
 	template <typename T>
@@ -122,15 +122,17 @@ namespace powe
 	void LFQueue<T>::Pop() noexcept
 	{
 		SharedPtr<Node<T>> oldHead{ m_Head.load() };
-		SharedPtr<Node<T>> newHead{ oldHead->pNextNode };
 
-		if (!newHead) 
-			return;
-
-		while (oldHead &&
-			!m_Head.compare_exchange_weak(oldHead, newHead))
+		while (oldHead && oldHead->pNextNode &&
+			!m_Head.compare_exchange_weak(oldHead, oldHead->pNextNode))
 		{
 		}
+	}
+
+	template <typename T>
+	bool LFQueue<T>::Empty() const noexcept
+	{
+		return m_Head.load()->pNextNode == nullptr;
 	}
 
 	template <typename T>

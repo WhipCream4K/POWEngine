@@ -21,7 +21,7 @@ namespace powe
 			typename UserClass = typename FnTraits<Func>::class_type,
 			typename ...Args,
 			typename Ret = std::invoke_result_t<Func, UserClass, Args...>>
-			std::future<Ret> PushStaticObjectTask(Func&& fn, UserClass& obj, Args&&... args);
+			std::future<Ret> PushStaticObjectTask(Func&& fn, UserClass* obj, Args&&... args);
 
 		template<
 			typename Func,
@@ -42,24 +42,41 @@ namespace powe
 
 
 	template <typename Func, typename UserClass, typename ... Args, typename Ret>
-	std::future<Ret> SimpleThreadPool::PushStaticObjectTask(Func&& fn, UserClass& obj, Args&&... args)
+	std::future<Ret> SimpleThreadPool::PushStaticObjectTask(Func&& fn, UserClass* obj, Args&&... args)
 	{
 		std::packaged_task<void()> task{};
+		std::future<Ret> future{};
 
-		auto sharedPromise{ std::make_shared<std::promise<Ret>>() };
-
-		// Perfect capture c++20 https://stackoverflow.com/questions/47496358/c-lambdas-how-to-capture-variadic-parameter-pack-from-the-upper-scope
-		task = std::packaged_task<void()>{ [
-			func = std::forward<Func>(fn),
-				&obj,
-				... largs = std::forward<Args>(args) ,
-				sharedPromise] ()
+		if constexpr (std::is_void_v<Ret>)
+		{
+			task = std::packaged_task<void()>{ [
+				func = std::forward<Func>(fn),
+			&obj,
+			... largs = std::forward<Args>(args)] ()
 			{
-				sharedPromise->set_value(std::invoke(func,obj,largs...));
+				(obj->*func)(largs...);
 			} };
 
+			future = task.get_future();
+		}
+		else
+		{
+			auto sharedPromise{ std::make_shared<std::promise<Ret>>() };
 
-		std::future<Ret> future{ sharedPromise->get_future() };
+			// Perfect capture c++20 https://stackoverflow.com/questions/47496358/c-lambdas-how-to-capture-variadic-parameter-pack-from-the-upper-scope
+			task = std::packaged_task<void()>{ [
+				func = std::forward<Func>(fn),
+					&obj,
+					... largs = std::forward<Args>(args) ,
+					sharedPromise] ()
+				{
+					sharedPromise->set_value(std::invoke(func,obj,largs...));
+				} };
+
+
+			future = sharedPromise->get_future();
+		}
+
 
 		{
 			std::unique_lock lock{ m_Mutex };
