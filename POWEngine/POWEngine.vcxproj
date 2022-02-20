@@ -197,6 +197,9 @@
     <ClInclude Include="POWEngine\Window\WindowContext.h" />
     <ClInclude Include="POWEngine\Window\WindowImpl.h" />
     <ClInclude Include="POWEngine\Core\Thread\SimpleThreadPool.h" />
+    <ClInclude Include="POWEngine\Services\ServiceLocator.h" />
+    <ClInclude Include="POWEngine\Singleton\Singleton.h" />
+    <ClInclude Include="POWEngine\Core\IdGenerator\UniqueIdGenerator.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="POWEngine\Core\LockFree\LFQueue.cpp" />
@@ -212,6 +215,9 @@
     <ClCompile Include="POWEngine\Window\Window.cpp" />
     <ClCompile Include="POWEngine\Window\WindowImpl.cpp" />
     <ClCompile Include="POWEngine\Core\Thread\SimpleThreadPool.cpp" />
+    <ClCompile Include="POWEngine\Services\ServiceLocator.cpp" />
+    <ClCompile Include="POWEngine\Singleton\Singleton.cpp" />
+    <ClCompile Include="POWEngine\Core\IdGenerator\UniqueIdGenerator.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

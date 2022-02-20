@@ -1,7 +1,13 @@
 #include "pch.h"
 #include "Core.h"
 
+#include "POWEngine/Services/ServiceLocator.h"
 #include "POWEngine/Window/Window.h"
+#include "POWEngine/Services/ServiceLocator.h"
+
+powe::Core::Core()
+{
+}
 
 bool powe::Core::TranslateWindowInputs(const SharedPtr<Window>& window)
 {

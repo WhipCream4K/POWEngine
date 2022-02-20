@@ -2,12 +2,15 @@
 
 namespace powe
 {
+	class ServiceLocator;
 	class Window;
 	class WorldEntity;
 	//class CoreImpl;
 	class Core final
 	{
 	public:
+
+		Core();
 
 		bool TranslateWindowInputs(const SharedPtr<Window>& window);
 		bool TranslateWindowInputs(const Window& window);

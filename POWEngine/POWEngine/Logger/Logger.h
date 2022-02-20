@@ -4,13 +4,14 @@
 #include "POWEngine/Core/Thread/SimpleThreadPool.h"
 #include "POWEngine/Core/LockFree/LFQueue.h"
 
+#define COLOR "\033"
+
 namespace powe
 {
 	class Logger
 	{
 	public:
 
-		//Logger(const SharedPtr<SimpleThreadPool>& threadPool);
 		Logger();
 		void AddMessage(const std::string& msg);
 		~Logger();
@@ -27,6 +28,7 @@ namespace powe
 		std::future<void> m_MessageThread;
 		bool m_IsContextExit;
 	};
+
 }
 
 

@@ -105,16 +105,20 @@ void PumpMessage(powe::Logger& logger, const std::string& msg)
 	logger.AddMessage(msg);
 }
 
+#include <POWEngine/Core/IdGenerator/UniqueIdGenerator.h>
+
 TEST_CASE("Logger")
 {
 	std::cout << "------- Test logger using thread pool -------\n";
 
-	//powe::SimpleThreadPool threadPool{};
-	//SharedPtr<powe::SimpleThreadPool> threadPool{std::make_shared<powe::SimpleThreadPool>()};
 	powe::Logger logger{};
 
-	std::cout << sizeof(SharedPtr<powe::Logger>) << '\n';
-	std::cout << sizeof(SharedPtr<int>) << '\n';
+	std::cout << powe::UniqueIdGenerator<powe::Logger>::GetNewId<double>() << std::endl;
+	std::cout << powe::UniqueIdGenerator<powe::Logger>::GetNewId<float>() << std::endl;
+	//std::cout << powe::UniqueIdGenerator<powe::>::GetNewId() << std::endl;
+ 
+	//std::cout << sizeof(SharedPtr<powe::Logger>) << '\n';
+	//std::cout << sizeof(SharedPtr<int>) << '\n';
 
 	const int pumpCnt{ 20 };
 
@@ -132,7 +136,6 @@ TEST_CASE("Logger")
 		thread.get();
 	}
 
-	//logger.AddMessage("Hello from logger");
 }
 
 //int main()

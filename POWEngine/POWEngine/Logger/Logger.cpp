@@ -20,15 +20,14 @@ void powe::Logger::AddMessage(const std::string& msg)
 
 powe::Logger::~Logger()
 {
-	m_MessageQueue.Push("Message thread exit");
-	m_TaskWait.notify_all();
-
+	// notify the thread so we can exit
+	AddMessage("Message thread exit");
 	m_IsContextExit = true;
 }
 
 void powe::Logger::Run()
 {
-	// this is single producer so we don't need atomic bool check
+	// this is single a producer so we don't need atomic bool check
 	while (!m_IsContextExit)
 	{
 		std::optional<std::string> msg{};
@@ -47,8 +46,6 @@ void powe::Logger::Run()
 		if (msg.has_value())
 			DisplayConsoleMessage(msg.value());
 	}
-
-
 }
 
 void powe::Logger::DisplayConsoleMessage(const std::string& msg)
