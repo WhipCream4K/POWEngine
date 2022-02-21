@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "Window.h"
 
+#include "POWEngine/Logger/LoggingService.h"
+
 #if USE_SFML_WINDOW
 #include "SFML/WindowSFML.h"
 using WindowType = powe::WindowSFML;
@@ -16,11 +18,18 @@ powe::Window::Window(uint32_t width, uint32_t height, const std::string& title, 
 		m_WindowImpl = std::make_unique<WindowType>(width, height, title);
 	else
 		m_WindowImpl = std::make_unique<WindowType>(width, height, title, others);
+
+	if(m_WindowImpl)
+	{
+		std::string log{ "Window Creation: using -> " };
+		log.append(typeid(WindowType).name());
+		POWLOGINFO(log);
+	}
 }
 
-const powe::WindowMessages& powe::Window::PollWindowMessages(bool& shouldEarlyExit) const
+const powe::WindowMessages& powe::Window::PollWindowMessages(bool& shouldEarlyExit, bool& shouldIgnoreInputs) const
 {
-	return m_WindowImpl->PollWindowMessages(shouldEarlyExit);
+	return m_WindowImpl->PollWindowMessages(shouldEarlyExit, shouldIgnoreInputs);
 }
 
 void powe::Window::Resize(uint32_t width, uint32_t height)

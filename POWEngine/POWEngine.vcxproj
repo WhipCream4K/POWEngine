@@ -187,12 +187,16 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="POWEngine\Core\Input\InputParams.h" />
+    <ClInclude Include="POWEngine\Core\Input\InputSettings.h" />
     <ClInclude Include="POWEngine\Core\Input\InputManager.h" />
+    <ClInclude Include="POWEngine\Core\Input\Key.h" />
     <ClInclude Include="POWEngine\Core\LockFree\LFQueue.h" />
     <ClInclude Include="POWEngine\Logger\Logger.h" />
     <ClInclude Include="PCH\pch.h" />
     <ClInclude Include="POWEngine\Core\Core.h" />
     <ClInclude Include="POWEngine\Core\CustomTypes.h" />
+    <ClInclude Include="POWEngine\Logger\LoggingService.h" />
     <ClInclude Include="POWEngine\Window\SFML\WindowSFML.h" />
     <ClInclude Include="POWEngine\Window\Window.h" />
     <ClInclude Include="POWEngine\Window\WindowContext.h" />
@@ -206,6 +210,7 @@
     <ClInclude Include="POWEngine\Services\Service.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="POWEngine\Core\Input\InputSettings.cpp" />
     <ClCompile Include="POWEngine\Core\Input\InputManager.cpp" />
     <ClCompile Include="POWEngine\Core\LockFree\LFQueue.cpp" />
     <ClCompile Include="POWEngine\Logger\Logger.cpp" />

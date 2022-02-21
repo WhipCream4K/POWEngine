@@ -15,22 +15,30 @@ namespace powe
 
 		bool TranslateWindowInputs(const SharedPtr<Window>& window);
 
-		bool TranslateWindowInputs(const Window& window);
+		//bool TranslateWindowInputs(const Window& window);
+
+		bool TranslateWindowInputs(
+			const Window& window,
+			const SharedPtr<WorldEntity>& worldEntt) const;
 
 		/**
-		 * \brief Call this function before entering the core loop to prevent a big deltatime in the first frame
+		 * \brief Call this function before entering the core loop to prevent a big deltaTime in the first frame
 		 */
 		void StartWorldClock();
 
 
 		void Step(const SharedPtr<WorldEntity>& worldEntt);
 
-		void Render(const SharedPtr<Window>& window,const SharedPtr<WorldEntity>& worldEntt);
+
+		void Render(
+			const SharedPtr<Window>& window,
+			const SharedPtr<WorldEntity>& worldEntt);
 
 		~Core();
 
 		Core(const Core&) = delete;
 		Core& operator=(const Core&) = delete;
+
 		//Core(Core&&) = delete;
 		//Core& operator=(Core&&) = delete;
 

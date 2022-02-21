@@ -8,7 +8,8 @@
 
 namespace powe
 {
-	constexpr uint32_t MinimumWindowEventCnt{ 23 };
+	constexpr uint32_t MinimumWindowEventCnt{ 15 };
+
 	struct MessageBus
 	{
 		std::any data{};
@@ -18,7 +19,7 @@ namespace powe
 
 	struct WindowMessages
 	{
-		std::array<std::any, MinimumWindowEventCnt> wndMessages{};
+		std::array<MessageBus, MinimumWindowEventCnt> wndMessages{};
 		int totalMessages{};
 	};
 

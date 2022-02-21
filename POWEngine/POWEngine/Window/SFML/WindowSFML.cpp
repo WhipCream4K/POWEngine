@@ -22,7 +22,7 @@ powe::WindowSFML::WindowSFML(uint32_t width, uint32_t height, const std::string&
 {
 }
 
-const powe::WindowMessages& powe::WindowSFML::PollWindowMessages(bool& shouldEarlyExit)
+const powe::WindowMessages& powe::WindowSFML::PollWindowMessages(bool& shouldEarlyExit, bool& shouldIgnoreInputs)
 {
 	m_WndMessages.totalMessages = 0;
 
@@ -54,8 +54,8 @@ const powe::WindowMessages& powe::WindowSFML::PollWindowMessages(bool& shouldEar
 			}
 			case sf::Event::LostFocus:
 			{
-				//OnLostFocus();
-				break;
+				shouldIgnoreInputs = true;
+				return m_WndMessages;
 			}
 			case sf::Event::KeyPressed:
 			case sf::Event::KeyReleased:

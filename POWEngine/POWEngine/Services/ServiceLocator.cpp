@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "ServiceLocator.h"
-#include "POWEngine/Logger/Logger.h"
+#include "POWEngine/Logger/LoggingService.h" 
 
 void powe::ServiceLocator::Initialize()
 {

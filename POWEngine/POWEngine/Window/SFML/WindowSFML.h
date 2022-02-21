@@ -16,7 +16,7 @@ namespace powe
 
 		WindowSFML(uint32_t width, uint32_t height, const std::string& title, OtherWindowParams others);
 		WindowSFML(uint32_t width, uint32_t height, const std::string& title);
-		const WindowMessages& PollWindowMessages(bool& shouldEarlyExit) override;
+		const WindowMessages& PollWindowMessages(bool& shouldEarlyExit,bool& shouldIgnoreInputs) override;
 		void Resize(uint32_t width, uint32_t height) override;
 		void SetTitle(const std::string& title) override;
 

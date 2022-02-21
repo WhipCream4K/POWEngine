@@ -6,16 +6,19 @@
 
 #include "POWEngine/Window/Window.h"
 #include "POWEngine/Core/Core.h"
+#include "POWEngine/Core/Clock/WorldClock.h"
+#include "POWEngine/Core/WorldEntity/WorldEntity.h"
 
 
 int main()
 {
 	powe::Core engineCore{};
 	const powe::Window window{ 640,480,"NewTitle" };
+	SharedPtr<powe::WorldEntity> worldEntity{std::make_shared<powe::WorldEntity>()};
 
 	engineCore.StartWorldClock();
 
-	while (!engineCore.TranslateWindowInputs(window))
+	while (!engineCore.TranslateWindowInputs(window,worldEntity))
 	{
 
 	}
