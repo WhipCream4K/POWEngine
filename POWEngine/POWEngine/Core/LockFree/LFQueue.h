@@ -25,15 +25,7 @@ namespace powe
 
 		int tag;
 		SharedPtr<Node> pNextNode;
-		//SharedPtr<Node> pBeforeNode;
-		//std::atomic<SharedPtr<Node>> pNextNode;
 		T data;
-	};
-
-	struct HeapPointer
-	{
-		uint32_t lastValidIndex{};
-		bool isValid{};
 	};
 
 	// Lock-Free queue using FIFO context
@@ -103,10 +95,8 @@ namespace powe
 		SharedPtr<Node<T>> oldHead{ m_Head.load() };
 		//const SharedPtr<Node<T>> newHead{ oldHead->pNextNode };
 
-		// we never remove the first node
-		//if (!newHead)
-		//	return std::nullopt;
 
+		// we never remove the first node
 		while (oldHead && oldHead->pNextNode &&
 			!m_Head.compare_exchange_weak(oldHead, oldHead->pNextNode))
 		{
@@ -129,6 +119,7 @@ namespace powe
 	{
 		SharedPtr<Node<T>> oldHead{ m_Head.load() };
 
+		// we never remove the first node
 		while (oldHead && oldHead->pNextNode &&
 			!m_Head.compare_exchange_weak(oldHead, oldHead->pNextNode))
 		{

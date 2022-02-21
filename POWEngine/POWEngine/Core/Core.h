@@ -14,8 +14,17 @@ namespace powe
 		Core();
 
 		bool TranslateWindowInputs(const SharedPtr<Window>& window);
+
 		bool TranslateWindowInputs(const Window& window);
+
+		/**
+		 * \brief Call this function before entering the core loop to prevent a big deltatime in the first frame
+		 */
+		void StartWorldClock();
+
+
 		void Step(const SharedPtr<WorldEntity>& worldEntt);
+
 		void Render(const SharedPtr<Window>& window,const SharedPtr<WorldEntity>& worldEntt);
 
 		~Core();

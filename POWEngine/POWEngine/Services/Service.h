@@ -34,7 +34,6 @@ namespace powe
 		return counter;
 	}
 
-	std::atomic_size_t Service::m_Id{ 1 };
 
 }
 

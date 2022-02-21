@@ -9,8 +9,10 @@ void powe::ServiceLocator::Initialize()
 		const auto serviceLocator{ GetInstance() };
 		const auto logger{ std::make_shared<Logger>() };
 		const size_t serviceId{ Service::GetId<Logger>() };
-		serviceLocator->m_ServiceTable[serviceId] = logger;
+		serviceLocator->m_ServiceTable.try_emplace(serviceId, logger);
 
-		logger->AddMessage("Hello from logger");
+		POWLOGINFO("Message Thread Started");
+		POWLOGERROR("LogError test");
+		POWLOGWARNING("LogWarning Test");
 	}
 }

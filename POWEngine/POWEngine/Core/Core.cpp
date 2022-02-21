@@ -5,9 +5,10 @@
 #include "POWEngine/Window/Window.h"
 #include "POWEngine/Services/ServiceLocator.h"
 #include "POWEngine/Core/Clock/WorldClock.h"
+#include "POWEngine/Logger/Logger.h"
 
 powe::Core::Core()
-	: m_WorldClock(std::make_shared<WorldClock>())
+	: m_WorldClock()
 {
 	ServiceLocator::Initialize();
 }
@@ -27,6 +28,7 @@ bool powe::Core::TranslateWindowInputs(const SharedPtr<Window>& window)
 
 bool powe::Core::TranslateWindowInputs(const Window& window)
 {
+
 	m_WorldClock->Start();
 
 	bool isEarlyExit{};
@@ -36,6 +38,11 @@ bool powe::Core::TranslateWindowInputs(const Window& window)
 	// TODO: if the window isn't focus then drop all the input receive
 
 	return isEarlyExit;
+}
+
+void powe::Core::StartWorldClock()
+{
+	m_WorldClock = std::make_shared<WorldClock>();
 }
 
 void powe::Core::Step(const SharedPtr<WorldEntity>& worldEntt)
