@@ -3,7 +3,7 @@
 namespace powe
 {
 	/**
-	 * \brief Create Id per class basis
+	 * \brief Create Id per class 
 	 * \tparam T Class Type
 	 */
 	template<typename T>

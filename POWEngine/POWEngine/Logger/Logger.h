@@ -3,18 +3,20 @@
 #include "POWEngine/Core/CustomTypes.h"
 #include "POWEngine/Core/Thread/SimpleThreadPool.h"
 #include "POWEngine/Core/LockFree/LFQueue.h"
+#include "POWEngine/Services/Service.h"
 
 #define COLOR "\033"
 
 namespace powe
 {
-	class Logger
+	class Logger : public Service
 	{
 	public:
 
+		// TODO: Rule of 5
 		Logger();
 		void AddMessage(const std::string& msg);
-		~Logger();
+		~Logger() override;
 
 	private:
 

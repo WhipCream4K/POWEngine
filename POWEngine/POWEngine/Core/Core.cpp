@@ -9,6 +9,7 @@
 powe::Core::Core()
 	: m_WorldClock(std::make_shared<WorldClock>())
 {
+	ServiceLocator::Initialize();
 }
 
 bool powe::Core::TranslateWindowInputs(const SharedPtr<Window>& window)

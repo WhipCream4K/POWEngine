@@ -187,6 +187,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="POWEngine\Core\Input\InputManager.h" />
     <ClInclude Include="POWEngine\Core\LockFree\LFQueue.h" />
     <ClInclude Include="POWEngine\Logger\Logger.h" />
     <ClInclude Include="PCH\pch.h" />
@@ -202,8 +203,10 @@
     <ClInclude Include="POWEngine\Core\IdGenerator\UniqueIdGenerator.h" />
     <ClInclude Include="POWEngine\Core\Clock\WorldClock.h" />
     <ClInclude Include="POWEngine\Core\WorldEntity\WorldEntity.h" />
+    <ClInclude Include="POWEngine\Services\Service.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="POWEngine\Core\Input\InputManager.cpp" />
     <ClCompile Include="POWEngine\Core\LockFree\LFQueue.cpp" />
     <ClCompile Include="POWEngine\Logger\Logger.cpp" />
     <ClCompile Include="PCH\pch.cpp">
@@ -222,6 +225,7 @@
     <ClCompile Include="POWEngine\Core\IdGenerator\UniqueIdGenerator.cpp" />
     <ClCompile Include="POWEngine\Core\Clock\WorldClock.cpp" />
     <ClCompile Include="POWEngine\Core\WorldEntity\WorldEntity.cpp" />
+    <ClCompile Include="POWEngine\Services\Service.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

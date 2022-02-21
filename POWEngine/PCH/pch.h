@@ -14,6 +14,7 @@
 //#include "../POWEngine/framework.h"
 #include <array>
 #include <string>
+#include <unordered_map>
 
 #include "../POWEngine/Core/CustomTypes.h"
 
