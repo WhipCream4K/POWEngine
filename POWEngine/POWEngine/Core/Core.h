@@ -5,6 +5,7 @@ namespace powe
 	class ServiceLocator;
 	class Window;
 	class WorldEntity;
+	class WorldClock;
 	//class CoreImpl;
 	class Core final
 	{
@@ -15,9 +16,14 @@ namespace powe
 		bool TranslateWindowInputs(const SharedPtr<Window>& window);
 		bool TranslateWindowInputs(const Window& window);
 		void Step(const SharedPtr<WorldEntity>& worldEntt);
-		void Render(const SharedPtr<Window>& window);
+		void Render(const SharedPtr<Window>& window,const SharedPtr<WorldEntity>& worldEntt);
 
 		~Core();
+
+		Core(const Core&) = delete;
+		Core& operator=(const Core&) = delete;
+		//Core(Core&&) = delete;
+		//Core& operator=(Core&&) = delete;
 
 	private:
 
@@ -26,6 +32,8 @@ namespace powe
 		 * i.e Inputs handle by sdl and rendering handles by OpenGL or DX12
 		 */
 		//OwnedPtr<CoreImpl> m_CoreImpl;
+
+		SharedPtr<WorldClock> m_WorldClock;
 	};
 }
 

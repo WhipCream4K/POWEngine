@@ -4,13 +4,17 @@
 #include "POWEngine/Services/ServiceLocator.h"
 #include "POWEngine/Window/Window.h"
 #include "POWEngine/Services/ServiceLocator.h"
+#include "POWEngine/Core/Clock/WorldClock.h"
 
 powe::Core::Core()
+	: m_WorldClock(std::make_shared<WorldClock>())
 {
 }
 
 bool powe::Core::TranslateWindowInputs(const SharedPtr<Window>& window)
 {
+	m_WorldClock->Start();
+
 	bool isEarlyExit{};
 
 	const WindowMessages messages{ window->PollWindowMessages(isEarlyExit) };
@@ -22,6 +26,8 @@ bool powe::Core::TranslateWindowInputs(const SharedPtr<Window>& window)
 
 bool powe::Core::TranslateWindowInputs(const Window& window)
 {
+	m_WorldClock->Start();
+
 	bool isEarlyExit{};
 
 	window.PollWindowMessages(isEarlyExit);

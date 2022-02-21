@@ -75,19 +75,25 @@ namespace powe
 		{
 		}
 
-		oldTail->pNextNode = newNode; // link this person to the next person in queue
+		// when we pass this line it means that we won the thread race any manipulation to the m_Tail
+		// doesn't matter, so we can assign our newNode which is local to the caller to the
+		// pNextNode of m_Tail
+		oldTail->pNextNode = newNode;
 	}
 
 	template <typename T>
 	void LFQueue<T>::Push(const T& data) noexcept
 	{
-		const SharedPtr<Node<T>> newNode{ std::make_shared<Node<T>>(data)};
+		const SharedPtr<Node<T>> newNode{ std::make_shared<Node<T>>(data) };
 		SharedPtr<Node<T>> oldTail{ m_Tail.load() };
 
 		while (!m_Tail.compare_exchange_weak(oldTail, newNode))
 		{
 		}
 
+		// when we pass this line it means that we won the thread race any manipulation to the m_Tail
+		// doesn't matter, so we can assign our newNode which is local to the caller to the
+		// pNextNode of m_Tail
 		oldTail->pNextNode = newNode; // link this person to the next person in queue
 	}
 

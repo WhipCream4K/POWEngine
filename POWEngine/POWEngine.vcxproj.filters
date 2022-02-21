@@ -54,6 +54,12 @@
     <ClInclude Include="POWEngine\Core\IdGenerator\UniqueIdGenerator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="POWEngine\Core\WorldEntity\WorldEntity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Core\Clock\WorldClock.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PCH\pch.cpp">
@@ -87,6 +93,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="POWEngine\Core\IdGenerator\UniqueIdGenerator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="POWEngine\Core\WorldEntity\WorldEntity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="POWEngine\Core\Clock\WorldClock.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

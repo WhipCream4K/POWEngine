@@ -200,6 +200,8 @@
     <ClInclude Include="POWEngine\Services\ServiceLocator.h" />
     <ClInclude Include="POWEngine\Singleton\Singleton.h" />
     <ClInclude Include="POWEngine\Core\IdGenerator\UniqueIdGenerator.h" />
+    <ClInclude Include="POWEngine\Core\Clock\WorldClock.h" />
+    <ClInclude Include="POWEngine\Core\WorldEntity\WorldEntity.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="POWEngine\Core\LockFree\LFQueue.cpp" />
@@ -218,6 +220,8 @@
     <ClCompile Include="POWEngine\Services\ServiceLocator.cpp" />
     <ClCompile Include="POWEngine\Singleton\Singleton.cpp" />
     <ClCompile Include="POWEngine\Core\IdGenerator\UniqueIdGenerator.cpp" />
+    <ClCompile Include="POWEngine\Core\Clock\WorldClock.cpp" />
+    <ClCompile Include="POWEngine\Core\WorldEntity\WorldEntity.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
