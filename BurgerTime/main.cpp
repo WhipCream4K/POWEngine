@@ -18,6 +18,8 @@ int main()
 
 	engineCore.StartWorldClock();
 
+	float hello = worldEntity->GetInputSettings().GetAxis("Some");
+	hello;
 	while (!engineCore.TranslateWindowInputs(window,worldEntity))
 	{
 

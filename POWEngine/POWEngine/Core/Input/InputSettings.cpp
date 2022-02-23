@@ -95,9 +95,9 @@ void powe::InputSettings::ParseHWMessages(const HardwareMessages& hwMessages)
 	{
 		const HardwareBus& hwBus{ hwMessages.hwMessages[i] };
 
-		if(hwBus.inDevice == InputDevice::D_Keyboard)
+		if (hwBus.inDevice == InputDevice::D_Keyboard)
 		{
-			const bool isKeyPressed{WindowEvents(hwBus.eventId) == WindowEvents::KeyPressed ? true : false};
+			const bool isKeyPressed{ WindowEvents(hwBus.eventId) == WindowEvents::KeyPressed ? true : false };
 			inKey.scale = float(isKeyPressed);
 			inKey.key = { hwBus.inDevice, std::get<KeyboardData>(hwBus.hData).keyCode };
 
@@ -135,7 +135,7 @@ void powe::InputSettings::ParseHWMessages(const HardwareMessages& hwMessages)
 				inKey.key = { hwBus.inDevice,std::get<MouseCharKey>(std::get<MouseData>(hwBus.hData)) };
 				inKey.scale = 0.0f;
 
-				ValidateKeyState(inKey,isKeyPressed);
+				ValidateKeyState(inKey, isKeyPressed);
 
 				continue; // continue with the loop
 			default: break;
@@ -155,14 +155,15 @@ float powe::InputSettings::GetAxis(const std::string& axisName, uint8_t playerIn
 {
 	try
 	{
-		//m_AxisKeyMappings.at(axisName).keys
 		const auto& axisMap{ m_AxisKeyMappings.at(axisName) };
+
 		for (const auto& val : axisMap.keys)
 		{
 			const InputState& state{ m_MainKeyPool.at(val.key) };
 
-			if (state.keyEvent == InputEvent::IE_Down ||
-				state.keyEvent == InputEvent::IE_Pressed)
+			if (state.userIndex == playerIndex &&
+				(state.keyEvent == InputEvent::IE_Down ||
+					state.keyEvent == InputEvent::IE_Pressed))
 			{
 				return val.scale * state.axisValue;
 			}
@@ -170,8 +171,12 @@ float powe::InputSettings::GetAxis(const std::string& axisName, uint8_t playerIn
 	}
 	catch (const std::exception& e)
 	{
-		POWLOGERROR("Can't find given axis name, maybe you forgot to add it?");
+		std::string log{e.what()};
+		log.append(" Can't find given axis name, maybe you forgot to add it?");
+		POWLOGERROR(log);
 	}
+
+	return 0.0f;
 }
 
 bool powe::InputSettings::IsKeyBoardPressed(KeyType key)
@@ -199,7 +204,7 @@ void powe::InputSettings::ValidateKeyState(const AxisKey& key, bool isKeyPressed
 
 InputEvent powe::InputSettings::InterpretInputState(bool isKeyPressed, const InputEvent& savedInputState)
 {
-	if(isKeyPressed)
+	if (isKeyPressed)
 	{
 		switch (savedInputState)
 		{
@@ -234,7 +239,7 @@ void powe::InputSettings::ValidateMouseDelta(const MousePos& mousePos)
 	// Mouse AxisX
 	// TODO: Implement mouse axis movement
 	const auto& itrMouseAxisX{ m_MainKeyPool.find(Key{ InputDevice::D_Mouse,KeyType(MouseKey::MK_AxisX) }) };
-	if(itrMouseAxisX != m_MainKeyPool.end())
+	if (itrMouseAxisX != m_MainKeyPool.end())
 	{
 		InputState& currentInputState{ itrMouseAxisX->second };
 		currentInputState.axisValue = (currentInputState.axisValue - float(mousePos.relativePosX));

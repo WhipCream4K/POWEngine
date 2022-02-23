@@ -25,8 +25,8 @@ namespace powe
 		Logger();
 		void AddMessage(const std::string& msg);
 		void AddInfoMessage(const std::string& msg);
-		void AddWarningMessage(const std::string& msg);
-		void AddErrorMessage(const std::string& msg);
+		void AddWarningMessage(const std::string& msg,const std::string& where);
+		void AddErrorMessage(const std::string& msg,const std::string& where);
 		~Logger() override;
 
 	private:

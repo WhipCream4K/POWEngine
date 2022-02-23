@@ -25,18 +25,18 @@ void powe::Logger::AddInfoMessage(const std::string& msg)
 	AddMessage(log);
 }
 
-void powe::Logger::AddWarningMessage(const std::string& msg)
+void powe::Logger::AddWarningMessage(const std::string& msg, const std::string& where)
 {
 	std::string log{ YellowText };
-	log.append(LogWarning ResetText " " + msg);
+	log.append(LogWarning ResetText " " + msg + " " + where);
 	AddMessage(log);
 }
 
-void powe::Logger::AddErrorMessage(const std::string& msg)
+void powe::Logger::AddErrorMessage(const std::string& msg, const std::string& where)
 {
 	std::string log{ RedText };
-	log.append(LogError ResetText " " + msg);
-	AddMessage(log);
+	log.append(LogError ResetText " " + msg + " " + where);
+	AddMessage(log);	
 }
 
 powe::Logger::~Logger()
