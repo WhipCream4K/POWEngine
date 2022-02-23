@@ -187,7 +187,8 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="POWEngine\Core\Input\InputParams.h" />
+    <ClInclude Include="POWEngine\Core\Input\InputStruct.h" />
+    <ClInclude Include="POWEngine\Core\Input\InputTypes.h" />
     <ClInclude Include="POWEngine\Core\Input\InputSettings.h" />
     <ClInclude Include="POWEngine\Core\Input\InputManager.h" />
     <ClInclude Include="POWEngine\Core\Input\Key.h" />
@@ -200,6 +201,7 @@
     <ClInclude Include="POWEngine\Window\SFML\WindowSFML.h" />
     <ClInclude Include="POWEngine\Window\Window.h" />
     <ClInclude Include="POWEngine\Window\WindowContext.h" />
+    <ClInclude Include="POWEngine\Window\WindowEvents.h" />
     <ClInclude Include="POWEngine\Window\WindowImpl.h" />
     <ClInclude Include="POWEngine\Core\Thread\SimpleThreadPool.h" />
     <ClInclude Include="POWEngine\Services\ServiceLocator.h" />

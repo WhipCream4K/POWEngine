@@ -5,6 +5,7 @@
 #include <any>
 #include <string>
 #include <vector>
+#include "POWEngine/Core/Input/InputStruct.h"
 
 namespace powe
 {
@@ -13,13 +14,28 @@ namespace powe
 	struct MessageBus
 	{
 		std::any data{};
-		int size = 0;
-		uint8_t eventId = 0;
+		uint8_t eventId{};
+		//InputDevice inDevice;
+	};
+
+	enum class InputDevice;
+
+	struct HardwareBus
+	{
+		HardWareInputData hData{};
+		InputDevice inDevice{};
+		uint8_t eventId{};
 	};
 
 	struct WindowMessages
 	{
 		std::array<MessageBus, MinimumWindowEventCnt> wndMessages{};
+		int totalMessages{};
+	};
+
+	struct HardwareMessages
+	{
+		std::array<HardwareBus, MinimumWindowEventCnt> hwMessages{};
 		int totalMessages{};
 	};
 

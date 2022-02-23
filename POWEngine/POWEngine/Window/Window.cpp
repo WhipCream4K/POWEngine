@@ -32,6 +32,11 @@ const powe::WindowMessages& powe::Window::PollWindowMessages(bool& shouldEarlyEx
 	return m_WindowImpl->PollWindowMessages(shouldEarlyExit, shouldIgnoreInputs);
 }
 
+const powe::HardwareMessages& powe::Window::PollHardwareMessages(bool& shouldEarlyExit, bool& shouldIgnoreInputs) const
+{
+	return m_WindowImpl->PollHardwareMessages(shouldEarlyExit, shouldIgnoreInputs);
+}
+
 void powe::Window::Resize(uint32_t width, uint32_t height)
 {
 	m_Width = width;

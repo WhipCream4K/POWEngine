@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Core.h"
 
-#include "Input/InputParams.h"
+//#include "Input/InputTypes.h"
 #include "Input/Key.h"
 #include "POWEngine/Services/ServiceLocator.h"
 #include "POWEngine/Window/Window.h"
@@ -36,36 +36,11 @@ bool powe::Core::TranslateWindowInputs(const Window& window, const SharedPtr<Wor
 	bool isEarlyExit{};
 	bool ignoreInputs{};
 
-	const WindowMessages& wndMessages{ window.PollWindowMessages(isEarlyExit,ignoreInputs) };
+	const HardwareMessages& hwMessages{ window.PollHardwareMessages(isEarlyExit,ignoreInputs) };
 
 	if (!ignoreInputs)
 	{
-		// filter hardware input in this window
-
-		std::array<WndMessageHWIdx, MinimumWindowEventCnt> hardWareInput{};
-		uint8_t hardWareInCnt{};
-
-		for (int i = 0; i < wndMessages.totalMessages; ++i)
-		{
-			// early exit when this window isn't focused
-			const uint8_t eventId{ wndMessages.wndMessages[i].eventId };
-
-			// TODO: Maybe do binary comparison
-
-			// This is framework specific
-			if (IsKeyboardEvent(eventId))
-			{
-				hardWareInput[int(hardWareInCnt++)] = 
-					WndMessageHWIdx{uint8_t(i),InputDevice::D_Keyboard };
-			}
-			else if (IsMouseEvent(eventId))
-			{
-				hardWareInput[int(hardWareInCnt++)] =
-					WndMessageHWIdx{ uint8_t(i), InputDevice::D_Mouse };
-			}
-		}
-
-		worldEntt->GetInputSettings().ParseWndMessages(wndMessages, hardWareInput);
+		worldEntt->GetInputSettings().ParseHWMessages(hwMessages);
 	}
 
 	return isEarlyExit;

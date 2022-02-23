@@ -13,6 +13,7 @@ namespace powe
 		Window(uint32_t width, uint32_t height, const std::string& title,const OtherWindowParams& others = {});
 
 		const WindowMessages& PollWindowMessages(bool& shouldEarlyExit, bool& shouldIgnoreInputs) const;
+		const HardwareMessages& PollHardwareMessages(bool& shouldEarlyExit, bool& shouldIgnoreInputs) const;
 		void Resize(uint32_t width, uint32_t height);
 		void SetTitle(const std::string& newTitle);
 

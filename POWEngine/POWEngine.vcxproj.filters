@@ -72,10 +72,16 @@
     <ClInclude Include="POWEngine\Core\Input\Key.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Core\Input\InputParams.h">
+    <ClInclude Include="POWEngine\Core\Input\InputTypes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="POWEngine\Logger\LoggingService.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Window\WindowEvents.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Core\Input\InputStruct.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

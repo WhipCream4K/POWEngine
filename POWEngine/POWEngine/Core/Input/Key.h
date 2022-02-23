@@ -84,6 +84,8 @@ namespace powe
 
 	struct AxisKey
 	{
+		AxisKey() = default;
+
 		AxisKey(const Key& defKey, float scaleValue)
 			:key(defKey)
 			, scale(scaleValue)
