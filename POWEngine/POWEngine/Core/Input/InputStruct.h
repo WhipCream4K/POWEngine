@@ -33,4 +33,13 @@ namespace powe
 
 	// The implementation is almost like union
 	using HardWareInputData = std::variant<MouseData, KeyboardData>;
+
+	// Just some helper function to get mouse data
+	template<typename T>
+	inline static decltype(auto) GetMouseData(const HardWareInputData& hData)
+	{
+		return std::get<T>(std::get<MouseData>(hData));
+	}
 }
+
+

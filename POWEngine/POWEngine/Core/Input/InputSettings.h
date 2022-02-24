@@ -47,15 +47,16 @@ namespace powe
 		InputSettings() = default;
 		InputSettings(const InputSettings&) = delete;
 		InputSettings& operator=(const InputSettings&) = delete;
-		InputSettings(InputSettings&&) = default;
-		InputSettings& operator=(InputSettings&&) = delete;
+		InputSettings(InputSettings&&) noexcept = default;
+		InputSettings& operator=(InputSettings&&) noexcept = default;
 		~InputSettings() = default;
 
 	public:
 
 		void ParseHWMessages(const HardwareMessages& hwMessages);
 
-		[[nodiscard]] float GetAxis(const std::string& axisName,uint8_t playerIndex = 0) const;
+		[[nodiscard]] float GetInputAxis(const std::string& axisName, uint8_t playerIndex = 0) const;
+		[[nodiscard]] InputEvent GetInputEvent(const std::string& actionName, uint8_t playerIndex = 0) const;
 
 		static bool IsKeyBoardPressed(KeyType key);
 
@@ -68,7 +69,7 @@ namespace powe
 		 */
 		void ValidateKeyState(const AxisKey& key, bool isKeyPressed);
 
-		static InputEvent InterpretInputState(bool isKeyPressed,const InputEvent& savedInputState);
+		static InputEvent InterpretInputState(bool isKeyPressed, const InputEvent& savedInputState);
 
 		void ValidateMouseDelta(const MousePos& mousePos);
 
@@ -77,7 +78,7 @@ namespace powe
 
 		// Data of every hardware mapping
 		KeyPool m_MainKeyPool;
-		
+
 		bool m_ShouldRevalidateMouseValue{};
 	};
 }

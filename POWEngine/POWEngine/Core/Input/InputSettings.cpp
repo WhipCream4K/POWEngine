@@ -113,7 +113,7 @@ void powe::InputSettings::ParseHWMessages(const HardwareMessages& hwMessages)
 
 				isKeyPressed = true;
 				inKey.key = { hwBus.inDevice,KeyType(MouseKey::MK_Middle) };
-				inKey.scale = std::get<MouseWheelDelta>(std::get<MouseData>(hwBus.hData));
+				inKey.scale = GetMouseData<MouseWheelDelta>(hwBus.hData);
 
 				ValidateKeyState(inKey, isKeyPressed);
 
@@ -123,7 +123,7 @@ void powe::InputSettings::ParseHWMessages(const HardwareMessages& hwMessages)
 			case WindowEvents::MouseButtonPressed:
 
 				isKeyPressed = true;
-				inKey.key = { hwBus.inDevice,std::get<MouseCharKey>(std::get<MouseData>(hwBus.hData)) };
+				inKey.key = { hwBus.inDevice,GetMouseData<MouseCharKey>(hwBus.hData) };
 				inKey.scale = 1.0f;
 
 				ValidateKeyState(inKey, isKeyPressed);
@@ -132,7 +132,7 @@ void powe::InputSettings::ParseHWMessages(const HardwareMessages& hwMessages)
 			case WindowEvents::MouseButtonReleased:
 
 				isKeyPressed = false;
-				inKey.key = { hwBus.inDevice,std::get<MouseCharKey>(std::get<MouseData>(hwBus.hData)) };
+				inKey.key = { hwBus.inDevice,GetMouseData<MouseCharKey>(hwBus.hData) };
 				inKey.scale = 0.0f;
 
 				ValidateKeyState(inKey, isKeyPressed);
@@ -142,8 +142,7 @@ void powe::InputSettings::ParseHWMessages(const HardwareMessages& hwMessages)
 			}
 
 			// If we past this line then we know that this is a mouse move
-			isKeyPressed = true;
-			ValidateMouseDelta(std::get<MousePos>(std::get<MouseData>(hwBus.hData)));
+			ValidateMouseDelta(GetMouseData<MousePos>(hwBus.hData));
 			m_ShouldRevalidateMouseValue = true;
 		}
 	}
@@ -151,7 +150,7 @@ void powe::InputSettings::ParseHWMessages(const HardwareMessages& hwMessages)
 
 }
 
-float powe::InputSettings::GetAxis(const std::string& axisName, uint8_t playerIndex) const
+float powe::InputSettings::GetInputAxis(const std::string& axisName, uint8_t playerIndex) const
 {
 	try
 	{
@@ -171,12 +170,36 @@ float powe::InputSettings::GetAxis(const std::string& axisName, uint8_t playerIn
 	}
 	catch (const std::exception& e)
 	{
-		std::string log{e.what()};
+		std::string log{ e.what() };
 		log.append(" Can't find given axis name, maybe you forgot to add it?");
 		POWLOGERROR(log);
 	}
 
 	return 0.0f;
+}
+
+InputEvent powe::InputSettings::GetInputEvent(const std::string& actionName, uint8_t playerIndex) const
+{
+	try
+	{
+		const auto& axisMap{ m_AxisKeyMappings.at(actionName) };
+
+		for (const auto& val : axisMap.keys)
+		{
+			const InputState& state{ m_MainKeyPool.at(val.key) };
+
+			if (state.userIndex == playerIndex)
+				return state.keyEvent;
+		}
+	}
+	catch (const std::exception& e)
+	{
+		std::string log{ e.what() };
+		log.append(" Can't find given action name, maybe you forgot to add it?");
+		POWLOGERROR(log);
+	}
+
+	return InputEvent::IE_None;
 }
 
 bool powe::InputSettings::IsKeyBoardPressed(KeyType key)

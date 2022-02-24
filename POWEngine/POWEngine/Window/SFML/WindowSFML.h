@@ -26,7 +26,6 @@ namespace powe
 	private:
 
 		sf::RenderWindow m_WndHandle;
-		//glm::ivec2 m_MousePosLastPoll;
 		glm::vec2 m_DeltaMousePos;
 	};
 }
