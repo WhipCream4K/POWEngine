@@ -13,7 +13,9 @@ namespace powe
 
 		Core();
 
-		bool TranslateWindowInputs(const SharedPtr<Window>& window);
+		bool TranslateWindowInputs(
+			const SharedPtr<Window>& window,
+			const SharedPtr<WorldEntity>& worldEntt) const;
 
 		//bool TranslateWindowInputs(const Window& window);
 
@@ -48,7 +50,7 @@ namespace powe
 		 * \brief Implementation of the core engine to expand the scalability of the core engine
 		 * i.e Inputs handle by sdl and rendering handles by OpenGL or DX12
 		 */
-		//OwnedPtr<CoreImpl> m_CoreImpl;
+		 //OwnedPtr<CoreImpl> m_CoreImpl;
 
 		SharedPtr<WorldClock> m_WorldClock;
 	};

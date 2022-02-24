@@ -15,6 +15,7 @@ namespace powe
 		virtual const HardwareMessages& PollHardwareMessages(bool& shouldEarlyExit, bool& shouldIgnoreInputs) = 0;
 		virtual void Resize(uint32_t width, uint32_t height) = 0;
 		virtual void SetTitle(const std::string& title) = 0;
+		[[nodiscard]] const glm::uvec2& GetRelativeMousePos() const { return m_MousePosLastPoll; }
 
 		virtual ~WindowImpl();
 
@@ -22,6 +23,7 @@ namespace powe
 
 		WindowMessages m_WndMessages;
 		HardwareMessages m_HWMessages;
+		glm::uvec2 m_MousePosLastPoll;
 	};
 }
 

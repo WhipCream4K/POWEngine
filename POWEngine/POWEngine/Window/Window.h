@@ -2,6 +2,7 @@
 
 #include "POWEngine/Core/CustomTypes.h"
 #include "WindowContext.h"
+#include "POWEngine/Math/Math.h"
 
 namespace powe
 {
@@ -19,6 +20,7 @@ namespace powe
 
 		[[nodiscard]] uint32_t GetHeight() const { return m_Height; }
 		[[nodiscard]] uint32_t GetWidth() const { return m_Width; }
+		[[nodiscard]] const glm::uvec2& GetRelativeMousePos() const;
 
 		~Window();
 

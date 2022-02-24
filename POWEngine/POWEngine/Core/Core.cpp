@@ -15,16 +15,20 @@ powe::Core::Core()
 	ServiceLocator::Initialize();
 }
 
-bool powe::Core::TranslateWindowInputs(const SharedPtr<Window>& window)
+bool powe::Core::TranslateWindowInputs(const SharedPtr<Window>& window, const SharedPtr<WorldEntity>& worldEntt) const
 {
 	m_WorldClock->Start();
 
 	bool isEarlyExit{};
 	bool ignoreInputs{};
 
-	const WindowMessages messages{ window->PollWindowMessages(isEarlyExit,ignoreInputs) };
 
-	// TODO: do the translation here
+	const HardwareMessages& hwMessages{ window->PollHardwareMessages(isEarlyExit,ignoreInputs) };
+
+	if (!ignoreInputs)
+	{
+		worldEntt->GetInputSettings().ParseHWMessages(hwMessages);
+	}
 
 	return isEarlyExit;
 }

@@ -52,6 +52,16 @@ void powe::Window::SetTitle(const std::string& newTitle)
 	m_WindowImpl->SetTitle(newTitle);
 }
 
+//const glm::vec2& powe::Window::GetDeltaMousePos() const
+//{
+//	
+//}
+
+const glm::uvec2& powe::Window::GetRelativeMousePos() const
+{
+	return m_WindowImpl->GetRelativeMousePos();
+}
+
 powe::Window::~Window() = default;
 
 

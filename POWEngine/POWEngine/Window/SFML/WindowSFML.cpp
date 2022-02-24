@@ -16,13 +16,21 @@ powe::WindowSFML::WindowSFML(uint32_t width, uint32_t height, const std::string&
 		sf::String{ title.c_str() },
 		static_cast<sf::Uint32>(others[0]),
 		reinterpret_cast<const sf::ContextSettings&>(others[sizeof(sf::Uint32)]))
+	, m_DeltaMousePos()
 {
+	const auto mousePos = sf::Mouse::getPosition(m_WndHandle);
+	m_MousePosLastPoll.x = mousePos.x;
+	m_MousePosLastPoll.y = mousePos.y;
 }
 
 powe::WindowSFML::WindowSFML(uint32_t width, uint32_t height, const std::string& title)
 	: WindowImpl(width, height, title)
 	, m_WndHandle(sf::VideoMode(width, height), sf::String{ title.c_str() })
+	, m_DeltaMousePos()
 {
+	const auto mousePos = sf::Mouse::getPosition(m_WndHandle);
+	m_MousePosLastPoll.x = mousePos.x;
+	m_MousePosLastPoll.y = mousePos.y;
 }
 
 const powe::WindowMessages& powe::WindowSFML::PollWindowMessages(bool& shouldEarlyExit, bool& shouldIgnoreInputs)
@@ -251,6 +259,12 @@ const powe::HardwareMessages& powe::WindowSFML::PollHardwareMessages(bool& shoul
 				messageData.hData = MousePos{ sfmlEvent.mouseMove.x,sfmlEvent.mouseMove.y };
 				messageData.eventId = uint8_t(WindowEvents::MouseMoved);
 				messageData.inDevice = InputDevice::D_Mouse;
+
+				m_DeltaMousePos.x = float(sfmlEvent.mouseMove.x - m_MousePosLastPoll.x);
+				m_DeltaMousePos.y = float(m_MousePosLastPoll.y - sfmlEvent.mouseMove.y);
+
+				m_MousePosLastPoll.x = sfmlEvent.mouseMove.x;
+				m_MousePosLastPoll.y = sfmlEvent.mouseMove.y;
 
 				m_HWMessages.hwMessages[messageCnt++] = messageData;
 

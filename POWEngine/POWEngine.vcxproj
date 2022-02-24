@@ -99,7 +99,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)PCH;$(SolutionDir)3rdPartyLib\SFML\include;$(SolutionDir)3rdPartyLib\fmod\include;$(SolutionDir)3rdPartyLib\rtm\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)PCH;$(SolutionDir)3rdPartyLib\SFML\include;$(SolutionDir)3rdPartyLib\fmod\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -123,7 +123,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)PCH;$(SolutionDir)3rdPartyLib\SFML\include;$(SolutionDir)3rdPartyLib\fmod\include;$(SolutionDir)3rdPartyLib\rtm\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)PCH;$(SolutionDir)3rdPartyLib\SFML\include;$(SolutionDir)3rdPartyLib\fmod\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -147,7 +147,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)PCH;$(SolutionDir)3rdPartyLib\SFML\include;$(SolutionDir)3rdPartyLib\fmod\include;$(SolutionDir)3rdPartyLib\rtm\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)PCH;$(SolutionDir)3rdPartyLib\SFML\include;$(SolutionDir)3rdPartyLib\fmod\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -171,7 +171,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)PCH;$(SolutionDir)3rdPartyLib\SFML\include;$(SolutionDir)3rdPartyLib\fmod\include;$(SolutionDir)3rdPartyLib\rtm\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)PCH;$(SolutionDir)3rdPartyLib\SFML\include;$(SolutionDir)3rdPartyLib\fmod\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -187,17 +187,22 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="POWEngine\Core\Components\BaseComponent.h" />
+    <ClInclude Include="POWEngine\Core\ECS\ECSTypes.h" />
     <ClInclude Include="POWEngine\Core\Input\InputStruct.h" />
     <ClInclude Include="POWEngine\Core\Input\InputTypes.h" />
     <ClInclude Include="POWEngine\Core\Input\InputSettings.h" />
     <ClInclude Include="POWEngine\Core\Input\InputManager.h" />
     <ClInclude Include="POWEngine\Core\Input\Key.h" />
     <ClInclude Include="POWEngine\Core\LockFree\LFQueue.h" />
+    <ClInclude Include="POWEngine\Core\ECS\Archetype.h" />
+    <ClInclude Include="POWEngine\Core\WorldEntity\PipelineLayer.h" />
     <ClInclude Include="POWEngine\Logger\Logger.h" />
     <ClInclude Include="PCH\pch.h" />
     <ClInclude Include="POWEngine\Core\Core.h" />
     <ClInclude Include="POWEngine\Core\CustomTypes.h" />
     <ClInclude Include="POWEngine\Logger\LoggingService.h" />
+    <ClInclude Include="POWEngine\Math\Math.h" />
     <ClInclude Include="POWEngine\Window\SFML\WindowSFML.h" />
     <ClInclude Include="POWEngine\Window\Window.h" />
     <ClInclude Include="POWEngine\Window\WindowContext.h" />
@@ -210,8 +215,11 @@
     <ClInclude Include="POWEngine\Core\Clock\WorldClock.h" />
     <ClInclude Include="POWEngine\Core\WorldEntity\WorldEntity.h" />
     <ClInclude Include="POWEngine\Services\Service.h" />
+    <ClInclude Include="POWEngine\Core\ECS\SystemBase.h" />
+    <ClInclude Include="POWEngine\Core\ECS\System.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="POWEngine\Core\Components\BaseComponent.cpp" />
     <ClCompile Include="POWEngine\Core\Input\InputSettings.cpp" />
     <ClCompile Include="POWEngine\Core\Input\InputManager.cpp" />
     <ClCompile Include="POWEngine\Core\LockFree\LFQueue.cpp" />
@@ -233,6 +241,8 @@
     <ClCompile Include="POWEngine\Core\Clock\WorldClock.cpp" />
     <ClCompile Include="POWEngine\Core\WorldEntity\WorldEntity.cpp" />
     <ClCompile Include="POWEngine\Services\Service.cpp" />
+    <ClCompile Include="POWEngine\Core\ECS\SystemBase.cpp" />
+    <ClCompile Include="POWEngine\Core\ECS\System.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

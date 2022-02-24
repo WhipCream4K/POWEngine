@@ -49,11 +49,21 @@ namespace powe
 			m_Head.store(m_Tail.load());
 		}
 
-		virtual ~LFQueue();
+		~LFQueue();
 
 	protected:
 
+		//https://github.com/darkautism/lfqueue/blob/HP/lfq.h
+		// his lock free queue version separate head and tail pointer in different cache line
+		// to prevent content or false-sharing to which I agree since the push and pop
+		// function happens separately and is local to the thread
 		std::atomic<SharedPtr<Node<T>>> m_Head; // since c++20
+		uint64_t : 64; // 8 bytes padding
+		uint64_t : 64; // 8 bytes padding
+		uint64_t : 64; // 8 bytes padding
+		uint64_t : 64; // 8 bytes padding
+		uint64_t : 64; // 8 bytes padding
+		uint64_t : 64; // 8 bytes padding
 		std::atomic<SharedPtr<Node<T>>> m_Tail; // since c++20
 	};
 

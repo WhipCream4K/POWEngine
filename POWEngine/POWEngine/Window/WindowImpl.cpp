@@ -3,6 +3,8 @@
 
 powe::WindowImpl::WindowImpl(uint32_t width, uint32_t height, const std::string& title)
 	: m_WndMessages()
+	, m_HWMessages()
+	, m_MousePosLastPoll()
 {
 	UNREF_PARAM(width);
 	UNREF_PARAM(height);
@@ -11,6 +13,8 @@ powe::WindowImpl::WindowImpl(uint32_t width, uint32_t height, const std::string&
 
 powe::WindowImpl::WindowImpl(uint32_t width, uint32_t height, const std::string& title, const OtherWindowParams& others)
 	: m_WndMessages()
+	, m_HWMessages()
+	, m_MousePosLastPoll()
 {
 	UNREF_PARAM(width);
 	UNREF_PARAM(height);
