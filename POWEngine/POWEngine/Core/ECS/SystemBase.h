@@ -27,11 +27,14 @@ namespace powe
 
 		[[nodiscard]] PipelineLayer GetPipeLineLayer() const { return m_Layer; }
 
+		void MarkDeleted(bool state) { m_MarkedDeleted = state; }
+
 	protected:
 
 		std::unordered_set<ComponentTypeId> m_Keys;
 		WeakPtr<WorldEntity> m_World;
 		PipelineLayer m_Layer;
+		bool m_MarkedDeleted;
 	};
 }
 

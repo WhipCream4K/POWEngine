@@ -8,6 +8,7 @@ namespace powe
 
 	struct Archetype;
 
+	// POD 
 	struct GameObjectInArchetypeRecord
 	{
 		WeakPtr<Archetype> Archetype{};

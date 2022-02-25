@@ -62,6 +62,11 @@ const glm::uvec2& powe::Window::GetRelativeMousePos() const
 	return m_WindowImpl->GetRelativeMousePos();
 }
 
+void powe::Window::SetClearColor(const glm::uvec4& color)
+{
+	m_ClearColor = color;
+}
+
 powe::Window::~Window() = default;
 
 

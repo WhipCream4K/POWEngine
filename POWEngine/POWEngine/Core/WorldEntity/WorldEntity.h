@@ -31,8 +31,12 @@ namespace powe
 		template<typename SystemType,typename ...Args>
 		EnableIsBasedOf<SystemBase, SystemType, WeakPtr<SystemBase>> AddSystem(Args&&... args);
 
+		// TODO: Maybe do a thread safe registering component
 		template<typename ComponentType>
 		EnableIsBasedOf<BaseComponent, ComponentType> RegisterComponent();
+
+		// TODO: Maybe do a thread safe removing system
+		void RemoveSystem(const SharedPtr<SystemBase>& system) const;
 
 	private:
 
@@ -42,18 +46,34 @@ namespace powe
 
 		SharedPtr<SimpleThreadPool> m_SimpleThreadPool;
 
-		// -------- ECS ----------
+		// ========== ECS ================
+
+		// -------------------------------
+		// --------- System --------------
+		// -------------------------------
 
 		// Has loop iteration, need to take care of run-time write
 		SystemPipeline m_SystemPipeline;
 		LFStack<SharedPtr<SystemBase>> m_PendingAddSystem;
 
-		//LFQueue<SharedPtr<SystemBase>> m_PendingAddSystem;
+		// -------------------------------
+		// --------- Component -----------
+		// -------------------------------
 
 		// No loop iteration
 		// Save data when component first created
 		std::unordered_map<ComponentTypeId, SharedPtr<BaseComponent>> m_ComponentMap;
-		
+		// Has loop iteration, need to take care of run-time write
+		// Buffer of archetypes by their combined component type id
+		std::unordered_map<ComponentTypeId, SharedPtr<Archetype>> m_ArchetypeBuffer;
+
+		// -------------------------------
+		// --------- Entity --------------
+		// -------------------------------
+
+		// No loop iteration
+		// Map that saves which GameObject belongs to which archetype at what index
+		std::unordered_map<GameObjectId, GameObjectInArchetypeRecord> m_GameObjectRecords;
 	};
 
 	template <typename SystemType, typename ... Args>
