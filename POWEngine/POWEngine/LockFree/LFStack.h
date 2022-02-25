@@ -23,6 +23,11 @@ namespace powe
 			{
 			}
 
+			//Node(const Node&) = delete;
+			//Node& operator=(const Node&) = delete;
+			//Node(Node&&) = delete;
+			//Node& operator=(Node&&) = delete;
+
 			SharedPtr<Node> nextNode;
 			size_t tag;
 			T data;
@@ -44,10 +49,9 @@ namespace powe
 
 		LFStack(const LFStack&) = delete;
 		LFStack& operator=(const LFStack&) = delete;
-		LFStack(LFStack&&) noexcept = default;
-		LFStack& operator=(LFStack&&) noexcept = default;
+		LFStack(LFStack&&) noexcept;
+		LFStack& operator=(LFStack&&) noexcept;
 		~LFStack();
-
 
 	private:
 
@@ -102,12 +106,39 @@ namespace powe
 	template <typename T>
 	void LFStack<T>::Pop() noexcept
 	{
+		SharedPtr<Node> oldHead{ m_Head.load() };
+
+		do
+		{
+			if (!oldHead || !oldHead->nextNode) // never delete the first node
+				return;
+
+			++oldHead->tag;
+		} while (!m_Head.compare_exchange_weak(oldHead, oldHead->nextNode));
+
 	}
 
 	template <typename T>
 	bool LFStack<T>::Empty() const noexcept
 	{
 		return m_Head.load();
+	}
+
+	template <typename T>
+	LFStack<T>::LFStack(LFStack&& other) noexcept
+		: m_Head(std::move(other.m_Head))
+	{
+	}
+
+	template <typename T>
+	LFStack<T>& LFStack<T>::operator=(LFStack&& other) noexcept
+	{
+		if(*this != other)
+		{
+			m_Head = std::move(other.m_Head);
+		}
+
+		return this;
 	}
 
 	template <typename T>

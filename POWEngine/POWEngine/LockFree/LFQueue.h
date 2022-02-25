@@ -26,6 +26,11 @@ namespace powe
 			{
 			}
 
+			Node(const Node&) = delete;
+			Node& operator=(const Node&) = delete;
+			Node(Node&&) = delete;
+			Node& operator=(Node&&) = delete;
+
 			int tag;
 			SharedPtr<Node> pNextNode;
 			T data;
