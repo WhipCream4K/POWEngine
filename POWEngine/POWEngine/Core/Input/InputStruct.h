@@ -13,8 +13,11 @@ namespace powe
 	};
 
 	// reduce 8 bytes of information when separate wheel data out 
+	// 24 bytes
 	struct MousePos
 	{
+		float deltaPosX{};
+		float deltaPosY{};
 		int relativePosX{};
 		int relativePosY{};
 	};

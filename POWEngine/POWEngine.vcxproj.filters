@@ -42,7 +42,7 @@
     <ClInclude Include="POWEngine\Core\Thread\SimpleThreadPool.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Core\LockFree\LFQueue.h">
+    <ClInclude Include="POWEngine\LockFree\LFQueue.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="POWEngine\Services\ServiceLocator.h">
@@ -105,6 +105,9 @@
     <ClInclude Include="POWEngine\Core\WorldEntity\PipelineLayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="POWEngine\LockFree\LFStack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PCH\pch.cpp">
@@ -128,7 +131,7 @@
     <ClCompile Include="POWEngine\Core\Thread\SimpleThreadPool.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="POWEngine\Core\LockFree\LFQueue.cpp">
+    <ClCompile Include="POWEngine\LockFree\LFQueue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="POWEngine\Services\ServiceLocator.cpp">
@@ -162,6 +165,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="POWEngine\Core\ECS\System.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="POWEngine\LockFree\LFStack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

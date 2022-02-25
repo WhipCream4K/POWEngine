@@ -2,7 +2,7 @@
 
 #include "POWEngine/Core/CustomTypes.h"
 #include "POWEngine/Core/Thread/SimpleThreadPool.h"
-#include "POWEngine/Core/LockFree/LFQueue.h"
+#include "POWEngine/LockFree/LFQueue.h"
 #include "POWEngine/Services/Service.h"
 
 namespace powe

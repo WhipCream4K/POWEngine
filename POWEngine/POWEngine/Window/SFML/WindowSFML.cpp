@@ -118,10 +118,19 @@ const powe::WindowMessages& powe::WindowSFML::PollWindowMessages(bool& shouldEar
 			}
 			case sf::Event::MouseMoved:
 			{
-				messageData.data = MousePos{ sfmlEvent.mouseMove.x,sfmlEvent.mouseMove.y };
+				messageData.eventId = uint8_t(WindowEvents::MouseMoved);
 
-				//messageData.data = sfmlEvent.mouseMove;
-				//messageData.size = sizeof(sf::Event::MouseMoveEvent);
+				m_DeltaMousePos.x = float(sfmlEvent.mouseMove.x - m_MousePosLastPoll.x);
+				m_DeltaMousePos.y = float(m_MousePosLastPoll.y - sfmlEvent.mouseMove.y);
+
+				messageData.data = MousePos{
+					m_DeltaMousePos.x,
+					m_DeltaMousePos.y,
+					sfmlEvent.mouseMove.x,
+					sfmlEvent.mouseMove.y };
+
+				m_MousePosLastPoll.x = sfmlEvent.mouseMove.x;
+				m_MousePosLastPoll.y = sfmlEvent.mouseMove.y;
 
 				break;
 			}
@@ -256,12 +265,17 @@ const powe::HardwareMessages& powe::WindowSFML::PollHardwareMessages(bool& shoul
 			}
 			case sf::Event::MouseMoved:
 			{
-				messageData.hData = MousePos{ sfmlEvent.mouseMove.x,sfmlEvent.mouseMove.y };
 				messageData.eventId = uint8_t(WindowEvents::MouseMoved);
 				messageData.inDevice = InputDevice::D_Mouse;
 
 				m_DeltaMousePos.x = float(sfmlEvent.mouseMove.x - m_MousePosLastPoll.x);
 				m_DeltaMousePos.y = float(m_MousePosLastPoll.y - sfmlEvent.mouseMove.y);
+
+				messageData.hData = MousePos{
+					m_DeltaMousePos.x,
+					m_DeltaMousePos.y,
+					sfmlEvent.mouseMove.x,
+					sfmlEvent.mouseMove.y };
 
 				m_MousePosLastPoll.x = sfmlEvent.mouseMove.x;
 				m_MousePosLastPoll.y = sfmlEvent.mouseMove.y;

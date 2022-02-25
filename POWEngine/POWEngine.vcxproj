@@ -187,6 +187,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="POWEngine\LockFree\LFStack.h" />
     <ClInclude Include="POWEngine\Core\Components\BaseComponent.h" />
     <ClInclude Include="POWEngine\Core\ECS\ECSTypes.h" />
     <ClInclude Include="POWEngine\Core\Input\InputStruct.h" />
@@ -194,7 +195,7 @@
     <ClInclude Include="POWEngine\Core\Input\InputSettings.h" />
     <ClInclude Include="POWEngine\Core\Input\InputManager.h" />
     <ClInclude Include="POWEngine\Core\Input\Key.h" />
-    <ClInclude Include="POWEngine\Core\LockFree\LFQueue.h" />
+    <ClInclude Include="POWEngine\LockFree\LFQueue.h" />
     <ClInclude Include="POWEngine\Core\ECS\Archetype.h" />
     <ClInclude Include="POWEngine\Core\WorldEntity\PipelineLayer.h" />
     <ClInclude Include="POWEngine\Logger\Logger.h" />
@@ -219,10 +220,11 @@
     <ClInclude Include="POWEngine\Core\ECS\System.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="POWEngine\LockFree\LFStack.cpp" />
     <ClCompile Include="POWEngine\Core\Components\BaseComponent.cpp" />
     <ClCompile Include="POWEngine\Core\Input\InputSettings.cpp" />
     <ClCompile Include="POWEngine\Core\Input\InputManager.cpp" />
-    <ClCompile Include="POWEngine\Core\LockFree\LFQueue.cpp" />
+    <ClCompile Include="POWEngine\LockFree\LFQueue.cpp" />
     <ClCompile Include="POWEngine\Logger\Logger.cpp" />
     <ClCompile Include="PCH\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

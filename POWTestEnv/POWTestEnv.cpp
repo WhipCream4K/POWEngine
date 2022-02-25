@@ -2,7 +2,7 @@
 //
 
 #include <iostream>
-#include <POWEngine/Core/LockFree/LFQueue.h>
+#include <POWEngine/LockFree/LFQueue.h>
 #include <vld.h>
 #include <random>
 #include <future>
@@ -137,6 +137,53 @@ TEST_CASE("Logger")
 	}
 
 }
+
+#include <POWEngine/LockFree/LFStack.h>
+
+void PushStack(powe::LFStack<std::string>& stack,const std::string& msg)
+{
+	const std::uniform_int_distribution<int> uniIntDist{ 1,6 };
+	std::this_thread::sleep_for(std::chrono::milliseconds(uniIntDist(engine)));
+	stack.Push(msg);
+}
+
+TEST_CASE("Lock free stack push")
+{
+	std::cout << "--------- Test lock free stack push ----------------\n";
+
+	powe::LFStack<std::string> lfTest{};
+
+	const int pushTime{ 100 };
+
+	std::vector<std::future<void>> pushThread{ pushTime };
+
+	lfTest.Push("some");
+	auto test = lfTest.PopReturn();
+	test = lfTest.PopReturn();
+	test;
+	for (int i = 0; i < pushTime; ++i)
+	{
+		std::string inString{ "some" };
+		inString.append(std::to_string(i));
+		pushThread[i] = std::async(std::launch::async, &PushStack, std::ref(lfTest), inString);
+	}
+
+	for (auto& thread : pushThread)
+	{
+		thread.get();
+	}
+
+	for (int i = 0; i < pushTime; ++i)
+	{
+		auto val{ lfTest.PopReturn() };
+		REQUIRE(val.has_value() == true);
+		if (val.has_value())
+			std::cout << val.value() << '\n';
+	}
+
+}
+
+//TEST_CASE("Lo")
 
 //int main()
 //{

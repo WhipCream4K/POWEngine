@@ -17,7 +17,7 @@ namespace powe
 
 		std::vector<ComponentTypeId> Types; // types of components of this archetypes
 		std::vector<GameObjectId> GameObjectIds; // GameObjectIds that has this archetype
-		SharedPtr<uint8_t[]> ComponentData{}; // Array of component struct
+		SharedPtr<RawByte[]> ComponentData{}; // Array of component struct
 		int SizeOfArchetype{};
 		int TotalAllocateData{};
 	};

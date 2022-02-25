@@ -13,7 +13,13 @@ namespace powe
 	public:
 
 		SimpleThreadPool(size_t threadCount = (size_t)std::thread::hardware_concurrency());
+		SimpleThreadPool(const SimpleThreadPool&) = delete;
+		SimpleThreadPool& operator=(const SimpleThreadPool&) = delete;
+		SimpleThreadPool(SimpleThreadPool&&) noexcept = delete;
+		SimpleThreadPool& operator=(SimpleThreadPool&&) noexcept = delete;
 		~SimpleThreadPool();
+
+	public:
 
 		// TODO: MARK maybe this should be depricate because object in memory can be moved everywhere and it's going to blow up
 		template<

@@ -6,32 +6,31 @@
 
 namespace powe
 {
-	template<typename T>
-	struct Node
-	{
-		Node(T&& data)
-			: tag()
-			, pNextNode()
-			, data(std::move(data))
-		{
-		}
-
-		Node(const T& param)
-			: tag()
-			, pNextNode()
-			, data(param)
-		{
-		}
-
-		int tag;
-		SharedPtr<Node> pNextNode;
-		T data;
-	};
-
 	// Lock-Free queue using FIFO context
 	template<typename T>
 	class LFQueue
 	{
+		struct Node
+		{
+			Node(T&& data)
+				: tag()
+				, pNextNode()
+				, data(std::move(data))
+			{
+			}
+
+			Node(const T& param)
+				: tag()
+				, pNextNode()
+				, data(param)
+			{
+			}
+
+			int tag;
+			SharedPtr<Node> pNextNode;
+			T data;
+		};
+
 	public:
 
 		void Push(T&& data) noexcept;
@@ -43,9 +42,9 @@ namespace powe
 		bool Empty() const noexcept;
 
 		LFQueue()
-			: m_Tail(std::make_shared<Node<T>>(T{}))
+			: m_Tail(std::make_shared<Node>(T{}))
 		{
-			SharedPtr<Node<T>> ref{ m_Tail.load() };
+			SharedPtr<Node> ref{ m_Tail.load() };
 			m_Head.store(m_Tail.load());
 		}
 
@@ -57,21 +56,21 @@ namespace powe
 		// his lock free queue version separate head and tail pointer in different cache line
 		// to prevent content or false-sharing to which I agree since the push and pop
 		// function happens separately and is local to the thread
-		std::atomic<SharedPtr<Node<T>>> m_Head; // since c++20
+		std::atomic<SharedPtr<Node>> m_Head; // since c++20
 		uint64_t : 64; // 8 bytes padding
 		uint64_t : 64; // 8 bytes padding
 		uint64_t : 64; // 8 bytes padding
 		uint64_t : 64; // 8 bytes padding
 		uint64_t : 64; // 8 bytes padding
 		uint64_t : 64; // 8 bytes padding
-		std::atomic<SharedPtr<Node<T>>> m_Tail; // since c++20
+		std::atomic<SharedPtr<Node>> m_Tail; // since c++20
 	};
 
 	template <typename T>
 	void LFQueue<T>::Push(T&& data) noexcept
 	{
-		const SharedPtr<Node<T>> newNode{ std::make_shared<Node<T>>(std::forward<T>(data)) };
-		SharedPtr<Node<T>> oldTail{ m_Tail.load() };
+		const SharedPtr<Node> newNode{ std::make_shared<Node>(std::forward<T>(data)) };
+		SharedPtr<Node> oldTail{ m_Tail.load() };
 
 		while (!m_Tail.compare_exchange_weak(oldTail, newNode))
 		{
@@ -86,8 +85,8 @@ namespace powe
 	template <typename T>
 	void LFQueue<T>::Push(const T& data) noexcept
 	{
-		const SharedPtr<Node<T>> newNode{ std::make_shared<Node<T>>(data) };
-		SharedPtr<Node<T>> oldTail{ m_Tail.load() };
+		const SharedPtr<Node> newNode{ std::make_shared<Node>(data) };
+		SharedPtr<Node> oldTail{ m_Tail.load() };
 
 		while (!m_Tail.compare_exchange_weak(oldTail, newNode))
 		{
@@ -102,7 +101,7 @@ namespace powe
 	template <typename T>
 	std::optional<T> LFQueue<T>::PopReturn()
 	{
-		SharedPtr<Node<T>> oldHead{ m_Head.load() };
+		SharedPtr<Node> oldHead{ m_Head.load() };
 		//const SharedPtr<Node<T>> newHead{ oldHead->pNextNode };
 
 
@@ -127,7 +126,7 @@ namespace powe
 	template <typename T>
 	void LFQueue<T>::Pop() noexcept
 	{
-		SharedPtr<Node<T>> oldHead{ m_Head.load() };
+		SharedPtr<Node> oldHead{ m_Head.load() };
 
 		// we never remove the first node
 		while (oldHead && oldHead->pNextNode &&
@@ -148,7 +147,7 @@ namespace powe
 		// fix the linked list destructor overflow
 		// https://softwareengineering.stackexchange.com/questions/271216/will-destructing-a-large-list-overflow-my-stack
 
-		SharedPtr<Node<T>> head{ m_Head.load() };
+		SharedPtr<Node> head{ m_Head.load() };
 		while (head)
 		{
 			head = std::move(head->pNextNode);

@@ -5,7 +5,7 @@
 
 namespace powe
 {
-	class Archetype;
+	struct Archetype;
 	class WorldEntity;
 	class SystemBase
 	{
@@ -20,7 +20,12 @@ namespace powe
 
 	public:
 
+		// Should prefer this update because necessary arguments already in cache line
+		virtual void InternalUpdate(WorldEntity& world, const Archetype& archetype) = 0;
+
 		virtual void InternalUpdate(float deltaTime, const SharedPtr<Archetype>& archetype) = 0;
+
+		[[nodiscard]] PipelineLayer GetPipeLineLayer() const { return m_Layer; }
 
 	protected:
 
