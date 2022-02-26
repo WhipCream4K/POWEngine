@@ -183,32 +183,38 @@ TEST_CASE("Lock free stack push")
 
 }
 
-//TEST_CASE("Lo")
+struct Base
+{
+	
+};
 
-//int main()
-//{
-//	powe::LFQueue<std::string> lfTest{};
-//
-//	const int pushTime{ 200 };
-//
-//	std::vector<std::future<void>> pushThread{};
-//
-//	for (int i = 0; i < pushTime; ++i)
-//	{
-//		std::string inString{"some"};
-//		inString.append(std::to_string(i));
-//		pushThread.emplace_back(std::async(std::launch::async, &Push, std::ref(lfTest), inString));
-//	}
-//
-//	for (auto& lthread : pushThread)
-//	{
-//		lthread.get();
-//	}
-//
-//	for (int i = 0; i < pushTime; ++i)
-//	{
-//		auto val{ lfTest.PopReturn() };
-//		if (val.has_value())
-//			std::cout << val.value() << '\n';
-//	}
-//}
+template<typename T>
+struct Comp : Base
+{
+	
+};
+
+struct Some : Comp<Some>
+{
+};
+
+TEST_CASE("For loop calculation or unordered set")
+{
+	std::cout << "------ For loop calculation or unordered set --------\n";
+
+	//std::chrono::high_resolution_clock::time_point startTime{};
+
+
+	std::cout << std::is_base_of_v<Base, Some> << std::endl;
+
+	const uint32_t some{ 1 | (1u << 31u) };
+
+	std::cout << (some & ~(1u << 31u)) << std::endl;
+
+	//while ()
+	//{
+	//	
+	//}
+}
+
+// TODO: Create Lock-free stack ABA test

@@ -187,6 +187,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="POWEngine\Core\GameObject\GameObject.h" />
     <ClInclude Include="POWEngine\LockFree\LFStack.h" />
     <ClInclude Include="POWEngine\Core\Components\BaseComponent.h" />
     <ClInclude Include="POWEngine\Core\ECS\ECSTypes.h" />
@@ -220,6 +221,7 @@
     <ClInclude Include="POWEngine\Core\ECS\System.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="POWEngine\Core\GameObject\GameObject.cpp" />
     <ClCompile Include="POWEngine\LockFree\LFStack.cpp" />
     <ClCompile Include="POWEngine\Core\Components\BaseComponent.cpp" />
     <ClCompile Include="POWEngine\Core\Input\InputSettings.cpp" />
