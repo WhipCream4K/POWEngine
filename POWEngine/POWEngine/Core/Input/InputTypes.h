@@ -56,6 +56,8 @@ enum class GamePadKey : uint16_t
 	GPK_KEY_CHECK = 0b111100111111111
 };
 
+//static constexpr uint32_t MaxHardWareInputs{UINT8_MAX + }
+
 //namespace powe
 //{
 //	enum class InputDevice;

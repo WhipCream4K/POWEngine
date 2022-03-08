@@ -78,7 +78,7 @@ namespace powe
 
 		// Data of every hardware mapping
 		KeyPool m_MainKeyPool;
-
+			
 		bool m_ShouldRevalidateMouseValue{};
 	};
 }

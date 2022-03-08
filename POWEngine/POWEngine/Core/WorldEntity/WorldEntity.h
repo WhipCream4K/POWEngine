@@ -127,9 +127,8 @@ namespace powe
 			return nullptr;
 
 		// 1. Check if this GameObject already exist in any archetype
-		SharedPtr<Archetype> oldArchetype{ gameObjectRecord->second.Archetype.lock() };
 
-		if(oldArchetype)
+		if(const SharedPtr<Archetype> oldArchetype{ gameObjectRecord->second.Archetype.lock() })
 		{
 			// 1.1 if so check if this component is already in register in this archetype
 			if (std::ranges::find(oldArchetype->Types, componentId) != oldArchetype->Types.end()) // since c++20
