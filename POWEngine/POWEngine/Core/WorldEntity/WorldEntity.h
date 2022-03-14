@@ -11,10 +11,10 @@
 namespace powe
 {
 	class SystemBase;
-	using SystemPipeline = std::array<std::vector<SharedPtr<SystemBase>>, size_t(PipelineLayer::Count)>;
-
 	class WorldEntity final
 	{
+		using SystemPipelines = std::array<std::vector<SharedPtr<SystemBase>>, size_t(PipelineLayer::Count)>;
+
 	public:
 
 		// TODO: Fix rule of 5
@@ -30,7 +30,7 @@ namespace powe
 		InputSettings& GetInputSettings() { return  m_InputSettings; }
 
 		// Lock-free add system
-		template<typename SystemType,typename ...Args>
+		template<typename SystemType, typename ...Args>
 		EnableIsBasedOf<SystemBase, SystemType, WeakPtr<SystemBase>> AddSystem(Args&&... args);
 
 		// TODO: Maybe do a thread safe registering component
@@ -44,9 +44,12 @@ namespace powe
 
 		template<typename ComponentType>
 		EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> AddComponentToGameObject(
-			GameObjectId id, 
+			GameObjectId id,
 			ComponentType&& component,
 			ComponentFlag flag = ComponentFlag::Default);
+
+		void RemoveComponentFromGameObject(GameObjectId id, ComponentTypeID componentID);
+
 
 		// -------------------------------
 		// -------- Pipeline -------------
@@ -55,15 +58,17 @@ namespace powe
 
 	private:
 
-		static bool IsDigitExistInNumber(const std::vector<ComponentTypeId>& compIds, const std::unordered_set<ComponentTypeId>& digit);
+		static bool IsDigitExistInNumber(const std::vector<ComponentTypeID>& compIds, const std::unordered_set<ComponentTypeID>& digit);
+		SharedPtr<Archetype> CreateArchetypeWithTypes(const std::vector<ComponentTypeID>& typeID);
+		static std::string CreateStringFromNumVector(const std::vector<ComponentTypeID>& numList);
 
 	private:
 
 		// This class will get execute almost every frame,
 		// it makes sense that it would live on the stack with WorldEntity
 		InputSettings m_InputSettings;
-		
-		SharedPtr<SimpleThreadPool> m_SimpleThreadPool;
+
+		OwnedPtr<SimpleThreadPool> m_SimpleThreadPool;
 
 		// ========== ECS ================
 
@@ -72,7 +77,7 @@ namespace powe
 		// -------------------------------
 
 		// Has loop iteration, need to take care of run-time write
-		SystemPipeline m_SystemPipeline;
+		SystemPipelines m_SystemPipeline;
 		LFStack<SharedPtr<SystemBase>> m_PendingAddSystem;
 
 		// -------------------------------
@@ -81,12 +86,11 @@ namespace powe
 
 		// No loop iteration
 		// Save data when component first created
-		std::unordered_map<ComponentTypeId, SharedPtr<BaseComponent>> m_ComponentMap;
+		std::unordered_map<ComponentTypeID, SharedPtr<BaseComponent>> m_ComponentMap;
 		// Has loop iteration, need to take care of run-time write
-		// Buffer of archetypes by their combined component type id
-		std::vector<SharedPtr<Archetype>> m_ArchetypesPool;
-
-		std::unordered_map<ComponentTypeId,size_t> m_PendingArchetypesMap;
+		//std::vector<SharedPtr<Archetype>> m_ArchetypesPool;
+		std::unordered_map<std::string, SharedPtr<Archetype>> m_ArchetypesPool;
+		std::unordered_map<std::string, SharedPtr<Archetype>> m_PendingArchetypesMap;
 
 		// -------------------------------
 		// --------- Entity --------------
@@ -118,7 +122,7 @@ namespace powe
 	EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> WorldEntity::AddComponentToGameObject(GameObjectId id,
 		ComponentType&& component, ComponentFlag flag)
 	{
-		const ComponentTypeId componentId{ BaseComponent::GetId<ComponentType>() | flag };
+		const ComponentTypeID componentId{ BaseComponent::GetId<ComponentType>() | flag };
 
 		const auto& gameObjectRecord{ m_GameObjectRecords.find(id) };
 
@@ -127,8 +131,7 @@ namespace powe
 			return nullptr;
 
 		// 1. Check if this GameObject already exist in any archetype
-
-		if(const SharedPtr<Archetype> oldArchetype{ gameObjectRecord->second.Archetype.lock() })
+		if (const SharedPtr<Archetype> oldArchetype{ gameObjectRecord->second.Archetype.lock() })
 		{
 			// 1.1 if so check if this component is already in register in this archetype
 			if (std::ranges::find(oldArchetype->Types, componentId) != oldArchetype->Types.end()) // since c++20
@@ -137,14 +140,22 @@ namespace powe
 				return nullptr;
 			}
 
-			// 1.2 Create a new archetype and add the id to the archetype
-			ArchetypeBuffer newArchetype{};
-			
+			// 1.2 if the GameObject is already existed in another archetype
+			// remove the GameObject from the old archetype, change the old archetype id and data alignment
+			// then create a new archetype for this GameObject
+
 			
 		}
 		else
 		{
-			
+			// 1.2 Create a new archetype for this GameObject
+			const std::vector<ComponentTypeID> compTypes{{componentId}}; // initializer list
+			//const std::string archetypeKey{ CreateStringFromNumVector(compTypes) };
+
+			if(const SharedPtr<Archetype> newArchetype{CreateArchetypeWithTypes(compTypes)})
+			{
+				newArchetype->GameObjectIds.emplace_back(id);
+			}
 		}
 	}
 }

@@ -26,13 +26,13 @@ namespace powe
 		virtual void InternalUpdate(float deltaTime, const SharedPtr<Archetype>& archetype) = 0;
 
 		[[nodiscard]] PipelineLayer GetPipeLineLayer() const { return m_Layer; }
-		[[nodiscard]] const std::unordered_set<ComponentTypeId>& GetKeys() const { return m_Keys; }
+		[[nodiscard]] const std::unordered_set<ComponentTypeID>& GetKeys() const { return m_Keys; }
 
 		void MarkDeleted(bool state) { m_MarkedDeleted = state; }
 
 	protected:
 
-		std::unordered_set<ComponentTypeId> m_Keys;
+		std::unordered_set<ComponentTypeID> m_Keys;
 		WeakPtr<WorldEntity> m_World;
 		PipelineLayer m_Layer;
 		bool m_MarkedDeleted;

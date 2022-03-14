@@ -18,6 +18,7 @@ namespace powe
 
 	public:
 
+
 		//template<typename ComponentType>
 		//EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> AddComponent(ComponentType&& component);
 
@@ -33,7 +34,7 @@ namespace powe
 	//template <typename ComponentType>
 	//EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> GameObject::AddComponent(ComponentType&& component)
 	//{
-	//	const ComponentTypeId newComponentTypeId{ BaseComponent::GetId<ComponentType>() };
+	//	const ComponentTypeID newComponentTypeId{ BaseComponent::GetId<ComponentType>() };
 
 	//	
 	//}

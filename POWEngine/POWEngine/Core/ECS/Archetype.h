@@ -16,7 +16,7 @@ namespace powe
 		Archetype& operator=(Archetype&&) noexcept = default;
 		~Archetype() = default;
 
-		std::vector<ComponentTypeId> Types; // types of components of this archetypes
+		std::vector<ComponentTypeID> Types; // types of components of this archetypes
 		std::vector<GameObjectId> GameObjectIds; // GameObjectIds that has this archetype
 		SharedPtr<RawByte[]> ComponentData{}; // Array of component struct
 		int SizeOfArchetype{};
