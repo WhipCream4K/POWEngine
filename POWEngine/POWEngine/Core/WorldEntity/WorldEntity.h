@@ -144,6 +144,8 @@ namespace powe
 			// remove the GameObject from the old archetype, change the old archetype id and data alignment
 			// then create a new archetype for this GameObject
 
+			const SharedPtr<Archetype> newArchetype{ CreateArchetypeWithTypes(oldArchetype->Types) };
+			
 			
 		}
 		else
