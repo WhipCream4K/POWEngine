@@ -6,6 +6,7 @@ namespace powe
 	using NormalIDType = ComponentTypeID; // This is for a normal use case of ID because I needed the same primitives as ComponentTypeID
 	using GameObjectId = uint32_t;
 	using RawByte = std::byte;
+	using SizeType = uint32_t;
 
 	//constexpr ComponentTypeID ChildOf = (1u << 31u);
 

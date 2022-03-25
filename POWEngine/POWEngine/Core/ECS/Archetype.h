@@ -6,6 +6,7 @@
 
 namespace powe
 {
+	
 	// POD for component data
 	struct Archetype final
 	{
@@ -16,11 +17,22 @@ namespace powe
 		Archetype& operator=(Archetype&&) noexcept = default;
 		~Archetype() = default;
 
+		Archetype& Copy(const Archetype& other)
+		{
+			Types = other.Types;
+			GameObjectIds = other.GameObjectIds;
+			SizeOfComponentsBlock = other.SizeOfComponentsBlock;
+			TotalAllocatedData = other.TotalAllocatedData;
+			ComponentData = other.ComponentData;
+			
+			return *this;
+		}
+
 		std::vector<ComponentTypeID> Types; // types of components of this archetypes
 		std::vector<GameObjectId> GameObjectIds; // GameObjectIds that has this archetype
 		SharedPtr<RawByte[]> ComponentData{}; // Array of component struct
-		int SizeOfArchetype{};
-		int TotalAllocatedData{};
+		SizeType SizeOfComponentsBlock{};
+		SizeType TotalAllocatedData{};
 	};
 }
 

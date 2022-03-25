@@ -1,4 +1,5 @@
 #pragma once
+#include "POWEngine/Core/ECS/ECSTypes.h"
 
 namespace powe
 {
@@ -19,8 +20,8 @@ namespace powe
 		static size_t GetId();
 
 		virtual void DestroyData(uint8_t* address) = 0;
-		virtual void MoveData(uint8_t* source, uint8_t* destination) const = 0;
-		[[nodiscard]] virtual size_t GetSize() const = 0;
+		virtual void MoveData(RawByte* source, RawByte* destination) const = 0;
+		[[nodiscard]] virtual SizeType GetSize() const = 0;
 
 	private:
 
@@ -55,8 +56,8 @@ namespace powe
 	public:
 
 		void DestroyData(uint8_t* address) override;
-		void MoveData(uint8_t* source, uint8_t* destination) const override;
-		[[nodiscard]] size_t GetSize() const override;
+		void MoveData(RawByte* source, RawByte* destination) const override;
+		[[nodiscard]] SizeType GetSize() const override;
 		virtual ~Component() override = default;
 
 	};
@@ -69,15 +70,15 @@ namespace powe
 	}
 
 	template <typename T>
-	void Component<T>::MoveData(uint8_t* source, uint8_t* destination) const
+	void Component<T>::MoveData(RawByte* source, RawByte* destination) const
 	{
 		new (destination) T{ std::move(*reinterpret_cast<T*>(source)) };
 	}
 
 	template <typename T>
-	size_t Component<T>::GetSize() const
+	SizeType Component<T>::GetSize() const
 	{
-		return sizeof(T);
+		return SizeType(sizeof(T));
 	}
 }
 

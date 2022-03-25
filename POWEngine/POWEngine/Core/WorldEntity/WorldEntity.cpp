@@ -21,9 +21,39 @@ powe::GameObjectId powe::WorldEntity::GetEntityId()
 	return m_GameObjectCounter++;
 }
 
-void powe::WorldEntity::RemoveComponentFromGameObject(GameObjectId id, ComponentTypeID componentID)
+void powe::WorldEntity::RemoveComponentByID(GameObjectId id, ComponentTypeID componentID)
 {
 
+}
+
+void powe::WorldEntity::RemoveGameObject(GameObjectId id)
+{
+	const auto findItr{ m_GameObjectRecords.find(id) };
+
+	if (findItr != m_GameObjectRecords.end())
+	{
+		if(const SharedPtr<Archetype> oldArchetype{ findItr->second.Archetype.lock() })
+		{
+			const std::string archetypeKey{ CreateStringFromNumVector(oldArchetype->Types) };
+			const auto archetypeItr{ m_PendingArchetypesMap.find(archetypeKey) };
+
+			SharedPtr<Archetype> targetArchetype{};
+			if (archetypeItr != m_PendingArchetypesMap.end())
+			{
+				// if we have the archetype in the pending then good
+				// we can change it immediately
+				targetArchetype = archetypeItr->second;
+			}
+			else
+			{
+				// we need to allocate new archetype and move over the data
+				targetArchetype = std::make_shared<Archetype>();
+				targetArchetype->Copy(*oldArchetype);
+			}
+
+			
+		}
+	}
 }
 
 void powe::WorldEntity::UpdatePipeline(PipelineLayer layer, float deltaTime)
@@ -70,7 +100,6 @@ SharedPtr<powe::Archetype> powe::WorldEntity::CreateArchetypeWithTypes(const std
 	if(!m_PendingArchetypesMap.contains(key))
 	{
 		const SharedPtr<Archetype> archetype{ std::make_shared<Archetype>() };
-		archetype->Types = typeID;
 		m_PendingArchetypesMap[key] = archetype;
 	}
 
@@ -84,6 +113,23 @@ std::string powe::WorldEntity::CreateStringFromNumVector(const std::vector<Compo
 	{
 		out.append(std::to_string(val));
 	}
+	return out;
+}
+
+SharedPtr<powe::Archetype> powe::WorldEntity::UpdatePendingArchetypeKey(const std::string& targetKey,
+                                                                        const std::string& newKey)
+{
+	auto nodeHandle{ m_PendingArchetypesMap.extract(targetKey) };
+	SharedPtr<Archetype> out{};
+
+	if(!nodeHandle.empty())
+	{
+		nodeHandle.key() = newKey;
+		out = nodeHandle.mapped();
+		m_PendingArchetypesMap.insert(std::move(nodeHandle));
+		return out;
+	}
+
 	return out;
 }
 

@@ -48,7 +48,12 @@ namespace powe
 			ComponentType&& component,
 			ComponentFlag flag = ComponentFlag::Default);
 
-		void RemoveComponentFromGameObject(GameObjectId id, ComponentTypeID componentID);
+		void RemoveComponentByID(GameObjectId id, ComponentTypeID componentID);
+
+		template<typename Component>
+		void RemoveComponentByType(GameObjectId id);
+
+		void RemoveGameObject(GameObjectId id);
 
 
 		// -------------------------------
@@ -61,6 +66,14 @@ namespace powe
 		static bool IsDigitExistInNumber(const std::vector<ComponentTypeID>& compIds, const std::unordered_set<ComponentTypeID>& digit);
 		SharedPtr<Archetype> CreateArchetypeWithTypes(const std::vector<ComponentTypeID>& typeID);
 		static std::string CreateStringFromNumVector(const std::vector<ComponentTypeID>& numList);
+		SharedPtr<Archetype> UpdatePendingArchetypeKey(const std::string& targetKey,const std::string& newKey);
+
+		template<typename ComponentType>
+		ComponentType* AllocateComponentData(
+			const SharedPtr<Archetype>& targetArchetype,
+			const SharedPtr<Archetype>& oldArchetype,
+			int indexInOldArchetype,
+			ComponentType&& component);
 
 	private:
 
@@ -130,6 +143,8 @@ namespace powe
 		if (gameObjectRecord == m_GameObjectRecords.end())
 			return nullptr;
 
+		SharedPtr<Archetype> newArchetype{};
+		
 		// 1. Check if this GameObject already exist in any archetype
 		if (const SharedPtr<Archetype> oldArchetype{ gameObjectRecord->second.Archetype.lock() })
 		{
@@ -144,9 +159,18 @@ namespace powe
 			// remove the GameObject from the old archetype, change the old archetype id and data alignment
 			// then create a new archetype for this GameObject
 
-			const SharedPtr<Archetype> newArchetype{ CreateArchetypeWithTypes(oldArchetype->Types) };
-			
-			
+			std::vector<ComponentTypeID> newCompTypes{oldArchetype->Types};
+			newCompTypes.emplace_back(componentId);
+
+			const std::string oldArchetypeKey{ CreateStringFromNumVector(oldArchetype->Types) };
+			const std::string newArchetypeKey{ CreateStringFromNumVector(newCompTypes) };
+
+			// this is our new archetype
+			newArchetype = UpdatePendingArchetypeKey(oldArchetypeKey, newArchetypeKey);
+
+			// 2. We re-allocate the data and align according to our new Archetype
+			AllocateComponentData(newArchetype, oldArchetype, component);
+
 		}
 		else
 		{
@@ -154,12 +178,116 @@ namespace powe
 			const std::vector<ComponentTypeID> compTypes{{componentId}}; // initializer list
 			//const std::string archetypeKey{ CreateStringFromNumVector(compTypes) };
 
-			if(const SharedPtr<Archetype> newArchetype{CreateArchetypeWithTypes(compTypes)})
+			newArchetype = CreateArchetypeWithTypes(compTypes);
+
+			// 2. We re-allocate the data and align according to our new Archetype
+			AllocateComponentData(newArchetype, nullptr, component);
+		}
+
+		//5. Add this GameObject ID to our new archetype
+		newArchetype->GameObjectIds.emplace_back(id);
+
+		//4. Save this GameObject to GameObjectRecord
+		gameObjectRecord->second.Archetype = newArchetype;
+		gameObjectRecord->second.IndexInArchetype = int(newArchetype->GameObjectIds.size()) - 1;
+		
+	}
+
+	template <typename Component>
+	void WorldEntity::RemoveComponentByType(GameObjectId id)
+	{
+		
+	}
+
+	template <typename ComponentType>
+	ComponentType* WorldEntity::AllocateComponentData(const SharedPtr<Archetype>& targetArchetype,
+		const SharedPtr<Archetype>& oldArchetype, int indexInOldArchetype, ComponentType&& component)
+	{
+		const size_t newComponentSize{ sizeof(ComponentType) };
+		ComponentType* outComponentPointer{};
+
+		SharedPtr<RawByte[]> targetComponentData{ targetArchetype->ComponentData };
+		const SizeType oldComponentsDataTotalSize{ targetArchetype->SizeOfComponentsBlock * SizeType(targetArchetype->GameObjectIds.size()) };
+
+		if (oldComponentsDataTotalSize + newComponentSize > targetArchetype->TotalAllocatedData || !targetArchetype->ComponentData)
+		{
+			const SizeType newSize{ oldComponentsDataTotalSize + (targetArchetype->SizeOfComponentsBlock) * 3 };
+
+			targetComponentData = SharedPtr<RawByte[]>{ new RawByte[newSize]{} };
+
+			//if(targetArchetype->ComponentData)
+			//{
+			//	std::copy_n(targetArchetype->ComponentData.get(),
+			//		oldComponentsDataTotalSize,
+			//		targetComponentData.get());
+			//}
+
+			targetArchetype->TotalAllocatedData = newSize;
+			targetArchetype->ComponentData = targetComponentData;
+		}
+
+		RawByte* newDataAddress{ targetComponentData.get() };
+		SizeType accumulateOffset{};
+
+		if (oldArchetype->ComponentData)
+		{
+			RawByte* oldDataAddress{ oldArchetype->ComponentData.get() };
+
+			for (const auto& _ : oldArchetype->GameObjectIds)
 			{
-				newArchetype->GameObjectIds.emplace_back(id);
+				for (const auto& componentID : oldArchetype->Types)
+				{
+					const SharedPtr<BaseComponent> thisComponent{ m_ComponentMap.at(componentID) };
+
+					RawByte* startAddress{ oldDataAddress + accumulateOffset };
+					RawByte* endAddress{ newDataAddress + accumulateOffset };
+
+					thisComponent->MoveData(startAddress, endAddress);
+					accumulateOffset += thisComponent->GetSize();
+				}
 			}
 		}
+
+		outComponentPointer = new (newDataAddress + accumulateOffset) ComponentType(component);
+
+		return outComponentPointer;
 	}
+
+	//template <typename ComponentType>
+	//ComponentType* WorldEntity::AllocateComponentData(const SharedPtr<Archetype>& targetArchetype,
+	//	int indexInOldArchetype, ComponentType&& component)
+	//{
+	//	const size_t newComponentSize{ sizeof(ComponentType) };
+	//	ComponentType* outPointer{};
+
+	//	SharedPtr<RawByte[]> targetComponentData{ targetArchetype->ComponentData };
+	//	const SizeType oldComponentsDataTotalSize{ targetArchetype->SizeOfComponentsBlock * SizeType(targetArchetype->GameObjectIds.size()) };
+
+	//	if(oldComponentsDataTotalSize + newComponentSize > targetArchetype->TotalAllocatedData || !targetArchetype->ComponentData)
+	//	{
+	//		const SizeType newSize{ oldComponentsDataTotalSize + (targetArchetype->SizeOfComponentsBlock) * 3 };
+
+	//		targetComponentData = SharedPtr<RawByte[]>{ new RawByte[newSize]{} };
+
+	//		//if(targetArchetype->ComponentData)
+	//		//{
+	//		//	std::copy_n(targetArchetype->ComponentData.get(),
+	//		//		oldComponentsDataTotalSize,
+	//		//		targetComponentData.get());
+	//		//}
+
+	//		targetArchetype->TotalAllocatedData = newSize;
+	//		//targetArchetype->ComponentData = targetComponentData;
+	//	}
+
+	//	if(targetArchetype->ComponentData)
+	//	{
+	//		for (const auto& componentID : targetArchetype->Types)
+	//		{
+	//			
+	//		}			
+	//	}
+	//}
 }
 
 
