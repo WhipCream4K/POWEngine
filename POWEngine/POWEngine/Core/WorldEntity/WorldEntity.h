@@ -37,10 +37,12 @@ namespace powe
 		template<typename ComponentType>
 		EnableIsBasedOf<BaseComponent, ComponentType> RegisterComponent();
 
+		void RegisterGameObject(GameObjectId id);
+
 		// TODO: Maybe do a thread safe removing system
 		void RemoveSystem(const SharedPtr<SystemBase>& system) const;
 
-		const auto& GetComponentMap() const { return m_ComponentMap; }
+		const auto& GetComponentMap() const { return m_ComponentTraitsMap; }
 
 		GameObjectId GetEntityId();
 
@@ -66,7 +68,7 @@ namespace powe
 
 		static bool IsDigitExistInNumber(const std::vector<ComponentTypeID>& compIds, const std::unordered_set<ComponentTypeID>& digit);
 		SharedPtr<Archetype> CreateArchetypeWithTypes(const std::vector<ComponentTypeID>& typeID);
-		SharedPtr<Archetype> CreateArchetypeWithKey(const std::string& key);
+		//SharedPtr<Archetype> CreateArchetypeWithKey(const std::string& key);
 		static std::string CreateStringFromNumVector(const std::vector<ComponentTypeID>& numList);
 		SharedPtr<Archetype> UpdatePendingArchetypeKey(const std::string& targetKey,const std::string& newKey);
 		//SharedPtr<Archetype> CreateAndAppendArchetypeByTypes(const std::vector<ComponentTypeID>& types);
@@ -78,7 +80,6 @@ namespace powe
 		ComponentType* AllocateComponentData(
 			const SharedPtr<Archetype>& targetArchetype,
 			const SharedPtr<Archetype>& oldArchetype,
-			int indexInOldArchetype,
 			ComponentType&& component);
 
 	private:
@@ -105,7 +106,7 @@ namespace powe
 
 		// No loop iteration
 		// Save data when component first created
-		std::unordered_map<ComponentTypeID, SharedPtr<BaseComponent>> m_ComponentMap;
+		std::unordered_map<ComponentTypeID, SharedPtr<BaseComponent>> m_ComponentTraitsMap;
 		// Has loop iteration, need to take care of run-time write
 		//std::vector<SharedPtr<Archetype>> m_ArchetypesPool;
 		std::unordered_map<std::string, SharedPtr<Archetype>> m_ArchetypesPool;
@@ -134,15 +135,20 @@ namespace powe
 	template <typename ComponentType>
 	EnableIsBasedOf<BaseComponent, ComponentType> WorldEntity::RegisterComponent()
 	{
-		const size_t typeId{ Component<ComponentType>::GetId() };
-		m_ComponentMap.try_emplace(typeId, std::make_shared<Component<ComponentType>>());
+		//const size_t typeId{ BaseComponent::GetI GetId() };
+		const ComponentTypeID componentID{ BaseComponent::GetId<ComponentType>() };
+		m_ComponentTraitsMap.try_emplace(componentID, std::make_shared<ComponentType>());
 	}
 
 	template <typename ComponentType>
 	EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> WorldEntity::AddComponentToGameObject(GameObjectId id,
-		ComponentType&& component, ComponentFlag flag)
+		ComponentType&& component, ComponentFlag )
 	{
-		const ComponentTypeID componentId{ BaseComponent::GetId<ComponentType>() | flag };
+		const ComponentTypeID componentId{ BaseComponent::GetId<ComponentType>() };
+
+		// 0. Register component automatically
+		if (!m_ComponentTraitsMap.contains(componentId))
+			RegisterComponent<ComponentType>();
 
 		const auto& gameObjectRecord{ m_GameObjectRecords.find(id) };
 
@@ -152,6 +158,7 @@ namespace powe
 
 		SharedPtr<Archetype> newArchetype{};
 		ComponentType* outPointer{};
+		bool isReUsing{};
 		
 		// 1. Check if this GameObject already exist in any archetype
 		if (const SharedPtr<Archetype> oldArchetype{ gameObjectRecord->second.Archetype.lock() })
@@ -167,17 +174,29 @@ namespace powe
 			// remove the GameObject from the old archetype, change the old archetype id and data alignment
 			// then create a new archetype for this GameObject
 
-			std::vector<ComponentTypeID> newCompTypes{oldArchetype->Types};
+			std::vector<ComponentTypeID> newCompTypes{ oldArchetype->Types };
 			newCompTypes.emplace_back(componentId);
-
 			const std::string newArchetypeKey{ CreateStringFromNumVector(newCompTypes) };
+			const std::string oldArchetypeKey{ CreateStringFromNumVector(oldArchetype->Types) };
 
-			newArchetype = GetArchetypeFromPendingList(newArchetypeKey);
+			// most likely that this archetype just got created
+			// so we are going to re-use this
+			if(oldArchetype->GameObjectIds.size() == 1)
+			{
+				const std::string oldCompTypes{ oldArchetypeKey };
+				newArchetype = GetArchetypeFromPendingList(oldCompTypes);
+				isReUsing = true;
+			}
+			else
+			{
+				newArchetype = GetArchetypeFromPendingList(newArchetypeKey);
+			}
 
 			if (!newArchetype)
 			{
-				newArchetype = CreateArchetypeWithKey(newArchetypeKey);
-
+				isReUsing = false;
+				RemoveArchetype(oldArchetypeKey);
+				newArchetype = CreateArchetypeWithTypes(newCompTypes);
 			}
 
 			//const std::string oldArchetypeKey{ CreateStringFromNumVector(oldArchetype->Types) };
@@ -186,27 +205,43 @@ namespace powe
 			//newArchetype = UpdatePendingArchetypeKey(oldArchetypeKey, newArchetypeKey);
 
 			// 2. We re-allocate the data and align according to our new Archetype
-			outPointer = AllocateComponentData(newArchetype, oldArchetype, component);
+			outPointer = AllocateComponentData(newArchetype, oldArchetype, std::forward<ComponentType>(component));
 
 		}
 		else
 		{
 			// 1.2 Create a new archetype for this GameObject
 			const std::vector<ComponentTypeID> compTypes{{componentId}}; // initializer list
-			//const std::string archetypeKey{ CreateStringFromNumVector(compTypes) };
+			const std::string archetypeKey{ CreateStringFromNumVector(compTypes) };
 
-			newArchetype = CreateArchetypeWithTypes(compTypes);
+			SharedPtr<Archetype> tempArchetype{};
+
+			newArchetype = GetArchetypeFromPendingList(archetypeKey);
+			if(!newArchetype)
+			{
+				// check for existing active archetype, if there's one then we are going to use that to copy our data
+				tempArchetype = GetArchetypeFromActiveList(archetypeKey);
+				if (tempArchetype)
+					RemoveArchetype(archetypeKey);
+
+				newArchetype = CreateArchetypeWithTypes(compTypes);
+			}
 
 			// 2. We re-allocate the data and align according to our new Archetype
-			outPointer = AllocateComponentData(newArchetype, nullptr, component);
+			outPointer = AllocateComponentData(newArchetype, tempArchetype, std::forward<ComponentType>(component));
 		}
 
-		//5. Add this GameObject ID to our new archetype
-		newArchetype->GameObjectIds.emplace_back(id);
+		if(!isReUsing)
+		{
+			//4. Save this GameObject to GameObjectRecord
+			gameObjectRecord->second.Archetype = newArchetype;
+			gameObjectRecord->second.IndexInArchetype = int(newArchetype->GameObjectIds.size());
 
-		//4. Save this GameObject to GameObjectRecord
-		gameObjectRecord->second.Archetype = newArchetype;
-		gameObjectRecord->second.IndexInArchetype = int(newArchetype->GameObjectIds.size()) - 1;
+			//5. Add this GameObject ID to our new archetype
+			newArchetype->GameObjectIds.emplace_back(id);
+			
+		}
+
 
 		return outPointer;
 		
@@ -215,52 +250,62 @@ namespace powe
 	template <typename Component>
 	void WorldEntity::RemoveComponentByType(GameObjectId id)
 	{
-		
+		const ComponentTypeID componentID{ BaseComponent::GetId<Component>() };
+		RemoveComponentByID(id, componentID);
 	}
 
 	template <typename ComponentType>
-	ComponentType* WorldEntity::AllocateComponentData(const SharedPtr<Archetype>& targetArchetype,
-		const SharedPtr<Archetype>& oldArchetype, int indexInOldArchetype, ComponentType&& component)
+	ComponentType* WorldEntity::AllocateComponentData(
+		const SharedPtr<Archetype>& targetArchetype,
+		const SharedPtr<Archetype>& oldArchetype, ComponentType&& component)
 	{
 		const size_t newComponentSize{ sizeof(ComponentType) };
 		ComponentType* outComponentPointer{};
 
 		SharedPtr<RawByte[]> targetComponentData{ targetArchetype->ComponentData };
-		const SizeType oldComponentsDataTotalSize{ targetArchetype->SizeOfComponentsBlock * SizeType(targetArchetype->GameObjectIds.size()) };
+		const SizeType currentOccupiedSize{ targetArchetype->SizeOfComponentsBlock * SizeType(targetArchetype->GameObjectIds.size()) };
 
-		if (oldComponentsDataTotalSize + newComponentSize > targetArchetype->TotalAllocatedData || !targetArchetype->ComponentData)
+		if(currentOccupiedSize + newComponentSize >= targetArchetype->TotalAllocatedData || !targetArchetype->ComponentData)
 		{
-			const SizeType newSize{ oldComponentsDataTotalSize + (targetArchetype->SizeOfComponentsBlock) * 3 };
-
-			targetComponentData = SharedPtr<RawByte[]>{ new RawByte[newSize]{} };
-
-			//if(targetArchetype->ComponentData)
-			//{
-			//	std::copy_n(targetArchetype->ComponentData.get(),
-			//		oldComponentsDataTotalSize,
-			//		targetComponentData.get());
-			//}
-
-			targetArchetype->TotalAllocatedData = newSize;
-			targetArchetype->ComponentData = targetComponentData;
+			const SizeType newSize{targetArchetype->SizeOfComponentsBlock * SizeType(targetArchetype->GameObjectIds.size() + 2)};
+			targetArchetype->AllocateComponentData(newSize, *this);
 		}
+
+		//if (oldComponentsDataTotalSize + newComponentSize > targetArchetype->TotalAllocatedData || !targetArchetype->ComponentData)
+		//{
+		//	const SizeType newSize{ oldComponentsDataTotalSize + (targetArchetype->SizeOfComponentsBlock) * 3 };
+
+		//	targetArchetype->AllocateComponentData(newSize, *this);
+		//	//targetComponentData = SharedPtr<RawByte[]>{ new RawByte[newSize]{} };
+
+		//	////if(targetArchetype->ComponentData)
+		//	////{
+		//	////	std::copy_n(targetArchetype->ComponentData.get(),
+		//	////		oldComponentsDataTotalSize,
+		//	////		targetComponentData.get());
+		//	////}
+
+		//	//targetArchetype->TotalAllocatedData = newSize;
+		//	//targetArchetype->ComponentData = targetComponentData;
+		//}
 
 		RawByte* newDataAddress{ targetComponentData.get() };
 		SizeType accumulateOffset{};
 
-		if (oldArchetype->ComponentData)
+		if (oldArchetype && oldArchetype->ComponentData)
 		{
+
 			RawByte* oldDataAddress{ oldArchetype->ComponentData.get() };
 
-			RawByte* startAddress{ oldDataAddress + accumulateOffset };
-			RawByte* endAddress{ newDataAddress + accumulateOffset };
+			RawByte* startAddress{ oldDataAddress };
+			RawByte* endAddress{ newDataAddress };
 
-			for (const auto& _ : oldArchetype->GameObjectIds)
+			for (const auto&  _[[maybe_unused]] : oldArchetype->GameObjectIds)
 			{
 				for (const auto& componentID : oldArchetype->Types)
 				{
-					const SharedPtr<BaseComponent> thisComponent{ m_ComponentMap.at(componentID) };
-					thisComponent->MoveData(startAddress, endAddress);
+					const SharedPtr<BaseComponent> thisComponent{ m_ComponentTraitsMap.at(componentID) };
+					thisComponent->MoveData(startAddress + accumulateOffset, endAddress + accumulateOffset);
 					accumulateOffset += thisComponent->GetSize();
 				}
 			}

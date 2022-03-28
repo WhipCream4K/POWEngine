@@ -210,11 +210,61 @@ TEST_CASE("For loop calculation or unordered set")
 	const uint32_t some{ 1 | (1u << 31u) };
 
 	std::cout << (some & ~(1u << 31u)) << std::endl;
-
-	//while ()
-	//{
-	//	
-	//}
 }
 
 // TODO: Create Lock-free stack ABA test
+
+#define ComponentTest
+
+#ifdef ComponentTest
+
+#include "POWEngine/Core/WorldEntity/WorldEntity.h"
+#include "POWEngine/Core/GameObject/GameObject.h"
+#include "POWEngine/Core/Components/BaseComponent.h"
+
+struct TestComponent : powe::Component<TestComponent>
+{
+	int some{42};
+};
+
+struct TestComponent2: powe::Component<TestComponent2>
+{
+	int sol{ 42 };
+};
+
+TEST_CASE("Component")
+{
+	std::cout << "------ Component System Test --------\n";
+
+	using namespace powe;
+
+	SharedPtr<WorldEntity> worldEnt{ std::make_shared<WorldEntity>() };
+	SharedPtr<GameObject> gameObject{ std::make_shared<GameObject>(worldEnt) };
+
+	// Create GameObject with null world entity should throw
+	REQUIRE_THROWS(std::make_shared<GameObject>(nullptr));
+
+	REQUIRE(gameObject->GetID() == 0);
+
+	TestComponent* test1{ worldEnt->AddComponentToGameObject(gameObject->GetID(), TestComponent{}) };
+	TestComponent2* test2{ worldEnt->AddComponentToGameObject(gameObject->GetID(), TestComponent2{}) };
+
+	REQUIRE(test1 != nullptr);
+	REQUIRE(test1->some == 42);
+	REQUIRE(test2 != nullptr);
+	REQUIRE(test2->sol == 42);
+
+	SharedPtr<GameObject> gameObject2{ std::make_shared<GameObject>(worldEnt) };
+
+	REQUIRE(gameObject2->GetID() == 1);
+
+	test1 = worldEnt->AddComponentToGameObject(gameObject2->GetID(), TestComponent{});
+	test2 = worldEnt->AddComponentToGameObject(gameObject2->GetID(), TestComponent2{});
+
+	REQUIRE(test1 != nullptr);
+	REQUIRE(test1->some == 42);
+	REQUIRE(test2 != nullptr);
+	REQUIRE(test2->sol == 42);
+}
+
+#endif

@@ -58,7 +58,7 @@ namespace powe
 		void DestroyData(RawByte* address) override;
 		void MoveData(RawByte* source, RawByte* destination) const override;
 		[[nodiscard]] SizeType GetSize() const override;
-		virtual ~Component() override = default;
+		~Component() override = default;
 
 	};
 

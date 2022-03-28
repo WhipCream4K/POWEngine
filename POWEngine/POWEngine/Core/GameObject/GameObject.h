@@ -10,14 +10,16 @@ namespace powe
 	{
 	public:
 
-		GameObject(const SharedPtr<WorldEntity>& world);
-		GameObject(const GameObject&) = default;
-		GameObject& operator=(const GameObject&) = default;
-		GameObject(GameObject&&) noexcept = default;
-		GameObject& operator=(GameObject&&) noexcept = default;
+		explicit GameObject(const SharedPtr<WorldEntity>& world);
+		GameObject(const GameObject&) = delete;
+		GameObject& operator=(const GameObject&) = delete;
+		GameObject(GameObject&&) noexcept = delete;
+		GameObject& operator=(GameObject&&) noexcept = delete;
+		~GameObject() = default;
 
 	public:
 
+		GameObjectId GetID() const { return m_Id; }
 
 		//template<typename ComponentType>
 		//EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> AddComponent(ComponentType&& component);
@@ -25,9 +27,11 @@ namespace powe
 		//template<typename ComponentType>
 		//EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> AddComponentSparse(ComponentType&& component);
 
+
 	private:
 
-		WeakPtr<WorldEntity> m_World;
+
+		WeakPtr<WorldEntity> m_World; // GameObject cannot exist without world entity
 		GameObjectId m_Id;
 	};
 

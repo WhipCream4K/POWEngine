@@ -6,6 +6,12 @@
 
 powe::WorldEntity::WorldEntity() = default;
 
+void powe::WorldEntity::RegisterGameObject(GameObjectId id)
+{
+	if (!m_GameObjectRecords.contains(id))
+		m_GameObjectRecords.try_emplace(id, GameObjectInArchetypeRecord{});
+}
+
 void powe::WorldEntity::RemoveSystem(const SharedPtr<SystemBase>&system) const
 {
 	const auto& targetPipeline{ m_SystemPipeline[size_t(system->GetPipeLineLayer())] };
@@ -24,9 +30,9 @@ powe::GameObjectId powe::WorldEntity::GetEntityId()
 void powe::WorldEntity::RemoveComponentByID(GameObjectId id, ComponentTypeID componentID)
 {
 	const auto gameObjectItr{ m_GameObjectRecords.find(id) };
-	const auto componentItr{ m_ComponentMap.find(componentID) };
+	const auto componentItr{ m_ComponentTraitsMap.find(componentID) };
 
-	if (gameObjectItr != m_GameObjectRecords.end() && componentItr != m_ComponentMap.end())
+	if (gameObjectItr != m_GameObjectRecords.end() && componentItr != m_ComponentTraitsMap.end())
 	{
 		if (const SharedPtr<Archetype> oldArchetype{ gameObjectItr->second.Archetype.lock() })
 		{
@@ -41,22 +47,27 @@ void powe::WorldEntity::RemoveComponentByID(GameObjectId id, ComponentTypeID com
 
 			if(!targetArchetype)
 			{
-				targetArchetype = CreateArchetypeWithKey(archetypeKey);
+				targetArchetype = CreateArchetypeWithTypes(newTypes);
 			}
 
 			// Move Data from the old archetype to the new archetype
 			if (const SizeType occupiedSize{ SizeType((targetArchetype->GameObjectIds.size() + 1) * targetArchetype->SizeOfComponentsBlock) };
 				occupiedSize + targetArchetype->SizeOfComponentsBlock >= targetArchetype->TotalAllocatedData)
 			{
+				// allocate more space if the current size is equal or more that the total allocated space
 				targetArchetype->AllocateComponentData(SizeType(occupiedSize * 3),*this);
 			}
 
 			SizeType accumulatedOffset{};
 			const SizeType startIndex{ SizeType(gameObjectItr->second.IndexInArchetype * oldArchetype->SizeOfComponentsBlock) };
 			const SizeType endIndex{ SizeType(targetArchetype->GameObjectIds.size() * targetArchetype->SizeOfComponentsBlock) };
+
+			RawByte* startAddress{ &oldArchetype->ComponentData[startIndex] };
+			RawByte* endAddress{ &targetArchetype->ComponentData[endIndex] };
+
 			for (const auto& compID: oldArchetype->Types)
 			{
-				const SharedPtr<BaseComponent> thisComponent{ m_ComponentMap.at(compID) };
+				const SharedPtr<BaseComponent> thisComponent{ m_ComponentTraitsMap.at(compID) };
 
 				if(compID == componentID)
 				{
@@ -64,8 +75,6 @@ void powe::WorldEntity::RemoveComponentByID(GameObjectId id, ComponentTypeID com
 					continue;
 				}
 
-				RawByte* startAddress{ &oldArchetype->ComponentData[startIndex] };
-				RawByte* endAddress{ &targetArchetype->ComponentData[endIndex] };
 				thisComponent->MoveData(startAddress + accumulatedOffset, endAddress + accumulatedOffset);
 				accumulatedOffset += thisComponent->GetSize();
 			}
@@ -100,7 +109,7 @@ void powe::WorldEntity::RemoveGameObject(GameObjectId id, bool removeRecord)
 			if (!targetArchetype)
 			{
 				// we need to create a new archetype and add it to the pending list
-				targetArchetype = CreateArchetypeWithKey(archetypeKey);
+				targetArchetype = CreateArchetypeWithTypes(oldArchetype->Types);
 				*targetArchetype = targetArchetype->Copy(*oldArchetype, *this);
 			}
 
@@ -110,9 +119,9 @@ void powe::WorldEntity::RemoveGameObject(GameObjectId id, bool removeRecord)
 				SizeType accumulateOffset{};
 				for (const auto& componentID : targetArchetype->Types)
 				{
-					const SharedPtr<BaseComponent> thisComponent{ m_ComponentMap.at(componentID) };
+					const SharedPtr<BaseComponent> thisComponent{ m_ComponentTraitsMap.at(componentID) };
 					thisComponent->DestroyData(startAddress + accumulateOffset);
-					accumulateOffset += m_ComponentMap.at(componentID)->GetSize();
+					accumulateOffset += m_ComponentTraitsMap.at(componentID)->GetSize();
 				}
 			}
 
@@ -126,7 +135,7 @@ void powe::WorldEntity::RemoveGameObject(GameObjectId id, bool removeRecord)
 					SizeType accumulateOffset{};
 					for (const auto& componentID : targetArchetype->Types)
 					{
-						const SharedPtr<BaseComponent> thisComponent{ m_ComponentMap.at(componentID) };
+						const SharedPtr<BaseComponent> thisComponent{ m_ComponentTraitsMap.at(componentID) };
 						RawByte* startAddress{ &targetArchetype->ComponentData[SizeType(i * targetArchetype->SizeOfComponentsBlock)] };
 						RawByte* endAddress{ &targetArchetype->ComponentData[SizeType((i - 1) * targetArchetype->SizeOfComponentsBlock)] };
 						thisComponent->MoveData(startAddress + accumulateOffset, endAddress + accumulateOffset);
@@ -189,17 +198,14 @@ SharedPtr<powe::Archetype> powe::WorldEntity::CreateArchetypeWithTypes(const std
 	if (!m_PendingAddArchetypes.contains(key))
 	{
 		const SharedPtr<Archetype> archetype{ std::make_shared<Archetype>() };
-		m_PendingAddArchetypes[key] = archetype;
-	}
 
-	return m_PendingAddArchetypes[key];
-}
+		archetype->Types = typeID;
 
-SharedPtr<powe::Archetype> powe::WorldEntity::CreateArchetypeWithKey(const std::string & key)
-{
-	if (!m_PendingAddArchetypes.contains(key))
-	{
-		const SharedPtr<Archetype> archetype{ std::make_shared<Archetype>() };
+		for (const auto& componentID : typeID)
+		{
+			archetype->SizeOfComponentsBlock += m_ComponentTraitsMap.at(componentID)->GetSize();
+		}
+
 		m_PendingAddArchetypes[key] = archetype;
 	}
 
