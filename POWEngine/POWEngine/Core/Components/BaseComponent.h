@@ -19,7 +19,7 @@ namespace powe
 		template<typename T>
 		static size_t GetId();
 
-		virtual void DestroyData(uint8_t* address) = 0;
+		virtual void DestroyData(RawByte* address) = 0;
 		virtual void MoveData(RawByte* source, RawByte* destination) const = 0;
 		[[nodiscard]] virtual SizeType GetSize() const = 0;
 
@@ -55,7 +55,7 @@ namespace powe
 
 	public:
 
-		void DestroyData(uint8_t* address) override;
+		void DestroyData(RawByte* address) override;
 		void MoveData(RawByte* source, RawByte* destination) const override;
 		[[nodiscard]] SizeType GetSize() const override;
 		virtual ~Component() override = default;
@@ -63,7 +63,7 @@ namespace powe
 	};
 
 	template <typename T>
-	void Component<T>::DestroyData(uint8_t* address)
+	void Component<T>::DestroyData(RawByte* address)
 	{
 		T* object{ reinterpret_cast<T*>(address) };
 		object->~T();

@@ -176,5 +176,8 @@
     <ClCompile Include="POWEngine\Core\GameObject\GameObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="POWEngine\Core\ECS\Archetype.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
