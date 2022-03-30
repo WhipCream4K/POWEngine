@@ -26,6 +26,8 @@ namespace powe
 
 		//template<typename ComponentType>
 		//EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> AddComponentSparse(ComponentType&& component);
+		
+		void SetParent(const SharedPtr<GameObject>& object);
 
 
 	private:

@@ -22,7 +22,7 @@ void powe::WorldEntity::RemoveSystem(const SharedPtr<SystemBase>&system) const
 	}
 }
 
-powe::GameObjectId powe::WorldEntity::GetEntityId()
+powe::GameObjectId powe::WorldEntity::GetNewEntityID()
 {
 	return m_GameObjectCounter++;
 }

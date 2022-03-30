@@ -42,9 +42,13 @@ namespace powe
 		// TODO: Maybe do a thread safe removing system
 		void RemoveSystem(const SharedPtr<SystemBase>& system) const;
 
+<<<<<<< Updated upstream
 		const auto& GetComponentMap() const { return m_ComponentTraitsMap; }
 
 		GameObjectId GetEntityId();
+=======
+		GameObjectId GetNewEntityID();
+>>>>>>> Stashed changes
 
 		template<typename ComponentType>
 		EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> AddComponentToGameObject(
@@ -170,6 +174,7 @@ namespace powe
 				return nullptr;
 			}
 
+<<<<<<< Updated upstream
 			// 1.2 if the GameObject is already existed in another archetype
 			// remove the GameObject from the old archetype, change the old archetype id and data alignment
 			// then create a new archetype for this GameObject
@@ -207,6 +212,11 @@ namespace powe
 			// 2. We re-allocate the data and align according to our new Archetype
 			outPointer = AllocateComponentData(newArchetype, oldArchetype, std::forward<ComponentType>(component));
 
+=======
+			// 1.2 Create a new archetype and add the id to the archetype
+			ArchetypeTraits newArchetype{};
+			
+>>>>>>> Stashed changes
 		}
 		else
 		{
