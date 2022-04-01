@@ -133,11 +133,12 @@ void powe::WorldEntity::RemoveGameObject(GameObjectId id, bool removeRecord)
 				for (auto i = thisGameObjectIndex + 1; i < targetArchetype->GameObjectIds.size(); ++i)
 				{
 					SizeType accumulateOffset{};
+					RawByte* startAddress{ &targetArchetype->ComponentData[SizeType(i * targetArchetype->SizeOfComponentsBlock)] };
+					RawByte* endAddress{ &targetArchetype->ComponentData[SizeType((i - 1) * targetArchetype->SizeOfComponentsBlock)] };
+
 					for (const auto& componentID : targetArchetype->Types)
 					{
 						const SharedPtr<BaseComponent> thisComponent{ m_ComponentTraitsMap.at(componentID) };
-						RawByte* startAddress{ &targetArchetype->ComponentData[SizeType(i * targetArchetype->SizeOfComponentsBlock)] };
-						RawByte* endAddress{ &targetArchetype->ComponentData[SizeType((i - 1) * targetArchetype->SizeOfComponentsBlock)] };
 						thisComponent->MoveData(startAddress + accumulateOffset, endAddress + accumulateOffset);
 						accumulateOffset += thisComponent->GetSize();
 					}
@@ -145,7 +146,9 @@ void powe::WorldEntity::RemoveGameObject(GameObjectId id, bool removeRecord)
 			}
 
 			// 3. Remove the GameObject ID out of this archetype
-			targetArchetype->GameObjectIds.erase(std::ranges::remove(targetArchetype->GameObjectIds, id).begin());
+			targetArchetype->GameObjectIds.erase(
+				std::ranges::remove(targetArchetype->GameObjectIds, id).begin(),
+				targetArchetype->GameObjectIds.end());
 
 			if (removeRecord)
 				m_GameObjectRecords.erase(findItr);
@@ -156,7 +159,7 @@ void powe::WorldEntity::RemoveGameObject(GameObjectId id, bool removeRecord)
 
 void powe::WorldEntity::UpdatePipeline(PipelineLayer layer, float deltaTime)
 {
-	const auto& systemsInThisPipeline{ m_SystemPipeline[size_t(layer)] };
+	const auto& systemsInThisPipeline{ m_SystemPipeline[int(layer)] };
 
 	for (const auto& system : systemsInThisPipeline)
 	{
@@ -264,40 +267,19 @@ SharedPtr<powe::Archetype> powe::WorldEntity::GetArchetypeFromActiveList(const s
 	return nullptr;
 }
 
-SharedPtr<powe::Archetype> powe::WorldEntity::GetValidArchetype(const std::string& key)
-{
-	auto archetypeItr{ m_ArchetypesPool.find(key) };
-
-	if(archetypeItr == m_ArchetypesPool.end())
-	{
-		archetypeItr = m_PendingAddArchetypes.find(key);
-		if (archetypeItr == m_PendingAddArchetypes.end())
-			return nullptr;
-
-		return archetypeItr->second;
-	}
-
-	return archetypeItr->second;
-}
-
-//SharedPtr<powe::Archetype> powe::WorldEntity::CreateAndAppendArchetypeByTypes(const std::vector<ComponentTypeID>& types)
+//SharedPtr<powe::Archetype> powe::WorldEntity::GetValidArchetype(const std::string& key)
 //{
-//	const std::string archetypeKey{ CreateStringFromNumVector(types) };
-//	const auto archetypeItr{ m_ArchetypesPool.find(archetypeKey) };
+//	auto archetypeItr{ m_ArchetypesPool.find(key) };
 //
-//	SharedPtr<Archetype> outArchetype{};
-// 
-//	if(archetypeItr != m_ArchetypesPool.end())
+//	if(archetypeItr == m_ArchetypesPool.end())
 //	{
-//		const auto pendingItr{ m_PendingAddArchetypes.find(archetypeKey) };
-//		if (pendingItr != m_PendingAddArchetypes.end())
-//			outArchetype = pendingItr->second;
-//	}
-//	else
-//	{
-//		outArchetype = std::make_shared<Archetype>();
+//		archetypeItr = m_PendingAddArchetypes.find(key);
+//		if (archetypeItr == m_PendingAddArchetypes.end())
+//			return nullptr;
+//
+//		return archetypeItr->second;
 //	}
 //
-//	return outArchetype;
+//	return archetypeItr->second;
 //}
 

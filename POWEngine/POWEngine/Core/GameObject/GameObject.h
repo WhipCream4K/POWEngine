@@ -33,6 +33,8 @@ namespace powe
 	private:
 
 		WeakPtr<WorldEntity> m_World; // GameObject cannot exist without world entity
+		GameObjectId m_Parent;
+		std::vector<ComponentTypeID> m_ChildrenComponents;
 		GameObjectId m_Id;
 	};
 }

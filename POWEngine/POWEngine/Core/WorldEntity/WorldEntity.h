@@ -7,6 +7,7 @@
 #include "POWEngine/LockFree/LFStack.h"
 #include "PipelineLayer.h"
 #include "POWEngine/Core/ECS/Archetype.h"
+#include "POWEngine/Core/Components/ChildComponentTraits.h"
 
 namespace powe
 {
@@ -81,7 +82,6 @@ namespace powe
 		SharedPtr<Archetype> GetArchetypeFromPendingList(const std::string& key);
 		void RemoveArchetype(const std::string& key);
 		SharedPtr<Archetype> GetArchetypeFromActiveList(const std::string& key);
-		SharedPtr<Archetype> GetValidArchetype(const std::string& key);
 
 		template<typename ComponentType>
 		ComponentType* AllocateComponentData(
@@ -122,6 +122,7 @@ namespace powe
 		std::unordered_set<std::string> m_PendingRemoveArchetypes;
 		std::unordered_map<ComponentTypeID, SizeType> m_SparseComponentEmptyPointer;
 		std::unordered_map<ComponentTypeID, SharedPtr<RawByte[]>> m_SparseComponent;
+		std::vector<ChildComponentTraits> m_ChildComponents;
 
 		// -------------------------------
 		// --------- Entity --------------
