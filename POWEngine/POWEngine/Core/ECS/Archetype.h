@@ -31,7 +31,7 @@ namespace powe
 		}
 
 		SharedPtr<RawByte[]> CopyComponentData(const Archetype& other, const WorldEntity& world) const;
-		void CopyComponentData(RawByte* startAddress, RawByte* endAddress);
+		//void CopyComponentData(const WorldEntity& world,const Archetype& other,int indexInArchetype);
 		void AllocateComponentData(SizeType newSize, const WorldEntity& world);
 
 		std::vector<ComponentTypeID> Types; // types of components of this archetypes

@@ -17,7 +17,7 @@ namespace powe
 	public:
 
 		template<typename T>
-		static size_t GetId();
+		static ComponentTypeID GetId();
 
 		virtual void DestroyData(RawByte* address) = 0;
 		virtual void MoveData(RawByte* source, RawByte* destination) const = 0;
@@ -26,14 +26,14 @@ namespace powe
 	private:
 
 		// Thread safe counter
-		static std::atomic_size_t m_ComponentIdCounter;
+		static std::atomic<ComponentTypeID> m_ComponentIdCounter;
 
 	};
 
 	template <typename T>
-	size_t BaseComponent::GetId()
+	ComponentTypeID BaseComponent::GetId()
 	{
-		static const size_t counter{ m_ComponentIdCounter++ };
+		static const ComponentTypeID counter{ m_ComponentIdCounter++ };
 		return counter;
 	}
 

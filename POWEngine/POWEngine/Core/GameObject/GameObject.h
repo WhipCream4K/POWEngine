@@ -32,25 +32,9 @@ namespace powe
 
 	private:
 
-
 		WeakPtr<WorldEntity> m_World; // GameObject cannot exist without world entity
 		GameObjectId m_Id;
 	};
-
-	//template <typename ComponentType>
-	//EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> GameObject::AddComponent(ComponentType&& component)
-	//{
-	//	const ComponentTypeID newComponentTypeId{ BaseComponent::GetId<ComponentType>() };
-
-	//	
-	//}
-
-	//template <typename ComponentType>
-	//EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> GameObject::AddComponentSparse(
-	//	ComponentType&& component)
-	//{
-	//	// TODO: do the component sparse
-	//}
 }
 
 

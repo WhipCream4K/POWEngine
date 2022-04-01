@@ -38,6 +38,18 @@ SharedPtr<powe::RawByte[]> powe::Archetype::CopyComponentData(const Archetype& o
 	return newComponentData;
 }
 
+//void powe::Archetype::CopyComponentData(const WorldEntity& world,const Archetype& other, int indexInArchetype)
+//{
+//	//SizeType accumulatedOffset{};
+//	//RawByte* startAddress{ &other.ComponentData[indexInArchetype * other.SizeOfComponentsBlock] };
+//	//RawByte* endAddress{};
+//
+//	//for (const auto& compID : Types)
+//	//{
+//	//	accumulatedOffset += 
+//	//}
+//}
+
 void powe::Archetype::AllocateComponentData(SizeType newSize,const WorldEntity& world)
 {
 	const SharedPtr<RawByte[]> newComponentData{ SharedPtr<RawByte[]>{new RawByte[newSize]{}} };

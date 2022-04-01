@@ -116,7 +116,7 @@ TEST_CASE("Logger")
 	std::cout << powe::UniqueIdGenerator<powe::Logger>::GetNewId<double>() << std::endl;
 	std::cout << powe::UniqueIdGenerator<powe::Logger>::GetNewId<float>() << std::endl;
 	//std::cout << powe::UniqueIdGenerator<powe::>::GetNewId() << std::endl;
- 
+
 	//std::cout << sizeof(SharedPtr<powe::Logger>) << '\n';
 	//std::cout << sizeof(SharedPtr<int>) << '\n';
 
@@ -131,7 +131,7 @@ TEST_CASE("Logger")
 		pumpMsgThread[i] = std::async(std::launch::async, &PumpMessage, std::ref(logger), msg);
 	}
 
-	for (auto & thread : pumpMsgThread)
+	for (auto& thread : pumpMsgThread)
 	{
 		thread.get();
 	}
@@ -140,7 +140,7 @@ TEST_CASE("Logger")
 
 #include <POWEngine/LockFree/LFStack.h>
 
-void PushStack(powe::LFStack<std::string>& stack,const std::string& msg)
+void PushStack(powe::LFStack<std::string>& stack, const std::string& msg)
 {
 	const std::uniform_int_distribution<int> uniIntDist{ 1,6 };
 	std::this_thread::sleep_for(std::chrono::milliseconds(uniIntDist(engine)));
@@ -185,13 +185,13 @@ TEST_CASE("Lock free stack push")
 
 struct Base
 {
-	
+
 };
 
 template<typename T>
 struct Comp : Base
 {
-	
+
 };
 
 struct Some : Comp<Some>
@@ -224,10 +224,10 @@ TEST_CASE("For loop calculation or unordered set")
 
 struct TestComponent : powe::Component<TestComponent>
 {
-	int some{42};
+	int some{ 42 };
 };
 
-struct TestComponent2: powe::Component<TestComponent2>
+struct TestComponent2 : powe::Component<TestComponent2>
 {
 	int sol{ 42 };
 };
@@ -238,33 +238,50 @@ TEST_CASE("Component")
 
 	using namespace powe;
 
-	SharedPtr<WorldEntity> worldEnt{ std::make_shared<WorldEntity>() };
-	SharedPtr<GameObject> gameObject{ std::make_shared<GameObject>(worldEnt) };
 
 	// Create GameObject with null world entity should throw
-	REQUIRE_THROWS(std::make_shared<GameObject>(nullptr));
+	SECTION("Test creating gameobject with null world")
+	{
+		REQUIRE_THROWS(std::make_shared<GameObject>(nullptr));
+	}
 
-	REQUIRE(gameObject->GetID() == 0);
+	SECTION("Test Adding Components")
+	{
+		SharedPtr<WorldEntity> worldEnt{ std::make_shared<WorldEntity>() };
+		SharedPtr<GameObject> gameObject{ std::make_shared<GameObject>(worldEnt) };
 
-	TestComponent* test1{ worldEnt->AddComponentToGameObject(gameObject->GetID(), TestComponent{}) };
-	TestComponent2* test2{ worldEnt->AddComponentToGameObject(gameObject->GetID(), TestComponent2{}) };
+		REQUIRE(gameObject->GetID() == 0);
 
-	REQUIRE(test1 != nullptr);
-	REQUIRE(test1->some == 42);
-	REQUIRE(test2 != nullptr);
-	REQUIRE(test2->sol == 42);
+		TestComponent* test1{ worldEnt->AddComponentToGameObject(gameObject->GetID(), TestComponent{}) };
+		TestComponent2* test2{ worldEnt->AddComponentToGameObject(gameObject->GetID(), TestComponent2{}) };
 
-	SharedPtr<GameObject> gameObject2{ std::make_shared<GameObject>(worldEnt) };
+		REQUIRE(test1 != nullptr);
+		REQUIRE(test1->some == 42);
+		REQUIRE(test2 != nullptr);
+		REQUIRE(test2->sol == 42);
+	}
 
-	REQUIRE(gameObject2->GetID() == 1);
+	SECTION("Test adding same components on different gameobjects")
+	{
+		SharedPtr<WorldEntity> worldEnt{ std::make_shared<WorldEntity>() };
+		SharedPtr<GameObject> gameObject1{ std::make_shared<GameObject>(worldEnt) };
 
-	test1 = worldEnt->AddComponentToGameObject(gameObject2->GetID(), TestComponent{});
-	test2 = worldEnt->AddComponentToGameObject(gameObject2->GetID(), TestComponent2{});
+		TestComponent* test1 = worldEnt->AddComponentToGameObject(gameObject1->GetID(), TestComponent{});
 
-	REQUIRE(test1 != nullptr);
-	REQUIRE(test1->some == 42);
-	REQUIRE(test2 != nullptr);
-	REQUIRE(test2->sol == 42);
+		REQUIRE(test1 != nullptr);
+		REQUIRE(test1->some == 42);
+
+		SharedPtr<GameObject> gameObject3{ std::make_shared<GameObject>(worldEnt) };
+		test1 = worldEnt->AddComponentToGameObject(gameObject3->GetID(), TestComponent{});
+
+		REQUIRE(test1 != nullptr);
+		REQUIRE(test1->some == 42);
+
+	}
+
+	
+
+
 }
 
 #endif

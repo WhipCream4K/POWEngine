@@ -43,19 +43,15 @@ powe::GameObject::GameObject(const SharedPtr<WorldEntity>& world)
 {
 	if(!world)
 	{
-<<<<<<< Updated upstream
 		//POWLOGERROR("GameObject cannot exist without world entity");
 		throw std::exception("GameObject instance cannot exist without world entity");
-=======
-		m_Id = world->GetNewEntityID();
->>>>>>> Stashed changes
 	}
 
-	m_Id = world->GetEntityId();
+	m_Id = world->GetNewEntityID();
 	world->RegisterGameObject(m_Id);
 }
 
-void powe::GameObject::SetParent(const SharedPtr<GameObject>& object)
+void powe::GameObject::SetParent(const SharedPtr<GameObject>& )
 {
 
 }

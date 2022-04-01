@@ -264,6 +264,22 @@ SharedPtr<powe::Archetype> powe::WorldEntity::GetArchetypeFromActiveList(const s
 	return nullptr;
 }
 
+SharedPtr<powe::Archetype> powe::WorldEntity::GetValidArchetype(const std::string& key)
+{
+	auto archetypeItr{ m_ArchetypesPool.find(key) };
+
+	if(archetypeItr == m_ArchetypesPool.end())
+	{
+		archetypeItr = m_PendingAddArchetypes.find(key);
+		if (archetypeItr == m_PendingAddArchetypes.end())
+			return nullptr;
+
+		return archetypeItr->second;
+	}
+
+	return archetypeItr->second;
+}
+
 //SharedPtr<powe::Archetype> powe::WorldEntity::CreateAndAppendArchetypeByTypes(const std::vector<ComponentTypeID>& types)
 //{
 //	const std::string archetypeKey{ CreateStringFromNumVector(types) };
