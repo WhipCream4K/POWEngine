@@ -6,9 +6,9 @@ namespace powe
 {
 	struct ChildComponentTraits
 	{
-		std::vector<ComponentTypeID> ChildComponentsID{};
-		GameObjectId ParentID{};
-		GameObjectId SelfID{};
+		ComponentTypeID ChildComponentID{};
+		GameObjectID ParentID{};
+		bool isDirty{};
 	};
 }
 

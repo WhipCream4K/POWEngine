@@ -221,6 +221,7 @@ TEST_CASE("For loop calculation or unordered set")
 #include "POWEngine/Core/WorldEntity/WorldEntity.h"
 #include "POWEngine/Core/GameObject/GameObject.h"
 #include "POWEngine/Core/Components/BaseComponent.h"
+//#include "POWEngine/Core/Components/Transform2D.h"
 
 struct TestComponent : powe::Component<TestComponent>
 {
@@ -232,23 +233,24 @@ struct TestComponent2 : powe::Component<TestComponent2>
 	int sol{ 42 };
 };
 
+struct MoreVirtual : powe::Component<MoreVirtual>
+{
+	virtual void Update()
+	{
+		std::cout << "Update";
+	}
+};
+
 TEST_CASE("Component")
 {
 	std::cout << "------ Component System Test --------\n";
 
 	using namespace powe;
 
-
-	// Create GameObject with null world entity should throw
-	SECTION("Test creating gameobject with null world")
-	{
-		REQUIRE_THROWS(std::make_shared<GameObject>(nullptr));
-	}
-
 	SECTION("Test Adding Components")
 	{
 		SharedPtr<WorldEntity> worldEnt{ std::make_shared<WorldEntity>() };
-		SharedPtr<GameObject> gameObject{ std::make_shared<GameObject>(worldEnt) };
+		SharedPtr<GameObject> gameObject{ std::make_shared<GameObject>(*worldEnt) };
 
 		REQUIRE(gameObject->GetID() == 0);
 
@@ -264,22 +266,24 @@ TEST_CASE("Component")
 	SECTION("Test adding same components on different gameobjects")
 	{
 		SharedPtr<WorldEntity> worldEnt{ std::make_shared<WorldEntity>() };
-		SharedPtr<GameObject> gameObject1{ std::make_shared<GameObject>(worldEnt) };
+		SharedPtr<GameObject> gameObject1{ std::make_shared<GameObject>(*worldEnt) };
 
 		TestComponent* test1 = worldEnt->AddComponentToGameObject(gameObject1->GetID(), TestComponent{});
 
 		REQUIRE(test1 != nullptr);
 		REQUIRE(test1->some == 42);
 
-		SharedPtr<GameObject> gameObject3{ std::make_shared<GameObject>(worldEnt) };
+		SharedPtr<GameObject> gameObject3{ std::make_shared<GameObject>(*worldEnt) };
 		test1 = worldEnt->AddComponentToGameObject(gameObject3->GetID(), TestComponent{});
 
 		REQUIRE(test1 != nullptr);
 		REQUIRE(test1->some == 42);
 
+		worldEnt->AddComponentToGameObject(gameObject3->GetID(), MoreVirtual{});
+
 	}
 
-
+	//const auto some{ std::make_tuple<std::array<int,3>>({1,2,3}) };
 }
 
 #endif

@@ -6,7 +6,7 @@
 
 powe::WorldEntity::WorldEntity() = default;
 
-void powe::WorldEntity::RegisterGameObject(GameObjectId id)
+void powe::WorldEntity::RegisterGameObject(GameObjectID id)
 {
 	if (!m_GameObjectRecords.contains(id))
 		m_GameObjectRecords.try_emplace(id, GameObjectInArchetypeRecord{});
@@ -22,12 +22,12 @@ void powe::WorldEntity::RemoveSystem(const SharedPtr<SystemBase>&system) const
 	}
 }
 
-powe::GameObjectId powe::WorldEntity::GetNewEntityID()
+powe::GameObjectID powe::WorldEntity::GetNewEntityID()
 {
 	return m_GameObjectCounter++;
 }
 
-void powe::WorldEntity::RemoveComponentByID(GameObjectId id, ComponentTypeID componentID)
+void powe::WorldEntity::RemoveComponentByID(GameObjectID id, ComponentTypeID componentID)
 {
 	const auto gameObjectItr{ m_GameObjectRecords.find(id) };
 	const auto componentItr{ m_ComponentTraitsMap.find(componentID) };
@@ -36,13 +36,13 @@ void powe::WorldEntity::RemoveComponentByID(GameObjectId id, ComponentTypeID com
 	{
 		if (const SharedPtr<Archetype> oldArchetype{ gameObjectItr->second.Archetype.lock() })
 		{
-
 			// Construct a new archetype or append archetype that has the same type as this GameObject
 			std::vector<ComponentTypeID> newTypes{ oldArchetype->Types };
 			newTypes.erase(std::ranges::remove(newTypes, componentID).begin());
 
 			const std::string archetypeKey{ CreateStringFromNumVector(newTypes) };
 
+			//TODO: Fix where there's already an active archetype with the new key
 			SharedPtr<Archetype> targetArchetype{ GetArchetypeFromPendingList(archetypeKey) };
 
 			if(!targetArchetype)
@@ -89,7 +89,7 @@ void powe::WorldEntity::RemoveComponentByID(GameObjectId id, ComponentTypeID com
 
 }
 
-void powe::WorldEntity::RemoveGameObject(GameObjectId id, bool removeRecord)
+void powe::WorldEntity::RemoveGameObject(GameObjectID id, bool removeRecord)
 {
 	const auto findItr{ m_GameObjectRecords.find(id) };
 
@@ -168,7 +168,7 @@ void powe::WorldEntity::UpdatePipeline(PipelineLayer layer, float deltaTime)
 			if (!archetype->GameObjectIds.empty())
 			{
 				if (IsDigitExistInNumber(archetype->Types, system->GetKeys()))
-					system->InternalUpdate(*this, *archetype, deltaTime);
+					system->InternalUpdate(*archetype, deltaTime);
 			}
 			//if(!archetype->GameObjectIds.empty())
 			//{
@@ -179,8 +179,31 @@ void powe::WorldEntity::UpdatePipeline(PipelineLayer layer, float deltaTime)
 	}
 }
 
+SharedPtr<powe::BaseComponent> powe::WorldEntity::GetBaseComponentByID(ComponentTypeID id) const
+{
+	if (m_ComponentTraitsMap.contains(id))
+		return m_ComponentTraitsMap.at(id);
+
+	return nullptr;
+}
+
+SharedPtr<powe::Archetype> powe::WorldEntity::GetArchetypeByGameObject(GameObjectID id) const
+{
+	if(m_GameObjectRecords.contains(id))
+	{
+		return m_GameObjectRecords.at(id).Archetype.lock();
+	}
+
+	return nullptr;
+}
+
+powe::SizeType powe::WorldEntity::GetComponentSize(ComponentTypeID id) const
+{
+	return m_ComponentTraitsMap.at(id)->GetSize();
+}
+
 bool powe::WorldEntity::IsDigitExistInNumber(const std::vector<ComponentTypeID>&compIds,
-	const std::unordered_set<ComponentTypeID>&digit)
+                                             const std::unordered_set<ComponentTypeID>&digit)
 {
 	for (const auto& id : compIds)
 	{
@@ -254,15 +277,13 @@ SharedPtr<powe::Archetype> powe::WorldEntity::GetArchetypeFromPendingList(const 
 void powe::WorldEntity::RemoveArchetype(const std::string& key)
 {
 	if(!m_PendingRemoveArchetypes.contains(key))
-	{
 		m_PendingRemoveArchetypes.insert(key);
-	}
 }
 
-SharedPtr<powe::Archetype> powe::WorldEntity::GetArchetypeFromActiveList(const std::string & key)
+SharedPtr<powe::Archetype> powe::WorldEntity::GetArchetypeFromActiveList(const std::string & key) const
 {
 	if (m_ArchetypesPool.contains(key))
-		return m_ArchetypesPool[key];
+		return m_ArchetypesPool.at(key);
 
 	return nullptr;
 }

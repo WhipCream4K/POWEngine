@@ -6,11 +6,11 @@
 namespace powe
 {
 	class WorldEntity;
-	class GameObject final
+	class GameObject final // Node
 	{
 	public:
 
-		explicit GameObject(const SharedPtr<WorldEntity>& world);
+		explicit GameObject(WorldEntity& world);
 		GameObject(const GameObject&) = delete;
 		GameObject& operator=(const GameObject&) = delete;
 		GameObject(GameObject&&) noexcept = delete;
@@ -19,23 +19,19 @@ namespace powe
 
 	public:
 
-		GameObjectId GetID() const { return m_Id; }
+		GameObjectID GetID() const { return m_Id; }
 
 		//template<typename ComponentType>
 		//EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> AddComponent(ComponentType&& component);
 
 		//template<typename ComponentType>
 		//EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> AddComponentSparse(ComponentType&& component);
-		
-		void SetParent(const SharedPtr<GameObject>& object);
 
 
 	private:
 
-		WeakPtr<WorldEntity> m_World; // GameObject cannot exist without world entity
-		GameObjectId m_Parent;
-		std::vector<ComponentTypeID> m_ChildrenComponents;
-		GameObjectId m_Id;
+		WorldEntity& m_World; // GameObject cannot exist without world entity
+		GameObjectID m_Id;
 	};
 }
 

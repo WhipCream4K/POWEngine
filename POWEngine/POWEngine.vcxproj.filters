@@ -111,10 +111,13 @@
     <ClInclude Include="POWEngine\Core\GameObject\GameObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Core\Components\Child.h">
+    <ClInclude Include="POWEngine\Core\Components\Attachable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="POWEngine\Core\Components\ChildComponentTraits.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Core\Components\Transform2D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -185,7 +188,10 @@
     <ClCompile Include="POWEngine\Core\ECS\Archetype.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="POWEngine\Core\Components\Child.cpp">
+    <ClCompile Include="POWEngine\Core\Components\Attachable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="POWEngine\Core\Components\Transform2D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -7,7 +7,8 @@ namespace powe
 	{
 	public:
 
-		BaseComponent() = default;
+		friend class WorldEntity;
+
 		BaseComponent(const BaseComponent&) = default;
 		BaseComponent& operator=(const BaseComponent&) = default;
 		BaseComponent(BaseComponent&&) noexcept = default;
@@ -22,6 +23,10 @@ namespace powe
 		virtual void DestroyData(RawByte* address) = 0;
 		virtual void MoveData(RawByte* source, RawByte* destination) const = 0;
 		[[nodiscard]] virtual SizeType GetSize() const = 0;
+
+	protected:
+
+		explicit BaseComponent() = default;
 
 	private:
 
@@ -47,7 +52,6 @@ namespace powe
 
 	public:
 
-		Component() = default;
 		Component(const Component&) = default;
 		Component& operator=(const Component&) = default;
 		Component(Component&&) noexcept = default;
@@ -60,6 +64,9 @@ namespace powe
 		[[nodiscard]] SizeType GetSize() const override;
 		~Component() override = default;
 
+	protected:
+
+		explicit Component() = default;
 	};
 
 	template <typename T>

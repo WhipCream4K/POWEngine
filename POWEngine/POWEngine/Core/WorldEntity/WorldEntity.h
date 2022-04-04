@@ -38,38 +38,45 @@ namespace powe
 		template<typename ComponentType>
 		EnableIsBasedOf<BaseComponent, ComponentType> RegisterComponent();
 
-		void RegisterGameObject(GameObjectId id);
+		void RegisterGameObject(GameObjectID id);
 
 		// TODO: Maybe do a thread safe removing system
 		void RemoveSystem(const SharedPtr<SystemBase>& system) const;
 
 		const auto& GetComponentMap() const { return m_ComponentTraitsMap; }
 
-		GameObjectId GetNewEntityID();
+		GameObjectID GetNewEntityID();
 
 		template<typename ComponentType>
 		EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> AddComponentToGameObject(
-			GameObjectId id,
+			GameObjectID id,
 			ComponentType&& component,
 			ComponentFlag flag = ComponentFlag::Default);
 
 		template<typename ComponentType>
 		EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> AddComponentSparseToGameObject(
-			GameObjectId id,
+			GameObjectID id,
 			ComponentType&& component,
 			ComponentFlag flag = ComponentFlag::Default);
 
-		void RemoveComponentByID(GameObjectId id, ComponentTypeID componentID);
+		template<typename ComponentType>
+		EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> GetComponentByGameObject(GameObjectID id);
+
+		void RemoveComponentByID(GameObjectID id, ComponentTypeID componentID);
 
 		template<typename Component>
-		void RemoveComponentByType(GameObjectId id);
+		void RemoveComponentByType(GameObjectID id);
 
-		void RemoveGameObject(GameObjectId id, bool removeRecord = true);
+		void RemoveGameObject(GameObjectID id, bool removeRecord = true);
 
 		// -------------------------------
 		// -------- Pipeline -------------
 		// -------------------------------
 		void UpdatePipeline(PipelineLayer layer, float deltaTime);
+
+		SharedPtr<BaseComponent> GetBaseComponentByID(ComponentTypeID id) const;
+		SharedPtr<Archetype> GetArchetypeByGameObject(GameObjectID id) const;
+		SizeType GetComponentSize(ComponentTypeID id) const;
 
 	private:
 
@@ -78,10 +85,10 @@ namespace powe
 		//SharedPtr<Archetype> CreateArchetypeWithKey(const std::string& key);
 		static std::string CreateStringFromNumVector(const std::vector<ComponentTypeID>& numList);
 		SharedPtr<Archetype> UpdatePendingArchetypeKey(const std::string& targetKey, const std::string& newKey);
-		//SharedPtr<Archetype> CreateAndAppendArchetypeByTypes(const std::vector<ComponentTypeID>& types);
 		SharedPtr<Archetype> GetArchetypeFromPendingList(const std::string& key);
+		SharedPtr<Archetype> GetArchetypeFromActiveList(const std::string& key) const;
+
 		void RemoveArchetype(const std::string& key);
-		SharedPtr<Archetype> GetArchetypeFromActiveList(const std::string& key);
 
 		template<typename ComponentType>
 		ComponentType* AllocateComponentData(
@@ -122,7 +129,7 @@ namespace powe
 		std::unordered_set<std::string> m_PendingRemoveArchetypes;
 		std::unordered_map<ComponentTypeID, SizeType> m_SparseComponentEmptyPointer;
 		std::unordered_map<ComponentTypeID, SharedPtr<RawByte[]>> m_SparseComponent;
-		std::vector<ChildComponentTraits> m_ChildComponents;
+		//std::vector<ChildComponentTraits> m_ChildComponents;
 
 		// -------------------------------
 		// --------- Entity --------------
@@ -130,9 +137,9 @@ namespace powe
 
 		// No loop iteration
 		// Map that saves which GameObject belongs to which archetype at what index
-		std::unordered_map<GameObjectId, GameObjectInArchetypeRecord> m_GameObjectRecords;
+		std::unordered_map<GameObjectID, GameObjectInArchetypeRecord> m_GameObjectRecords;
 		// Although this is not thread safe but the initialization of GameObject should be in main thread
-		GameObjectId m_GameObjectCounter{};
+		GameObjectID m_GameObjectCounter{};
 	};
 
 	template <typename SystemType, typename ... Args>
@@ -152,7 +159,7 @@ namespace powe
 	}
 
 	template <typename ComponentType>
-	EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> WorldEntity::AddComponentToGameObject(GameObjectId id,
+	EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> WorldEntity::AddComponentToGameObject(GameObjectID id,
 		ComponentType&& component, ComponentFlag)
 	{
 		const ComponentTypeID componentId{ BaseComponent::GetId<ComponentType>() };
@@ -266,8 +273,32 @@ namespace powe
 
 	}
 
+	template <typename ComponentType>
+	EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> WorldEntity::GetComponentByGameObject(GameObjectID id)
+	{
+		const auto gameObjectItr{ m_GameObjectRecords.find(id) };
+		const ComponentTypeID compID{ BaseComponent::GetId<ComponentType>() };
+		
+		if(gameObjectItr != m_GameObjectRecords.end())
+		{
+			if(const auto archetype{ gameObjectItr->second.Archetype.lock() })
+			{
+				SizeType accumulateOffset{};
+				RawByte* startAddress{ &archetype->ComponentData[gameObjectItr->second.IndexInArchetype * archetype->SizeOfComponentsBlock] };
+				for (const auto& type : archetype->Types)
+				{
+					if (type == compID)
+						return reinterpret_cast<ComponentType*>(startAddress + accumulateOffset);
+					accumulateOffset += GetComponentSize(type);
+				}	
+			}
+		}
+
+		return nullptr;
+	}
+
 	template <typename Component>
-	void WorldEntity::RemoveComponentByType(GameObjectId id)
+	void WorldEntity::RemoveComponentByType(GameObjectID id)
 	{
 		const ComponentTypeID componentID{ BaseComponent::GetId<Component>() };
 		RemoveComponentByID(id, componentID);
