@@ -22,9 +22,8 @@ namespace powe
 
 		Singleton(const Singleton&) = delete;
 		Singleton& operator=(const Singleton&) = delete;
-
-		Singleton(Singleton&& other) noexcept;
-		Singleton& operator=(Singleton&& other) noexcept;
+		Singleton(Singleton&& other) noexcept = delete;
+		Singleton& operator=(Singleton&& other) noexcept = delete;
 
 		virtual ~Singleton() = default;
 
@@ -35,22 +34,22 @@ namespace powe
 		static SharedPtr<T> m_Instance;
 	};
 
-	template <typename T>
-	Singleton<T>::Singleton(Singleton&& other) noexcept
-	{
-		m_Instance = std::move(other.m_Instance);
-	}
+	//template <typename T>
+	//Singleton<T>::Singleton(Singleton&& other) noexcept
+	//{
+	//	m_Instance = std::move(other.m_Instance);
+	//}
 
-	template <typename T>
-	Singleton<T>& Singleton<T>::operator=(Singleton&& other) noexcept
-	{
-		if(*this != other)
-		{
-			m_Instance = std::move(other.m_Instance);
-		}
+	//template <typename T>
+	//Singleton<T>& Singleton<T>::operator=(Singleton&& other) noexcept
+	//{
+	//	if(*this != other)
+	//	{
+	//		m_Instance = std::move(other.m_Instance);
+	//	}
 
-		return this;
-	}
+	//	return this;
+	//}
 
 	template<typename T>
 	SharedPtr<T> Singleton<T>::m_Instance{};

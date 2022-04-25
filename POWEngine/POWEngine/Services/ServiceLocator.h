@@ -23,8 +23,8 @@ namespace powe
 
 		ServiceLocator(const ServiceLocator&) = delete;
 		ServiceLocator& operator=(const ServiceLocator&) = delete;
-		ServiceLocator(ServiceLocator&&) noexcept = default;
-		ServiceLocator& operator=(ServiceLocator&&) noexcept = default;
+		ServiceLocator(ServiceLocator&&) noexcept = delete;
+		ServiceLocator& operator=(ServiceLocator&&) noexcept = delete;
 		~ServiceLocator() override = default;
 
 

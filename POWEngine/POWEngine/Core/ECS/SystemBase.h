@@ -3,6 +3,19 @@
 #include "ECSTypes.h"
 #include "POWEngine/Core/WorldEntity/PipelineLayer.h"
 
+#define DEFINE_SYSTEM_KEY(...)
+
+//#define GET_SYSKEY() typeid(*this).name()::
+
+//template<typename ...Args>
+//struct 
+//{
+//	std::unordered_set<ComponentTypeID> MakeSystemKey()
+//	{
+//		return {};
+//	}
+//};
+
 namespace powe
 {
 	struct Archetype;
@@ -11,8 +24,9 @@ namespace powe
 	{
 	public:
 
-		//explicit SystemBase(const SharedPtr<WorldEntity>& world, PipelineLayer layer);
-		explicit SystemBase(WorldEntity& world, PipelineLayer layer,const std::vector<ComponentTypeID>& componentTypes);
+
+
+		explicit SystemBase(WorldEntity& world, PipelineLayer layer);
 		SystemBase(const SystemBase&) = default;
 		SystemBase& operator=(const SystemBase&) = delete;
 		SystemBase(SystemBase&&) = default;
@@ -21,24 +35,23 @@ namespace powe
 
 	public:
 
-		// Should prefer this update because necessary arguments already in cache line
-		virtual void InternalUpdate(const Archetype& archetype,float deltaTime) = 0;
-
-		//virtual void InternalUpdate(float deltaTime, const SharedPtr<Archetype>& archetype) = 0;
+		void InternalUpdate(const Archetype& archetype, float deltaTime);
 
 		[[nodiscard]] PipelineLayer GetPipeLineLayer() const { return m_Layer; }
 		[[nodiscard]] const std::unordered_set<ComponentTypeID>& GetKeys() const { return m_Keys; }
 
-		void MarkDeleted(bool state) { m_MarkedDeleted = state; }
+		//void MarkDeleted(bool state) { m_MarkedDeleted = state; }
 
 	protected:
 
-		//std::unordered_set<ComponentTypeID> m_Keys;
-		WorldEntity& m_World;
+		virtual void OnUpdate(float,GameObjectID) {}
 
-		std::unordered_set<ComponentTypeID> m_Keys;
+
+		WorldEntity& m_World;
 		PipelineLayer m_Layer;
-		bool m_MarkedDeleted;
+		std::unordered_set<ComponentTypeID> m_Keys;
+		uint32_t m_UpdateCountPerArchetype;
+
 	};
 }
 

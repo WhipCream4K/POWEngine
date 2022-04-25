@@ -2,5 +2,6 @@
 
 enum class PipelineLayer
 {
+	Update,
 	Count
 };

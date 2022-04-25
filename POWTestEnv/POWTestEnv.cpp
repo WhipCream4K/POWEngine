@@ -287,3 +287,21 @@ TEST_CASE("Component")
 }
 
 #endif
+
+#define ArchetypeTest
+
+#ifdef ArchetypeTest
+
+#include "POWEngine/Core/ECS/System.h"
+#include "POWEngine/Core/ECS/Archetype.h"
+
+TEST_CASE("Archetype")
+{
+	using namespace powe;
+	WorldEntity world{};
+
+	//System input{ world,PipelineLayer::Update,{} };
+	const auto [num,two] = input.GetComponentsView<int, int>(1);
+}
+
+#endif

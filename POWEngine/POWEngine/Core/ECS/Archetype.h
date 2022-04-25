@@ -36,6 +36,7 @@ namespace powe
 		
 		std::vector<ComponentTypeID> Types; // types of components of this archetypes
 		std::vector<GameObjectID> GameObjectIds; // GameObjectIds that has this archetype
+		std::unordered_map<ComponentTypeID,uint32_t> ComponentOffsets; // map of component's offsets from the start of the array
 		SharedPtr<RawByte[]> ComponentData{}; // Array of component struct
 		SizeType SizeOfComponentsBlock{};
 		SizeType TotalAllocatedData{};
