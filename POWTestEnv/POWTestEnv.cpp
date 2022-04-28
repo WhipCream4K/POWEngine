@@ -301,7 +301,7 @@ TEST_CASE("Archetype")
 	WorldEntity world{};
 
 	//System input{ world,PipelineLayer::Update,{} };
-	const auto [num,two] = input.GetComponentsView<int, int>(1);
+	//const auto [num,two] = input.GetComponentsView<int, int>(1);
 }
 
 #endif

@@ -19,8 +19,12 @@ namespace powe
 		const glm::vec2& GetScales();
 		float GetDepth();
 		float GetRotation();
+
+		void SetParent(const SharedPtr<GameObject>& gameObject);
 		
 	private:
+
+		WeakPtr<GameObject> m_ParentNode;
 
 		glm::vec2 m_WorldPosition{};
 		glm::vec2 m_WorldScales{};

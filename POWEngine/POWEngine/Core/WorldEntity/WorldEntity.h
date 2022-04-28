@@ -178,6 +178,7 @@ namespace powe
 		SharedPtr<Archetype> oldArchetype{};
 		int indexInOldArchetype{};
 		bool isReUsing{};
+		bool shouldRemoveGameObject{};
 
 		// 1. Check if this GameObject already exist in any archetype
 		if (const SharedPtr<Archetype> recordedArchetype{ gameObjectRecord->second.Archetype.lock() })
@@ -212,7 +213,8 @@ namespace powe
 					newArchetype->ComponentData = newArchetype->CopyComponentData(*recordedArchetype, *this);
 				}
 
-				RemoveGameObject(id,false);
+				//RemoveGameObject(id,false);
+				shouldRemoveGameObject = true;
 			}
 			else // this archetype is still in pending we can add it directly
 			{
@@ -220,7 +222,8 @@ namespace powe
 				if(recordedArchetype->GameObjectIds.size() != 1)
 				{
 					newArchetype = CreateArchetypeWithTypes(newCompTypes);
-					RemoveGameObject(id, false);
+					//RemoveGameObject(id, false);
+					shouldRemoveGameObject = true;
 				}
 				else
 				{
@@ -256,6 +259,9 @@ namespace powe
 		ComponentType* outPointer{};
 		// 2. Re-allocate the data and align according to our new Archetype
 		outPointer = AllocateComponentData(newArchetype, oldArchetype,indexInOldArchetype, std::forward<ComponentType>(component));
+
+		if(shouldRemoveGameObject)
+			RemoveGameObject(id, false);
 
 		if (!isReUsing)
 		{
@@ -327,7 +333,6 @@ namespace powe
 
 		if (oldArchetype && oldArchetype->ComponentData)
 		{
-
 			RawByte* startAddress{ &oldArchetype->ComponentData[indexInArchetype * oldArchetype->SizeOfComponentsBlock] };
 			RawByte* endAddress{ newDataAddress };
 

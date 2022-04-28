@@ -21,6 +21,9 @@
     <ClCompile Include="BurgerTime.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerInputSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Resources\DeleteMe.txt">
@@ -32,6 +35,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BurgerTime.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerInputSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "Transform2D.h"
 
+#include "POWEngine/Core/GameObject/GameObject.h"
+
 void powe::Transform2D::SetPosition(const glm::vec2& position)
 {
 	m_LocalPosition = position;
@@ -39,4 +41,22 @@ float powe::Transform2D::GetDepth()
 float powe::Transform2D::GetRotation()
 {
 	return m_LocalZRotation;
+}
+
+void powe::Transform2D::SetParent(const SharedPtr<GameObject>& gameObject)
+{
+	if(gameObject)
+	{
+		if(const auto parent{m_ParentNode.lock()})
+		{
+			if(Transform2D* parentTransform{ parent->GetComponent<Transform2D>() })
+			{
+				parentTransform->SetParent(nullptr);
+			}
+		}
+	}
+	else
+	{
+		
+	}
 }

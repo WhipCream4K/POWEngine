@@ -1,52 +1,29 @@
 #include "pch.h"
 #include "SystemBase.h"
 
-#include "POWEngine/Core/WorldEntity/WorldEntity.h"
+#include "POWEngine/Core/ECS/Archetype.h"
 
-//powe::SystemBase::SystemBase(const SharedPtr<WorldEntity>& world, PipelineLayer layer)
-//	: m_Keys()
-//	, m_World(world)
-//	, m_Layer(layer)
-//	, m_MarkedDeleted()
-//{
-//	if (!world)
-//		throw std::exception("system requires world to be valid");
-//}
-
-//powe::SystemBase::SystemBase(WorldEntity& world, PipelineLayer layer)
-//	: m_Keys()
-//	, m_World(world)
-//	, m_Layer(layer)
-//	, m_MarkedDeleted()
-//{
-//}
-
-//powe::SystemBase::SystemBase(WorldEntity& world, PipelineLayer layer,
-//	const std::vector<ComponentTypeID>& )
-//	: m_World(world)
-//	, m_Keys()
-//	, m_Layer(layer)
-//	, m_MarkedDeleted()
-//{
-//
-//}
-
-powe::SystemBase::SystemBase(WorldEntity& world, PipelineLayer layer)
-	: m_World(world)
-	, m_Layer(layer)
+powe::SystemBase::SystemBase()
+	: m_World()
 	, m_Keys()
 	, m_UpdateCountPerArchetype()
 {
-	m_Keys = GET_SYSKEY();
 }
 
 void powe::SystemBase::InternalUpdate(const Archetype& archetype, float deltaTime)
 {
 	m_UpdateCountPerArchetype = 0;
+	m_CurrentArchetype = &archetype;
 
-	for (const auto& gID : archetype.GameObjectIds)
+	for (const auto gameObjectId : archetype.GameObjectIds)
 	{
-		OnUpdate(deltaTime, gID);
+		OnUpdate(deltaTime, gameObjectId);
 		++m_UpdateCountPerArchetype;
 	}
 }
+
+void powe::SystemBase::SetWorld(WorldEntity* world)
+{
+	m_World = world;
+}
+

@@ -2,11 +2,11 @@
 
 #include "POWEngine/Core/Components/BaseComponent.h"
 #include "POWEngine/Core/ECS/ECSTypes.h"
+#include "POWEngine/Core/WorldEntity/WorldEntity.h"
 
 namespace powe
 {
-	class WorldEntity;
-	class GameObject final // Node
+	class GameObject final
 	{
 	public:
 
@@ -20,6 +20,10 @@ namespace powe
 	public:
 
 		GameObjectID GetID() const { return m_Id; }
+		WorldEntity& GetWorld() const { return m_World; }
+
+		template<typename ComponentType>
+		EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> GetComponent();
 
 		//template<typename ComponentType>
 		//EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> AddComponent(ComponentType&& component);
@@ -33,6 +37,12 @@ namespace powe
 		WorldEntity& m_World; // GameObject cannot exist without world entity
 		GameObjectID m_Id;
 	};
+
+	template <typename ComponentType>
+	EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> GameObject::GetComponent()
+	{
+		return m_World.GetComponentByGameObject<ComponentType>(m_Id);
+	}
 }
 
 

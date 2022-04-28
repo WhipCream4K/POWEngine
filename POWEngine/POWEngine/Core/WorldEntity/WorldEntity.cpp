@@ -12,14 +12,14 @@ void powe::WorldEntity::RegisterGameObject(GameObjectID id)
 		m_GameObjectRecords.try_emplace(id, GameObjectInArchetypeRecord{});
 }
 
-void powe::WorldEntity::RemoveSystem(const SharedPtr<SystemBase>&system) const
+void powe::WorldEntity::RemoveSystem(const SharedPtr<SystemBase>&) const
 {
-	const auto& targetPipeline{ m_SystemPipeline[size_t(system->GetPipeLineLayer())] };
-	const auto& itr = std::ranges::find(targetPipeline, system); // ranges::find since c++20
-	if (itr != targetPipeline.end())
-	{
-		itr->get()->MarkDeleted(true);
-	}
+	//const auto& targetPipeline{ m_SystemPipeline[size_t(system->GetPipeLineLayer())] };
+	//const auto& itr = std::ranges::find(targetPipeline, system); // ranges::find since c++20
+	//if (itr != targetPipeline.end())
+	//{
+	//	itr->get()->MarkDeleted(true);
+	//}
 }
 
 powe::GameObjectID powe::WorldEntity::GetNewEntityID()

@@ -32,7 +32,6 @@ namespace powe
 
 		// Thread safe counter
 		static std::atomic<ComponentTypeID> m_ComponentIdCounter;
-
 	};
 
 	template <typename T>
