@@ -220,7 +220,6 @@
     <ClInclude Include="POWEngine\Core\WorldEntity\WorldEntity.h" />
     <ClInclude Include="POWEngine\Services\Service.h" />
     <ClInclude Include="POWEngine\Core\ECS\SystemBase.h" />
-    <ClInclude Include="POWEngine\Core\ECS\System.h" />
     <ClInclude Include="POWEngine\Core\Components\Transform2D.h" />
   </ItemGroup>
   <ItemGroup>
@@ -251,7 +250,6 @@
     <ClCompile Include="POWEngine\Core\WorldEntity\WorldEntity.cpp" />
     <ClCompile Include="POWEngine\Services\Service.cpp" />
     <ClCompile Include="POWEngine\Core\ECS\SystemBase.cpp" />
-    <ClCompile Include="POWEngine\Core\ECS\System.cpp" />
     <ClCompile Include="POWEngine\Core\Components\Transform2D.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

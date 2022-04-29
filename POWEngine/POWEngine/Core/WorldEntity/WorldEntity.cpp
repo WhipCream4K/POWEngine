@@ -170,11 +170,6 @@ void powe::WorldEntity::UpdatePipeline(PipelineLayer layer, float deltaTime)
 				if (IsDigitExistInNumber(archetype->Types, system->GetKeys()))
 					system->InternalUpdate(*archetype, deltaTime);
 			}
-			//if(!archetype->GameObjectIds.empty())
-			//{
-			//	if (IsDigitExistInNumber(archetype->Types, system->GetKeys()))
-			//		system->InternalUpdate(*this, *archetype,deltaTime);
-			//}
 		}
 	}
 }
@@ -227,11 +222,14 @@ SharedPtr<powe::Archetype> powe::WorldEntity::CreateArchetypeWithTypes(const std
 
 		archetype->Types = typeID;
 
+		SizeType componentAccumulateSize{};
 		for (const auto& componentID : typeID)
 		{
-			archetype->SizeOfComponentsBlock += m_ComponentTraitsMap.at(componentID)->GetSize();
+			archetype->ComponentOffsets[componentID] = componentAccumulateSize;
+			componentAccumulateSize += m_ComponentTraitsMap.at(componentID)->GetSize();
 		}
 
+		archetype->SizeOfComponentsBlock = componentAccumulateSize;
 		m_PendingAddArchetypes[key] = archetype;
 	}
 

@@ -23,8 +23,8 @@ SharedPtr<powe::RawByte[]> powe::Archetype::CopyComponentData(const Archetype& o
 
 	for (int i = 0; i < int(GameObjectIds.size()); ++i)
 	{
-		RawByte* startAddress{ &other.ComponentData[SizeType(i * SizeOfComponentsBlock)] };
-		RawByte* endAddress{ &newComponentData[SizeType(i * SizeOfComponentsBlock)] };
+		RawByte* startAddress{ &other.ComponentData[int(i * SizeOfComponentsBlock)] };
+		RawByte* endAddress{ &newComponentData[int(i * SizeOfComponentsBlock)] };
 
 		SizeType accumulateOffset{};
 		for (const auto& comID : Types)
@@ -38,26 +38,14 @@ SharedPtr<powe::RawByte[]> powe::Archetype::CopyComponentData(const Archetype& o
 	return newComponentData;
 }
 
-//void powe::Archetype::CopyComponentData(const WorldEntity& world,const Archetype& other, int indexInArchetype)
-//{
-//	//SizeType accumulatedOffset{};
-//	//RawByte* startAddress{ &other.ComponentData[indexInArchetype * other.SizeOfComponentsBlock] };
-//	//RawByte* endAddress{};
-//
-//	//for (const auto& compID : Types)
-//	//{
-//	//	accumulatedOffset += 
-//	//}
-//}
-
 void powe::Archetype::AllocateComponentData(SizeType newSize,const WorldEntity& world)
 {
 	const SharedPtr<RawByte[]> newComponentData{ SharedPtr<RawByte[]>{new RawByte[newSize]{}} };
 
 	for (int i = 0; i < int(GameObjectIds.size()); ++i)
 	{
-		RawByte* startAddress{ &ComponentData[SizeType(i * SizeOfComponentsBlock)] };
-		RawByte* endAddress{ &newComponentData[SizeType(i * SizeOfComponentsBlock)] };
+		RawByte* startAddress{ &ComponentData[int(i * SizeOfComponentsBlock)] };
+		RawByte* endAddress{ &newComponentData[int(i * SizeOfComponentsBlock)] };
 
 		SizeType accumulateOffset{};
 		for (const auto& comID : Types)

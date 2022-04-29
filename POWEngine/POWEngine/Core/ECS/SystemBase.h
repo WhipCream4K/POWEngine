@@ -29,16 +29,16 @@ namespace powe
 	protected:
 
 		void InternalUpdate(const Archetype&, float);
-		virtual void OnUpdate(float,powe::GameObjectID) {}
+		virtual void OnUpdate(float, powe::GameObjectID) {}
 
 		template<typename ...Args>
 		void InternMakeKeys();
-		
+
 		template<typename ComponentType>
-		EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> GetComponent();
+		EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> GetComponent() const;
 
 		template<typename ...Args>
-		std::tuple<std::add_pointer_t<Args>...> GetComponentsView();
+		std::tuple<std::add_pointer_t<Args>...> GetComponentsView() const;
 
 
 	private:
@@ -46,7 +46,7 @@ namespace powe
 		void SetWorld(WorldEntity* world);
 
 		template<typename T>
-		T* GetComponent(const Archetype& archetype);
+		T* GetComponent(const Archetype& archetype) const;
 
 
 		WorldEntity* m_World; // using pointer to be more flexible. Doesn't really need smartpointer here there's no ownership changing anyway
@@ -63,31 +63,33 @@ namespace powe
 	}
 
 	template <typename ComponentType>
-	EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> SystemBase::GetComponent()
+	EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> SystemBase::GetComponent() const
 	{
 		return GetComponent<ComponentType>(*m_CurrentArchetype);
 	}
 
 	template <typename ... Args>
-	std::tuple<std::add_pointer_t<Args>...> SystemBase::GetComponentsView()
+	std::tuple<std::add_pointer_t<Args>...> SystemBase::GetComponentsView() const
 	{
 		return std::make_tuple(GetComponent<Args>(*m_CurrentArchetype)...);
 	}
 
 	template <typename T>
-	T* SystemBase::GetComponent(const Archetype& archetype)
+	T* SystemBase::GetComponent(const Archetype& archetype) const
 	{
-		const ComponentTypeID compID{ BaseComponent::GetId<T>() };
-		T* outComponent{};
-
-		if (m_Keys.contains(compID))
+		try
 		{
-			outComponent = reinterpret_cast<T*>(&archetype.ComponentData[
-				m_UpdateCountPerArchetype * archetype.SizeOfComponentsBlock + 
-				archetype.ComponentOffsets.at(compID)]);
+			const ComponentTypeID compID{ BaseComponent::GetId<T>() };
+			return reinterpret_cast<T*>(&archetype.ComponentData[
+				m_UpdateCountPerArchetype * archetype.SizeOfComponentsBlock +
+					archetype.ComponentOffsets.at(compID)]); // there's a throw here
 		}
-
-		return outComponent;
+		catch (const std::exception& e)
+		{
+			std::string errMsg{};
+			errMsg.append("component name: " + typeid(T).name());
+			throw std::out_of_range(errMsg); // throws to update loop
+		}
 	}
 
 #pragma region MACRO

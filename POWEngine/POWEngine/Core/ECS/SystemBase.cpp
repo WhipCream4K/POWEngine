@@ -2,10 +2,12 @@
 #include "SystemBase.h"
 
 #include "POWEngine/Core/ECS/Archetype.h"
+#include "POWEngine/Logger/LoggingService.h"
 
 powe::SystemBase::SystemBase()
 	: m_World()
 	, m_Keys()
+	, m_CurrentArchetype()
 	, m_UpdateCountPerArchetype()
 {
 }
@@ -15,11 +17,24 @@ void powe::SystemBase::InternalUpdate(const Archetype& archetype, float deltaTim
 	m_UpdateCountPerArchetype = 0;
 	m_CurrentArchetype = &archetype;
 
-	for (const auto gameObjectId : archetype.GameObjectIds)
+	try
 	{
-		OnUpdate(deltaTime, gameObjectId);
-		++m_UpdateCountPerArchetype;
+		for (const auto gameObjectId : archetype.GameObjectIds)
+		{
+			OnUpdate(deltaTime, gameObjectId);
+			++m_UpdateCountPerArchetype;
+		}
 	}
+	catch (const std::exception& e)
+	{
+		std::string errMsg{ "System trying to access component that doesn't exist in this archetype -> " };
+		errMsg.append(e.what());
+		POWLOGWARNING(errMsg);
+
+		m_UpdateCountPerArchetype = 0;
+		m_CurrentArchetype = nullptr;
+	}
+
 }
 
 void powe::SystemBase::SetWorld(WorldEntity* world)

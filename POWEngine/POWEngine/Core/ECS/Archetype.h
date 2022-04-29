@@ -24,6 +24,7 @@ namespace powe
 			GameObjectIds = other.GameObjectIds;
 			SizeOfComponentsBlock = other.SizeOfComponentsBlock;
 			TotalAllocatedData = other.TotalAllocatedData;
+			ComponentOffsets = other.ComponentOffsets;
 
 			ComponentData = CopyComponentData(other,world);
 			

@@ -81,9 +81,9 @@ namespace powe
 	private:
 
 		static bool IsDigitExistInNumber(const std::vector<ComponentTypeID>& compIds, const std::unordered_set<ComponentTypeID>& digit);
-		SharedPtr<Archetype> CreateArchetypeWithTypes(const std::vector<ComponentTypeID>& typeID);
-		//SharedPtr<Archetype> CreateArchetypeWithKey(const std::string& key);
 		static std::string CreateStringFromNumVector(const std::vector<ComponentTypeID>& numList);
+
+		SharedPtr<Archetype> CreateArchetypeWithTypes(const std::vector<ComponentTypeID>& typeID);
 		SharedPtr<Archetype> UpdatePendingArchetypeKey(const std::string& targetKey, const std::string& newKey);
 		SharedPtr<Archetype> GetArchetypeFromPendingList(const std::string& key);
 		SharedPtr<Archetype> GetArchetypeFromActiveList(const std::string& key) const;

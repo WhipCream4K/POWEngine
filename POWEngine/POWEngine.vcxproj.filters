@@ -96,9 +96,6 @@
     <ClInclude Include="POWEngine\Core\Components\BaseComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Core\ECS\System.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="POWEngine\Core\ECS\ECSTypes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -174,9 +171,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="POWEngine\Core\Components\BaseComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Core\ECS\System.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="POWEngine\LockFree\LFStack.cpp">
