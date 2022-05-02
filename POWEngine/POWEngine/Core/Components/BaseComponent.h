@@ -118,7 +118,7 @@ namespace powe
 
 	namespace StaticComponent
 	{
-		static SharedPtr<SparseComponent> SparseTrait = std::make_shared<SparseComponent>();
+		static SharedPtr<SparseComponent> SparseTrait{ std::make_shared<SparseComponent>() };
 	}
 
 }

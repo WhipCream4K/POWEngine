@@ -496,12 +496,15 @@ void powe::WorldEntity::InternalRemoveComponentFromGameObject()
 		{
 			// 1.1. if there's one then we can manipulate the data here directly
 
-			if (const SizeType occupiedSize{ SizeType((targetArchetype->GameObjectIds.size() + 1) * targetArchetype->SizeOfComponentsBlock) };
-				occupiedSize + targetArchetype->SizeOfComponentsBlock >= targetArchetype->TotalAllocatedData)
+			if (const SizeType targetOccupiedSize{ SizeType((targetArchetype->GameObjectIds.size() + 1) * targetArchetype->SizeOfComponentsBlock) };
+				targetOccupiedSize >= targetArchetype->TotalAllocatedData)
 			{
 				// allocate more space if the current size is equal or more that the total allocated space
-				targetArchetype->AllocateComponentData(SizeType(occupiedSize * 3), *this);
+				targetArchetype->AllocateComponentData(SizeType(targetOccupiedSize * 3), *this);
 			}
+
+			// copy data over to the new archetype
+			
 		}
 		else
 		{
@@ -604,6 +607,11 @@ void powe::WorldEntity::InternalRemoveComponentFromGameObject()
 //	}
 //}
 
+
+}
+
+void powe::WorldEntity::InternalAddArchetypeToPipeline()
+{
 
 }
 

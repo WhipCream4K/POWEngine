@@ -96,6 +96,7 @@ namespace powe
 		// Actually trying to remove gameobjecsts from pending delete list
 		void InternalRemoveGameObjectFromPipeline();
 		void InternalRemoveComponentFromGameObject();
+		void InternalAddArchetypeToPipeline();
 		void AddGameObjectToRecordRemoveList(GameObjectID id);
 		void AddGameObjectToArchetypeRemoveList(const std::string& archetypeKey, GameObjectID id);
 		void AddComponentToGameObjectRemoveList(GameObjectID id, ComponentTypeID componentTypeID);
@@ -173,6 +174,7 @@ namespace powe
 		// --------- Archetype ----------
 		// ------------------------------
 		std::unordered_map<GameObjectID, PreArchetypeTrait> m_PendingAddArchetype;
+		std::unordered_map<std::string, std::vector<GameObjectID>> m_PendingAddArchetype2;
 
 		// Although this is not thread safe but the initialization of GameObject should be in main thread
 		GameObjectID m_GameObjectCounter{};

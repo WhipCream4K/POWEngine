@@ -14,8 +14,6 @@ namespace powe
 
 	public:
 
-		ServiceLocator() = default;
-
 		static void Initialize();
 
 		template<typename ServiceType>
@@ -27,6 +25,10 @@ namespace powe
 		ServiceLocator& operator=(ServiceLocator&&) noexcept = delete;
 		~ServiceLocator() override = default;
 
+	protected:
+
+		ServiceLocator() = default;
+		
 
 	private:
 

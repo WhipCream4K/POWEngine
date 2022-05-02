@@ -16,8 +16,6 @@ powe::Archetype::Archetype()
 
 SharedPtr<powe::RawByte[]> powe::Archetype::CopyComponentData(const Archetype& other, const WorldEntity& world) const
 {
-	//if (!ComponentData)
-	//	ComponentData = std::shared_ptr<RawByte[]>{ new RawByte[other.TotalAllocatedData]{} };
 
 	SharedPtr<RawByte[]> newComponentData{ SharedPtr<RawByte[]>{new RawByte[other.TotalAllocatedData]{}} };
 
@@ -26,12 +24,12 @@ SharedPtr<powe::RawByte[]> powe::Archetype::CopyComponentData(const Archetype& o
 		RawByte* startAddress{ &other.ComponentData[int(i * SizeOfComponentsBlock)] };
 		RawByte* endAddress{ &newComponentData[int(i * SizeOfComponentsBlock)] };
 
-		SizeType accumulateOffset{};
-		for (const auto& comID : Types)
+		//SizeType accumulateOffset{};
+		for (const auto& compID : Types)
 		{
-			const SharedPtr<BaseComponent> thisComponent{ world.GetComponentMap().at(comID) };
-			thisComponent->MoveData(startAddress + accumulateOffset, endAddress + accumulateOffset);
-			accumulateOffset += thisComponent->GetSize();
+			const SharedPtr<BaseComponent> thisComponent{ world.GetComponentTrait(compID) };
+			const SizeType componentOffset{ ComponentOffsets.at(compID) };
+			thisComponent->MoveData(startAddress + componentOffset, endAddress + componentOffset);
 		}
 	}
 
@@ -47,12 +45,12 @@ void powe::Archetype::AllocateComponentData(SizeType newSize,const WorldEntity& 
 		RawByte* startAddress{ &ComponentData[int(i * SizeOfComponentsBlock)] };
 		RawByte* endAddress{ &newComponentData[int(i * SizeOfComponentsBlock)] };
 
-		SizeType accumulateOffset{};
-		for (const auto& comID : Types)
+		//SizeType accumulateOffset{};
+		for (const auto& compID : Types)
 		{
-			const SharedPtr<BaseComponent> thisComponent{ world.GetComponentMap().at(comID) };
-			thisComponent->MoveData(startAddress + accumulateOffset, endAddress + accumulateOffset);
-			accumulateOffset += thisComponent->GetSize();
+			const SharedPtr<BaseComponent> thisComponent{ world.GetComponentTrait(compID) };
+			const SizeType componentOffset{ComponentOffsets.at(compID)};
+			thisComponent->MoveData(startAddress + componentOffset, endAddress + componentOffset);
 		}
 	}
 

@@ -34,7 +34,7 @@ namespace powe
 	struct PreArchetypeTrait
 	{
 		//using ComponentDataMap = std::unordered_map<ComponentTypeID, std::vector<SharedPtr<RawByte[]>>>;
-		std::unordered_map<ComponentTypeID, std::vector<SharedPtr<RawByte[]>>> componentData{};
+		std::unordered_map<ComponentTypeID, SharedPtr<RawByte[]>> componentData{};
 		std::string archetypeKey{};
 	};
 
