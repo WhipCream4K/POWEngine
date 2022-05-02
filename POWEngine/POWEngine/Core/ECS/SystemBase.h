@@ -40,7 +40,6 @@ namespace powe
 		template<typename ...Args>
 		std::tuple<std::add_pointer_t<Args>...> GetComponentsView() const;
 
-
 	private:
 
 		void SetWorld(WorldEntity* world);

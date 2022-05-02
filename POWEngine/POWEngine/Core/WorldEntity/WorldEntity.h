@@ -77,6 +77,8 @@ namespace powe
 		SharedPtr<BaseComponent> GetBaseComponentByID(ComponentTypeID id) const;
 		SharedPtr<Archetype> GetArchetypeByGameObject(GameObjectID id) const;
 		SizeType GetComponentSize(ComponentTypeID id) const;
+		SharedPtr<BaseComponent> GetComponentTrait(ComponentTypeID id) const;
+
 
 	private:
 
@@ -87,8 +89,31 @@ namespace powe
 		SharedPtr<Archetype> UpdatePendingArchetypeKey(const std::string& targetKey, const std::string& newKey);
 		SharedPtr<Archetype> GetArchetypeFromPendingList(const std::string& key);
 		SharedPtr<Archetype> GetArchetypeFromActiveList(const std::string& key) const;
-
+		bool GetGameObjectRecords(GameObjectID id,GameObjectInArchetypeRecord& outRecord) const;
+		//bool GetPendingArchetypeTrait(const std::string& archetypeKey, PreArchetypeTrait& outArchetypeTrait) const;
 		void RemoveArchetype(const std::string& key);
+
+		// Actually trying to remove gameobjecsts from pending delete list
+		void InternalRemoveGameObjectFromPipeline();
+		void InternalRemoveComponentFromGameObject();
+		void AddGameObjectToRecordRemoveList(GameObjectID id);
+		void AddGameObjectToArchetypeRemoveList(const std::string& archetypeKey, GameObjectID id);
+		void AddComponentToGameObjectRemoveList(GameObjectID id, ComponentTypeID componentTypeID);
+
+		void AddPreArchetype(
+			GameObjectID gameObjectID,
+			ComponentTypeID componentID,
+			const SharedPtr<RawByte[]>& reservedComponentData);
+
+		void RemoveComponentFromPreArchetype(GameObjectID id, ComponentTypeID componentTypeId);
+
+		//void RemoveComponentFromPreArchetype(const std::string& archetype)
+
+		//void AddPreArchetype(
+		//	const std::string& archetype,
+		//	GameObjectID gameObjectID,
+		//	const std::unordered_map<ComponentTypeID,std::vector<BaseComponent>>
+		//)
 
 		template<typename ComponentType>
 		ComponentType* AllocateComponentData(
@@ -129,7 +154,10 @@ namespace powe
 		std::unordered_set<std::string> m_PendingRemoveArchetypes;
 		std::unordered_map<ComponentTypeID, SizeType> m_SparseComponentEmptyPointer;
 		std::unordered_map<ComponentTypeID, SharedPtr<RawByte[]>> m_SparseComponent;
-		//std::vector<ChildComponentTraits> m_ChildComponents;
+
+		std::unordered_map<GameObjectID, std::vector<ComponentTypeID>> m_PendingDeleteComponentsFromGameObject;
+
+		//std::unordered_map<GameObjectID>
 
 		// -------------------------------
 		// --------- Entity --------------
@@ -138,6 +166,14 @@ namespace powe
 		// No loop iteration
 		// Map that saves which GameObject belongs to which archetype at what index
 		std::unordered_map<GameObjectID, GameObjectInArchetypeRecord> m_GameObjectRecords;
+		std::unordered_map<std::string, std::vector<GameObjectID>> m_PendingDeleteGameObjectsFromArchetype;
+		std::vector<GameObjectID> m_PendingDeleteGameObjectsFromRecord;
+
+		// ------------------------------
+		// --------- Archetype ----------
+		// ------------------------------
+		std::unordered_map<GameObjectID, PreArchetypeTrait> m_PendingAddArchetype;
+
 		// Although this is not thread safe but the initialization of GameObject should be in main thread
 		GameObjectID m_GameObjectCounter{};
 	};

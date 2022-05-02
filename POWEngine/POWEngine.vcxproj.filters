@@ -117,6 +117,9 @@
     <ClInclude Include="POWEngine\Core\Components\Transform2D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="POWEngine\Services\utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PCH\pch.cpp">

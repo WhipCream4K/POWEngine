@@ -17,8 +17,8 @@ namespace powe
 	enum class ComponentFlag : ComponentTypeID
 	{
 		Default,
-		ChildOf = (1u << 31u),
-		Sparse = (1u << 30u)
+		//ChildOf = (1u << 31u),
+		Sparse = (1u << 31u)
 	};
 
 
@@ -30,9 +30,13 @@ namespace powe
 		int IndexInArchetype{ -1 };
 	};
 
-	//struct ArchetypeTrait
-	//{
-	//	ComponentTypeID CombinedId{};
-	//	SharedPtr<Archetype> Archetype{};
-	//};
+	class BaseComponent;
+	struct PreArchetypeTrait
+	{
+		//using ComponentDataMap = std::unordered_map<ComponentTypeID, std::vector<SharedPtr<RawByte[]>>>;
+		std::unordered_map<ComponentTypeID, std::vector<SharedPtr<RawByte[]>>> componentData{};
+		std::string archetypeKey{};
+	};
+
+	//using PreArchetypeTrait = std::unordered_map<ComponentTypeID, SharedPtr<RawByte[]>>;
 }

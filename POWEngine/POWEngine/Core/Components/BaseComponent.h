@@ -55,6 +55,7 @@ namespace powe
 		Component& operator=(const Component&) = default;
 		Component(Component&&) noexcept = default;
 		Component& operator=(Component&&) noexcept = default;
+		~Component() override = default;
 
 	public:
 
@@ -65,7 +66,6 @@ namespace powe
 		
 		void MoveData(RawByte* source, RawByte* destination) const override;
 		[[nodiscard]] SizeType GetSize() const override;
-		~Component() override = default;
 
 	protected:
 
@@ -90,6 +90,37 @@ namespace powe
 	{
 		return SizeType(sizeof(T));
 	}
+
+	class SparseComponent : public BaseComponent
+	{
+	public:
+
+		SparseComponent(const SparseComponent&) = default;
+		SparseComponent& operator=(const SparseComponent&) = default;
+		SparseComponent(SparseComponent&&) = default;
+		SparseComponent& operator=(SparseComponent&&) = default;
+		~SparseComponent() override = default;
+
+	public:
+
+		void DestroyData(RawByte* address) override {}
+		void MoveData(RawByte* source, RawByte* destination) const override
+		{
+			new (destination) SizeType{*reinterpret_cast<SizeType*>(source)};
+		}
+
+		SizeType GetSize() const override { return sizeof(SizeType); }
+
+	protected:
+		
+		explicit SparseComponent() = default;
+	};
+
+	namespace StaticComponent
+	{
+		static SharedPtr<SparseComponent> SparseTrait = std::make_shared<SparseComponent>();
+	}
+
 }
 
 

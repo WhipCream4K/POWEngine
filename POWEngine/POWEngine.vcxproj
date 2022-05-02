@@ -207,6 +207,7 @@
     <ClInclude Include="POWEngine\Core\CustomTypes.h" />
     <ClInclude Include="POWEngine\Logger\LoggingService.h" />
     <ClInclude Include="POWEngine\Math\Math.h" />
+    <ClInclude Include="POWEngine\Services\utils.h" />
     <ClInclude Include="POWEngine\Window\SFML\WindowSFML.h" />
     <ClInclude Include="POWEngine\Window\Window.h" />
     <ClInclude Include="POWEngine\Window\WindowContext.h" />
