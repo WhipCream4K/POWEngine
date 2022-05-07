@@ -187,7 +187,6 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="POWEngine\Core\Components\Attachable.h" />
     <ClInclude Include="POWEngine\Core\Components\ChildComponentTraits.h" />
     <ClInclude Include="POWEngine\Core\ECS\ECSUtils.h" />
     <ClInclude Include="POWEngine\Core\GameObject\GameObject.h" />
@@ -225,7 +224,6 @@
     <ClInclude Include="POWEngine\Core\ECS\SparseComponentManager.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="POWEngine\Core\Components\Attachable.cpp" />
     <ClCompile Include="POWEngine\Core\ECS\Archetype.cpp" />
     <ClCompile Include="POWEngine\Core\GameObject\GameObject.cpp" />
     <ClCompile Include="POWEngine\LockFree\LFStack.cpp" />

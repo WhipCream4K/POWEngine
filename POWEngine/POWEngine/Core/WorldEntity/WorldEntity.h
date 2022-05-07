@@ -380,6 +380,7 @@ namespace powe
 				}
 			}
 		}
+
 		//const auto gameObjectItr{ m_GameObjectRecords.find(id) };
 
 		//if (gameObjectItr != m_GameObjectRecords.end())

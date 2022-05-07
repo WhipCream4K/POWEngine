@@ -103,7 +103,7 @@ namespace powe
 
 	public:
 
-		void DestroyData(RawByte* address) override {}
+		void DestroyData(RawByte*) override {}
 		void MoveData(RawByte* source, RawByte* destination) const override
 		{
 			new (destination) SizeType{*reinterpret_cast<SizeType*>(source)};
