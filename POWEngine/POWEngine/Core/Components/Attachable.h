@@ -40,7 +40,7 @@ namespace powe
 		if (m_ParentID != INVALID_GAMEOBJECT_ID)
 		{
 			// During GetParent maybe the object is already destroy so we need to update that in run-time
-			if (T * parentComponent{ m_World.GetComponentByGameObject<T>(m_ParentID) })
+			if (T * parentComponent{ m_World.GetComponent<T>(m_ParentID) })
 				return parentComponent;
 
 			m_ParentID = INVALID_GAMEOBJECT_ID;

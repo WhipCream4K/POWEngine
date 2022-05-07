@@ -41,7 +41,7 @@ namespace powe
 	template <typename ComponentType>
 	EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> GameObject::GetComponent()
 	{
-		return m_World.GetComponentByGameObject<ComponentType>(m_Id);
+		return m_World.GetComponent<ComponentType>(m_Id);
 	}
 }
 

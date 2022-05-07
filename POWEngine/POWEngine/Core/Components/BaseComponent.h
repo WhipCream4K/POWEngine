@@ -109,7 +109,7 @@ namespace powe
 			new (destination) SizeType{*reinterpret_cast<SizeType*>(source)};
 		}
 
-		SizeType GetSize() const override { return sizeof(SizeType); }
+		SizeType GetSize() const override { return sizeof(SparseHandle); }
 
 	protected:
 		

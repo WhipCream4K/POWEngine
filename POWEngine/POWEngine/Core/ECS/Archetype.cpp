@@ -14,6 +14,11 @@ powe::Archetype::Archetype()
 	ComponentData = SharedPtr<RawByte[]>{ new RawByte[TotalAllocatedData]{} };
 }
 
+powe::RawByte* powe::Archetype::GetPointer(int pointerDiff) const
+{
+	return &ComponentData[pointerDiff];
+}
+
 SharedPtr<powe::RawByte[]> powe::Archetype::CopyComponentData(const Archetype& other, const WorldEntity& world) const
 {
 

@@ -7,36 +7,69 @@ namespace powe
 	using GameObjectID = uint32_t;
 	using RawByte = std::byte;
 	using SizeType = uint32_t;
+	using SparseHandle = uint32_t;
 
 	//constexpr ComponentTypeID ChildOf = (1u << 31u);
 	constexpr GameObjectID INVALID_GAMEOBJECT_ID{ UINT32_MAX };
 
 	// https://ajmmertens.medium.com/building-an-ecs-1-types-hierarchies-and-prefabs-9f07666a1e9d
-	constexpr uint32_t ChildOfBitPos = 31;
+	constexpr uint32_t SparseBitPos = 31;
 
 	enum class ComponentFlag : ComponentTypeID
 	{
 		Default,
-		//ChildOf = (1u << 31u),
-		Sparse = (1u << 31u)
+		Sparse = (1u << 31u),
+
+		Count = Sparse
 	};
+
+	//struct ComponentTypeHashKey
+	//{
+	//	ComponentTypeID key{};
+
+	//	bool operator==(const ComponentTypeHashKey& other) const
+	//	{
+	//		return (key & ~(1u << SparseBitPos)) == other.key;
+	//	}
+	//};
+
 
 
 	struct Archetype;
 	// POD 
-	struct GameObjectInArchetypeRecord
+	struct GameObjectRecord
 	{
 		WeakPtr<Archetype> Archetype{};
 		int IndexInArchetype{ -1 };
 	};
+
 
 	class BaseComponent;
 	struct PreArchetypeTrait
 	{
 		//using ComponentDataMap = std::unordered_map<ComponentTypeID, std::vector<SharedPtr<RawByte[]>>>;
 		std::unordered_map<ComponentTypeID, SharedPtr<RawByte[]>> componentData{};
-		std::string archetypeKey{};
+		std::vector<ComponentTypeID> archetypeKey{};
 	};
+
+	//struct SparseHandle
+	//{
+	//	SizeType Index{};
+	//	ComponentTypeID ComponentID{};
+	//};
+
+	//struct PreArchetypeTrait
+	//{
+	//	std::unordered_map<ComponentTypeID, SharedPtr<RawByte[]>> ComponentData{};
+	//	GameObjectID OwnerID{};
+	//};
+
+	//struct PreArchetypeContainer
+	//{
+	//	std::unordered_map<std::string, std::vector<PreArchetypeTrait>> PreArchetypeTraits{};
+	//	// This is to check whether the GameObject has been registered in the pipeline or not without iteratively check the map
+	//	std::unordered_set<GameObjectID> GameObjectList{}; 
+	//};
 
 	//using PreArchetypeTrait = std::unordered_map<ComponentTypeID, SharedPtr<RawByte[]>>;
 }
