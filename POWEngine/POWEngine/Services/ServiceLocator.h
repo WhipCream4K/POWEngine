@@ -2,6 +2,7 @@
 
 #include "Service.h"
 #include "POWEngine/Singleton/Singleton.h"
+#include "ServiceIndicator.h"
 
 namespace powe
 {
@@ -18,6 +19,8 @@ namespace powe
 
 		template<typename ServiceType>
 		static SharedPtr<EnableIsBasedOf<Service,ServiceType,ServiceType>> GetService();
+
+		static void RegisterService(const SharedPtr<Service>& instance, ServiceIndicator serviceNum);
 
 		ServiceLocator(const ServiceLocator&) = delete;
 		ServiceLocator& operator=(const ServiceLocator&) = delete;

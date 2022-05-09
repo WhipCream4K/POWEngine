@@ -30,7 +30,7 @@ namespace powe
 	template <typename T>
 	size_t Service::GetId()
 	{
-		static const size_t counter{ m_Id++ };
+		static const size_t counter{ m_Id.load() };
 		return counter;
 	}
 

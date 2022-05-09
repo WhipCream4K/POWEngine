@@ -16,3 +16,8 @@ void powe::ServiceLocator::Initialize()
 		POWLOGWARNING("LogWarning Test");
 	}
 }
+
+void powe::ServiceLocator::RegisterService(const SharedPtr<Service>& instance, ServiceIndicator serviceNum)
+{
+	
+}

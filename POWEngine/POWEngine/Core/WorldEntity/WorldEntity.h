@@ -75,19 +75,29 @@ namespace powe
 
 
 		SharedPtr<Archetype> GetArchetypeByGameObject(GameObjectID id) const;
-		SizeType GetComponentSize(ComponentTypeID id) const;
 		SharedPtr<BaseComponent> GetComponentTrait(ComponentTypeID id) const;
+		//SizeType GetComponentSize(ComponentTypeID id) const;
 
 
 		static bool IsDigitExistInNumber(const std::vector<ComponentTypeID>& compIds, const std::unordered_set<ComponentTypeID>& digit);
 		static std::string CreateStringFromNumVector(const std::vector<ComponentTypeID>& numList);
 
+#ifdef RUNTIME_TEST
+	public:
+		void InternalAddGameObjectToPipeline();
+		void InternalRemoveGameObjectFromPipeline();
+		void InternalRemoveComponentFromGameObject();
+#else
+
+	private:
+
 		void InternalAddGameObjectToPipeline();
 		void InternalRemoveGameObjectFromPipeline();
 		void InternalRemoveComponentFromGameObject();
 
-	private:
+#endif
 
+	private:
 
 		//SharedPtr<Archetype> CreateArchetypeWithTypes(const std::vector<ComponentTypeID>& typeID);
 		//SharedPtr<Archetype> UpdatePendingArchetypeKey(const std::string& targetKey, const std::string& newKey);

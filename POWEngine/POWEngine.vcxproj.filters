@@ -120,6 +120,15 @@
     <ClInclude Include="POWEngine\Core\ECS\SparseComponentManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="POWEngine\Services\ServiceIndicator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Sound\SoundSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Sound\SoundAPI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PCH\pch.cpp">
@@ -189,6 +198,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="POWEngine\Core\ECS\SparseComponentManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="POWEngine\Sound\SoundSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="POWEngine\Sound\SoundAPI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -207,6 +207,7 @@
     <ClInclude Include="POWEngine\Core\CustomTypes.h" />
     <ClInclude Include="POWEngine\Logger\LoggingService.h" />
     <ClInclude Include="POWEngine\Math\Math.h" />
+    <ClInclude Include="POWEngine\Services\ServiceIndicator.h" />
     <ClInclude Include="POWEngine\Window\SFML\WindowSFML.h" />
     <ClInclude Include="POWEngine\Window\Window.h" />
     <ClInclude Include="POWEngine\Window\WindowContext.h" />
@@ -222,6 +223,8 @@
     <ClInclude Include="POWEngine\Core\ECS\SystemBase.h" />
     <ClInclude Include="POWEngine\Core\Components\Transform2D.h" />
     <ClInclude Include="POWEngine\Core\ECS\SparseComponentManager.h" />
+    <ClInclude Include="POWEngine\Sound\SoundSystem.h" />
+    <ClInclude Include="POWEngine\Sound\SoundAPI.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="POWEngine\Core\ECS\Archetype.cpp" />
@@ -252,6 +255,8 @@
     <ClCompile Include="POWEngine\Core\ECS\SystemBase.cpp" />
     <ClCompile Include="POWEngine\Core\Components\Transform2D.cpp" />
     <ClCompile Include="POWEngine\Core\ECS\SparseComponentManager.cpp" />
+    <ClCompile Include="POWEngine\Sound\SoundSystem.cpp" />
+    <ClCompile Include="POWEngine\Sound\SoundAPI.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

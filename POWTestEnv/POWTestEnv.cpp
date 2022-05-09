@@ -218,6 +218,8 @@ TEST_CASE("For loop calculation or unordered set")
 
 #ifdef ComponentTest
 
+#define RUNTIME_TEST
+
 #include "POWEngine/Core/WorldEntity/WorldEntity.h"
 #include "POWEngine/Core/GameObject/GameObject.h"
 #include "POWEngine/Core/Components/BaseComponent.h"

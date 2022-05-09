@@ -48,18 +48,6 @@ powe::SparseHandle powe::SparseComponentManager::AddComponentToSparseSet(
 	return sparseSet.CurrentEmptyIndex++;
 }
 
-//powe::RawByte* powe::SparseComponentManager::GetComponentData(
-//	GameObjectID id, 
-//	ComponentTypeID compID, 
-//	SparseHandle handle) const
-//{
-//	if(!m_RegisteredGameObjects.contains(id))
-//		return nullptr;
-//
-//	return &m_SparseComponentData.at(compID).Data[int(handle * sizeof())]
-//	//m_SparseComponentData.at(compID)
-//}
-
 void powe::SparseComponentManager::RemoveComponentFromGameObject(GameObjectID , ComponentTypeID ,
 	SparseHandle )
 {

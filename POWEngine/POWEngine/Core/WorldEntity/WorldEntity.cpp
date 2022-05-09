@@ -47,6 +47,10 @@ void powe::WorldEntity::RemoveComponentByID(GameObjectID id, ComponentTypeID com
 			RemoveComponentFromPreArchetype(id, componentID);
 		}
 
+	}
+
+#pragma region OLDCODE
+
 		//const std::string oldArchetypeKey{ CreateStringFromNumVector(oldArchetype->Types) };
 
 		//std::vector<ComponentTypeID> newTypes{ oldArchetype->Types };
@@ -60,8 +64,6 @@ void powe::WorldEntity::RemoveComponentByID(GameObjectID id, ComponentTypeID com
 		//	// from its archetype and find/create a new archetype for the gameobject the we just ejected.
 		//	AddGameObjectToArchetypeRemoveList(oldArchetypeKey, id);
 		//}
-
-	}
 
 	//const auto gameObjectItr{ m_GameObjectRecords.find(id) };
 	//const auto componentItr{ m_ComponentTraitsMap.find(componentID) };
@@ -120,6 +122,8 @@ void powe::WorldEntity::RemoveComponentByID(GameObjectID id, ComponentTypeID com
 	//		targetArchetype->GameObjectIds.emplace_back(id);
 	//	}
 	//}
+
+#pragma endregion
 
 }
 
@@ -715,19 +719,19 @@ void powe::WorldEntity::RemoveGameObjectFromPreArchetype(GameObjectID id)
 	}
 }
 
-powe::SizeType powe::WorldEntity::GetComponentSize(ComponentTypeID id) const
-{
-	// if the component id has a sparse flag then return handle size
-	if (id & int(ComponentFlag::Sparse))
-		return sizeof(SizeType);
-
-	if (m_ComponentTraitsMap.contains(id))
-	{
-		return m_ComponentTraitsMap.at(id)->GetSize();
-	}
-
-	return {};
-}
+//powe::SizeType powe::WorldEntity::GetComponentSize(ComponentTypeID id) const
+//{
+//	// if the component id has a sparse flag then return handle size
+//	if (id & int(ComponentFlag::Sparse))
+//		return sizeof(SizeType);
+//
+//	if (m_ComponentTraitsMap.contains(id))
+//	{
+//		return m_ComponentTraitsMap.at(id)->GetSize();
+//	}
+//
+//	return {};
+//}
 
 SharedPtr<powe::BaseComponent> powe::WorldEntity::GetComponentTrait(ComponentTypeID id) const
 {

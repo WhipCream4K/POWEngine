@@ -39,11 +39,9 @@ namespace powe
 
 	private:
 
-		//std::unordered_map<GameObjectID, std::vector<SizeType>> m_SparseHandleMap;
 		//std::unordered_map<GameObjectID, std::unordered_map<ComponentTypeID,SizeType>> m_SparseHandleMap;
 		std::unordered_set<GameObjectID> m_RegisteredGameObjects;
 		std::unordered_map<ComponentTypeID, SparseSet> m_SparseComponentData;
-		//std::unordered_map<ComponentTypeID,std::unordered_map<GameObjectID>>
 	};
 
 	template <typename T>
