@@ -3,12 +3,12 @@
 
 #include "POWEngine/Core/WorldEntity/WorldEntity.h"
 
-powe::SizeType powe::SparseComponentManager::AddComponentToSparseSet(
+powe::SparseHandle powe::SparseComponentManager::AddComponentToSparseSet(
 	const WorldEntity& world,
 	GameObjectID id, ComponentTypeID componentTypeId,
 	const SharedPtr<RawByte[]>& data)
 {
-	if(m_SparseHandleMap.contains(id))
+	if(m_RegisteredGameObjects.contains(id))
 		return m_SparseComponentData[componentTypeId].CurrentEmptyIndex;
 	
 	const auto& [componentItr,result] = m_SparseComponentData.try_emplace(componentTypeId, SparseSet{});
@@ -42,14 +42,26 @@ powe::SizeType powe::SparseComponentManager::AddComponentToSparseSet(
 
 	componentTrait->MoveData(sourceAddress, endAddress);
 
-	m_SparseHandleMap.try_emplace(id, sparseSet.CurrentEmptyIndex);
+	m_RegisteredGameObjects.insert(id);
+	//m_SparseHandleMap.try_emplace(id, sparseSet.CurrentEmptyIndex);
 
 	return sparseSet.CurrentEmptyIndex++;
 }
 
-SharedPtr<powe::RawByte[]> powe::SparseComponentManager::GetComponentData(
-	GameObjectID id, 
-	ComponentTypeID compID)
+//powe::RawByte* powe::SparseComponentManager::GetComponentData(
+//	GameObjectID id, 
+//	ComponentTypeID compID, 
+//	SparseHandle handle) const
+//{
+//	if(!m_RegisteredGameObjects.contains(id))
+//		return nullptr;
+//
+//	return &m_SparseComponentData.at(compID).Data[int(handle * sizeof())]
+//	//m_SparseComponentData.at(compID)
+//}
+
+void powe::SparseComponentManager::RemoveComponentFromGameObject(GameObjectID , ComponentTypeID ,
+	SparseHandle )
 {
 	
 }

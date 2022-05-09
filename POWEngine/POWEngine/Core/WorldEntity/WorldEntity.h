@@ -60,6 +60,8 @@ namespace powe
 
 		void RemoveComponentByID(GameObjectID id, ComponentTypeID componentID);
 
+		const SparseComponentManager& GetSparseComponentManager() const { return m_SparseComponentManager; }
+
 		template<typename Component>
 		void RemoveComponentByType(GameObjectID id);
 
@@ -77,24 +79,26 @@ namespace powe
 		SharedPtr<BaseComponent> GetComponentTrait(ComponentTypeID id) const;
 
 
-	private:
-
 		static bool IsDigitExistInNumber(const std::vector<ComponentTypeID>& compIds, const std::unordered_set<ComponentTypeID>& digit);
 		static std::string CreateStringFromNumVector(const std::vector<ComponentTypeID>& numList);
 
-		SharedPtr<Archetype> CreateArchetypeWithTypes(const std::vector<ComponentTypeID>& typeID);
-		SharedPtr<Archetype> UpdatePendingArchetypeKey(const std::string& targetKey, const std::string& newKey);
-		SharedPtr<Archetype> GetArchetypeFromPendingList(const std::string& key);
-		SharedPtr<Archetype> GetArchetypeFromActiveList(const std::string& key) const;
-		bool GetGameObjectRecords(GameObjectID id, GameObjectRecord& outRecord) const;
-		bool GetPreArchetypeTrait(GameObjectID id, PreArchetypeTrait& outTrait) const;
-		void RemoveArchetype(const std::string& key);
-
-		// Actually trying to remove gameobjects from pending delete list
 		void InternalAddGameObjectToPipeline();
 		void InternalRemoveGameObjectFromPipeline();
 		void InternalRemoveComponentFromGameObject();
-		void InternalAddArchetypeToPipeline();
+
+	private:
+
+
+		//SharedPtr<Archetype> CreateArchetypeWithTypes(const std::vector<ComponentTypeID>& typeID);
+		//SharedPtr<Archetype> UpdatePendingArchetypeKey(const std::string& targetKey, const std::string& newKey);
+		//SharedPtr<Archetype> GetArchetypeFromPendingList(const std::string& key);
+		//void RemoveArchetype(const std::string& key);
+
+		SharedPtr<Archetype> GetArchetypeFromActiveList(const std::string& key) const;
+		bool GetGameObjectRecords(GameObjectID id, GameObjectRecord& outRecord) const;
+		bool GetPreArchetypeTrait(GameObjectID id, PreArchetypeTrait& outTrait) const;
+
+		// Actually trying to remove gameobjects from pending delete list
 		void AddGameObjectToRecordRemoveList(GameObjectID id);
 		void AddGameObjectToArchetypeRemoveList(const std::string& archetypeKey, GameObjectID id);
 		void AddComponentToGameObjectRemoveList(GameObjectID id, ComponentTypeID componentTypeID);
@@ -107,6 +111,7 @@ namespace powe
 			const SharedPtr<RawByte[]>& reservedComponentData);
 
 		void RemoveComponentFromPreArchetype(GameObjectID id, ComponentTypeID componentTypeId);
+		void RemoveGameObjectFromPreArchetype(GameObjectID id);
 
 		template<typename ComponentType>
 		ComponentType* AllocateComponentData(
@@ -189,7 +194,7 @@ namespace powe
 	EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> WorldEntity::AddComponentToGameObject(GameObjectID id,
 		ComponentType&& component, ComponentFlag componentFlag)
 	{
-		const ComponentTypeID componentId{ BaseComponent::GetId<ComponentType>() | componentFlag };
+		const ComponentTypeID componentId{ BaseComponent::GetId<ComponentType>() | ComponentTypeID(componentFlag) };
 
 		// 0. Register component automatically
 		if (!m_ComponentTraitsMap.contains(componentId))
@@ -232,7 +237,6 @@ namespace powe
 				!= preArchetypeTrait.archetypeKey.end())
 				return nullptr;
 		}
-
 
 		// Create data for the pre-archetype container
 		const SharedPtr<RawByte[]> componentData{ SharedPtr<RawByte[]>{new RawByte[sizeof(ComponentType)]} };
@@ -362,6 +366,10 @@ namespace powe
 				const auto findItr{ archetype->ComponentOffsets.find(compID) };
 				if (findItr != archetype->ComponentOffsets.end())
 				{
+					RawByte* sourceAddress{ &archetype->ComponentData[
+						gbRecords.IndexInArchetype * archetype->SizeOfComponentsBlock
+					 + findItr->second] };
+					
 					// check the key if it's a sparse component or not
 					if (!IsThisComponentSparse(findItr->first))
 					{
@@ -373,12 +381,19 @@ namespace powe
 
 					// IS Sparse component
 					// get the data from sparse section
-					const SharedPtr<RawByte[]> sparseComponentData{
-						m_SparseComponentManager.GetComponentData(id,compID) };
+					SparseHandle* handle{ reinterpret_cast<SparseHandle*>(sourceAddress) };
+					RawByte* realCompData{ m_SparseComponentManager.GetComponentData<ComponentType>(id,compID,*handle) };
 
-					return reinterpret_cast<ComponentType*>(sparseComponentData.get());
+					//const SharedPtr<RawByte[]> sparseComponentData{
+					//	m_SparseComponentManager.GetComponentData(id,compID) };
+
+					return reinterpret_cast<ComponentType*>(realCompData);
 				}
 			}
+		}
+		else // if some how user ask for a component before the gameobject got registered to the pipeline
+		{
+			
 		}
 
 		//const auto gameObjectItr{ m_GameObjectRecords.find(id) };

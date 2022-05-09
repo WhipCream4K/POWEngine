@@ -3,6 +3,7 @@
 #include "POWEngine/Core/CustomTypes.h"
 #include "ECSTypes.h"
 #include "POWEngine/Core/WorldEntity/WorldEntity.h"
+#include "POWEngine/Core/ECS/ECSUtils.h"
 
 namespace powe
 {
@@ -79,14 +80,36 @@ namespace powe
 		try
 		{
 			const ComponentTypeID compID{ BaseComponent::GetId<T>() };
-			return reinterpret_cast<T*>(&archetype.ComponentData[
-				m_UpdateCountPerArchetype * archetype.SizeOfComponentsBlock +
-					archetype.ComponentOffsets.at(compID)]); // there's a throw here
+
+			const auto findItr = archetype.ComponentOffsets.find(compID);
+
+			if(findItr != archetype.ComponentOffsets.end())
+			{
+				// check the key if it's a sparse component or not
+				if (!IsThisComponentSparse(findItr->first))
+				{
+					return reinterpret_cast<T*>(&archetype.ComponentData[
+						m_UpdateCountPerArchetype * archetype.SizeOfComponentsBlock
+							+ findItr->second // offsets
+					]);
+				}
+
+				// if it is Sparse component
+				// get the data from sparse section
+				auto& sparseManager{ m_World->GetSparseComponentManager() };
+				const SharedPtr<RawByte[]> sparseComponentData{
+					sparseManager.GetComponentData(archetype.GameObjectIds[m_UpdateCountPerArchetype],compID) };
+
+				return reinterpret_cast<T*>(sparseComponentData.get());
+			}
+
+			throw std::out_of_range("no component in this archetype");
 		}
-		catch (const std::exception& e)
+		catch (const std::exception&)
 		{
 			std::string errMsg{};
-			errMsg.append("component name: " + typeid(T).name());
+			errMsg.append("component name: ");
+			errMsg.append(typeid(T).name());
 			throw std::out_of_range(errMsg); // throws to update loop
 		}
 	}

@@ -3,6 +3,7 @@
 
 namespace powe
 {
+
 	class BaseComponent
 	{
 	public:
@@ -20,6 +21,9 @@ namespace powe
 		template<typename T>
 		static ComponentTypeID GetId();
 
+		//template<typename T>
+		//static SharedPtr<T> Create();
+			
 		virtual void DestroyData(RawByte* address) = 0;
 		virtual void MoveData(RawByte* source, RawByte* destination) const = 0;
 		[[nodiscard]] virtual SizeType GetSize() const = 0;
@@ -34,12 +38,21 @@ namespace powe
 		static std::atomic<ComponentTypeID> m_ComponentIdCounter;
 	};
 
+
 	template <typename T>
 	ComponentTypeID BaseComponent::GetId()
 	{
-		static const ComponentTypeID counter{ m_ComponentIdCounter++ };
+		//static const ComponentTypeID counter{ m_ComponentIdCounter++ };
+		static const ComponentTypeID counter{ m_ComponentIdCounter.load() };
+		++m_ComponentIdCounter;
 		return counter;
 	}
+
+	//template <typename T>
+	//SharedPtr<T> BaseComponent::Create()
+	//{
+	//	return SharedPtr<T>(new T());
+	//}
 
 	/**
 	 * \brief Every component should inherit from this and make sure that the component is moveable
@@ -69,7 +82,8 @@ namespace powe
 
 	protected:
 
-		explicit Component() = default;
+		Component() = default;
+
 	};
 
 	template <typename T>
@@ -101,9 +115,12 @@ namespace powe
 		SparseComponent& operator=(SparseComponent&&) = default;
 		~SparseComponent() override = default;
 
+		static SharedPtr<SparseComponent> GetStatic();
+
 	public:
 
 		void DestroyData(RawByte*) override {}
+
 		void MoveData(RawByte* source, RawByte* destination) const override
 		{
 			new (destination) SizeType{*reinterpret_cast<SizeType*>(source)};
@@ -112,14 +129,14 @@ namespace powe
 		SizeType GetSize() const override { return sizeof(SparseHandle); }
 
 	protected:
-		
+
 		explicit SparseComponent() = default;
 	};
 
-	namespace StaticComponent
-	{
-		static SharedPtr<SparseComponent> SparseTrait{ std::make_shared<SparseComponent>() };
-	}
+	//namespace StaticComponent
+	//{
+	//	static SharedPtr<SparseComponent> SparseTrait{};
+	//}
 
 }
 

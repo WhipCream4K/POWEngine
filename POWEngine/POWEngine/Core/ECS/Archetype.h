@@ -18,9 +18,10 @@ namespace powe
 
 	struct ComponentEqualOp
 	{
-		bool operator()(const ComponentTypeID& left,const ComponentTypeID right) const
+		bool operator()(const ComponentTypeID& left,const ComponentTypeID& right) const
 		{
-			return (left & ~(SizeType(ComponentFlag::Count))) == right;
+			return (left & ~SizeType(ComponentFlag::Count)) == right
+			|| left == (right & ~SizeType(ComponentFlag::Count));
 		}
 	};
 

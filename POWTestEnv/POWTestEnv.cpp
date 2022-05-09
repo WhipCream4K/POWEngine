@@ -279,29 +279,33 @@ TEST_CASE("Component")
 		REQUIRE(test1 != nullptr);
 		REQUIRE(test1->some == 42);
 
-		worldEnt->AddComponentToGameObject(gameObject3->GetID(), MoreVirtual{});
+		MoreVirtual* moreVirtual = worldEnt->AddComponentToGameObject(gameObject3->GetID(), MoreVirtual{});
+		moreVirtual->Update();
 
 	}
 
-	//const auto some{ std::make_tuple<std::array<int,3>>({1,2,3}) };
-}
+	SECTION("Runtime adding components")
+	{
+		SharedPtr<WorldEntity> worldEnt{ std::make_shared<WorldEntity>() };
+		SharedPtr<GameObject> gameObject1{ std::make_shared<GameObject>(*worldEnt) };
 
-#endif
+		worldEnt->AddComponentToGameObject(gameObject1->GetID(), TestComponent{});
+		worldEnt->AddComponentToGameObject(gameObject1->GetID(), TestComponent2{}, ComponentFlag::Sparse);
 
-#define ArchetypeTest
+		worldEnt->InternalRemoveGameObjectFromPipeline();
+		worldEnt->InternalRemoveComponentFromGameObject();
+		worldEnt->InternalAddGameObjectToPipeline();
 
-#ifdef ArchetypeTest
+		TestComponent* test{ worldEnt->GetComponent<TestComponent>(gameObject1->GetID()) };
+		TestComponent2* test2{ worldEnt->GetComponent<TestComponent2>(gameObject1->GetID()) };
 
-#include "POWEngine/Core/ECS/System.h"
-#include "POWEngine/Core/ECS/Archetype.h"
+		REQUIRE(test != nullptr);
+		REQUIRE(test->some == 42);
 
-TEST_CASE("Archetype")
-{
-	using namespace powe;
-	WorldEntity world{};
+		REQUIRE(test2 != nullptr);
+		REQUIRE(test2->sol == 42);
+	}
 
-	//System input{ world,PipelineLayer::Update,{} };
-	//const auto [num,two] = input.GetComponentsView<int, int>(1);
 }
 
 #endif

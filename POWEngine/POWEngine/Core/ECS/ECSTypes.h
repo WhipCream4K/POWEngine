@@ -1,5 +1,8 @@
 #pragma once
 
+//#include "POWEngine/Core/CustomTypes.h"
+#include <unordered_map>
+
 namespace powe
 {
 	using ComponentTypeID = uint32_t;
@@ -22,18 +25,6 @@ namespace powe
 
 		Count = Sparse
 	};
-
-	//struct ComponentTypeHashKey
-	//{
-	//	ComponentTypeID key{};
-
-	//	bool operator==(const ComponentTypeHashKey& other) const
-	//	{
-	//		return (key & ~(1u << SparseBitPos)) == other.key;
-	//	}
-	//};
-
-
 
 	struct Archetype;
 	// POD 

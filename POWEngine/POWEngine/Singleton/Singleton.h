@@ -16,7 +16,7 @@ namespace powe
 		static SharedPtr<T> GetInstance()
 		{
 			if (!m_Instance)
-				m_Instance = std::make_shared<T>();
+				m_Instance = SharedPtr<T>(new T());
 			return m_Instance;
 		}
 
