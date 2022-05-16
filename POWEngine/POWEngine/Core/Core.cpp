@@ -6,13 +6,13 @@
 #include "POWEngine/Services/ServiceLocator.h"
 #include "POWEngine/Window/Window.h"
 #include "POWEngine/Core/Clock/WorldClock.h"
-#include "POWEngine/Logger/LoggingService.h"
+#include "POWEngine/Logger/LoggerUtils.h"
 #include "WorldEntity/WorldEntity.h"
 
 powe::Core::Core()
 	: m_WorldClock()
 {
-	ServiceLocator::Initialize();
+	//ServiceLocator::Initialize();
 }
 
 bool powe::Core::TranslateWindowInputs(const SharedPtr<Window>& window, const SharedPtr<WorldEntity>& worldEntt) const

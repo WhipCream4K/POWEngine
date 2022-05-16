@@ -2,7 +2,7 @@
 #include "GameObject.h"
 
 #include "POWEngine/Core/WorldEntity/WorldEntity.h"
-#include "POWEngine/Logger/LoggingService.h"
+#include "POWEngine/Logger/LoggerUtils.h"
 
 //powe::GameObject::GameObject(const SharedPtr<WorldEntity>& world)
 //	: m_World(world)

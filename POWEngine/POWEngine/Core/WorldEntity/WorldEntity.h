@@ -45,7 +45,6 @@ namespace powe
 		// TODO: Maybe do a thread safe removing system
 		void RemoveSystem(const SharedPtr<SystemBase>& system) const;
 
-		const auto& GetComponentMap() const { return m_ComponentTraitsMap; }
 
 		GameObjectID GetNewEntityID();
 
@@ -56,7 +55,7 @@ namespace powe
 			ComponentFlag componentFlag = ComponentFlag::Default);
 
 		template<typename ComponentType>
-		EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> GetComponent(GameObjectID id);
+		EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> GetComponent(GameObjectID id) const;
 
 		void RemoveComponentByID(GameObjectID id, ComponentTypeID componentID);
 
@@ -105,6 +104,7 @@ namespace powe
 		//void RemoveArchetype(const std::string& key);
 
 		SharedPtr<Archetype> GetArchetypeFromActiveList(const std::string& key) const;
+		const auto& GetComponentMap() const { return m_ComponentTraitsMap; }
 		bool GetGameObjectRecords(GameObjectID id, GameObjectRecord& outRecord) const;
 		bool GetPreArchetypeTrait(GameObjectID id, PreArchetypeTrait& outTrait) const;
 
@@ -243,8 +243,7 @@ namespace powe
 		{
 			// if the gameobject has been prepared to be added into the pipeline then check for the current
 			// types of component that this gameobject is possessed;
-			if (std::ranges::find(preArchetypeTrait.archetypeKey, componentId)
-				!= preArchetypeTrait.archetypeKey.end())
+			if (!preArchetypeTrait.componentData.contains(componentId))
 				return nullptr;
 		}
 
@@ -364,7 +363,7 @@ namespace powe
 	}
 
 	template <typename ComponentType>
-	EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> WorldEntity::GetComponent(GameObjectID id)
+	EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> WorldEntity::GetComponent(GameObjectID id) const
 	{
 		const ComponentTypeID compID{ BaseComponent::GetId<ComponentType>() };
 
@@ -389,40 +388,25 @@ namespace powe
 						]);
 					}
 
-					// IS Sparse component
-					// get the data from sparse section
-					SparseHandle* handle{ reinterpret_cast<SparseHandle*>(sourceAddress) };
+					// if it's a Sparse component
+					// get the handle from the sourceAddress then use that to get a real component address
+					const SparseHandle* handle{ reinterpret_cast<SparseHandle*>(sourceAddress) };
 					RawByte* realCompData{ m_SparseComponentManager.GetComponentData<ComponentType>(id,compID,*handle) };
-
-					//const SharedPtr<RawByte[]> sparseComponentData{
-					//	m_SparseComponentManager.GetComponentData(id,compID) };
 
 					return reinterpret_cast<ComponentType*>(realCompData);
 				}
 			}
+			else // if some how user ask for a component before the gameobject got registered to the pipeline
+			{
+				PreArchetypeTrait preArchetypeTrait{};
+				if(GetPreArchetypeTrait(id, preArchetypeTrait))
+				{
+					const auto findItr{ preArchetypeTrait.componentData.find(compID) };
+					if (findItr != preArchetypeTrait.componentData.end())
+						return reinterpret_cast<ComponentType*>(findItr->second.get());
+				}
+			}
 		}
-		else // if some how user ask for a component before the gameobject got registered to the pipeline
-		{
-			
-		}
-
-		//const auto gameObjectItr{ m_GameObjectRecords.find(id) };
-
-		//if (gameObjectItr != m_GameObjectRecords.end())
-		//{
-		//	if (const auto archetype{ gameObjectItr->second.Archetype.lock() })
-		//	{
-		//		RawByte* sourceAddress{&archetype->ComponentData[]}
-		//		//SizeType accumulateOffset{};
-		//		//RawByte* startAddress{ &archetype->ComponentData[gameObjectItr->second.IndexInArchetype * archetype->SizeOfComponentsBlock] };
-		//		//for (const auto& type : archetype->Types)
-		//		//{
-		//		//	if (type == compID)
-		//		//		return reinterpret_cast<ComponentType*>(startAddress + accumulateOffset);
-		//		//	accumulateOffset += GetComponentSize(type);
-		//		//}
-		//	}
-		//}
 
 		return nullptr;
 	}

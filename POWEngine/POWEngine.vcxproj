@@ -187,6 +187,13 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="POWEngine\Rendering\NullRenderer.h" />
+    <ClInclude Include="POWEngine\Logger\Logger.h" />
+    <ClInclude Include="POWEngine\Logger\NullLogger.h" />
+    <ClInclude Include="POWEngine\Rendering\Components\Sprite\SFML\SFMLSprite.h" />
+    <ClInclude Include="POWEngine\Rendering\RenderBridge.h" />
+    <ClInclude Include="POWEngine\Sound\FMOD\FMOD2DSound.h" />
+    <ClInclude Include="POWEngine\Sound\NullSoundSystem.h" />
     <ClInclude Include="POWEngine\Core\Components\ChildComponentTraits.h" />
     <ClInclude Include="POWEngine\Core\ECS\ECSUtils.h" />
     <ClInclude Include="POWEngine\Core\GameObject\GameObject.h" />
@@ -201,14 +208,15 @@
     <ClInclude Include="POWEngine\LockFree\LFQueue.h" />
     <ClInclude Include="POWEngine\Core\ECS\Archetype.h" />
     <ClInclude Include="POWEngine\Core\WorldEntity\PipelineLayer.h" />
-    <ClInclude Include="POWEngine\Logger\Logger.h" />
+    <ClInclude Include="POWEngine\Logger\Console\ConsoleLogger.h" />
     <ClInclude Include="PCH\pch.h" />
     <ClInclude Include="POWEngine\Core\Core.h" />
     <ClInclude Include="POWEngine\Core\CustomTypes.h" />
-    <ClInclude Include="POWEngine\Logger\LoggingService.h" />
+    <ClInclude Include="POWEngine\Logger\LoggerUtils.h" />
     <ClInclude Include="POWEngine\Math\Math.h" />
     <ClInclude Include="POWEngine\Services\ServiceIndicator.h" />
-    <ClInclude Include="POWEngine\Window\SFML\WindowSFML.h" />
+    <ClInclude Include="POWEngine\Sound\SoundInfo.h" />
+    <ClInclude Include="POWEngine\Window\SFML\SFMLWindow.h" />
     <ClInclude Include="POWEngine\Window\Window.h" />
     <ClInclude Include="POWEngine\Window\WindowContext.h" />
     <ClInclude Include="POWEngine\Window\WindowEvents.h" />
@@ -224,9 +232,22 @@
     <ClInclude Include="POWEngine\Core\Components\Transform2D.h" />
     <ClInclude Include="POWEngine\Core\ECS\SparseComponentManager.h" />
     <ClInclude Include="POWEngine\Sound\SoundSystem.h" />
-    <ClInclude Include="POWEngine\Sound\SoundAPI.h" />
+    <ClInclude Include="POWEngine\Rendering\Renderer.h" />
+    <ClInclude Include="POWEngine\Rendering\RendererImpl.h" />
+    <ClInclude Include="POWEngine\Rendering\SFML\SFML2DRenderer.h" />
+    <ClInclude Include="POWEngine\Rendering\Components\Sprite\SpriteComponent.h" />
+    <ClInclude Include="POWEngine\Rendering\Resources\Texture\Texture.h" />
+    <ClInclude Include="POWEngine\Rendering\Resources\Texture\TextureImpl.h" />
+    <ClInclude Include="POWEngine\Rendering\Resources\Texture\SFML\SFMLTexture.h" />
+    <ClInclude Include="POWEngine\Rendering\Components\Sprite\SpriteImpl.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="POWEngine\Rendering\NullRenderer.cpp" />
+    <ClCompile Include="POWEngine\Logger\Logger.cpp" />
+    <ClCompile Include="POWEngine\Logger\NullLogger.cpp" />
+    <ClCompile Include="POWEngine\Rendering\Components\Sprite\SFML\SFMLSprite.cpp" />
+    <ClCompile Include="POWEngine\Sound\FMOD\FMOD2DSound.cpp" />
+    <ClCompile Include="POWEngine\Sound\NullSoundSystem.cpp" />
     <ClCompile Include="POWEngine\Core\ECS\Archetype.cpp" />
     <ClCompile Include="POWEngine\Core\GameObject\GameObject.cpp" />
     <ClCompile Include="POWEngine\LockFree\LFStack.cpp" />
@@ -234,7 +255,7 @@
     <ClCompile Include="POWEngine\Core\Input\InputSettings.cpp" />
     <ClCompile Include="POWEngine\Core\Input\InputManager.cpp" />
     <ClCompile Include="POWEngine\LockFree\LFQueue.cpp" />
-    <ClCompile Include="POWEngine\Logger\Logger.cpp" />
+    <ClCompile Include="POWEngine\Logger\Console\ConsoleLogger.cpp" />
     <ClCompile Include="PCH\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -242,7 +263,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="POWEngine\Core\Core.cpp" />
-    <ClCompile Include="POWEngine\Window\SFML\WindowSFML.cpp" />
+    <ClCompile Include="POWEngine\Window\SFML\SFMLWindow.cpp" />
     <ClCompile Include="POWEngine\Window\Window.cpp" />
     <ClCompile Include="POWEngine\Window\WindowImpl.cpp" />
     <ClCompile Include="POWEngine\Core\Thread\SimpleThreadPool.cpp" />
@@ -256,7 +277,14 @@
     <ClCompile Include="POWEngine\Core\Components\Transform2D.cpp" />
     <ClCompile Include="POWEngine\Core\ECS\SparseComponentManager.cpp" />
     <ClCompile Include="POWEngine\Sound\SoundSystem.cpp" />
-    <ClCompile Include="POWEngine\Sound\SoundAPI.cpp" />
+    <ClCompile Include="POWEngine\Rendering\Renderer.cpp" />
+    <ClCompile Include="POWEngine\Rendering\RendererImpl.cpp" />
+    <ClCompile Include="POWEngine\Rendering\SFML\SFML2DRenderer.cpp" />
+    <ClCompile Include="POWEngine\Rendering\Components\Sprite\SpriteComponent.cpp" />
+    <ClCompile Include="POWEngine\Rendering\Resources\Texture\Texture.cpp" />
+    <ClCompile Include="POWEngine\Rendering\Resources\Texture\TextureImpl.cpp" />
+    <ClCompile Include="POWEngine\Rendering\Resources\Texture\SFML\SFMLTexture.cpp" />
+    <ClCompile Include="POWEngine\Rendering\Components\Sprite\SpriteImpl.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

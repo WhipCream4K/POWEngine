@@ -72,3 +72,8 @@ struct FnTraits<Ret(UserClass::*)(Args...) const> : FnTraits<Ret(UserClass&, Arg
 };
 
 #define UNREF_PARAM(param) param
+
+namespace powe
+{
+	using RawByte = std::byte;
+}

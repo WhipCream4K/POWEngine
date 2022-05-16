@@ -96,9 +96,9 @@ TEST_CASE("Lock-Free queue Pop test")
 	REQUIRE_THROWS(lfTest.Front());
 }
 
-#include <POWEngine/Logger/Logger.h>
+#include <POWEngine/Logger/ConsoleLogger.h>
 
-void PumpMessage(powe::Logger& logger, const std::string& msg)
+void PumpMessage(powe::ConsoleLogger& logger, const std::string& msg)
 {
 	const std::uniform_int_distribution<int> uniIntDist{ 1,6 };
 	std::this_thread::sleep_for(std::chrono::milliseconds(uniIntDist(engine)));
@@ -111,10 +111,10 @@ TEST_CASE("Logger")
 {
 	std::cout << "------- Test logger using thread pool -------\n";
 
-	powe::Logger logger{};
+	powe::ConsoleLogger logger{};
 
-	std::cout << powe::UniqueIdGenerator<powe::Logger>::GetNewId<double>() << std::endl;
-	std::cout << powe::UniqueIdGenerator<powe::Logger>::GetNewId<float>() << std::endl;
+	std::cout << powe::UniqueIdGenerator<powe::ConsoleLogger>::GetNewId<double>() << std::endl;
+	std::cout << powe::UniqueIdGenerator<powe::ConsoleLogger>::GetNewId<float>() << std::endl;
 	//std::cout << powe::UniqueIdGenerator<powe::>::GetNewId() << std::endl;
 
 	//std::cout << sizeof(SharedPtr<powe::Logger>) << '\n';

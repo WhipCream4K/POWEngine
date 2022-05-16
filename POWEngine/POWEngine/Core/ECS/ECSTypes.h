@@ -8,7 +8,7 @@ namespace powe
 	using ComponentTypeID = uint32_t;
 	using NormalIDType = ComponentTypeID; // This is for a normal use case of ID because I needed the same primitives as ComponentTypeID
 	using GameObjectID = uint32_t;
-	using RawByte = std::byte;
+	//using RawByte = std::byte;
 	using SizeType = uint32_t;
 	using SparseHandle = uint32_t;
 
@@ -34,12 +34,31 @@ namespace powe
 		int IndexInArchetype{ -1 };
 	};
 
+	struct ComponentTypeHasher
+	{
+		size_t operator()(const ComponentTypeID& other) const
+		{
+			return std::hash<ComponentTypeID>()(other);
+		}
+	};
+
+	struct ComponentEqualOp
+	{
+		bool operator()(const ComponentTypeID& left, const ComponentTypeID& right) const
+		{
+			return (left & ~SizeType(ComponentFlag::Count)) == right
+				|| left == (right & ~SizeType(ComponentFlag::Count));
+		}
+	};
+
+	template<typename Val>
+	using ECSComponentMap = std::unordered_map<ComponentTypeID, Val, ComponentTypeHasher, ComponentEqualOp>;
 
 	class BaseComponent;
 	struct PreArchetypeTrait
 	{
 		//using ComponentDataMap = std::unordered_map<ComponentTypeID, std::vector<SharedPtr<RawByte[]>>>;
-		std::unordered_map<ComponentTypeID, SharedPtr<RawByte[]>> componentData{};
+		ECSComponentMap<SharedPtr<RawByte[]>> componentData{};
 		std::vector<ComponentTypeID> archetypeKey{};
 	};
 

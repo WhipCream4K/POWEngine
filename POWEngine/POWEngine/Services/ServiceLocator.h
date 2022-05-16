@@ -1,55 +1,84 @@
 #pragma once
 
 #include "Service.h"
-#include "POWEngine/Singleton/Singleton.h"
-#include "ServiceIndicator.h"
+#include "POWEngine/Sound/NullSoundSystem.h"
+#include "POWEngine/Logger/NullLogger.h"
 
 namespace powe
 {
 	class Service;
-	class ServiceLocator final : public Singleton<ServiceLocator>
+	class SoundSystem;
+	class ConsoleLogger;
+	class ServiceLocator final
 	{
 
-		friend class Singleton<ServiceLocator>;
-		using ServiceKey = size_t;
+		//friend class Singleton<ServiceLocator>;
 
 	public:
 
-		static void Initialize();
+		//static void Initialize();
 
-		template<typename ServiceType>
-		static SharedPtr<EnableIsBasedOf<Service,ServiceType,ServiceType>> GetService();
+		//template<typename ServiceType>
+		//static EnableIsBasedOf<Service,ServiceType,ServiceType&> GetService();
 
-		static void RegisterService(const SharedPtr<Service>& instance, ServiceIndicator serviceNum);
+		//template<typename ServiceType,typename = EnableIsBasedOf<Service,ServiceType>>
+		//static void RegisterService(const SharedPtr<Service>& service);
 
+		ServiceLocator() = delete;
 		ServiceLocator(const ServiceLocator&) = delete;
 		ServiceLocator& operator=(const ServiceLocator&) = delete;
 		ServiceLocator(ServiceLocator&&) noexcept = delete;
 		ServiceLocator& operator=(ServiceLocator&&) noexcept = delete;
-		~ServiceLocator() override = default;
+		~ServiceLocator() = default;
 
-	protected:
+		static SoundSystem& GetSoundSystem() { return *m_SoundSystem; }
+		static void RegisterSoundSystem(const SharedPtr<SoundSystem>& soundSystem);
 
-		ServiceLocator() = default;
-		
+		static Logger& GetLogger() { return *m_Logger; }
+		static void RegisterLogger(const SharedPtr<Logger>& logger);
 
 	private:
 
-		std::unordered_map<ServiceKey, SharedPtr<Service>> m_ServiceTable;
+		// ----- Audio ------
+		static SharedPtr<SoundSystem> m_SoundSystem;
+		static NullSoundSystem m_NullAudio;
+		// ------------------
+
+		// ----- Logger ------
+		static SharedPtr<Logger> m_Logger;
+		static NullLogger m_NullLogger;
+		// -------------------
 	};
 
-	template <typename ServiceType>
-	SharedPtr<EnableIsBasedOf<Service, ServiceType, ServiceType>> ServiceLocator::GetService()
-	{
-		const size_t serviceId{ Service::GetId<ServiceType>() };
-		const auto serviceLocator{ GetInstance() };
+	//template <typename ServiceType>
+	//SharedPtr<EnableIsBasedOf<Service, ServiceType, ServiceType>> ServiceLocator::GetService()
+	//{
+	//	const size_t serviceId{ Service::GetId<ServiceType>() };
+	//	const auto serviceLocator{ GetInstance() };
 
-		const auto itr{ serviceLocator->m_ServiceTable.find(serviceId) };
-		if (itr != serviceLocator->m_ServiceTable.end())
-			return std::static_pointer_cast<ServiceType>(itr->second);
+	//	const auto itr{ serviceLocator->m_ServiceTable.find(serviceId) };
+	//	if (itr != serviceLocator->m_ServiceTable.end())
+	//		return std::static_pointer_cast<ServiceType>(itr->second);
 
-		return {};
-	}
+	//	return {};
+	//}
+
+	//template <typename ServiceType>
+	//EnableIsBasedOf<Service, ServiceType, ServiceType&> ServiceLocator::GetService()
+	//{
+	//	const ServiceKey serviceKey{ Service::GetId<ServiceType>() };
+	//	const auto serviceLocator{ GetInstance() };
+
+	//	const auto itr{ serviceLocator->m_ServiceTable.find(serviceKey) };
+	//	if (itr != serviceLocator->m_ServiceTable.end())
+	//		return *std::static_pointer_cast<ServiceType>(itr->second);
+	//}
+
+	//template <typename ServiceType, typename>
+	//void ServiceLocator::RegisterService(const SharedPtr<Service>& service)
+	//{
+	//	
+	//}
 }
 
 

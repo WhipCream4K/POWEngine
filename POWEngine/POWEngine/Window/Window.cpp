@@ -1,11 +1,11 @@
 #include "pch.h"
 #include "Window.h"
 
-#include "POWEngine/Logger/LoggingService.h"
+#include "POWEngine/Logger/LoggerUtils.h"
 
 #if USE_SFML_WINDOW
-#include "SFML/WindowSFML.h"
-using WindowType = powe::WindowSFML;
+#include "SFML/SFMLWindow.h"
+using WindowType = powe::SFMLWindow;
 #endif
 
 powe::Window::Window(uint32_t width, uint32_t height, const std::string& title, const OtherWindowParams& others)

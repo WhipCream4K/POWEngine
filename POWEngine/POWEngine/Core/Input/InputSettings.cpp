@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "InputSettings.h"
-#include "POWEngine/Logger/LoggingService.h"
+#include "POWEngine/Logger/LoggerUtils.h"
 #include "POWEngine/Window/WindowEvents.h"
 
 #if USE_SFML_WINDOW

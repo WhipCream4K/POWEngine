@@ -1,23 +1,36 @@
 #include "pch.h"
 #include "ServiceLocator.h"
-#include "POWEngine/Logger/LoggingService.h" 
+//#include "POWEngine/Logger/LoggerUtils.h"
+#include "POWEngine/Sound/SoundSystem.h"
 
-void powe::ServiceLocator::Initialize()
+powe::NullSoundSystem powe::ServiceLocator::m_NullAudio{};
+SharedPtr<powe::SoundSystem> powe::ServiceLocator::m_SoundSystem{ SharedPtr<powe::NullSoundSystem>(&ServiceLocator::m_NullAudio,[](powe::NullSoundSystem*){})};
+
+powe::NullLogger powe::ServiceLocator::m_NullLogger{};
+SharedPtr<powe::Logger> powe::ServiceLocator::m_Logger{ SharedPtr<powe::NullLogger>(&powe::ServiceLocator::m_NullLogger,[](powe::NullLogger*) {}) };
+
+
+//void powe::ServiceLocator::Initialize()
+//{
+//	// Initialize logger
+//	{
+//		const auto serviceLocator{ GetInstance() };
+//		const auto logger{ std::make_shared<Logger>() };
+//		const size_t serviceId{ Service::GetId<Logger>() };
+//		serviceLocator->m_ServiceTable.try_emplace(serviceId, logger);
+//
+//		POWLOGINFO("Message Thread Started");
+//		POWLOGERROR("LogError test");
+//		POWLOGWARNING("LogWarning Test");
+//	}
+//}
+
+void powe::ServiceLocator::RegisterSoundSystem(const SharedPtr<SoundSystem>& soundSystem)
 {
-	// Initialize logger
-	{
-		const auto serviceLocator{ GetInstance() };
-		const auto logger{ std::make_shared<Logger>() };
-		const size_t serviceId{ Service::GetId<Logger>() };
-		serviceLocator->m_ServiceTable.try_emplace(serviceId, logger);
-
-		POWLOGINFO("Message Thread Started");
-		POWLOGERROR("LogError test");
-		POWLOGWARNING("LogWarning Test");
-	}
+	m_SoundSystem = soundSystem == nullptr ? SharedPtr<NullSoundSystem>(&m_NullAudio,[](NullSoundSystem*){}) : soundSystem;
 }
 
-void powe::ServiceLocator::RegisterService(const SharedPtr<Service>& instance, ServiceIndicator serviceNum)
+void powe::ServiceLocator::RegisterLogger(const SharedPtr<Logger>& logger)
 {
-	
+	m_Logger = logger == nullptr ? SharedPtr<NullLogger>(&m_NullLogger, [](NullLogger*) {}) : logger;
 }

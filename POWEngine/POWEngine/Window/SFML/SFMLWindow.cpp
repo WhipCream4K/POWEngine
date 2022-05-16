@@ -1,6 +1,6 @@
 
 #include "pch.h"
-#include "WindowSFML.h"
+#include "SFMLWindow.h"
 #include "POWEngine/Window/WindowEvents.h"
 //#include "POWEngine/Core/Input/InputStruct.h"
 #include <iostream>
@@ -9,7 +9,7 @@
 
 #if USE_SFML_WINDOW
 
-powe::WindowSFML::WindowSFML(uint32_t width, uint32_t height, const std::string& title, OtherWindowParams others)
+powe::SFMLWindow::SFMLWindow(uint32_t width, uint32_t height, const std::string& title, OtherWindowParams others)
 	: WindowImpl(width, height, title, others)
 	, m_WndHandle(
 		sf::VideoMode(width, height),
@@ -23,7 +23,7 @@ powe::WindowSFML::WindowSFML(uint32_t width, uint32_t height, const std::string&
 	m_MousePosLastPoll.y = mousePos.y;
 }
 
-powe::WindowSFML::WindowSFML(uint32_t width, uint32_t height, const std::string& title)
+powe::SFMLWindow::SFMLWindow(uint32_t width, uint32_t height, const std::string& title)
 	: WindowImpl(width, height, title)
 	, m_WndHandle(sf::VideoMode(width, height), sf::String{ title.c_str() })
 	, m_DeltaMousePos()
@@ -33,7 +33,7 @@ powe::WindowSFML::WindowSFML(uint32_t width, uint32_t height, const std::string&
 	m_MousePosLastPoll.y = mousePos.y;
 }
 
-const powe::WindowMessages& powe::WindowSFML::PollWindowMessages(bool& shouldEarlyExit, bool& shouldIgnoreInputs)
+const powe::WindowMessages& powe::SFMLWindow::PollWindowMessages(bool& shouldEarlyExit, bool& shouldIgnoreInputs)
 {
 	m_WndMessages.totalMessages = 0;
 
@@ -162,7 +162,7 @@ const powe::WindowMessages& powe::WindowSFML::PollWindowMessages(bool& shouldEar
 	return m_WndMessages;
 }
 
-const powe::HardwareMessages& powe::WindowSFML::PollHardwareMessages(bool& shouldEarlyExit, bool& shouldIgnoreInputs)
+const powe::HardwareMessages& powe::SFMLWindow::PollHardwareMessages(bool& shouldEarlyExit, bool& shouldIgnoreInputs)
 {
 	m_HWMessages.totalMessages = 0;
 
@@ -296,17 +296,17 @@ const powe::HardwareMessages& powe::WindowSFML::PollHardwareMessages(bool& shoul
 	return m_HWMessages;
 }
 
-void powe::WindowSFML::Resize(uint32_t width, uint32_t height)
+void powe::SFMLWindow::Resize(uint32_t width, uint32_t height)
 {
 	m_WndHandle.setSize({ width,height });
 }
 
-void powe::WindowSFML::SetTitle(const std::string& title)
+void powe::SFMLWindow::SetTitle(const std::string& title)
 {
 	m_WndHandle.setTitle(sf::String{ title.c_str() });
 }
 
-powe::WindowSFML::~WindowSFML() = default;
+powe::SFMLWindow::~SFMLWindow() = default;
 
 
 #endif

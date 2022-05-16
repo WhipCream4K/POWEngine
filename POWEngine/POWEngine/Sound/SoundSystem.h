@@ -1,19 +1,43 @@
 #pragma once
 
-#include "POWEngine/Services/Service.h"
+//#include "POWEngine/Services/Service.h"
+#include <future>
+
+#include "SoundInfo.h"
 
 namespace powe
 {
-	class SoundAPI;
-	class SoundSystem : public Service
+	using SoundID = uint32_t;
+	using ChannelID = uint32_t;
+	class SoundSystem
 	{
 	public:
 
+		SoundSystem() = default;
+		SoundSystem(const SoundSystem&) = delete;
+		SoundSystem& operator=(const SoundSystem&) = delete;
+		SoundSystem(SoundSystem&&) = delete;
+		SoundSystem& operator=(SoundSystem&&) = delete;
+		virtual ~SoundSystem() = default;
 
+	public:
 
-	private:
+		virtual SoundID RegisterSoundEntity(const std::string& filePath, bool shouldLoaded = false) = 0;
+		virtual void UnRegisterSoundEntity(SoundID id) = 0;
 
-		SharedPtr<SoundAPI> m_SoundAPI;
+		virtual void Update() = 0;
+
+		// Play saved sound from memory
+		virtual ChannelID Play(SoundID id, const SoundInfo& soundInfo) = 0;
+
+		virtual SoundID PreLoadSoundToMemory(const std::string& filePath) = 0;
+		virtual void RemovePreLoadSound(SoundID id) = 0;
+
+		// Play the sound immediately without saving to the memory
+		virtual SoundID PlayImmediate(const std::string& filePath, const SoundInfo& soundInfo) = 0;
+		virtual bool IsPlaying(ChannelID id) = 0;
+		virtual void Stop(ChannelID id) = 0;
+
 	};
 }
 

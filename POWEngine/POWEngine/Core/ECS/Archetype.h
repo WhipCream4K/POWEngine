@@ -7,24 +7,6 @@
 namespace powe
 {
 	class WorldEntity;
-
-	struct ComponentTypeHasher
-	{
-		size_t operator()(const ComponentTypeID& other) const
-		{
-			return std::hash<ComponentTypeID>()(other);
-		}
-	};
-
-	struct ComponentEqualOp
-	{
-		bool operator()(const ComponentTypeID& left,const ComponentTypeID& right) const
-		{
-			return (left & ~SizeType(ComponentFlag::Count)) == right
-			|| left == (right & ~SizeType(ComponentFlag::Count));
-		}
-	};
-
 	// POD for component data
 	struct Archetype final
 	{
@@ -57,7 +39,7 @@ namespace powe
 		std::vector<ComponentTypeID> Types; // types of components of this archetypes
 		std::vector<GameObjectID> GameObjectIds; // GameObjectIds that has this archetype
 		//std::unordered_map<ComponentTypeID,uint32_t> ComponentOffsets; // map of component's offsets from the start of the array
-		std::unordered_map<ComponentTypeID, SizeType, ComponentTypeHasher, ComponentEqualOp> ComponentOffsets;
+		ECSComponentMap<SizeType> ComponentOffsets;
 		SharedPtr<RawByte[]> ComponentData{}; // Array of component struct
 		SizeType SizeOfComponentsBlock{};
 		SizeType TotalAllocatedData{};

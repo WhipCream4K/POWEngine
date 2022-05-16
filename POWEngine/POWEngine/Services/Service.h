@@ -1,7 +1,11 @@
 #pragma once
 
+#include <functional>
+
 namespace powe
 {
+	using ServiceKey = uint32_t;
+
 	/**
 	 * \brief Just a base class for all Service types
 	 */
@@ -20,17 +24,21 @@ namespace powe
 		template<typename T>
 		static size_t GetId();
 
+		//virtual std::function<SharedPtr<Service>> GetDefault() = 0;
+		//virtual SharedPtr<Service> GetDefault() const = 0;
+
 	private:
 
 		// Thread safe
-		static std::atomic_size_t m_Id;
+		static std::atomic<ServiceKey> m_Id;
 
 	};
 
 	template <typename T>
-	size_t Service::GetId()
+	ServiceKey Service::GetId()
 	{
-		static const size_t counter{ m_Id.load() };
+		static const ServiceKey counter{ m_Id.load() };
+		++m_Id;
 		return counter;
 	}
 

@@ -9,15 +9,19 @@
 
 #define SFML_SUPPORT
 #define USE_SFML_WINDOW 1
+#define USE_SFML_RENDERER 1
 #define RELEASE_WITH_LOGINFO 1
 
 // add headers that you want to pre-compile here
 
 #include <array>
 #include <string>
+#include <map>
 #include <unordered_map>
+#include <set>
 #include <unordered_set>
 #include <algorithm>
+#include <stdexcept>
 
 #include "POWEngine/Core/CustomTypes.h"
 #include "POWEngine/Math/Math.h"

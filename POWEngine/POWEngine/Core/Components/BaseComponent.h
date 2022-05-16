@@ -3,7 +3,7 @@
 
 namespace powe
 {
-
+	class WorldEntity;
 	class BaseComponent
 	{
 	public:
@@ -26,6 +26,9 @@ namespace powe
 			
 		virtual void DestroyData(RawByte* address) = 0;
 		virtual void MoveData(RawByte* source, RawByte* destination) const = 0;
+		virtual void OnCreate(WorldEntity&, GameObjectID id) {}
+		virtual void OnDestroy(WorldEntity&, GameObjectID id) {}
+
 		[[nodiscard]] virtual SizeType GetSize() const = 0;
 
 	protected:
@@ -73,10 +76,6 @@ namespace powe
 	public:
 
 		void DestroyData(RawByte* address) override;
-
-		virtual void OnDestroy() {}
-		virtual void OnCreate() {}
-		
 		void MoveData(RawByte* source, RawByte* destination) const override;
 		[[nodiscard]] SizeType GetSize() const override;
 

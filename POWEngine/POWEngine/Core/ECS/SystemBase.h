@@ -30,7 +30,10 @@ namespace powe
 	protected:
 
 		void InternalUpdate(const Archetype&, float);
+
 		virtual void OnUpdate(float, powe::GameObjectID) {}
+		virtual void OnCreate(GameObjectID) {}
+		virtual void OnDestroy(GameObjectID) {}
 
 		template<typename ...Args>
 		void InternMakeKeys();

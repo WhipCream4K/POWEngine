@@ -2,7 +2,7 @@
 #include "SystemBase.h"
 
 #include "POWEngine/Core/ECS/Archetype.h"
-#include "POWEngine/Logger/LoggingService.h"
+#include "POWEngine/Logger/LoggerUtils.h"
 
 powe::SystemBase::SystemBase()
 	: m_World()
