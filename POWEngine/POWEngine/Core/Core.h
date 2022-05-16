@@ -23,6 +23,11 @@ namespace powe
 			const Window& window,
 			const SharedPtr<WorldEntity>& worldEntt) const;
 
+		bool TranslateWindowInputs(
+			const Window& window,
+			WorldEntity& worldEntt
+		) const;
+
 		/**
 		 * \brief Call this function before entering the core loop to prevent a big deltaTime in the first frame
 		 */

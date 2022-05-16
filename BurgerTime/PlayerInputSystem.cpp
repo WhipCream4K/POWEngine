@@ -12,5 +12,3 @@ void PlayerInputSystem::OnUpdate(float, powe::GameObjectID)
 	const auto [num, shit] = GetComponentsView<int, std::string>();
 }
 
-
-

@@ -18,11 +18,9 @@ int main()
 
 	engineCore.StartWorldClock();
 
-	//float hello = worldEntity->GetInputSettings().GetAxis("Some");
-	//hello;
-	while (!engineCore.TranslateWindowInputs(window,worldEntity))
+	while (!engineCore.TranslateWindowInputs(window,*worldEntity))
 	{
-
+		engineCore.Step(worldEntity);
 	}
 
 }

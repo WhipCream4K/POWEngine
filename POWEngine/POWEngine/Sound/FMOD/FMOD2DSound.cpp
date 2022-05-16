@@ -78,14 +78,15 @@ private:
 	std::condition_variable m_MainSoundThreadCV{};
 	bool m_IsThreadExit{};
 	std::mutex m_SoundQueueMutex{};
-	std::queue<ChannelID> m_ActiveChannels;
+	LFQueue<SoundInfo> m_SoundInfoQueue;
+	//std::queue<ChannelID> m_ActiveChannels;
 
 
-	std::future<void> m_ReservedSoundThread{};
-	std::condition_variable m_ReservedSoundThreadCV{};
-	std::mutex m_ReservedThreadMutex{};
-	//std::vector<std::vector<Channel>> m_ToBePlayedSound{};
-	std::unordered_map<ChannelID, Channel> m_ToBePlayedSound{};
+	//std::future<void> m_ReservedSoundThread{};
+	//std::condition_variable m_ReservedSoundThreadCV{};
+	//std::mutex m_ReservedThreadMutex{};
+	////std::vector<std::vector<Channel>> m_ToBePlayedSound{};
+	//std::unordered_map<ChannelID, Channel> m_ToBePlayedSound{};
 };
 
 powe::FMOD2DSound::FMODSoundImpl::~FMODSoundImpl()
@@ -153,16 +154,16 @@ powe::ChannelID powe::FMOD2DSound::FMODSoundImpl::Play(SoundID id, const SoundIn
 	}
 
 
-	{
-		std::scoped_lock lock{m_SoundQueueMutex};
-		bool isPlaying{};
-		m_Channels[int(channelID % m_MaxChannelsCnt)].channelInst->isPlaying(&isPlaying);
-		if (!isPlaying)
-			m_ActiveChannels.push(channelID);
+	//{
+	//	std::scoped_lock lock{m_SoundQueueMutex};
+	//	bool isPlaying{};
+	//	m_Channels[int(channelID % m_MaxChannelsCnt)].channelInst->isPlaying(&isPlaying);
+	//	if (!isPlaying)
+	//		m_ActiveChannels.push(channelID);
 
-		//m_Channels[int(channelId % m_MaxChannelsCnt)] = channel;
-		//m_ActiveChannels.push(channelId);
-	}
+	//	//m_Channels[int(channelId % m_MaxChannelsCnt)] = channel;
+	//	//m_ActiveChannels.push(channelId);
+	//}
 
 	m_MainSoundThreadCV.notify_one();
 
@@ -189,108 +190,104 @@ void powe::FMOD2DSound::FMODSoundImpl::RunMainPlaySound()
 	// this is single a producer so we don't need atomic bool check
 	while (!m_IsThreadExit)
 	{
-		Channel tempChannel{};
+		//Channel tempChannel{};
+
+		//{
+		//	std::unique_lock lock{ m_SoundQueueMutex };
+
+		//	m_MainSoundThreadCV.wait(lock, [this]()
+		//		{
+		//			return !m_ActiveChannels.empty();
+		//		});
+
+		//	tempChannel = m_Channels[m_ActiveChannels.front()];
+		//	m_ActiveChannels.pop();
+		//}
+
+		//FMOD::Sound* toPlaySound{};
+		//if(!tempChannel.soundInst)
+		//{
+		//	auto result = m_FMODSystem->createStream(tempChannel.filePath.c_str(),
+		//		FMOD_2D | FMOD_CREATESTREAM | FMOD_LOOP_OFF,
+		//		nullptr, &toPlaySound);
+
+		//	if (result != FMOD_OK)
+		//		throw std::runtime_error(FMOD_ErrorString(result));
+		//}
+		//else
+		//{
+		//	toPlaySound = tempChannel.soundInst;
+		//}
 
 		{
 			std::unique_lock lock{ m_SoundQueueMutex };
 
 			m_MainSoundThreadCV.wait(lock, [this]()
 				{
-					return !m_ActiveChannels.empty();
+					return !m_SoundInfoQueue.Empty();
 				});
-
-			tempChannel = m_Channels[m_ActiveChannels.front()];
-			m_ActiveChannels.pop();
 		}
 
-		FMOD::Sound* toPlaySound{};
-		if(!tempChannel.soundInst)
-		{
-			auto result = m_FMODSystem->createStream(tempChannel.filePath.c_str(),
-				FMOD_2D | FMOD_CREATESTREAM | FMOD_LOOP_OFF,
-				nullptr, &toPlaySound);
-
-			if (result != FMOD_OK)
-				throw std::runtime_error(FMOD_ErrorString(result));
-		}
-		else
-		{
-			toPlaySound = tempChannel.soundInst;
-		}
-
-		//{
-		//	std::unique_lock lock{ m_ThreadMutex };
-
-		//	m_TaskWait.wait(lock, [this]()
-		//		{
-		//			return !m_SoundQueue.Empty();
-		//		});
-		//}
-
-		//const FMODSoundInfo soundInst{  };
-		//m_SoundQueue.Pop();
+		const SoundInfo soundInst{};
+		m_SoundInfoQueue.Pop();
 
 		FMOD::Channel* channel{};
-		const auto result = m_FMODSystem->playSound(toPlaySound, nullptr, true, &channel);
+		const auto result = m_FMODSystem->playSound(nullptr, nullptr, true, &channel);
 
-		//if (result == FMOD_OK)
-		//{
-		//	const int loopCount{ soundInst.isLooped ? -1 : 0 };
-		//	channel->setLoopCount(loopCount);
-		//	channel->setVolume(soundInst.volume);
-		//	channel->setPitch(soundInst.pitch);
-		//	channel->setPaused(false);
-		//}
-		
+		if (result == FMOD_OK)
 		{
-			std::scoped_lock lock{ m_SoundQueueMutex };
-			m_Channels[2].channelInst = channel;
-
-			//for (const auto& channel : m_Channels)
-			//{
-			//	bool isPlaying{};
-			//	channel.channelInst->isPlaying(&isPlaying);
-			//	if (!isPlaying)
-			//	{
-			//		m_ActiveChannels.push(0);
-			//	}
-			//}
+			const int loopCount{ soundInst.isLooped ? -1 : 0 };
+			channel->setLoopCount(loopCount);
+			channel->setVolume(soundInst.volume);
+			channel->setPitch(soundInst.pitch);
+			channel->setPaused(false);
 		}
+		
+		//{
+		//	std::scoped_lock lock{ m_SoundQueueMutex };
+		//	m_Channels[2].channelInst = channel;
 
-
+		//	//for (const auto& channel : m_Channels)
+		//	//{
+		//	//	bool isPlaying{};
+		//	//	channel.channelInst->isPlaying(&isPlaying);
+		//	//	if (!isPlaying)
+		//	//	{
+		//	//		m_ActiveChannels.push(0);
+		//	//	}
+		//	//}
+		//}
 	}
 }
 
 void powe::FMOD2DSound::FMODSoundImpl::RunReservedPlaySound()
 {
+	//{
+	//	std::unique_lock lock{ m_ReservedThreadMutex };
 
-	{
-		std::unique_lock lock{ m_ReservedThreadMutex };
+	//	m_ReservedSoundThreadCV.wait(lock, [this]()
+	//		{
+	//			return !m_ToBePlayedSound.empty();
+	//		});
 
-		m_ReservedSoundThreadCV.wait(lock, [this]()
-			{
-				return !m_ToBePlayedSound.empty();
-			});
-
-		for (const auto& [channelID,soundData] : m_ToBePlayedSound)
-		{
-			{
-				std::scoped_lock mainSoundThreadLock{ m_SoundQueueMutex };
-				FMOD::Channel* tempChannel{ m_Channels[channelID].channelInst };
-				if(tempChannel)
-				{
-					bool isPlaying{};
-					tempChannel->isPlaying(&isPlaying);
-					if(!isPlaying)
-					{
-						m_ActiveChannels.push(channelID);
-						m_Channels[channelID] = soundData;
-					}
-				}
-			}
-		}
-	}
-	
+	//	for (const auto& [channelID,soundData] : m_ToBePlayedSound)
+	//	{
+	//		{
+	//			std::scoped_lock mainSoundThreadLock{ m_SoundQueueMutex };
+	//			FMOD::Channel* tempChannel{ m_Channels[channelID].channelInst };
+	//			if(tempChannel)
+	//			{
+	//				bool isPlaying{};
+	//				tempChannel->isPlaying(&isPlaying);
+	//				if(!isPlaying)
+	//				{
+	//					m_ActiveChannels.push(channelID);
+	//					m_Channels[channelID] = soundData;
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
 }
 
 powe::FMOD2DSound::FMOD2DSound(uint32_t nbChannels)

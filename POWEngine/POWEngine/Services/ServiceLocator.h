@@ -12,8 +12,6 @@ namespace powe
 	class ServiceLocator final
 	{
 
-		//friend class Singleton<ServiceLocator>;
-
 	public:
 
 		//static void Initialize();
@@ -49,36 +47,6 @@ namespace powe
 		static NullLogger m_NullLogger;
 		// -------------------
 	};
-
-	//template <typename ServiceType>
-	//SharedPtr<EnableIsBasedOf<Service, ServiceType, ServiceType>> ServiceLocator::GetService()
-	//{
-	//	const size_t serviceId{ Service::GetId<ServiceType>() };
-	//	const auto serviceLocator{ GetInstance() };
-
-	//	const auto itr{ serviceLocator->m_ServiceTable.find(serviceId) };
-	//	if (itr != serviceLocator->m_ServiceTable.end())
-	//		return std::static_pointer_cast<ServiceType>(itr->second);
-
-	//	return {};
-	//}
-
-	//template <typename ServiceType>
-	//EnableIsBasedOf<Service, ServiceType, ServiceType&> ServiceLocator::GetService()
-	//{
-	//	const ServiceKey serviceKey{ Service::GetId<ServiceType>() };
-	//	const auto serviceLocator{ GetInstance() };
-
-	//	const auto itr{ serviceLocator->m_ServiceTable.find(serviceKey) };
-	//	if (itr != serviceLocator->m_ServiceTable.end())
-	//		return *std::static_pointer_cast<ServiceType>(itr->second);
-	//}
-
-	//template <typename ServiceType, typename>
-	//void ServiceLocator::RegisterService(const SharedPtr<Service>& service)
-	//{
-	//	
-	//}
 }
 
 

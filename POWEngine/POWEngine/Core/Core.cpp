@@ -50,6 +50,23 @@ bool powe::Core::TranslateWindowInputs(const Window& window, const SharedPtr<Wor
 	return isEarlyExit;
 }
 
+bool powe::Core::TranslateWindowInputs(const Window& window, WorldEntity& worldEntt) const
+{
+	m_WorldClock->Start();
+
+	bool isEarlyExit{};
+	bool ignoreInputs{};
+
+	const HardwareMessages& hwMessages{ window.PollHardwareMessages(isEarlyExit,ignoreInputs) };
+
+	if (!ignoreInputs)
+	{
+		worldEntt.GetInputSettings().ParseHWMessages(hwMessages);
+	}
+
+	return isEarlyExit;
+}
+
 void powe::Core::StartWorldClock()
 {
 	m_WorldClock = std::make_shared<WorldClock>();

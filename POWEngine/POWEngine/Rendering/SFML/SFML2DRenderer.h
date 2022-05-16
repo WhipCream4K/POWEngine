@@ -24,6 +24,7 @@ namespace powe
 		SFML2DRenderer& operator=(SFML2DRenderer&&) = delete;
 
 		void PushRenderBuffer(RawByte* buffer, uint32_t size) override;
+		void PushRenderBuffer2(sf::Drawable* drawable, sf::RenderStates* renderStates);
 		void DrawBufferOnWindow(const Window& window) override;
 
 	private:

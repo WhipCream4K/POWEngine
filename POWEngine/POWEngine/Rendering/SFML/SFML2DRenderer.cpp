@@ -4,6 +4,7 @@
 #include "POWEngine/Rendering/RenderBridge.h"
 
 #if USE_SFML_RENDERER
+
 #include "POWEngine/Window/Window.h"
 #include "POWEngine/Window/SFML/SFMLWindow.h"
 #include <SFML/Graphics.hpp>
