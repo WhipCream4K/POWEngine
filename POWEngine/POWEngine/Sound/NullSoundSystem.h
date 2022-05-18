@@ -17,7 +17,7 @@ namespace powe
 
 	public:
 
-		bool IsPlaying(SoundID id) override { return false; }
+		bool IsPlaying(SoundID) override { return false; }
 
 		SoundID RegisterSoundEntity(const std::string&, bool = false) override { return {}; }
 		void UnRegisterSoundEntity(SoundID ) override {}

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "POWEngine/Core/Components/BaseComponent.h"
-#include "POWEngine/Core/ECS/ECSTypes.h"
+#include "POWEngine/ECS/ECSTypes.h"
 #include "POWEngine/Core/WorldEntity/WorldEntity.h"
 
 namespace powe

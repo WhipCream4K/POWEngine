@@ -1,5 +1,5 @@
 #pragma once
-#include "POWEngine/Core/ECS/ECSTypes.h"
+#include "POWEngine/ECS/ECSTypes.h"
 
 namespace powe
 {
@@ -26,8 +26,8 @@ namespace powe
 			
 		virtual void DestroyData(RawByte* address) = 0;
 		virtual void MoveData(RawByte* source, RawByte* destination) const = 0;
-		virtual void OnCreate(WorldEntity&, GameObjectID id) {}
-		virtual void OnDestroy(WorldEntity&, GameObjectID id) {}
+		virtual void OnCreate(WorldEntity&, GameObjectID ) {}
+		virtual void OnDestroy(WorldEntity&, GameObjectID ) {}
 
 		[[nodiscard]] virtual SizeType GetSize() const = 0;
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "POWEngine/Rendering/RendererImpl.h"
+#include "POWEngine/Rendering/Renderer.h"
 
 #if USE_SFML_RENDERER
 
@@ -12,8 +12,8 @@ namespace sf
 
 namespace powe
 {
-	class SFML2DRenderer :
-		public RendererImpl
+	class SFML2DRenderer : public Renderer
+		
 	{
 	public:
 
@@ -23,20 +23,13 @@ namespace powe
 		SFML2DRenderer(SFML2DRenderer&&) = delete;
 		SFML2DRenderer& operator=(SFML2DRenderer&&) = delete;
 
-		void PushRenderBuffer(RawByte* buffer, uint32_t size) override;
-		void PushRenderBuffer2(sf::Drawable* drawable, sf::RenderStates* renderStates);
-		void DrawBufferOnWindow(const Window& window) override;
+		void SubmitDrawSprite(sf::Drawable* drawable,sf::RenderStates* renderStates,int drawOrder) const; 
+		void DrawBufferOnWindow(const Window& window) const override;
 
 	private:
 
-		struct DrawEntity
-		{
-			sf::Drawable* instance{};
-			sf::RenderStates* renderStates{};
-			int layer{};
-		};
-
-		std::vector<DrawEntity> m_DrawEntities;
+		class SFML2DRendererImpl;
+		OwnedPtr<SFML2DRendererImpl> m_RenderImpl;
 	};
 }
 

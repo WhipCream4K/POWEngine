@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "WorldEntity.h"
 
-#include "POWEngine/Core/ECS/Archetype.h"
-#include "POWEngine/Core/ECS/SystemBase.h"
+#include "POWEngine/ECS/Archetype.h"
+#include "POWEngine/ECS/SystemBase.h"
 
 powe::WorldEntity::WorldEntity()
 {

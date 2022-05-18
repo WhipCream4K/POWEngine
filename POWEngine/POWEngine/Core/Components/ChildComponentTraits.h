@@ -1,6 +1,6 @@
 #pragma once
 
-#include "POWEngine/Core/ECS/ECSTypes.h"
+#include "POWEngine/ECS/ECSTypes.h"
 
 namespace powe
 {

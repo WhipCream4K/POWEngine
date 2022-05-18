@@ -1,7 +1,9 @@
 #include "pch.h"
 #include "SFML2DRenderer.h"
 
-#include "POWEngine/Rendering/RenderBridge.h"
+//#include "POWEngine/Rendering/RenderBridge.h"
+//#include <vector>
+#include <algorithm>
 
 #if USE_SFML_RENDERER
 
@@ -9,34 +11,60 @@
 #include "POWEngine/Window/SFML/SFMLWindow.h"
 #include <SFML/Graphics.hpp>
 
-powe::SFML2DRenderer::SFML2DRenderer(uint32_t width, uint32_t height, const OtherWindowParams& others)
-	: RendererImpl(width,height,others)
+class powe::SFML2DRenderer::SFML2DRendererImpl
 {
-}
+public:
 
-
-void powe::SFML2DRenderer::PushRenderBuffer(RawByte* buffer, uint32_t)
-{
-	//SFMLSpriteComponent* sfDrawInst{ reinterpret_cast<SFMLSpriteComponent*>(buffer) };
-	//m_DrawEntities.emplace_back(&sfDrawInst->sprite, 0);
-}
-
-void powe::SFML2DRenderer::DrawBufferOnWindow(const Window& window)
-{
-	// ordering the z depths of the entities and render them back to forth
-	if (SFMLWindow * windowSFML{ window.GetWindowInstance<SFMLWindow>() })
+	void DrawBufferOnWindow(const Window& window) 
 	{
-		// sort
-		std::ranges::sort(m_DrawEntities, [](const DrawEntity& left, const DrawEntity& right)
+		SFMLWindow* sfmlWindow{ window.GetWindowInstance<SFMLWindow>() };
+		sf::RenderWindow& renderWindow{ sfmlWindow->GetRenderWindow() };
+
+		// sort the render order
+		std::ranges::sort(m_SF2DDrawEntities, [](const DrawEntity& left, const DrawEntity& right)
 			{
-				return left.layer < right.layer;
+				return left.drawOrder < right.drawOrder;
 			});
 
-		for (const auto& drawEntt : m_DrawEntities)
+		for (const auto& drawEntt : m_SF2DDrawEntities)
 		{
-			windowSFML->GetRenderWindow().draw(*drawEntt.instance);
+			renderWindow.draw(*drawEntt.sfDraw, *drawEntt.sfRenderStates);
 		}
+
+		m_SF2DDrawEntities.clear();
 	}
+
+	void SubmitDrawSprite(sf::Drawable* drawObject,sf::RenderStates* renderStates,int drawOrder)
+	{
+		m_SF2DDrawEntities.emplace_back(drawObject,renderStates,drawOrder);
+	}
+
+private:
+
+	struct DrawEntity
+	{
+		sf::Drawable* sfDraw{};
+		sf::RenderStates* sfRenderStates{};
+		int drawOrder{};
+	};
+
+	std::vector<DrawEntity> m_SF2DDrawEntities;
+};
+
+powe::SFML2DRenderer::SFML2DRenderer(uint32_t width, uint32_t height, const OtherWindowParams& others)
+	: m_RenderImpl(std::make_unique<SFML2DRendererImpl>())
+{
 }
+
+void powe::SFML2DRenderer::SubmitDrawSprite(sf::Drawable* drawable, sf::RenderStates* renderStates, int drawOrder) const
+{
+	m_RenderImpl->SubmitDrawSprite(drawable, renderStates, drawOrder);
+}
+
+void powe::SFML2DRenderer::DrawBufferOnWindow(const Window& window) const
+{
+	m_RenderImpl->DrawBufferOnWindow(window);
+}
+
 
 #endif

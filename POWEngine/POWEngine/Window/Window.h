@@ -42,7 +42,7 @@ namespace powe
 	template <typename T>
 	T* Window::GetWindowInstance() const
 	{
-		return dynamic_cast<T*>(m_WindowImpl.get());
+		return static_cast<T*>(m_WindowImpl.get());
 	}
 }
 

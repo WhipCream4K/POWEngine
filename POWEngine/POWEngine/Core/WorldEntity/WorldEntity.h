@@ -1,15 +1,15 @@
 #pragma once
 
 #include "POWEngine/Core/Input/InputSettings.h"
-#include "POWEngine/Core/ECS/ECSTypes.h"
+#include "POWEngine/ECS/ECSTypes.h"
 #include "POWEngine/Core/Components/BaseComponent.h"
 #include "POWEngine/Core/Thread/SimpleThreadPool.h"
 #include "POWEngine/LockFree/LFStack.h"
 #include "PipelineLayer.h"
-#include "POWEngine/Core/ECS/Archetype.h"
+#include "POWEngine/ECS/Archetype.h"
 #include "POWEngine/Core/Components/ChildComponentTraits.h"
-#include "POWEngine/Core/ECS/ECSUtils.h"
-#include "POWEngine/Core/ECS/SparseComponentManager.h"
+#include "POWEngine/ECS/ECSUtils.h"
+#include "POWEngine/ECS/SparseComponentManager.h"
 
 namespace powe
 {

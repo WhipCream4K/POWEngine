@@ -195,18 +195,18 @@
     <ClInclude Include="POWEngine\Sound\FMOD\FMOD2DSound.h" />
     <ClInclude Include="POWEngine\Sound\NullSoundSystem.h" />
     <ClInclude Include="POWEngine\Core\Components\ChildComponentTraits.h" />
-    <ClInclude Include="POWEngine\Core\ECS\ECSUtils.h" />
+    <ClInclude Include="POWEngine\ECS\ECSUtils.h" />
     <ClInclude Include="POWEngine\Core\GameObject\GameObject.h" />
     <ClInclude Include="POWEngine\LockFree\LFStack.h" />
     <ClInclude Include="POWEngine\Core\Components\BaseComponent.h" />
-    <ClInclude Include="POWEngine\Core\ECS\ECSTypes.h" />
+    <ClInclude Include="POWEngine\ECS\ECSTypes.h" />
     <ClInclude Include="POWEngine\Core\Input\InputStruct.h" />
     <ClInclude Include="POWEngine\Core\Input\InputTypes.h" />
     <ClInclude Include="POWEngine\Core\Input\InputSettings.h" />
     <ClInclude Include="POWEngine\Core\Input\InputManager.h" />
     <ClInclude Include="POWEngine\Core\Input\Key.h" />
     <ClInclude Include="POWEngine\LockFree\LFQueue.h" />
-    <ClInclude Include="POWEngine\Core\ECS\Archetype.h" />
+    <ClInclude Include="POWEngine\ECS\Archetype.h" />
     <ClInclude Include="POWEngine\Core\WorldEntity\PipelineLayer.h" />
     <ClInclude Include="POWEngine\Logger\Console\ConsoleLogger.h" />
     <ClInclude Include="PCH\pch.h" />
@@ -228,9 +228,9 @@
     <ClInclude Include="POWEngine\Core\Clock\WorldClock.h" />
     <ClInclude Include="POWEngine\Core\WorldEntity\WorldEntity.h" />
     <ClInclude Include="POWEngine\Services\Service.h" />
-    <ClInclude Include="POWEngine\Core\ECS\SystemBase.h" />
+    <ClInclude Include="POWEngine\ECS\SystemBase.h" />
     <ClInclude Include="POWEngine\Core\Components\Transform2D.h" />
-    <ClInclude Include="POWEngine\Core\ECS\SparseComponentManager.h" />
+    <ClInclude Include="POWEngine\ECS\SparseComponentManager.h" />
     <ClInclude Include="POWEngine\Sound\SoundSystem.h" />
     <ClInclude Include="POWEngine\Rendering\Renderer.h" />
     <ClInclude Include="POWEngine\Rendering\RendererImpl.h" />
@@ -240,6 +240,7 @@
     <ClInclude Include="POWEngine\Rendering\Resources\Texture\TextureImpl.h" />
     <ClInclude Include="POWEngine\Rendering\Resources\Texture\SFML\SFMLTexture.h" />
     <ClInclude Include="POWEngine\Rendering\Components\Sprite\SpriteImpl.h" />
+    <ClInclude Include="RenderSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="POWEngine\Rendering\NullRenderer.cpp" />
@@ -248,7 +249,7 @@
     <ClCompile Include="POWEngine\Rendering\Components\Sprite\SFML\SFMLSprite.cpp" />
     <ClCompile Include="POWEngine\Sound\FMOD\FMOD2DSound.cpp" />
     <ClCompile Include="POWEngine\Sound\NullSoundSystem.cpp" />
-    <ClCompile Include="POWEngine\Core\ECS\Archetype.cpp" />
+    <ClCompile Include="POWEngine\ECS\Archetype.cpp" />
     <ClCompile Include="POWEngine\Core\GameObject\GameObject.cpp" />
     <ClCompile Include="POWEngine\LockFree\LFStack.cpp" />
     <ClCompile Include="POWEngine\Core\Components\BaseComponent.cpp" />
@@ -273,9 +274,9 @@
     <ClCompile Include="POWEngine\Core\Clock\WorldClock.cpp" />
     <ClCompile Include="POWEngine\Core\WorldEntity\WorldEntity.cpp" />
     <ClCompile Include="POWEngine\Services\Service.cpp" />
-    <ClCompile Include="POWEngine\Core\ECS\SystemBase.cpp" />
+    <ClCompile Include="POWEngine\ECS\SystemBase.cpp" />
     <ClCompile Include="POWEngine\Core\Components\Transform2D.cpp" />
-    <ClCompile Include="POWEngine\Core\ECS\SparseComponentManager.cpp" />
+    <ClCompile Include="POWEngine\ECS\SparseComponentManager.cpp" />
     <ClCompile Include="POWEngine\Sound\SoundSystem.cpp" />
     <ClCompile Include="POWEngine\Rendering\Renderer.cpp" />
     <ClCompile Include="POWEngine\Rendering\RendererImpl.cpp" />
@@ -285,6 +286,7 @@
     <ClCompile Include="POWEngine\Rendering\Resources\Texture\TextureImpl.cpp" />
     <ClCompile Include="POWEngine\Rendering\Resources\Texture\SFML\SFMLTexture.cpp" />
     <ClCompile Include="POWEngine\Rendering\Components\Sprite\SpriteImpl.cpp" />
+    <ClCompile Include="RenderSystem.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

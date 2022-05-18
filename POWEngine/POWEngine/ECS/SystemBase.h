@@ -3,7 +3,7 @@
 #include "POWEngine/Core/CustomTypes.h"
 #include "ECSTypes.h"
 #include "POWEngine/Core/WorldEntity/WorldEntity.h"
-#include "POWEngine/Core/ECS/ECSUtils.h"
+#include "POWEngine/ECS/ECSUtils.h"
 
 namespace powe
 {
@@ -31,7 +31,7 @@ namespace powe
 
 		void InternalUpdate(const Archetype&, float);
 
-		virtual void OnUpdate(float, powe::GameObjectID) {}
+		virtual void OnUpdate(float, powe::GameObjectID) = 0;
 		virtual void OnCreate(GameObjectID) {}
 		virtual void OnDestroy(GameObjectID) {}
 

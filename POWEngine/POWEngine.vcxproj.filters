@@ -87,16 +87,16 @@
     <ClInclude Include="POWEngine\Math\Math.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Core\ECS\SystemBase.h">
+    <ClInclude Include="POWEngine\ECS\SystemBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Core\ECS\Archetype.h">
+    <ClInclude Include="POWEngine\ECS\Archetype.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="POWEngine\Core\Components\BaseComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Core\ECS\ECSTypes.h">
+    <ClInclude Include="POWEngine\ECS\ECSTypes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="POWEngine\Core\WorldEntity\PipelineLayer.h">
@@ -114,10 +114,10 @@
     <ClInclude Include="POWEngine\Core\Components\Transform2D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Core\ECS\ECSUtils.h">
+    <ClInclude Include="POWEngine\ECS\ECSUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Core\ECS\SparseComponentManager.h">
+    <ClInclude Include="POWEngine\ECS\SparseComponentManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="POWEngine\Services\ServiceIndicator.h">
@@ -174,6 +174,9 @@
     <ClInclude Include="POWEngine\Rendering\RenderBridge.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RenderSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PCH\pch.cpp">
@@ -224,7 +227,7 @@
     <ClCompile Include="POWEngine\Core\Input\InputSettings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="POWEngine\Core\ECS\SystemBase.cpp">
+    <ClCompile Include="POWEngine\ECS\SystemBase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="POWEngine\Core\Components\BaseComponent.cpp">
@@ -236,13 +239,13 @@
     <ClCompile Include="POWEngine\Core\GameObject\GameObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="POWEngine\Core\ECS\Archetype.cpp">
+    <ClCompile Include="POWEngine\ECS\Archetype.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="POWEngine\Core\Components\Transform2D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="POWEngine\Core\ECS\SparseComponentManager.cpp">
+    <ClCompile Include="POWEngine\ECS\SparseComponentManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="POWEngine\Sound\SoundSystem.cpp">
@@ -288,6 +291,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="POWEngine\Rendering\NullRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

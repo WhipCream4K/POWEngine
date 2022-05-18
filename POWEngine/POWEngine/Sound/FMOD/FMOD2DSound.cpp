@@ -297,7 +297,7 @@ powe::FMOD2DSound::FMOD2DSound(uint32_t nbChannels)
 
 powe::FMOD2DSound::~FMOD2DSound() = default;
 
-powe::SoundID powe::FMOD2DSound::RegisterSoundEntity(const std::string& filePath, bool shouldLoaded)
+powe::SoundID powe::FMOD2DSound::RegisterSoundEntity(const std::string& , bool )
 {
 	
 }
