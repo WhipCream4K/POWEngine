@@ -2,10 +2,12 @@
 
 namespace powe
 {
+	class RenderAPI;
 	class ServiceLocator;
 	class Window;
 	class WorldEntity;
 	class WorldClock;
+	class Renderer;
 	//class CoreImpl;
 	class Core final
 	{
@@ -37,9 +39,13 @@ namespace powe
 		void Step(const SharedPtr<WorldEntity>& worldEntt);
 
 
-		void Render(
+		void Draw(
 			const SharedPtr<Window>& window,
-			const SharedPtr<WorldEntity>& worldEntt);
+			const SharedPtr<WorldEntity>& worldEntt) const;
+
+		void Draw(const Window& window, const WorldEntity& worldEntt) const;
+
+		void RegisterRendererType(OwnedPtr<RenderAPI>&& renderAPI) const;
 
 		~Core();
 
@@ -58,6 +64,7 @@ namespace powe
 		 //OwnedPtr<CoreImpl> m_CoreImpl;
 
 		SharedPtr<WorldClock> m_WorldClock;
+		SharedPtr<Renderer> m_MainRenderer;
 	};
 }
 

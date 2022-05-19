@@ -191,7 +191,6 @@
     <ClInclude Include="POWEngine\Logger\Logger.h" />
     <ClInclude Include="POWEngine\Logger\NullLogger.h" />
     <ClInclude Include="POWEngine\Rendering\Components\Sprite\SFML\SFMLSprite.h" />
-    <ClInclude Include="POWEngine\Rendering\RenderBridge.h" />
     <ClInclude Include="POWEngine\Sound\FMOD\FMOD2DSound.h" />
     <ClInclude Include="POWEngine\Sound\NullSoundSystem.h" />
     <ClInclude Include="POWEngine\Core\Components\ChildComponentTraits.h" />
@@ -240,7 +239,8 @@
     <ClInclude Include="POWEngine\Rendering\Resources\Texture\TextureImpl.h" />
     <ClInclude Include="POWEngine\Rendering\Resources\Texture\SFML\SFMLTexture.h" />
     <ClInclude Include="POWEngine\Rendering\Components\Sprite\SpriteImpl.h" />
-    <ClInclude Include="RenderSystem.h" />
+    <ClInclude Include="POWEngine\Rendering\System\RenderSystemBase.h" />
+    <ClInclude Include="POWEngine\Rendering\RenderAPI.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="POWEngine\Rendering\NullRenderer.cpp" />
@@ -286,7 +286,8 @@
     <ClCompile Include="POWEngine\Rendering\Resources\Texture\TextureImpl.cpp" />
     <ClCompile Include="POWEngine\Rendering\Resources\Texture\SFML\SFMLTexture.cpp" />
     <ClCompile Include="POWEngine\Rendering\Components\Sprite\SpriteImpl.cpp" />
-    <ClCompile Include="RenderSystem.cpp" />
+    <ClCompile Include="POWEngine\Rendering\System\RenderSystemBase.cpp" />
+    <ClCompile Include="POWEngine\Rendering\RenderAPI.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

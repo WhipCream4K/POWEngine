@@ -14,15 +14,21 @@ void powe::WorldEntity::RegisterGameObject(GameObjectID id)
 		m_GameObjectRecords.try_emplace(id, GameObjectRecord{});
 }
 
-void powe::WorldEntity::RemoveSystem(const SharedPtr<SystemBase>&) const
+void powe::WorldEntity::RemoveSystem(PipelineLayer layer, const SharedPtr<SystemBase>& system)
 {
-	//const auto& targetPipeline{ m_SystemPipeline[size_t(system->GetPipeLineLayer())] };
-	//const auto& itr = std::ranges::find(targetPipeline, system); // ranges::find since c++20
-	//if (itr != targetPipeline.end())
-	//{
-	//	itr->get()->MarkDeleted(true);
-	//}
+	m_PendingDeleteSystem.Push(SystemTrait{ system,layer });
 }
+
+//void powe::WorldEntity::RemoveSystem(const SharedPtr<SystemBase>&)
+//{
+//	m_PendingDeleteSystem.Push(SystemTrait{})
+//	//const auto& targetPipeline{ m_SystemPipeline[size_t(system->GetPipeLineLayer())] };
+//	//const auto& itr = std::ranges::find(targetPipeline, system); // ranges::find since c++20
+//	//if (itr != targetPipeline.end())
+//	//{
+//	//	itr->get()->MarkDeleted(true);
+//	//}
+//}
 
 powe::GameObjectID powe::WorldEntity::GetNewEntityID()
 {
@@ -244,19 +250,19 @@ SharedPtr<powe::Archetype> powe::WorldEntity::GetArchetypeByGameObject(GameObjec
 	return nullptr;
 }
 
-bool powe::WorldEntity::IsDigitExistInNumber(const std::vector<ComponentTypeID>& compIds,
-	const std::unordered_set<ComponentTypeID>& digit)
-{
-	for (const auto& id : compIds)
-	{
-		// this checks also take into account the hierarchy of the components
-		const ComponentTypeID number{ id & ~(SizeType(ComponentFlag::Count))}; // clearing the child of bit flag
-		if (!digit.contains(number))
-			return false;
-	}
-
-	return true;
-}
+//bool powe::WorldEntity::IsDigitExistInNumber(const std::vector<ComponentTypeID>& compIds,
+//	const std::unordered_set<ComponentTypeID>& digit)
+//{
+//	for (const auto& id : compIds)
+//	{
+//		// this checks also take into account the hierarchy of the components
+//		const ComponentTypeID number{ id & ~(SizeType(ComponentFlag::Count))}; // clearing the child of bit flag
+//		if (!digit.contains(number))
+//			return false;
+//	}
+//
+//	return true;
+//}
 
 //SharedPtr<powe::Archetype> powe::WorldEntity::CreateArchetypeWithTypes(const std::vector<ComponentTypeID>& typeID)
 //{
@@ -623,10 +629,6 @@ void powe::WorldEntity::InternalRemoveComponentFromGameObject()
 
 }
 
-void powe::WorldEntity::Step(float)
-{
-}
-
 
 void powe::WorldEntity::AddGameObjectToRecordRemoveList(GameObjectID id)
 {
@@ -718,20 +720,6 @@ void powe::WorldEntity::RemoveGameObjectFromPreArchetype(GameObjectID id)
 		m_PreArchetypes.erase(id);
 	}
 }
-
-//powe::SizeType powe::WorldEntity::GetComponentSize(ComponentTypeID id) const
-//{
-//	// if the component id has a sparse flag then return handle size
-//	if (id & int(ComponentFlag::Sparse))
-//		return sizeof(SizeType);
-//
-//	if (m_ComponentTraitsMap.contains(id))
-//	{
-//		return m_ComponentTraitsMap.at(id)->GetSize();
-//	}
-//
-//	return {};
-//}
 
 SharedPtr<powe::BaseComponent> powe::WorldEntity::GetComponentTrait(ComponentTypeID id) const
 {
@@ -853,6 +841,11 @@ void powe::WorldEntity::InternalAddGameObjectToPipeline()
 	}
 
 	m_PreArchetypes.clear();
+}
+
+void powe::WorldEntity::InternalAddSystemToPipeline()
+{
+	
 }
 
 

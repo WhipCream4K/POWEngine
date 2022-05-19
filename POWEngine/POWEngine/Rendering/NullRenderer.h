@@ -1,15 +1,17 @@
 #pragma once
 
-#include "RendererImpl.h"
+//#include "RendererImpl.h"
+#include "RenderAPI.h"
 
 namespace powe
 {
-	class NullRenderer : public RendererImpl
+	class NullRenderer : public RenderAPI
 	{
 	public:
 
 		NullRenderer(uint32_t width, uint32_t height, const OtherWindowParams& other);
-		void DrawBufferOnWindow(const Window&) override {}
+		NullRenderer() = default;
+		void DrawBufferOnWindow(const Window& ) const override{}
 	};
 }
 

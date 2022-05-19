@@ -20,7 +20,6 @@ namespace powe
 
 	public:
 
-		// TODO: Fix rule of 5
 		WorldEntity();
 		WorldEntity(const WorldEntity&) = delete;
 		WorldEntity& operator=(const WorldEntity&) = delete;
@@ -34,17 +33,16 @@ namespace powe
 
 		// Lock-free add system
 		template<typename SystemType, typename ...Args>
-		EnableIsBasedOf<SystemBase, SystemType, WeakPtr<SystemBase>> AddSystem(Args&&... args);
+		EnableIsBasedOf<SystemBase, SystemType, WeakPtr<SystemBase>> AddSystem(PipelineLayer layer,Args&&... args);
+
+		// TODO: Maybe do a thread safe removing system
+		void RemoveSystem(PipelineLayer layer,const SharedPtr<SystemBase>& system);
 
 		// TODO: Maybe do a thread safe registering component
 		template<typename ComponentType>
 		EnableIsBasedOf<BaseComponent, ComponentType> RegisterComponent();
 
 		void RegisterGameObject(GameObjectID id);
-
-		// TODO: Maybe do a thread safe removing system
-		void RemoveSystem(const SharedPtr<SystemBase>& system) const;
-
 
 		GameObjectID GetNewEntityID();
 
@@ -70,15 +68,14 @@ namespace powe
 		// -------- Pipeline -------------
 		// -------------------------------
 		void UpdatePipeline(PipelineLayer layer, float deltaTime);
-		void Step(float deltaTime);
+		//void Step(float deltaTime);
 
 
 		SharedPtr<Archetype> GetArchetypeByGameObject(GameObjectID id) const;
+		const std::unordered_map<std::string, SharedPtr<Archetype>> GetActiveArchetypes() const { return m_ArchetypesPool; }
 		SharedPtr<BaseComponent> GetComponentTrait(ComponentTypeID id) const;
-		//SizeType GetComponentSize(ComponentTypeID id) const;
 
-
-		static bool IsDigitExistInNumber(const std::vector<ComponentTypeID>& compIds, const std::unordered_set<ComponentTypeID>& digit);
+		//static bool IsDigitExistInNumber(const std::vector<ComponentTypeID>& compIds, const std::unordered_set<ComponentTypeID>& digit);
 		static std::string CreateStringFromNumVector(const std::vector<ComponentTypeID>& numList);
 
 #ifdef RUNTIME_TEST
@@ -91,6 +88,7 @@ namespace powe
 	private:
 
 		void InternalAddGameObjectToPipeline();
+		void InternalAddSystemToPipeline();
 		void InternalRemoveGameObjectFromPipeline();
 		void InternalRemoveComponentFromGameObject();
 
@@ -147,7 +145,16 @@ namespace powe
 
 		// Has loop iteration, need to take care of run-time write
 		SystemPipelines m_SystemPipeline;
-		LFStack<SharedPtr<SystemBase>> m_PendingAddSystem;
+
+		struct SystemTrait
+		{
+			SharedPtr<SystemBase> system{};
+			PipelineLayer layer{};
+		};
+
+		LFStack<SystemTrait> m_PendingAddSystem;
+		LFStack<SystemTrait> m_PendingDeleteSystem;
+
 
 		// -------------------------------
 		// --------- Component -----------
@@ -155,13 +162,9 @@ namespace powe
 		// No loop iteration
 		// Save data when component first created
 		std::unordered_map<ComponentTypeID, SharedPtr<BaseComponent>> m_ComponentTraitsMap;
-		SparseComponentManager m_SparseComponentManager;
-		//std::vector<SharedPtr<Archetype>> m_ArchetypesPool;
-		//std::unordered_map<std::string, SharedPtr<Archetype>> m_PendingAddArchetypes;
-		//std::unordered_set<std::string> m_PendingRemoveArchetypes;
-
-
 		std::unordered_map<GameObjectID, std::vector<ComponentTypeID>> m_PendingDeleteComponentsFromGameObject;
+		SparseComponentManager m_SparseComponentManager;
+
 
 		// -------------------------------
 		// --------- Entity --------------
@@ -185,10 +188,10 @@ namespace powe
 	};
 
 	template <typename SystemType, typename ... Args>
-	EnableIsBasedOf<SystemBase, SystemType, WeakPtr<SystemBase>> WorldEntity::AddSystem(Args&&... args)
+	EnableIsBasedOf<SystemBase, SystemType, WeakPtr<SystemBase>> WorldEntity::AddSystem(PipelineLayer layer, Args&&... args)
 	{
 		SharedPtr<SystemBase> system{ std::make_shared<SystemType>(std::forward<Args>(args)...) };
-		m_PendingAddSystem.Push(system);
+		m_PendingAddSystem.Push(SystemTrait{ system,layer });
 		return system;
 	}
 
@@ -357,8 +360,6 @@ namespace powe
 		//return outPointer;
 
 #pragma endregion
-
-
 
 	}
 

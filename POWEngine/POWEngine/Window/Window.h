@@ -21,6 +21,8 @@ namespace powe
 		[[nodiscard]] uint32_t GetHeight() const { return m_Height; }
 		[[nodiscard]] uint32_t GetWidth() const { return m_Width; }
 		[[nodiscard]] const glm::uvec2& GetRelativeMousePos() const;
+
+		void ClearWindow() const;
 		void SetClearColor(const glm::uvec4& color);
 		[[nodiscard]] const glm::uvec4& GetClearColor() const { return m_ClearColor; }
 

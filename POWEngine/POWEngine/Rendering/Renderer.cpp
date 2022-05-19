@@ -1,10 +1,21 @@
 #include "pch.h"
 #include "Renderer.h"
 
-#include "RendererImpl.h"
-#include "POWEngine/Window/Window.h"
+#include "RenderAPI.h"
+#include "POWEngine/Rendering/System/RenderSystemBase.h"
+#include "NullRenderer.h"
 
-void powe::Renderer::RegisterSystem(const SharedPtr<RenderSystem>& system)
+powe::Renderer::Renderer()
+	: m_RenderAPI(std::make_unique<NullRenderer>())
+{
+}
+
+void powe::Renderer::Draw(const Window& window) const
+{
+	m_RenderAPI->DrawBufferOnWindow(window);
+}
+
+void powe::Renderer::RegisterSystem(const SharedPtr<RenderSystemBase>& system)
 {
 	if(system)
 	{
@@ -13,10 +24,35 @@ void powe::Renderer::RegisterSystem(const SharedPtr<RenderSystem>& system)
 	}
 }
 
-void powe::Renderer::RemoveSystem(const SharedPtr<RenderSystem>& system)
+void powe::Renderer::RemoveSystem(const SharedPtr<RenderSystemBase>& system)
 {
 	if(system)
 	{
 		m_RenderSystems.erase(std::ranges::remove(m_RenderSystems, system).begin(), m_RenderSystems.end());
 	}
+}
+
+void powe::Renderer::UpdateSystem(const SharedPtr<Archetype>& archetype)
+{
+	for (const auto& system : m_RenderSystems)
+	{
+		
+	}
+}
+
+void powe::Renderer::UpdateSystem(const std::unordered_map<std::string, SharedPtr<Archetype>>& archetypePool) const
+{
+	for (const auto& system : m_RenderSystems)
+	{
+		for (const auto& [_,archetype] : archetypePool)
+		{
+			if (IsDigitExistInNumber(archetype->Types, system->GetKeys()))
+				system->InternalDraw(*m_RenderAPI);
+		}
+	}
+}
+
+void powe::Renderer::RegisterRenderAPI(OwnedPtr<RenderAPI>&& renderInst)
+{
+	m_RenderAPI = std::move(renderInst);
 }

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "POWEngine/Rendering/Renderer.h"
+#include "POWEngine/Rendering/RenderAPI.h"
 
 #if USE_SFML_RENDERER
 
@@ -12,7 +12,7 @@ namespace sf
 
 namespace powe
 {
-	class SFML2DRenderer : public Renderer
+	class SFML2DRenderer : public RenderAPI
 		
 	{
 	public:

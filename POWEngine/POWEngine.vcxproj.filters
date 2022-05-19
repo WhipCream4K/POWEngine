@@ -171,10 +171,10 @@
     <ClInclude Include="POWEngine\Rendering\NullRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Rendering\RenderBridge.h">
+    <ClInclude Include="POWEngine\Rendering\System\RenderSystemBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RenderSystem.h">
+    <ClInclude Include="POWEngine\Rendering\RenderAPI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -293,7 +293,10 @@
     <ClCompile Include="POWEngine\Rendering\NullRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RenderSystem.cpp">
+    <ClCompile Include="POWEngine\Rendering\System\RenderSystemBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="POWEngine\Rendering\RenderAPI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
