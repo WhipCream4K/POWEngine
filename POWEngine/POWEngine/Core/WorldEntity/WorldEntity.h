@@ -1,13 +1,13 @@
 #pragma once
 
 #include "POWEngine/Core/Input/InputSettings.h"
-#include "POWEngine/ECS/ECSTypes.h"
+//#include "POWEngine/ECS/ECSTypes.h"
+#include "POWEngine/ECS/Archetype.h"
 #include "POWEngine/Core/Components/BaseComponent.h"
 #include "POWEngine/Core/Thread/SimpleThreadPool.h"
 #include "POWEngine/LockFree/LFStack.h"
 #include "PipelineLayer.h"
-#include "POWEngine/ECS/Archetype.h"
-#include "POWEngine/Core/Components/ChildComponentTraits.h"
+//#include "POWEngine/Core/Components/ChildComponentTraits.h"
 #include "POWEngine/ECS/ECSUtils.h"
 #include "POWEngine/ECS/SparseComponentManager.h"
 
@@ -68,7 +68,8 @@ namespace powe
 		// -------- Pipeline -------------
 		// -------------------------------
 		void UpdatePipeline(PipelineLayer layer, float deltaTime);
-		//void Step(float deltaTime);
+		void ResolveEntities();
+
 
 
 		SharedPtr<Archetype> GetArchetypeByGameObject(GameObjectID id) const;
@@ -89,6 +90,7 @@ namespace powe
 
 		void InternalAddGameObjectToPipeline();
 		void InternalAddSystemToPipeline();
+		void InternalRemoveSystemFromPipeline();
 		void InternalRemoveGameObjectFromPipeline();
 		void InternalRemoveComponentFromGameObject();
 

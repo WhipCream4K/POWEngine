@@ -1,6 +1,5 @@
 #pragma once
 
-#include "POWEngine/Core/Components/BaseComponent.h"
 #include "POWEngine/ECS/ECSTypes.h"
 #include "POWEngine/Core/WorldEntity/WorldEntity.h"
 
@@ -25,12 +24,10 @@ namespace powe
 		template<typename ComponentType>
 		EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> GetComponent();
 
-		//template<typename ComponentType>
-		//EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> AddComponent(ComponentType&& component);
-
-		//template<typename ComponentType>
-		//EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> AddComponentSparse(ComponentType&& component);
-
+		template<typename ComponentType>
+		EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> AddComponent(
+			ComponentType&& component,
+			ComponentFlag flag = ComponentFlag::Default);
 
 	private:
 
@@ -42,6 +39,12 @@ namespace powe
 	EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> GameObject::GetComponent()
 	{
 		return m_World.GetComponent<ComponentType>(m_Id);
+	}
+
+	template <typename ComponentType>
+	EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> GameObject::AddComponent(ComponentType&& component,ComponentFlag flag)
+	{
+		return m_World.AddComponentToGameObject(m_Id, std::move(component), flag);
 	}
 }
 

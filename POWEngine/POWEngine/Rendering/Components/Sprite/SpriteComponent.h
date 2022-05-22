@@ -12,7 +12,6 @@ namespace powe
 
 		SpriteComponent() = default;
 		SpriteComponent(WorldEntity* worldEntity,GameObjectID id);
-		SpriteComponent(const Texture& texture);
 		void SetTexture(const Texture& texture) const;
 		void SetRect(const glm::fvec4& rect) const;
 		void SetOrigin(float x, float y) const;

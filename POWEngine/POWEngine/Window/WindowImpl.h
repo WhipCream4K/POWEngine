@@ -15,15 +15,18 @@ namespace powe
 		virtual const HardwareMessages& PollHardwareMessages(bool& shouldEarlyExit, bool& shouldIgnoreInputs) = 0;
 		virtual void Resize(uint32_t width, uint32_t height) = 0;
 		virtual void SetTitle(const std::string& title) = 0;
-		[[nodiscard]] const glm::uvec2& GetRelativeMousePos() const { return m_MousePosLastPoll; }
+		virtual void ClearWindow() = 0;
+		virtual void Display() = 0;
+		virtual void SetClearColor(const glm::uvec4&) = 0;
+		virtual const glm::uvec4& GetClearColor() const = 0;
+		[[nodiscard]] virtual const glm::uvec2& GetRelativeMousePos() const = 0;
 
 		virtual ~WindowImpl();
 
 	protected:
 
-		WindowMessages m_WndMessages;
-		HardwareMessages m_HWMessages;
-		glm::uvec2 m_MousePosLastPoll;
+
+		//glm::uvec2 m_MousePosLastPoll;
 	};
 }
 

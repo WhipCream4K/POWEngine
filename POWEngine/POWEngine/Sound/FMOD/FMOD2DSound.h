@@ -17,13 +17,11 @@ namespace powe
     public:
 
         SoundID RegisterSoundEntity(const std::string& filePath, bool shouldLoaded) override;
-        SoundID PreLoadSoundToMemory(const std::string& filePath) override;
-        void RemovePreLoadSound(SoundID id) override;
-        bool IsPlaying(ChannelID id) override;
+        void UnRegisterSoundEntity(SoundID id) override;
+        bool IsPlaying(ChannelID id) const override;
         ChannelID Play(SoundID id, const SoundInfo& soundInfo) override;
-        //void Play(SoundID id, SoundInfo soundInfo) override;
-        //void Play(SoundID id, WeakPtr<SoundInfo> soundInfo) override;
-
+        ChannelID PlayImmediate(const std::string& filePath, const SoundInfo& soundInfo) override;
+        void Update() override;
         void Stop(ChannelID id) override;
 
     private:

@@ -14,11 +14,6 @@ powe::SpriteComponent::SpriteComponent(WorldEntity* worldEntity, GameObjectID id
 {
 }
 
-powe::SpriteComponent::SpriteComponent(const Texture& texture)
-	: m_SpriteImpl(std::make_unique<SpriteType>())
-{
-}
-
 void powe::SpriteComponent::SetTexture(const Texture& texture) const
 {
 	m_SpriteImpl->SetTexture(texture);

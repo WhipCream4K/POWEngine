@@ -1,6 +1,6 @@
 #pragma once
 
-#include "POWEngine/Core/CustomTypes.h"
+//#include "POWEngine/Core/CustomTypes.h"
 #include "WindowContext.h"
 #include "POWEngine/Math/Math.h"
 
@@ -22,9 +22,10 @@ namespace powe
 		[[nodiscard]] uint32_t GetWidth() const { return m_Width; }
 		[[nodiscard]] const glm::uvec2& GetRelativeMousePos() const;
 
+		void Display() const;
 		void ClearWindow() const;
-		void SetClearColor(const glm::uvec4& color);
-		[[nodiscard]] const glm::uvec4& GetClearColor() const { return m_ClearColor; }
+		void SetClearColor(const glm::uvec4& color) const;
+		[[nodiscard]] const glm::uvec4& GetClearColor() const;
 
 		template<typename T>
 		T* GetWindowInstance() const;
@@ -35,7 +36,7 @@ namespace powe
 
 		OwnedPtr<WindowImpl> m_WindowImpl;
 
-		glm::uvec4 m_ClearColor{};
+		//glm::uvec4 m_ClearColor{};
 		std::string m_Title;
 		uint32_t m_Width;
 		uint32_t m_Height;

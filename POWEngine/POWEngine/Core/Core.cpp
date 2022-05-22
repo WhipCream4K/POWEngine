@@ -2,19 +2,20 @@
 #include "Core.h"
 
 //#include "Input/InputTypes.h"
-#include "Input/Key.h"
+//#include "Input/Key.h"
 #include "POWEngine/Services/ServiceLocator.h"
 #include "POWEngine/Window/Window.h"
 #include "POWEngine/Core/Clock/WorldClock.h"
 #include "POWEngine/Logger/LoggerUtils.h"
+#include "POWEngine/Rendering/RenderAPI.h"
 #include "POWEngine/Rendering/Renderer.h"
 #include "WorldEntity/WorldEntity.h"
 
+
 powe::Core::Core()
-	: m_WorldClock()
+	: m_WorldClock(std::make_shared<WorldClock>())
 	, m_MainRenderer(std::make_shared<Renderer>())
 {
-	//ServiceLocator::Initialize();
 }
 
 bool powe::Core::TranslateWindowInputs(const SharedPtr<Window>& window, const SharedPtr<WorldEntity>& worldEntt) const
@@ -49,6 +50,8 @@ bool powe::Core::TranslateWindowInputs(const Window& window, const SharedPtr<Wor
 		worldEntt->GetInputSettings().ParseHWMessages(hwMessages);
 	}
 
+	//SFMLRenderer some{};
+
 	return isEarlyExit;
 }
 
@@ -74,23 +77,32 @@ void powe::Core::StartWorldClock()
 	m_WorldClock = std::make_shared<WorldClock>();
 }
 
-void powe::Core::Step(const SharedPtr<WorldEntity>&)
+void powe::Core::Step(WorldEntity& worldEntity) const
 {
-	// updates the world also create tasks for multi-thread rendering
+	worldEntity.ResolveEntities();
+
+	const float deltaTime{ m_WorldClock->GetDeltaTime() };
+
+	worldEntity.UpdatePipeline(PipelineLayer::Update, deltaTime);
+	worldEntity.UpdatePipeline(PipelineLayer::PostUpdate, deltaTime);
+
+	ServiceLocator::GetSoundSystem().Update();
 }
 
 void powe::Core::Draw(const SharedPtr<Window>& window, const SharedPtr<WorldEntity>& worldEntt) const
 {
+	window->ClearWindow();
 	m_MainRenderer->UpdateSystem(worldEntt->GetActiveArchetypes());
 	m_MainRenderer->Draw(*window);
-	window->ClearWindow();
+	window->Display();
 }
 
 void powe::Core::Draw(const Window& window, const WorldEntity& worldEntt) const
 {
+	window.ClearWindow();
 	m_MainRenderer->UpdateSystem(worldEntt.GetActiveArchetypes());
 	m_MainRenderer->Draw(window);
-	window.ClearWindow();
+	window.Display();
 }
 
 void powe::Core::RegisterRendererType(OwnedPtr<RenderAPI>&& renderAPI) const

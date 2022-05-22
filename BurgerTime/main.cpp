@@ -4,23 +4,36 @@
 #include <iostream>
 #include <vld.h>
 
-#include "POWEngine/Window/Window.h"
-#include "POWEngine/Core/Core.h"
-#include "POWEngine/Core/Clock/WorldClock.h"
-#include "POWEngine/Core/WorldEntity/WorldEntity.h"
+#define USE_SFML_RENDERER 1
+#include <powengine.h>
+#include "BurgerTimeScene.h"
+#include "POWEngine/Logger/Console/ConsoleLogger.h"
+#include "POWEngine/Sound/FMOD/FMOD2DSound.h"
 
 
 int main()
 {
-	powe::Core engineCore{};
-	const powe::Window window{ 640,480,"NewTitle" };
-	SharedPtr<powe::WorldEntity> worldEntity{std::make_shared<powe::WorldEntity>()};
+	const SharedPtr<powe::Core> engineCore{ std::make_shared<powe::Core>() };
+	const SharedPtr<powe::Window> window{ std::make_shared<powe::Window>(640,480,"BurgerTime")};
+	const SharedPtr<powe::WorldEntity> worldEntity{std::make_shared<powe::WorldEntity>()};
 
-	engineCore.StartWorldClock();
+	const SharedPtr<BurgerTimeScene> burgerTimeScene{ std::make_shared<BurgerTimeScene>() };
+	const SharedPtr<powe::WorldClock> worldClock{engineCore->GetWorldClock()};
 
-	while (!engineCore.TranslateWindowInputs(window,*worldEntity))
+	engineCore->RegisterRendererType(std::make_unique<powe::SFML2DRenderer>());
+
+	powe::ServiceLocator::RegisterLogger(std::make_shared<powe::ConsoleLogger>());
+	powe::ServiceLocator::RegisterSoundSystem(std::make_shared<powe::FMOD2DSound>(20));
+
+	burgerTimeScene->Start(engineCore,worldEntity);
+
+	engineCore->StartWorldClock();
+
+	while (!engineCore->TranslateWindowInputs(*window,*worldEntity))
 	{
-		engineCore.Step(worldEntity);
-	}
+		burgerTimeScene->Run(worldEntity,worldClock);
+		engineCore->Step(*worldEntity);
 
+		engineCore->Draw(*window, *worldEntity);
+	}
 }

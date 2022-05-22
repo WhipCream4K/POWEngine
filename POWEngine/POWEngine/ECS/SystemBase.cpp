@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "SystemBase.h"
 
-#include "POWEngine/Core/ECS/Archetype.h"
+#include "POWEngine/ECS/Archetype.h"
 #include "POWEngine/Logger/LoggerUtils.h"
 
 powe::SystemBase::SystemBase()

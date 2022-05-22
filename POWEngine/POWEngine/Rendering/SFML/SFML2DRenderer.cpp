@@ -1,10 +1,6 @@
 #include "pch.h"
 #include "SFML2DRenderer.h"
 
-//#include "POWEngine/Rendering/RenderBridge.h"
-//#include <vector>
-#include <algorithm>
-
 #if USE_SFML_RENDERER
 
 #include "POWEngine/Window/Window.h"
@@ -15,7 +11,7 @@ class powe::SFML2DRenderer::SFML2DRendererImpl
 {
 public:
 
-	void DrawBufferOnWindow(const Window& window) 
+	void DrawBufferOnWindow(const Window& window)
 	{
 		SFMLWindow* sfmlWindow{ window.GetWindowInstance<SFMLWindow>() };
 		sf::RenderWindow& renderWindow{ sfmlWindow->GetRenderWindow() };
@@ -34,9 +30,9 @@ public:
 		m_SF2DDrawEntities.clear();
 	}
 
-	void SubmitDrawSprite(sf::Drawable* drawObject,sf::RenderStates* renderStates,int drawOrder)
+	void SubmitDrawSprite(sf::Drawable* drawObject, sf::RenderStates* renderStates, int drawOrder)
 	{
-		m_SF2DDrawEntities.emplace_back(drawObject,renderStates,drawOrder);
+		m_SF2DDrawEntities.emplace_back(drawObject, renderStates, drawOrder);
 	}
 
 private:
@@ -51,10 +47,13 @@ private:
 	std::vector<DrawEntity> m_SF2DDrawEntities;
 };
 
-powe::SFML2DRenderer::SFML2DRenderer(uint32_t width, uint32_t height, const OtherWindowParams& others)
-	: m_RenderImpl(std::make_unique<SFML2DRendererImpl>())
+powe::SFML2DRenderer::SFML2DRenderer()
+	: RenderAPI()
+	, m_RenderImpl(std::make_unique<SFML2DRendererImpl>())
 {
 }
+
+powe::SFML2DRenderer::~SFML2DRenderer() = default;
 
 void powe::SFML2DRenderer::SubmitDrawSprite(sf::Drawable* drawable, sf::RenderStates* renderStates, int drawOrder) const
 {

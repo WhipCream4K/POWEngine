@@ -96,7 +96,8 @@ TEST_CASE("Lock-Free queue Pop test")
 	REQUIRE_THROWS(lfTest.Front());
 }
 
-#include <POWEngine/Logger/ConsoleLogger.h>
+#include <POWEngine/Logger/LoggerUtils.h>
+#include <POWEngine/Logger/Console/ConsoleLogger.h>
 
 void PumpMessage(powe::ConsoleLogger& logger, const std::string& msg)
 {
@@ -288,6 +289,7 @@ TEST_CASE("Component")
 
 	SECTION("Runtime adding components")
 	{
+#define RUNTIME_TEST 
 		SharedPtr<WorldEntity> worldEnt{ std::make_shared<WorldEntity>() };
 		SharedPtr<GameObject> gameObject1{ std::make_shared<GameObject>(*worldEnt) };
 
@@ -306,6 +308,8 @@ TEST_CASE("Component")
 
 		REQUIRE(test2 != nullptr);
 		REQUIRE(test2->sol == 42);
+
+#undef RUNTIME_TEST
 	}
 
 }

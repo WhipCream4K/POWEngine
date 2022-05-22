@@ -28,7 +28,7 @@ namespace powe
 			//Node(Node&&) = delete;
 			//Node& operator=(Node&&) = delete;
 
-			SharedPtr<Node> nextNode;
+			SharedPtr<Node>		nextNode;
 			size_t tag;
 			T data;
 		};
@@ -41,16 +41,17 @@ namespace powe
 		[[nodiscard]] std::optional<T> PopReturn(); // maybe has data or not c++17
 		void Pop() noexcept;
 		bool Empty() const noexcept;
+		T& Front() noexcept;
 
 		LFStack()
 			: m_Head(std::make_shared<Node>(T{}))
 		{
 		}
 
-		LFStack(const LFStack&) = delete;
+		LFStack(const LFStack&) = default;
 		LFStack& operator=(const LFStack&) = delete;
-		LFStack(LFStack&&) noexcept;
-		LFStack& operator=(LFStack&&) noexcept;
+		LFStack(LFStack&&) noexcept = default;
+		LFStack& operator=(LFStack&&) noexcept = delete;
 		~LFStack();
 
 	private:
@@ -93,7 +94,7 @@ namespace powe
 
 		do
 		{
-			if (!oldHead || !oldHead->nextNode) // never delete the first node
+			if (!oldHead || !oldHead->nextNode) // never deletes the first node
 				return std::nullopt;
 
 			++oldHead->tag;
@@ -110,7 +111,7 @@ namespace powe
 
 		do
 		{
-			if (!oldHead || !oldHead->nextNode) // never delete the first node
+			if (!oldHead || !oldHead->nextNode) // never deletes the first node
 				return;
 
 			++oldHead->tag;
@@ -121,25 +122,31 @@ namespace powe
 	template <typename T>
 	bool LFStack<T>::Empty() const noexcept
 	{
-		return m_Head.load();
+		return !m_Head.load() || !m_Head.load()->nextNode;
 	}
 
 	template <typename T>
-	LFStack<T>::LFStack(LFStack&& other) noexcept
-		: m_Head(std::move(other.m_Head))
+	T& LFStack<T>::Front() noexcept
 	{
+		return m_Head.load()->data;
 	}
 
-	template <typename T>
-	LFStack<T>& LFStack<T>::operator=(LFStack&& other) noexcept
-	{
-		if(*this != other)
-		{
-			m_Head = std::move(other.m_Head);
-		}
+	//template <typename T>
+	//LFStack<T>::LFStack(LFStack&& other) noexcept
+	//	: m_Head(std::move(other.m_Head))
+	//{
+	//}
 
-		return this;
-	}
+	//template <typename T>
+	//LFStack<T>& LFStack<T>::operator=(LFStack&& other) noexcept
+	//{
+	//	if(*this != other)
+	//	{
+	//		m_Head = std::move(other.m_Head);
+	//	}
+
+	//	return this;
+	//}
 
 	template <typename T>
 	LFStack<T>::~LFStack()

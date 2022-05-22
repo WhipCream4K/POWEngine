@@ -20,6 +20,11 @@ namespace powe
 		const HardwareMessages& PollHardwareMessages(bool& shouldEarlyExit, bool& shouldIgnoreInputs) override;
 		void Resize(uint32_t width, uint32_t height) override;
 		void SetTitle(const std::string& title) override;
+		const glm::uvec2& GetRelativeMousePos() const override;
+		void ClearWindow() override;
+		void SetClearColor(const glm::uvec4&) override;
+		void Display() override;
+		const glm::uvec4& GetClearColor() const override;
 
 		sf::RenderWindow& GetRenderWindow() { return m_WndHandle; }
 
@@ -27,9 +32,14 @@ namespace powe
 
 	private:
 
+		WindowMessages m_WndMessages;
+		HardwareMessages m_HWMessages;
 		sf::RenderWindow m_WndHandle;
-		glm::vec2 m_DeltaMousePos;
+		glm::uvec2 m_MousePosLastPoll;
+		glm::uvec4 m_ClearColor{};
+		glm::fvec2 m_DeltaMousePos;
 	};
+
 }
 
 #endif

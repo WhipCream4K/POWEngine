@@ -52,24 +52,29 @@ void powe::Window::SetTitle(const std::string& newTitle)
 	m_WindowImpl->SetTitle(newTitle);
 }
 
-//const glm::vec2& powe::Window::GetDeltaMousePos() const
-//{
-//	
-//}
-
 const glm::uvec2& powe::Window::GetRelativeMousePos() const
 {
 	return m_WindowImpl->GetRelativeMousePos();
 }
 
-void powe::Window::ClearWindow() const
+void powe::Window::Display() const
 {
-	
+	m_WindowImpl->Display();
 }
 
-void powe::Window::SetClearColor(const glm::uvec4& color)
+void powe::Window::ClearWindow() const
 {
-	m_ClearColor = color;
+	m_WindowImpl->ClearWindow();
+}
+
+void powe::Window::SetClearColor(const glm::uvec4& color) const
+{
+	m_WindowImpl->SetClearColor(color);
+}
+
+const glm::uvec4& powe::Window::GetClearColor() const
+{
+	return m_WindowImpl->GetClearColor();
 }
 
 powe::Window::~Window() = default;

@@ -1,4 +1,5 @@
 #pragma once
+//#include "POWEngine/Rendering/Renderer.h"
 
 namespace powe
 {
@@ -36,8 +37,11 @@ namespace powe
 		void StartWorldClock();
 
 
-		void Step(const SharedPtr<WorldEntity>& worldEntt);
+		//void Step(const SharedPtr<WorldEntity>& worldEntt);
+		void Step(WorldEntity& worldEntity) const;
 
+		const SharedPtr<WorldClock>& GetWorldClock() const { return m_WorldClock; }
+		const SharedPtr<Renderer>& GetRenderer() const { return m_MainRenderer; }
 
 		void Draw(
 			const SharedPtr<Window>& window,

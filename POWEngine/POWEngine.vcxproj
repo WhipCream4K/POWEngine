@@ -187,11 +187,18 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\poweComponent.h" />
+    <ClInclude Include="POWEngine\Sound\FMOD\AudioClip.h" />
+    <ClInclude Include="POWEngine\Sound\FMOD\Channel.h" />
+    <ClInclude Include="include\poweCustomtype.h" />
+    <ClInclude Include="include\powengine.h" />
+    <ClInclude Include="include\poweSystem.h" />
     <ClInclude Include="POWEngine\Rendering\NullRenderer.h" />
     <ClInclude Include="POWEngine\Logger\Logger.h" />
     <ClInclude Include="POWEngine\Logger\NullLogger.h" />
     <ClInclude Include="POWEngine\Rendering\Components\Sprite\SFML\SFMLSprite.h" />
     <ClInclude Include="POWEngine\Sound\FMOD\FMOD2DSound.h" />
+    <ClInclude Include="POWEngine\Sound\FMOD\FMODUtils.h" />
     <ClInclude Include="POWEngine\Sound\NullSoundSystem.h" />
     <ClInclude Include="POWEngine\Core\Components\ChildComponentTraits.h" />
     <ClInclude Include="POWEngine\ECS\ECSUtils.h" />
@@ -215,6 +222,7 @@
     <ClInclude Include="POWEngine\Math\Math.h" />
     <ClInclude Include="POWEngine\Services\ServiceIndicator.h" />
     <ClInclude Include="POWEngine\Sound\SoundInfo.h" />
+    <ClInclude Include="POWEngine\Sound\SoundTypes.h" />
     <ClInclude Include="POWEngine\Window\SFML\SFMLWindow.h" />
     <ClInclude Include="POWEngine\Window\Window.h" />
     <ClInclude Include="POWEngine\Window\WindowContext.h" />
@@ -243,6 +251,8 @@
     <ClInclude Include="POWEngine\Rendering\RenderAPI.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="POWEngine\Sound\FMOD\AudioClip.cpp" />
+    <ClCompile Include="POWEngine\Sound\FMOD\Channel.cpp" />
     <ClCompile Include="POWEngine\Rendering\NullRenderer.cpp" />
     <ClCompile Include="POWEngine\Logger\Logger.cpp" />
     <ClCompile Include="POWEngine\Logger\NullLogger.cpp" />

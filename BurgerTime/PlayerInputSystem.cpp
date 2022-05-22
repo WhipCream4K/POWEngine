@@ -1,14 +1,16 @@
 #include "PlayerInputSystem.h"
 
+#include <powengine.h>
+#include "BurgerTimeComponents.h"
 
 PlayerInputSystem::PlayerInputSystem()
-	: SystemBase()
 {
-	DEFINE_SYSTEM_KEY(int, std::string);
+	DEFINE_SYSTEM_KEY(InputComponent);
 }
 
 void PlayerInputSystem::OnUpdate(float, powe::GameObjectID)
 {
-	const auto [num, shit] = GetComponentsView<int, std::string>();
+	POWLOGINFO("Hey");
+	InputComponent* inputTest{ GetComponent<InputComponent>() };
+	POWLOGINFO(std::to_string(inputTest->tag));
 }
-

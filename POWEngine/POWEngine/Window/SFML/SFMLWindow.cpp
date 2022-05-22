@@ -2,20 +2,21 @@
 #include "pch.h"
 #include "SFMLWindow.h"
 #include "POWEngine/Window/WindowEvents.h"
-//#include "POWEngine/Core/Input/InputStruct.h"
-#include <iostream>
-
 #include "POWEngine/Core/Input/Key.h"
 
 #if USE_SFML_WINDOW
 
 powe::SFMLWindow::SFMLWindow(uint32_t width, uint32_t height, const std::string& title, OtherWindowParams others)
 	: WindowImpl(width, height, title, others)
+	, m_WndMessages()
+	, m_HWMessages()
 	, m_WndHandle(
 		sf::VideoMode(width, height),
 		sf::String{ title.c_str() },
 		static_cast<sf::Uint32>(others[0]),
 		reinterpret_cast<const sf::ContextSettings&>(others[sizeof(sf::Uint32)]))
+	, m_MousePosLastPoll()
+	, m_ClearColor(0, 0, 0, 255)
 	, m_DeltaMousePos()
 {
 	const auto mousePos = sf::Mouse::getPosition(m_WndHandle);
@@ -25,7 +26,11 @@ powe::SFMLWindow::SFMLWindow(uint32_t width, uint32_t height, const std::string&
 
 powe::SFMLWindow::SFMLWindow(uint32_t width, uint32_t height, const std::string& title)
 	: WindowImpl(width, height, title)
+	, m_WndMessages()
+	, m_HWMessages()
 	, m_WndHandle(sf::VideoMode(width, height), sf::String{ title.c_str() })
+	, m_MousePosLastPoll()
+	, m_ClearColor(0, 0, 0, 255)
 	, m_DeltaMousePos()
 {
 	const auto mousePos = sf::Mouse::getPosition(m_WndHandle);
@@ -304,6 +309,36 @@ void powe::SFMLWindow::Resize(uint32_t width, uint32_t height)
 void powe::SFMLWindow::SetTitle(const std::string& title)
 {
 	m_WndHandle.setTitle(sf::String{ title.c_str() });
+}
+
+const glm::uvec2& powe::SFMLWindow::GetRelativeMousePos() const
+{
+	return m_MousePosLastPoll;
+}
+
+void powe::SFMLWindow::ClearWindow()
+{
+	sf::Uint8 r{ uint8_t(m_ClearColor.x) };
+	sf::Uint8 g{ uint8_t(m_ClearColor.y) };
+	sf::Uint8 b{ uint8_t(m_ClearColor.z) };
+	sf::Uint8 a{ uint8_t(m_ClearColor.w) };
+
+	m_WndHandle.clear({ r,g,b,a });
+}
+
+void powe::SFMLWindow::SetClearColor(const glm::uvec4& color)
+{
+	m_ClearColor = color;
+}
+
+void powe::SFMLWindow::Display()
+{
+	m_WndHandle.display();
+}
+
+const glm::uvec4& powe::SFMLWindow::GetClearColor() const
+{
+	return m_ClearColor;
 }
 
 powe::SFMLWindow::~SFMLWindow() = default;

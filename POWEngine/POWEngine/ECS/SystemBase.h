@@ -1,9 +1,8 @@
 #pragma once
 
-#include "POWEngine/Core/CustomTypes.h"
-#include "ECSTypes.h"
-#include "POWEngine/Core/WorldEntity/WorldEntity.h"
+//#include "ECSTypes.h"
 #include "POWEngine/ECS/ECSUtils.h"
+#include "POWEngine/Core/WorldEntity/WorldEntity.h"
 
 namespace powe
 {
@@ -113,7 +112,7 @@ namespace powe
 			return reinterpret_cast<T*>(realCompData);
 		}
 
-		throw std::out_of_range("no component in this archetype");
+		throw std::out_of_range(typeid(T).name());
 
 		//}
 		//catch (const std::exception&)

@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "RenderAPI.h"
 
-powe::RenderAPI::RenderAPI(uint32_t width, uint32_t height, const OtherWindowParams& window)
+powe::RenderAPI::RenderAPI(uint32_t , uint32_t , const OtherWindowParams& )
 {
 }

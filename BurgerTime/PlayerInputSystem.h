@@ -1,6 +1,6 @@
 #pragma once
 
-#include "POWEngine/Core/ECS/SystemBase.h"
+#include <poweSystem.h>
 
 class PlayerInputSystem : public powe::SystemBase
 {

@@ -22,6 +22,7 @@
 #include <unordered_set>
 #include <algorithm>
 #include <stdexcept>
+#include <ranges>
 
 #include "POWEngine/Core/CustomTypes.h"
 #include "POWEngine/Math/Math.h"

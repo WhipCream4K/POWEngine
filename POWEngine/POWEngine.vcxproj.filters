@@ -177,6 +177,30 @@
     <ClInclude Include="POWEngine\Rendering\RenderAPI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\powengine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\poweCustomtype.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\poweSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Sound\FMOD\Channel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Sound\SoundTypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Sound\FMOD\FMODUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Sound\FMOD\AudioClip.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\poweComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PCH\pch.cpp">
@@ -297,6 +321,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="POWEngine\Rendering\RenderAPI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="POWEngine\Sound\FMOD\Channel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="POWEngine\Sound\FMOD\AudioClip.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,6 +1,6 @@
 #pragma once
 
-//#include "POWEngine/Core/CustomTypes.h"
+#include "POWEngine/Core/CustomTypes.h"
 #include <unordered_map>
 
 namespace powe
@@ -8,7 +8,6 @@ namespace powe
 	using ComponentTypeID = uint32_t;
 	using NormalIDType = ComponentTypeID; // This is for a normal use case of ID because I needed the same primitives as ComponentTypeID
 	using GameObjectID = uint32_t;
-	//using RawByte = std::byte;
 	using SizeType = uint32_t;
 	using SparseHandle = uint32_t;
 
@@ -57,7 +56,6 @@ namespace powe
 	class BaseComponent;
 	struct PreArchetypeTrait
 	{
-		//using ComponentDataMap = std::unordered_map<ComponentTypeID, std::vector<SharedPtr<RawByte[]>>>;
 		ECSComponentMap<SharedPtr<RawByte[]>> componentData{};
 		std::vector<ComponentTypeID> archetypeKey{};
 	};

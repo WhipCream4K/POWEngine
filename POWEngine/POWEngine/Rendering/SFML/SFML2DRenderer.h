@@ -17,11 +17,12 @@ namespace powe
 	{
 	public:
 
-		SFML2DRenderer(uint32_t width, uint32_t height, const OtherWindowParams& others);
+		SFML2DRenderer();
 		SFML2DRenderer(const SFML2DRenderer&) = delete;
 		SFML2DRenderer& operator=(const SFML2DRenderer&) = delete;
 		SFML2DRenderer(SFML2DRenderer&&) = delete;
 		SFML2DRenderer& operator=(SFML2DRenderer&&) = delete;
+		~SFML2DRenderer() override;
 
 		void SubmitDrawSprite(sf::Drawable* drawable,sf::RenderStates* renderStates,int drawOrder) const; 
 		void DrawBufferOnWindow(const Window& window) const override;

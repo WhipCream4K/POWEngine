@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "Renderer.h"
-
 #include "RenderAPI.h"
 #include "POWEngine/Rendering/System/RenderSystemBase.h"
 #include "NullRenderer.h"
@@ -9,6 +8,8 @@ powe::Renderer::Renderer()
 	: m_RenderAPI(std::make_unique<NullRenderer>())
 {
 }
+
+powe::Renderer::~Renderer() = default;
 
 void powe::Renderer::Draw(const Window& window) const
 {
@@ -32,19 +33,19 @@ void powe::Renderer::RemoveSystem(const SharedPtr<RenderSystemBase>& system)
 	}
 }
 
-void powe::Renderer::UpdateSystem(const SharedPtr<Archetype>& archetype)
-{
-	for (const auto& system : m_RenderSystems)
-	{
-		
-	}
-}
+//void powe::Renderer::UpdateSystem(const SharedPtr<Archetype>& archetype)
+//{
+//	for (const auto& system : m_RenderSystems)
+//	{
+//		
+//	}
+//}
 
 void powe::Renderer::UpdateSystem(const std::unordered_map<std::string, SharedPtr<Archetype>>& archetypePool) const
 {
 	for (const auto& system : m_RenderSystems)
 	{
-		for (const auto& [_,archetype] : archetypePool)
+		for (const auto& archetype : archetypePool | std::views::values) // since c++20
 		{
 			if (IsDigitExistInNumber(archetype->Types, system->GetKeys()))
 				system->InternalDraw(*m_RenderAPI);
