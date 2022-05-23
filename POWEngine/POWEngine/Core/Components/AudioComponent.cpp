@@ -6,7 +6,6 @@
 powe::AudioComponent::AudioComponent(const std::string& filePath, bool shouldPreloaded)
 	: m_SoundID()
 	, m_UsedChannel()
-	, m_IsActive()
 {
 	m_SoundID = ServiceLocator::GetSoundSystem().RegisterSoundEntity(filePath, shouldPreloaded);
 }
@@ -15,7 +14,6 @@ powe::AudioComponent::AudioComponent(const std::string& filePath, const SoundInf
 	: m_Info(info)
 	, m_SoundID()
 	, m_UsedChannel()
-	, m_IsActive()
 {
 	m_SoundID = ServiceLocator::GetSoundSystem().RegisterSoundEntity(filePath, shouldPreloaded);
 }

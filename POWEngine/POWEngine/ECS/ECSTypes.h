@@ -45,7 +45,7 @@ namespace powe
 	{
 		bool operator()(const ComponentTypeID& left, const ComponentTypeID& right) const
 		{
-			return (left & ~SizeType(ComponentFlag::Count)) == right
+			return (left == right) || (left & ~SizeType(ComponentFlag::Count)) == right
 				|| left == (right & ~SizeType(ComponentFlag::Count));
 		}
 	};

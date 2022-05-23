@@ -14,6 +14,12 @@ void powe::WorldEntity::RegisterGameObject(GameObjectID id)
 		m_GameObjectRecords.try_emplace(id, GameObjectRecord{});
 }
 
+void powe::WorldEntity::AddSystem(PipelineLayer layer, const SharedPtr<SystemBase>& system)
+{
+	system->SetWorld(this);
+	m_PendingAddSystem.Push(SystemTrait{ system,layer });
+}
+
 void powe::WorldEntity::RemoveSystem(PipelineLayer layer, const SharedPtr<SystemBase>& system)
 {
 	m_PendingDeleteSystem.Push(SystemTrait{ system,layer });
@@ -348,7 +354,14 @@ void powe::WorldEntity::InternalRemoveGameObjectFromPipeline()
 				for (const auto& componentID : targetArchetype->Types)
 				{
 					const SharedPtr<BaseComponent> componentTrait{ GetComponentTrait(componentID) };
-					componentTrait->DestroyData(startAddress + accumulateOffset);
+
+					if(IsThisComponentSparse(componentID))
+					{
+						m_SparseComponentManager.RemoveComponentFromGameObject(*this, gameObjectIDs[deletingGameObjectIdx], componentID);
+					}
+					else
+						componentTrait->DestroyData(startAddress + accumulateOffset);
+
 					accumulateOffset += componentTrait->GetSize();
 				}
 			}
@@ -364,7 +377,7 @@ void powe::WorldEntity::InternalRemoveGameObjectFromPipeline()
 
 				const GameObjectID startGameObjectID{ targetArchetype->GameObjectIds[thisGameObjectIndex] };
 
-				for (int i = thisGameObjectIndex; i < int(targetArchetype->GameObjectIds.size()); ++i)
+				for (int i = thisGameObjectIndex; i < int(targetArchetype->GameObjectIds.size() - 1); ++i)
 				{
 					const GameObjectID thisGameObjectID{ targetArchetype->GameObjectIds[i] };
 
@@ -373,15 +386,15 @@ void powe::WorldEntity::InternalRemoveGameObjectFromPipeline()
 						break;
 
 					SizeType accumulateOffset{};
-					RawByte* startAddress{ &targetArchetype->ComponentData[int(i * targetArchetype->SizeOfComponentsBlock)] };
-					RawByte* endAddress{ &targetArchetype->ComponentData[int((i - 1) * targetArchetype->SizeOfComponentsBlock)] };
+					RawByte* toAddress{ &targetArchetype->ComponentData[int(i * targetArchetype->SizeOfComponentsBlock)] };
+					RawByte* fromAddress{ &targetArchetype->ComponentData[int((i + 1) * targetArchetype->SizeOfComponentsBlock)] };
 
 					for (const auto& componentID : targetArchetype->Types)
 					{
 						const SharedPtr<BaseComponent> componentTrait{ GetComponentTrait(componentID) };
 
-						componentTrait->MoveData(startAddress + accumulateOffset,
-							endAddress + accumulateOffset);
+						componentTrait->MoveData(fromAddress + accumulateOffset,
+							toAddress + accumulateOffset);
 
 						accumulateOffset += componentTrait->GetSize();
 					}
@@ -733,11 +746,13 @@ void powe::WorldEntity::InternalAddGameObjectToPipeline()
 			if (IsThisComponentSparse(componentType))
 			{
 				const ComponentTypeID discardCompFlag{ componentType & ~SizeType(ComponentFlag::Count) };
-				const SparseHandle handle{ m_SparseComponentManager.AddComponentToSparseSet(
-					*this,gameObjectID,discardCompFlag,compData) };
+				m_SparseComponentManager.AddComponentToSparseSet(*this, gameObjectID, discardCompFlag, compData);
 
-				// Initialize the handle
-				new (destination) SparseHandle(handle);
+				//const SparseHandle handle{ m_SparseComponentManager.AddComponentToSparseSet(
+				//	*this,gameObjectID,discardCompFlag,compData) };
+
+				//// Initialize the handle
+				//new (destination) SparseHandle(handle);
 			}
 			else
 			{

@@ -1,13 +1,11 @@
 #pragma once
 
 #include "POWEngine/Core/Input/InputSettings.h"
-//#include "POWEngine/ECS/ECSTypes.h"
 #include "POWEngine/ECS/Archetype.h"
 #include "POWEngine/Core/Components/BaseComponent.h"
 #include "POWEngine/Core/Thread/SimpleThreadPool.h"
 #include "POWEngine/LockFree/LFStack.h"
 #include "PipelineLayer.h"
-//#include "POWEngine/Core/Components/ChildComponentTraits.h"
 #include "POWEngine/ECS/ECSUtils.h"
 #include "POWEngine/ECS/SparseComponentManager.h"
 
@@ -34,6 +32,8 @@ namespace powe
 		// Lock-free add system
 		template<typename SystemType, typename ...Args>
 		EnableIsBasedOf<SystemBase, SystemType, WeakPtr<SystemBase>> AddSystem(PipelineLayer layer,Args&&... args);
+
+		void AddSystem(PipelineLayer layer, const SharedPtr<SystemBase>& system);
 
 		// TODO: Maybe do a thread safe removing system
 		void RemoveSystem(PipelineLayer layer,const SharedPtr<SystemBase>& system);
@@ -130,6 +130,8 @@ namespace powe
 			int indexInArchetype,
 			ComponentType&& component);
 
+		SharedPtr<SystemBase> InternCreateSystem();
+
 
 	private:
 
@@ -192,6 +194,7 @@ namespace powe
 	EnableIsBasedOf<SystemBase, SystemType, WeakPtr<SystemBase>> WorldEntity::AddSystem(PipelineLayer layer, Args&&... args)
 	{
 		SharedPtr<SystemBase> system{ std::make_shared<SystemType>(std::forward<Args>(args)...) };
+		system->SetWorld(this);
 		m_PendingAddSystem.Push(SystemTrait{ system,layer });
 		return system;
 	}
@@ -218,15 +221,6 @@ namespace powe
 		if (!GetGameObjectRecords(id, gameObjectRecord))
 			return nullptr;
 
-		//// This GameObject doesn't exist
-		//if (gameObjectRecord == m_GameObjectRecords.end())
-		//	return nullptr;
-
-		//SharedPtr<Archetype> newArchetype{};
-		////SharedPtr<Archetype> oldArchetype{};
-		//int indexInOldArchetype{};
-		//bool isReUsing{};
-		//bool shouldRemoveGameObject{};
 		if (const auto oldArchetype{ gameObjectRecord.Archetype.lock() })
 		{
 			const std::string oldArchetypeKey{ CreateStringFromNumVector(oldArchetype->Types) };
@@ -377,9 +371,9 @@ namespace powe
 				const auto findItr{ archetype->ComponentOffsets.find(compID) };
 				if (findItr != archetype->ComponentOffsets.end())
 				{
-					RawByte* sourceAddress{ &archetype->ComponentData[
-						gbRecords.IndexInArchetype * archetype->SizeOfComponentsBlock
-					 + findItr->second] };
+					//RawByte* sourceAddress{ &archetype->ComponentData[
+					//	gbRecords.IndexInArchetype * archetype->SizeOfComponentsBlock
+					// + findItr->second] };
 					
 					// check the key if it's a sparse component or not
 					if (!IsThisComponentSparse(findItr->first))
@@ -392,8 +386,8 @@ namespace powe
 
 					// if it's a Sparse component
 					// get the handle from the sourceAddress then use that to get a real component address
-					const SparseHandle* handle{ reinterpret_cast<SparseHandle*>(sourceAddress) };
-					RawByte* realCompData{ m_SparseComponentManager.GetComponentData<ComponentType>(id,compID,*handle) };
+					//const SparseHandle* handle{ reinterpret_cast<SparseHandle*>(sourceAddress) };
+					RawByte* realCompData{ m_SparseComponentManager.GetComponentData<ComponentType>(id,compID) };
 
 					return reinterpret_cast<ComponentType*>(realCompData);
 				}

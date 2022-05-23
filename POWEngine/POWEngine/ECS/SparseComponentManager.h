@@ -24,7 +24,13 @@ namespace powe
 
 	public:
 
-		SparseHandle AddComponentToSparseSet(
+		//SparseHandle AddComponentToSparseSet(
+		//	const WorldEntity& world,
+		//	GameObjectID id,
+		//	ComponentTypeID componentTypeId,
+		//	const SharedPtr<RawByte[]>& data);
+
+		void AddComponentToSparseSet(
 			const WorldEntity& world,
 			GameObjectID id,
 			ComponentTypeID componentTypeId,
@@ -33,25 +39,35 @@ namespace powe
 		//RawByte* GetComponentData(GameObjectID id,ComponentTypeID compID,SparseHandle handle) const;
 
 		template<typename T>
-		RawByte* GetComponentData(GameObjectID id, ComponentTypeID compID, SparseHandle handle) const;
+		RawByte* GetComponentData(GameObjectID id, ComponentTypeID compID) const;
 
-		void RemoveComponentFromGameObject(GameObjectID id, ComponentTypeID compID, SparseHandle handle);
+		void RemoveComponentFromGameObject(
+			const WorldEntity& worldEntity,
+			GameObjectID id,
+			ComponentTypeID compID
+		);
 
 	private:
 
 		//std::unordered_map<GameObjectID, std::unordered_map<ComponentTypeID,SizeType>> m_SparseHandleMap;
-		std::unordered_set<GameObjectID> m_RegisteredGameObjects;
+		//std::unordered_set<GameObjectID> m_RegisteredGameObjects;
+		std::unordered_map<GameObjectID, std::unordered_map<ComponentTypeID, SparseHandle>> m_GameObjectToHandle;
 		std::unordered_map<ComponentTypeID, SparseSet> m_SparseComponentData;
 	};
 
+
 	template <typename T>
-	RawByte* SparseComponentManager::GetComponentData(GameObjectID id, ComponentTypeID compID,
-		SparseHandle handle) const
+	RawByte* SparseComponentManager::GetComponentData(GameObjectID id, ComponentTypeID compID) const
 	{
-		if (!m_RegisteredGameObjects.contains(id))
-			return nullptr;
-		
-		return &m_SparseComponentData.at(compID).Data[int(handle * sizeof(T))];
+		const auto findItr{ m_GameObjectToHandle.find(id) };
+		if(findItr != m_GameObjectToHandle.end() && findItr->second.contains(compID))
+		{
+			const SparseHandle handle{ findItr->second.at(compID) };
+
+			return &m_SparseComponentData.at(compID).Data[int(handle * sizeof(T))];
+		}
+
+		return nullptr;
 	}
 }
 

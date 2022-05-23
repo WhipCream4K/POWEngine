@@ -13,7 +13,13 @@ namespace powe
 		AudioComponent() = default;
 		AudioComponent(const std::string& filePath,bool shouldPreloaded = false);
 		AudioComponent(const std::string& filePath,const SoundInfo& info, bool shouldPreloaded = false);
+
+		AudioComponent(const AudioComponent&) = default;
+		AudioComponent& operator=(const AudioComponent&) = default;
+		AudioComponent(AudioComponent&&) = default;
+		AudioComponent& operator=(AudioComponent&&) = default;
 		~AudioComponent() override;
+
 		void Play();
 		void Play(const SoundInfo& info);
 		bool IsPlaying() const;
@@ -21,10 +27,9 @@ namespace powe
 
 	private:
 
-		SoundInfo m_Info;
-		SoundID m_SoundID;
-		ChannelID m_UsedChannel;
-		bool m_IsActive;
+		SoundInfo m_Info{};
+		SoundID m_SoundID{};
+		ChannelID m_UsedChannel{};
 	};
 }
 

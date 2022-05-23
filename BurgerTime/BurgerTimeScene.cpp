@@ -10,10 +10,11 @@ void BurgerTimeScene::Start(const SharedPtr<powe::Core>& ,
 {
 	using namespace powe;
 
-	SharedPtr<SystemBase> system = worldEntity->AddSystem<PlayerInputSystem>(PipelineLayer::Update).lock();
-	
+	//SharedPtr<SystemBase> system = worldEntity->AddSystem<PlayerInputSystem>(PipelineLayer::Update).lock();
+	SharedPtr<PlayerInputSystem> system{ std::make_shared<PlayerInputSystem>() };
+	worldEntity->AddSystem(PipelineLayer::Update, system);
 	const SharedPtr<GameObject> testSystem{std::make_shared<GameObject>(*worldEntity)};
-	testSystem->AddComponent(AudioComponent{"./Resources/Sound/Jump.wav"});
+	testSystem->AddComponent(AudioComponent{"./Resources/Sound/Jump.wav"},ComponentFlag::Sparse);
 }
 
 void BurgerTimeScene::Run(const SharedPtr<powe::WorldEntity>& ,

@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "SystemBase.h"
 
+#include "POWEngine/Core/WorldEntity/WorldEntity.h"
 #include "POWEngine/ECS/Archetype.h"
 #include "POWEngine/Logger/LoggerUtils.h"
 
@@ -11,6 +12,14 @@ powe::SystemBase::SystemBase()
 	, m_UpdateCountPerArchetype()
 {
 }
+
+//powe::SystemBase::SystemBase(WorldEntity* worldEntity)
+//	: m_World(worldEntity)
+//	, m_Keys()
+//	, m_CurrentArchetype()
+//	, m_UpdateCountPerArchetype()
+//{
+//}
 
 void powe::SystemBase::InternalUpdate(const Archetype& archetype, float deltaTime)
 {

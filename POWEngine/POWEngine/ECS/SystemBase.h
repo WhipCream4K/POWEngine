@@ -1,13 +1,19 @@
 #pragma once
 
 //#include "ECSTypes.h"
+#include <stdexcept>
 #include "POWEngine/ECS/ECSUtils.h"
 #include "POWEngine/Core/WorldEntity/WorldEntity.h"
+//#include "POWEngine/Core/Components/BaseComponent.h"
+//#include "POWEngine/ECS/Archetype.h"
+//#include "POWEngine/ECS/SparseComponentManager.h"
+
+//#include "POWEngine/Core/WorldEntity/WorldEntity.h"
 
 namespace powe
 {
 	struct Archetype;
-	class WorldEntity;
+	class SparseComponentManager;
 	class SystemBase
 	{
 		friend class WorldEntity;
@@ -39,15 +45,19 @@ namespace powe
 		template<typename ...Args>
 		void InternMakeKeys();
 
+		// Specialize GetComponent from iteration
 		template<typename ComponentType>
 		EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> GetComponent() const;
 
+		// Specialize GetComponent from iteration
 		template<typename ...Args>
 		std::tuple<std::add_pointer_t<Args>...> GetComponentsView() const;
 
 	private:
 
 		void SetWorld(WorldEntity* world);
+
+		//inline const SparseComponentManager& GetSparseComponentManager() const;
 
 		template<typename T>
 		T* GetComponent(const Archetype& archetype) const;
@@ -104,12 +114,11 @@ namespace powe
 			// get the data from sparse section
 			auto& sparseManager{ m_World->GetSparseComponentManager() };
 
-			const SparseHandle* handle{ reinterpret_cast<SparseHandle*>(dataAddress) };
-			RawByte* realCompData{ sparseManager.GetComponentData<T>(
-				archetype.GameObjectIds[m_UpdateCountPerArchetype],compID,*handle) };
+			//const SparseHandle* handle{ reinterpret_cast<SparseHandle*>(dataAddress) };
 
-			//const SharedPtr<RawByte[]> sparseComponentData{
-			//	sparseManager.GetComponentData(archetype.GameObjectIds[m_UpdateCountPerArchetype],compID) };
+			RawByte* realCompData{ sparseManager.GetComponentData<T>(
+				archetype.GameObjectIds[m_UpdateCountPerArchetype],compID) };
+
 
 			return reinterpret_cast<T*>(realCompData);
 		}
