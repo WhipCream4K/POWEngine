@@ -30,8 +30,8 @@ namespace powe
 
 		// Play the sound immediately without saving to the memory
 		ChannelID PlayImmediate(const std::string& , const SoundInfo& ) override { return {}; }
-		bool IsPlaying(ChannelID ) const override { return false; }
-		void Stop(ChannelID ) override {}
+		bool IsPlaying(SoundID) const override { return false; }
+		void Stop(SoundID) override {}
 
 	};
 }

@@ -14,7 +14,7 @@
 int main()
 {
 	const SharedPtr<powe::Core> engineCore{ std::make_shared<powe::Core>() };
-	const SharedPtr<powe::Window> window{ std::make_shared<powe::Window>(640,480,"BurgerTime")};
+	const SharedPtr<powe::Window> window{ std::make_shared<powe::Window>(1280,720,"BurgerTime")};
 	const SharedPtr<powe::WorldEntity> worldEntity{std::make_shared<powe::WorldEntity>()};
 
 	const SharedPtr<BurgerTimeScene> burgerTimeScene{ std::make_shared<BurgerTimeScene>() };

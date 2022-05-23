@@ -157,7 +157,6 @@ namespace powe
 		LFStack<SystemTrait> m_PendingAddSystem;
 		LFStack<SystemTrait> m_PendingDeleteSystem;
 
-
 		// -------------------------------
 		// --------- Component -----------
 		// -------------------------------

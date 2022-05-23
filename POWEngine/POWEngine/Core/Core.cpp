@@ -83,10 +83,11 @@ void powe::Core::Step(WorldEntity& worldEntity) const
 
 	const float deltaTime{ m_WorldClock->GetDeltaTime() };
 
+	worldEntity.UpdatePipeline(PipelineLayer::Async, deltaTime);
 	worldEntity.UpdatePipeline(PipelineLayer::Update, deltaTime);
 	worldEntity.UpdatePipeline(PipelineLayer::PostUpdate, deltaTime);
 
-	ServiceLocator::GetSoundSystem().Update();
+	//ServiceLocator::GetSoundSystem().Update();
 }
 
 void powe::Core::Draw(const SharedPtr<Window>& window, const SharedPtr<WorldEntity>& worldEntt) const

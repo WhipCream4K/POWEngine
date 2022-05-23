@@ -15,9 +15,9 @@ namespace powe
 
 	public:
 
-		virtual void LogInfoMessage(const std::string&,const std::string& fromWhere = "") = 0;
-		virtual void LogWarningMessage(const std::string&, const std::string& fromWhere = "") = 0;
-		virtual void LogErrorMessage(const std::string&, const std::string& fromWhere = "") = 0;
+		virtual void LogInfoMessage(const std::string&,const std::string& fromWhere = "",bool showOrigin = false) = 0;
+		virtual void LogWarningMessage(const std::string&, const std::string& fromWhere = "", bool showOrigin = false) = 0;
+		virtual void LogErrorMessage(const std::string&, const std::string& fromWhere = "", bool showOrigin = false) = 0;
 		
 	};
 }

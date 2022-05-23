@@ -39,21 +39,21 @@ void powe::ConsoleLogger::AddMessage(const std::string& msg)
 //	AddMessage(log);	
 //}
 
-void powe::ConsoleLogger::LogErrorMessage(const std::string& msg, const std::string& fromWhere)
+void powe::ConsoleLogger::LogErrorMessage(const std::string& msg, const std::string& fromWhere, bool  )
 {
 	std::string log{ RedText };
 	log.append(LogError ResetText " " + msg + " " + fromWhere);
 	AddMessage(log);
 }
 
-void powe::ConsoleLogger::LogInfoMessage(const std::string& msg, const std::string& fromWhere)
+void powe::ConsoleLogger::LogInfoMessage(const std::string& msg, const std::string& fromWhere, bool )
 {
 	std::string log{ GreenText };
 	log.append(LogInfo ResetText " " + msg + " " + fromWhere);
 	AddMessage(log);
 }
 
-void powe::ConsoleLogger::LogWarningMessage(const std::string& msg, const std::string& fromWhere)
+void powe::ConsoleLogger::LogWarningMessage(const std::string& msg, const std::string& fromWhere, bool )
 {
 	std::string log{ YellowText };
 	log.append(LogWarning ResetText " " + msg + " " + fromWhere);

@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "ServiceLocator.h"
-//#include "POWEngine/Logger/LoggerUtils.h"
+#include "POWEngine/Logger/LoggerUtils.h"
 #include "POWEngine/Sound/SoundSystem.h"
 
 powe::NullSoundSystem powe::ServiceLocator::m_NullAudio{};
@@ -28,9 +28,17 @@ SharedPtr<powe::Logger> powe::ServiceLocator::m_Logger{ SharedPtr<powe::NullLogg
 void powe::ServiceLocator::RegisterSoundSystem(const SharedPtr<SoundSystem>& soundSystem)
 {
 	m_SoundSystem = soundSystem == nullptr ? SharedPtr<NullSoundSystem>(&m_NullAudio,[](NullSoundSystem*){}) : soundSystem;
+
+	std::string testMsg{ "Registering Audio system typeof -> " };
+	testMsg.append(typeid(*soundSystem).name());
+	POWLOGNORMAL(testMsg);
 }
 
 void powe::ServiceLocator::RegisterLogger(const SharedPtr<Logger>& logger)
 {
 	m_Logger = logger == nullptr ? SharedPtr<NullLogger>(&m_NullLogger, [](NullLogger*) {}) : logger;
+
+	std::string testMsg{ "Registering Logger system typeof -> " };
+	testMsg.append(typeid(*logger).name());
+	POWLOGNORMAL(testMsg);
 }

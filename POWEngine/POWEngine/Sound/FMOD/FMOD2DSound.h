@@ -4,31 +4,31 @@
 namespace powe
 {
 	class FMOD2DSound : public SoundSystem
-    {
-    public:
+	{
+	public:
 
-        FMOD2DSound(uint32_t nbChannels);
-        FMOD2DSound(const FMOD2DSound&) = delete;
-        FMOD2DSound& operator=(const FMOD2DSound&) = delete;
-        FMOD2DSound(FMOD2DSound&&) = delete;
-        FMOD2DSound& operator=(FMOD2DSound&&) = delete;
-        ~FMOD2DSound() override;
+		FMOD2DSound(uint32_t nbChannels);
+		FMOD2DSound(const FMOD2DSound&) = delete;
+		FMOD2DSound& operator=(const FMOD2DSound&) = delete;
+		FMOD2DSound(FMOD2DSound&&) = delete;
+		FMOD2DSound& operator=(FMOD2DSound&&) = delete;
+		~FMOD2DSound() override;
 
-    public:
+	public:
 
-        SoundID RegisterSoundEntity(const std::string& filePath, bool shouldLoaded) override;
-        void UnRegisterSoundEntity(SoundID id) override;
-        bool IsPlaying(ChannelID id) const override;
-        ChannelID Play(SoundID id, const SoundInfo& soundInfo) override;
-        ChannelID PlayImmediate(const std::string& filePath, const SoundInfo& soundInfo) override;
-        void Update() override;
-        void Stop(ChannelID id) override;
+		SoundID RegisterSoundEntity(const std::string& filePath, bool shouldLoaded) override;
+		void UnRegisterSoundEntity(SoundID id) override;
+		bool IsPlaying(SoundID id) const override;
+		ChannelID Play(SoundID id, const SoundInfo& soundInfo) override;
+		ChannelID PlayImmediate(const std::string& filePath, const SoundInfo& soundInfo) override;
+		void Update() override;
+		void Stop(SoundID id) override;
 
-    private:
+	private:
 
-        class FMODSoundImpl;
-        OwnedPtr<FMODSoundImpl> m_FmodSoundImpl;
-    };
+		class FMODSoundImpl;
+		OwnedPtr<FMODSoundImpl> m_FmodSoundImpl;
+	};
 }
 
  

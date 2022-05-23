@@ -17,9 +17,9 @@ namespace powe
 
 	public:
 
-		void LogErrorMessage(const std::string&, const std::string& ) override {}
-		void LogInfoMessage(const std::string&, const std::string& ) override {}
-		void LogWarningMessage(const std::string&, const std::string& ) override {}
+		void LogErrorMessage(const std::string&, const std::string&, bool) override {}
+		void LogInfoMessage(const std::string&, const std::string& ,bool) override {}
+		void LogWarningMessage(const std::string&, const std::string&,bool) override {}
 	};
 }
 

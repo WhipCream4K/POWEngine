@@ -23,6 +23,15 @@ void powe::AudioClip::LoadStream(FMOD::System* system)
 	}
 }
 
+void powe::AudioClip::LoadCompressed(FMOD::System* system)
+{
+	if(!m_SoundInst)
+	{
+		const auto result{ system->createSound(m_FilePath.c_str(),FMOD_2D | FMOD_CREATECOMPRESSEDSAMPLE | FMOD_LOOP_OFF,nullptr,&m_SoundInst) };
+		FMODErrorCheck(result);
+	}
+}
+
 powe::AudioClip::~AudioClip()
 {
 	if (m_SoundInst)

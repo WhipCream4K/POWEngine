@@ -22,6 +22,7 @@ namespace powe
 		void Play(FMOD::System* system,FMOD::Sound* sound);
 		void Stop() const;
 		ChannelID GetID() const { return m_Id; }
+		~Channel();
 
 	private:
 

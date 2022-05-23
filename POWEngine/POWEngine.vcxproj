@@ -187,6 +187,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="POWEngine\Core\Components\AudioComponent.h" />
     <ClInclude Include="include\poweComponent.h" />
     <ClInclude Include="POWEngine\Sound\FMOD\AudioClip.h" />
     <ClInclude Include="POWEngine\Sound\FMOD\Channel.h" />
@@ -251,6 +252,7 @@
     <ClInclude Include="POWEngine\Rendering\RenderAPI.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="POWEngine\Core\Components\AudioComponent.cpp" />
     <ClCompile Include="POWEngine\Sound\FMOD\AudioClip.cpp" />
     <ClCompile Include="POWEngine\Sound\FMOD\Channel.cpp" />
     <ClCompile Include="POWEngine\Rendering\NullRenderer.cpp" />

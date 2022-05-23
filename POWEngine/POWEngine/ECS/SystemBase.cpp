@@ -37,6 +37,54 @@ void powe::SystemBase::InternalUpdate(const Archetype& archetype, float deltaTim
 
 }
 
+void powe::SystemBase::InternalCreate(const Archetype& archetype)
+{
+	m_UpdateCountPerArchetype = 0;
+	m_CurrentArchetype = &archetype;
+
+	try
+	{
+		for (const auto gameObjectId : archetype.GameObjectIds)
+		{
+			OnCreate(gameObjectId);
+			++m_UpdateCountPerArchetype;
+		}
+	}
+	catch (const std::exception& e)
+	{
+		std::string errMsg{ "System trying to access component that doesn't exist in this archetype -> " };
+		errMsg.append(e.what());
+		POWLOGWARNING(errMsg);
+
+		m_UpdateCountPerArchetype = 0;
+		m_CurrentArchetype = nullptr;
+	}
+}
+
+void powe::SystemBase::InternalDestroy(const Archetype& archetype)
+{
+	m_UpdateCountPerArchetype = 0;
+	m_CurrentArchetype = &archetype;
+
+	try
+	{
+		for (const auto gameObjectId : archetype.GameObjectIds)
+		{
+			OnDestroy(gameObjectId);
+			++m_UpdateCountPerArchetype;
+		}
+	}
+	catch (const std::exception& e)
+	{
+		std::string errMsg{ "System trying to access component that doesn't exist in this archetype -> " };
+		errMsg.append(e.what());
+		POWLOGWARNING(errMsg);
+
+		m_UpdateCountPerArchetype = 0;
+		m_CurrentArchetype = nullptr;
+	}
+}
+
 void powe::SystemBase::SetWorld(WorldEntity* world)
 {
 	m_World = world;

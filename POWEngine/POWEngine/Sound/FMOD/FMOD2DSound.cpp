@@ -30,23 +30,26 @@ public:
 			throw std::runtime_error(FMOD_ErrorString(result));
 
 		m_FMODSystem = system;
+
+		InitializeThread();
 	}
 
 	~FMODSoundImpl();
 
-	SoundID RegisterSoundEntity(const std::string& filePath);
+	SoundID RegisterSoundEntity(const std::string& filePath, bool shouldPreloaded);
 	void UnRegisterSoundEntity(SoundID id);
-	void InitializeThread();
 	ChannelID Play(SoundID id, const SoundInfo& info);
 	ChannelID PlayImmediate(const std::string& filePath, const SoundInfo& soundInfo);
-	void Stop(ChannelID id);
-	bool IsPlaying(ChannelID id);
+	void Stop(SoundID id);
+	bool IsPlaying(SoundID id);
 	void Update();
 
 
 private:
 
+	void InitializeThread();
 	void RunMainPlaySound();
+	void RunChannelChecking();
 
 	FMOD::System* m_FMODSystem{};
 	uint32_t m_MaxChannelsCnt{};
@@ -54,21 +57,21 @@ private:
 	// Audio
 	std::mutex m_AudioMapMutex{};
 	std::unordered_map<SoundID, SharedPtr<AudioClip>> m_AudioClip{};
-	std::unordered_set<std::string> m_PathCheck{};
+	std::unordered_map<std::string, SoundID> m_PathCheck{};
 	std::atomic<SoundID> m_AudioClipCnt{};
 
 	// Channels
 	std::mutex m_ChannelMutex{};
-	std::vector<SharedPtr<Channel>> m_ActiveChannels{};
+	std::unordered_map<SoundID, SharedPtr<Channel>> m_ActiveChannels{};
 	std::atomic<ChannelID> m_ChannelCnt{};
 
 	std::future<void> m_SoundThread{};
 	std::condition_variable m_MainSoundThreadCV{};
-	bool m_IsThreadExit{}; 
+	bool m_IsThreadExit{};
 
 	struct SoundQueue
 	{
-		SoundQueue(const SharedPtr<AudioClip>& clip,Channel* channel)
+		SoundQueue(const SharedPtr<AudioClip>& clip, Channel* channel)
 			: aClip(clip)
 			, aChannel(channel)
 		{
@@ -80,49 +83,75 @@ private:
 		Channel* aChannel{};
 	};
 
-	std::mutex m_PlayQueueMutex{};
-	LFQueue<SoundQueue> m_PlayQueue;
+	// SoundQueue
+	std::mutex m_SoundQueueMutex{};
+	LFQueue<SoundQueue> m_SoundQueue;
+
+	// Channel Integrity
+	std::future<void> m_ChannelIntegCheck{};
 };
 
 powe::FMOD2DSound::FMODSoundImpl::~FMODSoundImpl()
 {
+	m_IsThreadExit = true;
+
+	m_SoundQueue.Push(SoundQueue{});
+	m_MainSoundThreadCV.notify_one();
+
+	// AudioClip contains fmod sound file and it need to be clean before fmod system exited
+	m_AudioClip.clear();
+
 	m_FMODSystem->release();
 	m_FMODSystem = nullptr;
-	m_IsThreadExit = true;
 }
 
-powe::SoundID powe::FMOD2DSound::FMODSoundImpl::RegisterSoundEntity(const std::string& )
+powe::SoundID powe::FMOD2DSound::FMODSoundImpl::RegisterSoundEntity(const std::string& filePath, bool shouldPreloaded)
 {
-	//const auto& [listItr, emplaceResult] { m_PreloadedSoundHandle.try_emplace(filePath, m_PreLoadedSoundCnt) };
-	//if (emplaceResult)
-	//{
-	//	FMOD::Sound* soundInst{};
-	//	const auto result = m_FMODSystem->createSound(filePath.c_str(), FMOD_2D | FMOD_CREATESAMPLE | FMOD_LOOP_OFF,
-	//		nullptr, &soundInst);
+	if (!m_PathCheck.contains(filePath))
+	{
+		const SoundID soundID{ m_AudioClipCnt++ };
+		const SharedPtr<AudioClip> clip{ std::make_shared<AudioClip>(soundID,filePath) };
 
-	//	if (result != FMOD_OK)
-	//		throw std::runtime_error(FMOD_ErrorString(result));
+		if (shouldPreloaded)
+			clip->LoadCompressed(m_FMODSystem);
 
-	//	SoundMemo memo{};
-	//	memo.filePath = filePath;
-	//	memo.soundInst = soundInst;
+		m_PathCheck.try_emplace(filePath, soundID);
 
-	//	m_PreLoadedSounds[m_PreLoadedSoundCnt] = memo;
-	//	++m_PreLoadedSoundCnt;
-	//}
+		{
+			std::scoped_lock lock{ m_AudioMapMutex };
+			m_AudioClip.try_emplace(soundID, clip);
+		}
 
-	//return listItr->second;
-	return {};
+		return soundID;
+	}
+
+	return m_PathCheck[filePath];
 }
 
-void powe::FMOD2DSound::FMODSoundImpl::UnRegisterSoundEntity(SoundID )
+void powe::FMOD2DSound::FMODSoundImpl::UnRegisterSoundEntity(SoundID id)
 {
-	
+	SharedPtr<AudioClip> clip{};
+
+	{
+		std::scoped_lock lock{ m_AudioMapMutex };
+		clip = m_AudioClip[id];
+	}
+
+	if(clip)
+	{
+		m_PathCheck.erase(clip->GetFilePath());
+
+		{
+			std::scoped_lock lock{ m_AudioMapMutex };
+			m_ActiveChannels.erase(id);
+		}
+	}
 }
 
 void powe::FMOD2DSound::FMODSoundImpl::InitializeThread()
 {
 	m_SoundThread = std::async(std::launch::async, &FMODSoundImpl::RunMainPlaySound, this);
+	m_ChannelIntegCheck = std::async(std::launch::async, &FMODSoundImpl::RunChannelChecking, this);
 }
 
 powe::ChannelID powe::FMOD2DSound::FMODSoundImpl::Play(SoundID id, const SoundInfo& info)
@@ -138,85 +167,104 @@ powe::ChannelID powe::FMOD2DSound::FMODSoundImpl::Play(SoundID id, const SoundIn
 		clip = m_AudioClip[id];
 	}
 
-	const SharedPtr<Channel> channel{ std::make_shared<Channel>(m_ChannelCnt++,info) };
+	SharedPtr<Channel> channel{};
 
 	{
 		std::scoped_lock lock{ m_ChannelMutex };
-		m_ActiveChannels.emplace_back(channel);
+		channel = m_ActiveChannels[id];
 	}
 
-	const SoundQueue soundQueue{clip,channel.get()};
-	m_PlayQueue.Push(soundQueue);
+	if (!channel)
+	{
+		channel = std::make_shared<Channel>(m_ChannelCnt++, info);
+
+		{
+			std::scoped_lock lock{ m_ChannelMutex };
+			m_ActiveChannels[id] = channel;
+		}
+	}
+
+
+	const SoundQueue soundQueue{ clip,channel.get() };
+	m_SoundQueue.Push(soundQueue);
 
 	m_MainSoundThreadCV.notify_one();
 
 	return channel->GetID();
 }
 
-powe::ChannelID powe::FMOD2DSound::FMODSoundImpl::PlayImmediate(const std::string& filePath, const SoundInfo& soundInfo)
+powe::ChannelID powe::FMOD2DSound::FMODSoundImpl::PlayImmediate(const std::string& filePath, const SoundInfo& info)
 {
-	const SharedPtr<AudioClip> audioClip{ std::make_shared<AudioClip>(0,filePath)};
-
-	const SharedPtr<Channel> channel{ std::make_shared<Channel>(m_ChannelCnt++,soundInfo) };
+	const SoundID soundID{ m_AudioClipCnt++ };
+	const SharedPtr<AudioClip> audioClip{ std::make_shared<AudioClip>(soundID,filePath) };
+	SharedPtr<Channel> channel{};
 
 	{
 		std::scoped_lock lock{ m_ChannelMutex };
-		m_ActiveChannels.emplace_back(channel);
+		channel = m_ActiveChannels[soundID];
 	}
 
-	const SoundQueue soundQueue{audioClip,channel.get()};
-	m_PlayQueue.Push(soundQueue);
+	if (!channel)
+	{
+		channel = std::make_shared<Channel>(m_ChannelCnt++, info);
+
+		{
+			std::scoped_lock lock{ m_ChannelMutex };
+			m_ActiveChannels[soundID] = channel;
+		}
+	}
+
+	const SoundQueue soundQueue{ audioClip,channel.get() };
+	m_SoundQueue.Push(soundQueue);
 
 	m_MainSoundThreadCV.notify_one();
 
 	return channel->GetID();
 }
 
-void powe::FMOD2DSound::FMODSoundImpl::Stop(ChannelID id)
+void powe::FMOD2DSound::FMODSoundImpl::Stop(SoundID id)
 {
-	std::ranges::borrowed_iterator_t<const std::vector<SharedPtr<Channel>>&> findItr{};
+	SharedPtr<Channel> targetChannel{};
+
 	{
 		std::scoped_lock lock{ m_ChannelMutex };
-		
-		findItr = std::ranges::find_if(m_ActiveChannels, [&id](const SharedPtr<Channel>& channel)
-			{
-				return channel->GetID() == id;
-			});
-
-		if (findItr == m_ActiveChannels.end())
-			return;
+		targetChannel = m_ActiveChannels[id];
 	}
 
-	findItr->get()->Stop();
+	if (targetChannel)
+		targetChannel->Stop();
 }
 
-bool powe::FMOD2DSound::FMODSoundImpl::IsPlaying(ChannelID id)
+bool powe::FMOD2DSound::FMODSoundImpl::IsPlaying(SoundID id)
 {
-	std::ranges::borrowed_iterator_t<const std::vector<SharedPtr<Channel>>&> findItr{};
+	SharedPtr<Channel> targetChannel{};
 
 	{
 		std::scoped_lock lock{ m_ChannelMutex };
-
-		findItr = std::ranges::find_if(m_ActiveChannels, [&id](const SharedPtr<Channel>& channel)
-			{
-				return channel->GetID() == id;
-			});
-
-		if (findItr == m_ActiveChannels.end())
-			return false;
+		targetChannel = m_ActiveChannels[id];
 	}
 
-	return findItr->get()->IsPlaying();
+	if (targetChannel)
+		return targetChannel->IsPlaying();
+
+	return false;
 }
 
 void powe::FMOD2DSound::FMODSoundImpl::Update()
 {
+	while(!m_IsThreadExit)
 	{
-		std::scoped_lock lock{ m_ChannelMutex };
-		m_ActiveChannels.erase(std::ranges::find_if(m_ActiveChannels, [](const SharedPtr<Channel>& channel)
-			{
-				return !channel->IsPlaying();
-			}),m_ActiveChannels.end());
+		std::this_thread::sleep_for(std::chrono::milliseconds(17));
+
+		{
+			std::scoped_lock lock{ m_ChannelMutex };
+
+			std::erase_if(m_ActiveChannels, [](const auto& item)
+				{
+					const auto& [key, value] = item;
+					return !value->IsPlaying();
+				});
+		}
 	}
 }
 
@@ -227,21 +275,42 @@ void powe::FMOD2DSound::FMODSoundImpl::RunMainPlaySound()
 	while (!m_IsThreadExit)
 	{
 		{
-			std::unique_lock lock{ m_PlayQueueMutex };
+			std::unique_lock lock{ m_SoundQueueMutex };
 
 			m_MainSoundThreadCV.wait(lock, [this]()
 				{
-					return !m_PlayQueue.Empty();
+					return !m_SoundQueue.Empty();
 				});
 		}
 
-		const SoundQueue element{m_PlayQueue.Front()};
-		m_PlayQueue.Pop();
+		const SoundQueue element{ m_SoundQueue.Front() };
+		m_SoundQueue.Pop();
 
-		if (!element.aClip->IsLoaded())
-			element.aClip->LoadStream(m_FMODSystem);
+		if(element.aChannel && element.aClip)
+		{
+			if (!element.aClip->IsLoaded())
+				element.aClip->LoadStream(m_FMODSystem);
 
-		element.aChannel->Play(m_FMODSystem,element.aClip->GetSound());
+			element.aChannel->Play(m_FMODSystem, element.aClip->GetSound());
+		}
+	}
+}
+
+void powe::FMOD2DSound::FMODSoundImpl::RunChannelChecking()
+{
+	while (!m_IsThreadExit)
+	{
+		std::this_thread::sleep_for(std::chrono::milliseconds(17));
+
+		{
+			std::scoped_lock lock{ m_ChannelMutex };
+
+			std::erase_if(m_ActiveChannels, [](const auto& item)
+				{
+					const auto& [key, value] = item;
+					return !value->IsPlaying();
+				});
+		}
 	}
 }
 
@@ -252,33 +321,23 @@ powe::FMOD2DSound::FMOD2DSound(uint32_t nbChannels)
 
 powe::FMOD2DSound::~FMOD2DSound() = default;
 
-powe::SoundID powe::FMOD2DSound::RegisterSoundEntity(const std::string& , bool )
+powe::SoundID powe::FMOD2DSound::RegisterSoundEntity(const std::string& filePath, bool shouldPreloaded)
 {
-	return {};
+	return m_FmodSoundImpl->RegisterSoundEntity(filePath, shouldPreloaded);
 }
 
-void powe::FMOD2DSound::UnRegisterSoundEntity(SoundID )
+void powe::FMOD2DSound::UnRegisterSoundEntity(SoundID id)
 {
-
+	m_FmodSoundImpl->UnRegisterSoundEntity(id);
 }
 
-//powe::SoundID powe::FMOD2DSound::PreLoadSoundToMemory(const std::string & filePath)
-//{
-//	return m_FmodSoundImpl->PreLoadSoundToMemory(filePath);
-//}
-//
-//void powe::FMOD2DSound::RemovePreLoadSound(SoundID id)
-//{
-//	m_FmodSoundImpl->RemovePreLoadSound(id);
-//}
 
-
-bool powe::FMOD2DSound::IsPlaying(ChannelID id) const
+bool powe::FMOD2DSound::IsPlaying(SoundID id) const
 {
 	return m_FmodSoundImpl->IsPlaying(id);
 }
 
-powe::ChannelID powe::FMOD2DSound::Play(SoundID id, const SoundInfo & soundInfo)
+powe::ChannelID powe::FMOD2DSound::Play(SoundID id, const SoundInfo& soundInfo)
 {
 	return m_FmodSoundImpl->Play(id, soundInfo);
 }
@@ -293,7 +352,7 @@ void powe::FMOD2DSound::Update()
 	m_FmodSoundImpl->Update();
 }
 
-void powe::FMOD2DSound::Stop(ChannelID id)
+void powe::FMOD2DSound::Stop(SoundID id)
 {
 	m_FmodSoundImpl->Stop(id);
 }

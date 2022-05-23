@@ -143,7 +143,7 @@ namespace powe
 	template <typename T>
 	bool LFQueue<T>::Empty() const noexcept
 	{
-		return m_Head.load()->pNextNode == nullptr;
+		return m_Tail.load() == m_Head.load();
 	}
 
 	template <typename T>

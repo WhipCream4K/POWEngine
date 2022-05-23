@@ -34,8 +34,8 @@ namespace powe
 
 		// Play the sound immediately without saving to the memory
 		virtual ChannelID PlayImmediate(const std::string& filePath, const SoundInfo& soundInfo) = 0;
-		virtual bool IsPlaying(ChannelID id) const = 0;
-		virtual void Stop(ChannelID id) = 0;
+		virtual bool IsPlaying(SoundID id) const = 0;
+		virtual void Stop(SoundID id) = 0;
 
 	};
 }

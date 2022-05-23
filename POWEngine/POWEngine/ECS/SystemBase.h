@@ -29,6 +29,8 @@ namespace powe
 	protected:
 
 		void InternalUpdate(const Archetype&, float);
+		void InternalCreate(const Archetype&);
+		void InternalDestroy(const Archetype&);
 
 		virtual void OnUpdate(float, powe::GameObjectID) = 0;
 		virtual void OnCreate(GameObjectID) {}

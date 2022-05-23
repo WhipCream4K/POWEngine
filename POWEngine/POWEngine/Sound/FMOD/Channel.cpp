@@ -37,3 +37,5 @@ void powe::Channel::Stop() const
 	if (m_ChannelInst)
 		FMODErrorCheck(m_ChannelInst->stop());
 }
+
+powe::Channel::~Channel() = default;

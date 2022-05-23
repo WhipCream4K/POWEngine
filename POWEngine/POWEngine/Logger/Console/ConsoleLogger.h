@@ -38,9 +38,9 @@ namespace powe
 		//void AddWarningMessage(const std::string& msg,const std::string& where);
 		//void AddErrorMessage(const std::string& msg,const std::string& where);
 
-		void LogErrorMessage(const std::string&, const std::string& fromWhere = "") override;
-		void LogInfoMessage(const std::string&, const std::string& fromWhere = "") override;
-		void LogWarningMessage(const std::string&, const std::string& fromWhere = "") override;
+		void LogErrorMessage(const std::string&, const std::string& fromWhere = "", bool showOrigin = false) override;
+		void LogInfoMessage(const std::string&, const std::string& fromWhere = "", bool showOrigin = false) override;
+		void LogWarningMessage(const std::string&, const std::string& fromWhere = "", bool showOrigin = false) override;
 
 	private:
 

@@ -19,17 +19,6 @@ void powe::WorldEntity::RemoveSystem(PipelineLayer layer, const SharedPtr<System
 	m_PendingDeleteSystem.Push(SystemTrait{ system,layer });
 }
 
-//void powe::WorldEntity::RemoveSystem(const SharedPtr<SystemBase>&)
-//{
-//	m_PendingDeleteSystem.Push(SystemTrait{})
-//	//const auto& targetPipeline{ m_SystemPipeline[size_t(system->GetPipeLineLayer())] };
-//	//const auto& itr = std::ranges::find(targetPipeline, system); // ranges::find since c++20
-//	//if (itr != targetPipeline.end())
-//	//{
-//	//	itr->get()->MarkDeleted(true);
-//	//}
-//}
-
 powe::GameObjectID powe::WorldEntity::GetNewEntityID()
 {
 	return m_GameObjectCounter++;
@@ -789,12 +778,22 @@ void powe::WorldEntity::InternalAddSystemToPipeline()
 {
 	while(!m_PendingAddSystem.Empty())
 	{
-		const auto addingSystem{ m_PendingAddSystem.Front() };
+		const auto systemTrait{ m_PendingAddSystem.Front() };
 		m_PendingAddSystem.Pop();
-		auto& existingSystems{ m_SystemPipeline[int(addingSystem.layer)] };
-		if(std::ranges::find(existingSystems, addingSystem.system) == existingSystems.end())
+		auto& existingSystems{ m_SystemPipeline[int(systemTrait.layer)] };
+		if(std::ranges::find(existingSystems, systemTrait.system) == existingSystems.end())
 		{
-			existingSystems.emplace_back(addingSystem.system);
+			const auto& system{ systemTrait.system };
+			for (const auto& archetype : m_ArchetypesPool | std::views::values)
+			{
+				if (!archetype->GameObjectIds.empty())
+				{
+					if (IsDigitExistInNumber(archetype->Types, system->GetKeys()))
+						system->InternalCreate(*archetype);
+				}
+			}
+
+			existingSystems.emplace_back(systemTrait.system);
 		}
 	}
 
@@ -802,12 +801,38 @@ void powe::WorldEntity::InternalAddSystemToPipeline()
 
 void powe::WorldEntity::InternalRemoveSystemFromPipeline()
 {
+	std::unordered_map<PipelineLayer,std::vector<SharedPtr<SystemBase>>> removingSystems{};
+
 	while(!m_PendingDeleteSystem.Empty())
 	{
-		const auto addingSystem{ m_PendingAddSystem.Front() };
-		m_PendingAddSystem.Pop();
-		auto& existingSystems{ m_SystemPipeline[int(addingSystem.layer)] };
-		existingSystems.erase(std::ranges::remove(existingSystems, addingSystem.system).begin(), existingSystems.end());
+		const auto systemTrait{ m_PendingDeleteSystem.Front() };
+		m_PendingDeleteSystem.Pop();
+		removingSystems[systemTrait.layer].emplace_back(systemTrait.system);
+	}
+
+	for (const auto& [layer,removeSystem] : removingSystems)
+	{
+		auto& existingSystems{ m_SystemPipeline[int(layer)] };
+
+		const auto removeItr = std::ranges::remove_if(existingSystems, [&removeSystem](const SharedPtr<SystemBase>& system)
+			{
+				return std::ranges::find(removeSystem, system) != removeSystem.end();
+			});
+
+		for ( auto it = removeItr.begin(); it != existingSystems.end(); ++it)
+		{
+			const auto& system{ it->get() };
+			for (const auto& archetype : m_ArchetypesPool | std::views::values)
+			{
+				if (!archetype->GameObjectIds.empty())
+				{
+					if (IsDigitExistInNumber(archetype->Types, system->GetKeys()))
+						system->InternalDestroy(*archetype);
+				}
+			}
+		}
+
+		existingSystems.erase(removeItr.begin(), existingSystems.end());
 	}
 }
 
