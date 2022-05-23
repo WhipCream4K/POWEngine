@@ -4,9 +4,7 @@
 #include "POWEngine/ECS/Archetype.h"
 #include "POWEngine/ECS/SystemBase.h"
 
-powe::WorldEntity::WorldEntity()
-{
-}
+powe::WorldEntity::WorldEntity() = default;
 
 void powe::WorldEntity::RegisterGameObject(GameObjectID id)
 {
@@ -52,77 +50,77 @@ void powe::WorldEntity::RemoveComponentByID(GameObjectID id, ComponentTypeID com
 
 #pragma region OLDCODE
 
-		//const std::string oldArchetypeKey{ CreateStringFromNumVector(oldArchetype->Types) };
+	//const std::string oldArchetypeKey{ CreateStringFromNumVector(oldArchetype->Types) };
 
-		//std::vector<ComponentTypeID> newTypes{ oldArchetype->Types };
-		//newTypes.erase(std::ranges::remove(newTypes, componentID).begin());
+	//std::vector<ComponentTypeID> newTypes{ oldArchetype->Types };
+	//newTypes.erase(std::ranges::remove(newTypes, componentID).begin());
 
-		//SharedPtr<Archetype> targetArchetype{};
+	//SharedPtr<Archetype> targetArchetype{};
 
-		//if((targetArchetype = GetArchetypeFromActiveList(oldArchetypeKey)))
-		//{
-		//	// if there's an already active archetype, we need to told the world to remove the gameobject
-		//	// from its archetype and find/create a new archetype for the gameobject the we just ejected.
-		//	AddGameObjectToArchetypeRemoveList(oldArchetypeKey, id);
-		//}
-
-	//const auto gameObjectItr{ m_GameObjectRecords.find(id) };
-	//const auto componentItr{ m_ComponentTraitsMap.find(componentID) };
-
-	//if (gameObjectItr != m_GameObjectRecords.end() && componentItr != m_ComponentTraitsMap.end())
+	//if((targetArchetype = GetArchetypeFromActiveList(oldArchetypeKey)))
 	//{
-	//	if (const SharedPtr<Archetype> oldArchetype{ gameObjectItr->second.Archetype.lock() })
-	//	{
-	//		// Construct a new archetype or append archetype that has the same type as this GameObject
-	//		std::vector<ComponentTypeID> newTypes{ oldArchetype->Types };
-	//		newTypes.erase(std::ranges::remove(newTypes, componentID).begin());
-
-	//		const std::string archetypeKey{ CreateStringFromNumVector(newTypes) };
-
-	//		//TODO: Fix where there's already an active archetype with the new key
-	//		SharedPtr<Archetype> targetArchetype{ GetArchetypeFromPendingList(archetypeKey) };
-
-	//		if (!targetArchetype)
-	//		{
-	//			targetArchetype = CreateArchetypeWithTypes(newTypes);
-	//		}
-
-	//		// Move Data from the old archetype to the new archetype
-	//		if (const SizeType occupiedSize{ SizeType((targetArchetype->GameObjectIds.size() + 1) * targetArchetype->SizeOfComponentsBlock) };
-	//			occupiedSize + targetArchetype->SizeOfComponentsBlock >= targetArchetype->TotalAllocatedData)
-	//		{
-	//			// allocate more space if the current size is equal or more that the total allocated space
-	//			targetArchetype->AllocateComponentData(SizeType(occupiedSize * 3), *this);
-	//		}
-
-	//		SizeType accumulatedOffset{};
-	//		const int startIndex{ int(gameObjectItr->second.IndexInArchetype * oldArchetype->SizeOfComponentsBlock) };
-	//		const int endIndex{ int(targetArchetype->GameObjectIds.size() * targetArchetype->SizeOfComponentsBlock) };
-
-	//		RawByte* startAddress{ &oldArchetype->ComponentData[startIndex] };
-	//		RawByte* endAddress{ &targetArchetype->ComponentData[endIndex] };
-
-	//		for (const auto& compID : oldArchetype->Types)
-	//		{
-	//			const SharedPtr<BaseComponent> thisComponent{ m_ComponentTraitsMap.at(compID) };
-
-	//			if (compID == componentID)
-	//			{
-	//				accumulatedOffset += thisComponent->GetSize();
-	//				continue;
-	//			}
-
-	//			thisComponent->MoveData(startAddress + accumulatedOffset, endAddress + accumulatedOffset);
-	//			accumulatedOffset += thisComponent->GetSize();
-	//		}
-
-	//		RemoveGameObject(id, false);
-
-	//		gameObjectItr->second.IndexInArchetype = int(targetArchetype->GameObjectIds.size());
-	//		gameObjectItr->second.Archetype = targetArchetype;
-	//		targetArchetype->GameObjectIds.emplace_back(id);
-	//	}
+	//	// if there's an already active archetype, we need to told the world to remove the gameobject
+	//	// from its archetype and find/create a new archetype for the gameobject the we just ejected.
+	//	AddGameObjectToArchetypeRemoveList(oldArchetypeKey, id);
 	//}
+
+//const auto gameObjectItr{ m_GameObjectRecords.find(id) };
+//const auto componentItr{ m_ComponentTraitsMap.find(componentID) };
+
+//if (gameObjectItr != m_GameObjectRecords.end() && componentItr != m_ComponentTraitsMap.end())
+//{
+//	if (const SharedPtr<Archetype> oldArchetype{ gameObjectItr->second.Archetype.lock() })
+//	{
+//		// Construct a new archetype or append archetype that has the same type as this GameObject
+//		std::vector<ComponentTypeID> newTypes{ oldArchetype->Types };
+//		newTypes.erase(std::ranges::remove(newTypes, componentID).begin());
+
+//		const std::string archetypeKey{ CreateStringFromNumVector(newTypes) };
+
+//		//TODO: Fix where there's already an active archetype with the new key
+//		SharedPtr<Archetype> targetArchetype{ GetArchetypeFromPendingList(archetypeKey) };
+
+//		if (!targetArchetype)
+//		{
+//			targetArchetype = CreateArchetypeWithTypes(newTypes);
+//		}
+
+//		// Move Data from the old archetype to the new archetype
+//		if (const SizeType occupiedSize{ SizeType((targetArchetype->GameObjectIds.size() + 1) * targetArchetype->SizeOfComponentsBlock) };
+//			occupiedSize + targetArchetype->SizeOfComponentsBlock >= targetArchetype->TotalAllocatedData)
+//		{
+//			// allocate more space if the current size is equal or more that the total allocated space
+//			targetArchetype->AllocateComponentData(SizeType(occupiedSize * 3), *this);
+//		}
+
+//		SizeType accumulatedOffset{};
+//		const int startIndex{ int(gameObjectItr->second.IndexInArchetype * oldArchetype->SizeOfComponentsBlock) };
+//		const int endIndex{ int(targetArchetype->GameObjectIds.size() * targetArchetype->SizeOfComponentsBlock) };
+
+//		RawByte* startAddress{ &oldArchetype->ComponentData[startIndex] };
+//		RawByte* endAddress{ &targetArchetype->ComponentData[endIndex] };
+
+//		for (const auto& compID : oldArchetype->Types)
+//		{
+//			const SharedPtr<BaseComponent> thisComponent{ m_ComponentTraitsMap.at(compID) };
+
+//			if (compID == componentID)
+//			{
+//				accumulatedOffset += thisComponent->GetSize();
+//				continue;
+//			}
+
+//			thisComponent->MoveData(startAddress + accumulatedOffset, endAddress + accumulatedOffset);
+//			accumulatedOffset += thisComponent->GetSize();
+//		}
+
+//		RemoveGameObject(id, false);
+
+//		gameObjectItr->second.IndexInArchetype = int(targetArchetype->GameObjectIds.size());
+//		gameObjectItr->second.Archetype = targetArchetype;
+//		targetArchetype->GameObjectIds.emplace_back(id);
+//	}
+//}
 
 #pragma endregion
 
@@ -355,7 +353,7 @@ void powe::WorldEntity::InternalRemoveGameObjectFromPipeline()
 				{
 					const SharedPtr<BaseComponent> componentTrait{ GetComponentTrait(componentID) };
 
-					if(IsThisComponentSparse(componentID))
+					if (IsThisComponentSparse(componentID))
 					{
 						m_SparseComponentManager.RemoveComponentFromGameObject(*this, gameObjectIDs[deletingGameObjectIdx], componentID);
 					}
@@ -427,12 +425,12 @@ void powe::WorldEntity::InternalRemoveComponentFromGameObject()
 	for (const auto& [gameObjectID, componentIDs] : m_PendingDeleteComponentsFromGameObject)
 	{
 		GameObjectRecord gbRecords{};
-		
-		if(!GetGameObjectRecords(gameObjectID, gbRecords))
+
+		if (!GetGameObjectRecords(gameObjectID, gbRecords))
 			continue;
 
 		const auto oldArchetype{ gbRecords.Archetype.lock() };
-		if(!oldArchetype)
+		if (!oldArchetype)
 			continue;
 
 		std::vector<ComponentTypeID> newTypes{ oldArchetype->Types };
@@ -440,16 +438,21 @@ void powe::WorldEntity::InternalRemoveComponentFromGameObject()
 		// remove every element that matches the deleting componentIDs
 		newTypes.erase(std::ranges::remove_if(newTypes, [&componentIDs](ComponentTypeID id)
 			{
-				return std::ranges::find(componentIDs, id) != componentIDs.end();
+				return std::ranges::find_if(componentIDs, [&id](ComponentTypeID removeID)
+				{
+					// discard the flag of the component
+						return removeID == DiscardFlag(id);
+				}) != componentIDs.end();
 			}).begin(), newTypes.end());
 
 		const std::string newArchetypeKey{ CreateStringFromNumVector(newTypes) };
 		const std::string oldArchetypeKey{ CreateStringFromNumVector(oldArchetype->Types) };
 
-		// 1. Check if there's any archetype that has the same key
-		if (const auto targetArchetype{ GetArchetypeFromActiveList(newArchetypeKey) })
+		const auto targetArchetype{ GetArchetypeFromActiveList(newArchetypeKey) };
+
+		// 1. if the archetype is valid and is not the same archetype then move the remaining components to another archetype
+		if (targetArchetype && targetArchetype != oldArchetype)
 		{
-			// 1.1. if there's one then we can manipulate the data here directly
 
 			if (const SizeType targetOccupiedSize{ SizeType((targetArchetype->GameObjectIds.size() + 1) * targetArchetype->SizeOfComponentsBlock) };
 				targetOccupiedSize >= targetArchetype->TotalAllocatedData)
@@ -491,26 +494,9 @@ void powe::WorldEntity::InternalRemoveComponentFromGameObject()
 		}
 
 		AddGameObjectToArchetypeRemoveList(oldArchetypeKey, gameObjectID);
-
-		//for (const auto deletingComponentID : componentIDs)
-		//{
-
-		//	newTypes.erase(std::ranges::remove(newTypes, deletingComponentID).begin());
-
-		//	const std::string newArchetypeKey{ CreateStringFromNumVector(newTypes) };
-		//	SharedPtr<Archetype> targetArchetype{ GetArchetypeFromActiveList(newArchetypeKey) };
-
-		//	if(!targetArchetype)
-		//	{
-		//		// Create new archetype and copy the rest of the component data to the new archetype
-		//		for (const auto & oldComponentType : oldArchetype->Types)
-		//		{
-		//			if(oldComponentType)
-		//		}
-		//	}
-		//	
-		//}
 	}
+
+	m_PendingDeleteComponentsFromGameObject.clear();
 
 	//const auto gameObjectItr{ m_GameObjectRecords.find(id) };
 //const auto componentItr{ m_ComponentTraitsMap.find(componentID) };
@@ -591,7 +577,7 @@ void powe::WorldEntity::AddGameObjectToArchetypeRemoveList(const std::string& ar
 	}
 	else
 	{
-		std::vector<GameObjectID> temp{}; // i don't trust constructor
+		std::vector<GameObjectID> temp{};
 		temp.emplace_back(id);
 		//m_PendingDeleteGameObjectsFromArchetype[archetypeKey] = temp;
 		m_PendingDeleteGameObjectsFromArchetype.try_emplace(archetypeKey, temp);
@@ -609,7 +595,7 @@ void powe::WorldEntity::AddComponentToGameObjectRemoveList(GameObjectID id, Comp
 	}
 	else
 	{
-		std::vector<ComponentTypeID> temp{}; // i don't trust constructor
+		std::vector<ComponentTypeID> temp{};
 		temp.emplace_back(id);
 		//m_PendingDeleteComponentsFromGameObject[id] = temp;
 		m_PendingDeleteComponentsFromGameObject.try_emplace(id, temp);
@@ -659,7 +645,7 @@ void powe::WorldEntity::RemoveComponentFromPreArchetype(GameObjectID id, Compone
 
 void powe::WorldEntity::RemoveGameObjectFromPreArchetype(GameObjectID id)
 {
-	if(m_PreArchetypes.contains(id))
+	if (m_PreArchetypes.contains(id))
 	{
 		m_PreArchetypes.erase(id);
 	}
@@ -733,20 +719,20 @@ void powe::WorldEntity::InternalAddGameObjectToPipeline()
 		}
 
 		SizeType accumulateOffset{};
-		for (const ComponentTypeID componentType : archetypeKey)
+		for (const ComponentTypeID componentTypeId : archetypeKey)
 		{
-			const SharedPtr<BaseComponent> componentTrait{ GetComponentTrait(componentType) };
-			const SharedPtr<RawByte[]> compData{ componentTempDataMap.at(componentType) };
+			const SharedPtr<BaseComponent> componentTrait{ GetComponentTrait(componentTypeId) };
+			const SharedPtr<RawByte[]> compData{ componentTempDataMap.at(componentTypeId) };
 
 			RawByte* destination{ &targetArchetype->ComponentData[int(
 				(targetArchetype->GameObjectIds.size() * targetArchetype->SizeOfComponentsBlock) +
 				accumulateOffset)] };
 
 			// Check if this component is sparse or not
-			if (IsThisComponentSparse(componentType))
+			if (IsThisComponentSparse(componentTypeId))
 			{
-				const ComponentTypeID discardCompFlag{ componentType & ~SizeType(ComponentFlag::Count) };
-				m_SparseComponentManager.AddComponentToSparseSet(*this, gameObjectID, discardCompFlag, compData);
+				//const ComponentTypeID discardCompFlag{ componentTypeId & ~SizeType(ComponentFlag::Count) };
+				m_SparseComponentManager.AddComponentToSparseSet(*this, gameObjectID, DiscardFlag(componentTypeId), compData);
 
 				//const SparseHandle handle{ m_SparseComponentManager.AddComponentToSparseSet(
 				//	*this,gameObjectID,discardCompFlag,compData) };
@@ -756,18 +742,18 @@ void powe::WorldEntity::InternalAddGameObjectToPipeline()
 			}
 			else
 			{
-				RawByte* source{ componentTempDataMap.at(componentType).get() };
+				RawByte* source{ componentTempDataMap.at(componentTypeId).get() };
 				componentTrait->MoveData(source, destination);
 			}
 
-			if(shouldInitializeArchetype)
+			if (shouldInitializeArchetype)
 			{
-				targetArchetype->ComponentOffsets.try_emplace(componentType,accumulateOffset);
+				targetArchetype->ComponentOffsets.try_emplace(componentTypeId, accumulateOffset);
 
 				// safety block for duplicates
-				if(std::ranges::find(targetArchetype->Types,componentType) == targetArchetype->Types.end())
+				if (std::ranges::find(targetArchetype->Types, componentTypeId) == targetArchetype->Types.end())
 				{
-					targetArchetype->Types.emplace_back(componentType);
+					targetArchetype->Types.emplace_back(componentTypeId);
 				}
 			}
 
@@ -775,8 +761,8 @@ void powe::WorldEntity::InternalAddGameObjectToPipeline()
 		}
 
 		// add the record to this gameobject
-		GameObjectRecord gbRecord{};
 		//GetGameObjectRecords(gameObjectID, gbRecord);
+		GameObjectRecord gbRecord{};
 		gbRecord.Archetype = targetArchetype;
 		gbRecord.IndexInArchetype = int(targetArchetype->GameObjectIds.size());
 
@@ -791,12 +777,12 @@ void powe::WorldEntity::InternalAddGameObjectToPipeline()
 
 void powe::WorldEntity::InternalAddSystemToPipeline()
 {
-	while(!m_PendingAddSystem.Empty())
+	while (!m_PendingAddSystem.Empty())
 	{
 		const auto systemTrait{ m_PendingAddSystem.Front() };
 		m_PendingAddSystem.Pop();
 		auto& existingSystems{ m_SystemPipeline[int(systemTrait.layer)] };
-		if(std::ranges::find(existingSystems, systemTrait.system) == existingSystems.end())
+		if (std::ranges::find(existingSystems, systemTrait.system) == existingSystems.end())
 		{
 			const auto& system{ systemTrait.system };
 			for (const auto& archetype : m_ArchetypesPool | std::views::values)
@@ -816,16 +802,16 @@ void powe::WorldEntity::InternalAddSystemToPipeline()
 
 void powe::WorldEntity::InternalRemoveSystemFromPipeline()
 {
-	std::unordered_map<PipelineLayer,std::vector<SharedPtr<SystemBase>>> removingSystems{};
+	std::unordered_map<PipelineLayer, std::vector<SharedPtr<SystemBase>>> removingSystems{};
 
-	while(!m_PendingDeleteSystem.Empty())
+	while (!m_PendingDeleteSystem.Empty())
 	{
 		const auto systemTrait{ m_PendingDeleteSystem.Front() };
 		m_PendingDeleteSystem.Pop();
 		removingSystems[systemTrait.layer].emplace_back(systemTrait.system);
 	}
 
-	for (const auto& [layer,removeSystem] : removingSystems)
+	for (const auto& [layer, removeSystem] : removingSystems)
 	{
 		auto& existingSystems{ m_SystemPipeline[int(layer)] };
 
@@ -834,7 +820,7 @@ void powe::WorldEntity::InternalRemoveSystemFromPipeline()
 				return std::ranges::find(removeSystem, system) != removeSystem.end();
 			});
 
-		for ( auto it = removeItr.begin(); it != existingSystems.end(); ++it)
+		for (auto it = removeItr.begin(); it != existingSystems.end(); ++it)
 		{
 			const auto& system{ it->get() };
 			for (const auto& archetype : m_ArchetypesPool | std::views::values)

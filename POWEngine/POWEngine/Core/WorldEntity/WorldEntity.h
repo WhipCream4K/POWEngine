@@ -30,12 +30,8 @@ namespace powe
 		InputSettings& GetInputSettings() { return  m_InputSettings; }
 
 		// Lock-free add system
-		template<typename SystemType, typename ...Args>
-		EnableIsBasedOf<SystemBase, SystemType, WeakPtr<SystemBase>> AddSystem(PipelineLayer layer,Args&&... args);
-
 		void AddSystem(PipelineLayer layer, const SharedPtr<SystemBase>& system);
 
-		// TODO: Maybe do a thread safe removing system
 		void RemoveSystem(PipelineLayer layer,const SharedPtr<SystemBase>& system);
 
 		// TODO: Maybe do a thread safe registering component
@@ -189,15 +185,6 @@ namespace powe
 		// Although this is not thread safe but the initialization of GameObject should be in main thread
 		GameObjectID m_GameObjectCounter{};
 	};
-
-	template <typename SystemType, typename ... Args>
-	EnableIsBasedOf<SystemBase, SystemType, WeakPtr<SystemBase>> WorldEntity::AddSystem(PipelineLayer layer, Args&&... args)
-	{
-		SharedPtr<SystemBase> system{ std::make_shared<SystemType>(std::forward<Args>(args)...) };
-		system->SetWorld(this);
-		m_PendingAddSystem.Push(SystemTrait{ system,layer });
-		return system;
-	}
 
 	template <typename ComponentType>
 	EnableIsBasedOf<BaseComponent, ComponentType> WorldEntity::RegisterComponent()

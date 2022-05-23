@@ -24,19 +24,12 @@ namespace powe
 
 	public:
 
-		//SparseHandle AddComponentToSparseSet(
-		//	const WorldEntity& world,
-		//	GameObjectID id,
-		//	ComponentTypeID componentTypeId,
-		//	const SharedPtr<RawByte[]>& data);
-
 		void AddComponentToSparseSet(
 			const WorldEntity& world,
 			GameObjectID id,
 			ComponentTypeID componentTypeId,
 			const SharedPtr<RawByte[]>& data);
 
-		//RawByte* GetComponentData(GameObjectID id,ComponentTypeID compID,SparseHandle handle) const;
 
 		template<typename T>
 		RawByte* GetComponentData(GameObjectID id, ComponentTypeID compID) const;
@@ -49,8 +42,6 @@ namespace powe
 
 	private:
 
-		//std::unordered_map<GameObjectID, std::unordered_map<ComponentTypeID,SizeType>> m_SparseHandleMap;
-		//std::unordered_set<GameObjectID> m_RegisteredGameObjects;
 		std::unordered_map<GameObjectID, std::unordered_map<ComponentTypeID, SparseHandle>> m_GameObjectToHandle;
 		std::unordered_map<ComponentTypeID, SparseSet> m_SparseComponentData;
 	};

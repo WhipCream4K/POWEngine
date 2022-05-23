@@ -10,7 +10,7 @@ namespace powe
 	//	return std::to_string(id & ~(1u << SparseBitPos));
 	//}
 
-	static inline bool IsThisComponentSparse(ComponentTypeID id)
+	static constexpr inline bool IsThisComponentSparse(ComponentTypeID id)
 	{
 		return id & int(ComponentFlag::Sparse);
 	}
@@ -27,5 +27,10 @@ namespace powe
 		}
 
 		return true;
+	}
+
+	static constexpr inline ComponentTypeID DiscardFlag(ComponentTypeID id)
+	{
+		return id & ~SizeType(ComponentFlag::Count);
 	}
 }

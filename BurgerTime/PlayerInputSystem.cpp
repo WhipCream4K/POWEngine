@@ -1,6 +1,5 @@
 #include "PlayerInputSystem.h"
 
-//#include <powengine.h>
 #include "BurgerTimeComponents.h"
 #include "POWEngine/Core/Components/AudioComponent.h"
 
@@ -18,7 +17,7 @@ void PlayerInputSystem::OnUpdate(float, powe::GameObjectID)
 	//POWLOGINFO(std::to_string(inputTest->tag));
 }
 
-void PlayerInputSystem::OnCreate(powe::GameObjectID )
+void PlayerInputSystem::OnCreate(powe::GameObjectID id)
 {
 	using namespace powe;
 
@@ -30,4 +29,6 @@ void PlayerInputSystem::OnCreate(powe::GameObjectID )
 	info.isLooped = false;
 
 	audio->Play(info);
+
+	GetWorld()->RemoveComponentByType<AudioComponent>(id);
 }
