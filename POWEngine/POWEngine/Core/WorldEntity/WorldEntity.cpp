@@ -719,7 +719,7 @@ void powe::WorldEntity::DestroyComponentData(
 
 		if (archetype.ComponentOffsets.contains(componentTypeId)) // check if this component id is a sparse component
 		{
-			m_SparseComponentManager.RemoveComponentFromGameObject(*this, id, componentTypeId);
+			m_SparseComponentManager.RemoveComponentFromGameObject(id, componentTypeId);
 		}
 		else
 			componentTrait->DestroyData(startAddress + offset);
@@ -808,7 +808,7 @@ void powe::WorldEntity::InternalAddGameObjectToPipeline()
 			if (IsThisComponentSparse(componentTypeId))
 			{
 				//const ComponentTypeID discardCompFlag{ componentTypeId & ~SizeType(ComponentFlag::Count) };
-				m_SparseComponentManager.AddComponentToSparseSet(*this, gameObjectID, DiscardFlag(componentTypeId), compData);
+				m_SparseComponentManager.AddComponentToSparseSet(gameObjectID, DiscardFlag(componentTypeId), compData);
 
 				// Initialize the handle
 				new (destination) SparseComponent();

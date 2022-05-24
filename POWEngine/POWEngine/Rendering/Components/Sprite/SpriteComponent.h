@@ -33,8 +33,7 @@ namespace powe
 
 	private:
 
-		//OwnedPtr<SpriteImpl> m_SpriteImpl;
-		SharedPtr<SpriteImpl> m_SpriteImpl;
+		OwnedPtr<SpriteImpl> m_SpriteImpl;
 		float m_ZDepth{};
 	};
 

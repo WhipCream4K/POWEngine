@@ -28,17 +28,14 @@ namespace powe
 		SparseComponentManager(WorldEntity& world);
 
 		void AddComponentToSparseSet(
-			const WorldEntity& world,
 			GameObjectID id,
 			ComponentTypeID componentTypeId,
 			const SharedPtr<RawByte[]>& data);
-
 
 		template<typename T>
 		RawByte* GetComponentData(GameObjectID id, ComponentTypeID compID) const;
 
 		void RemoveComponentFromGameObject(
-			const WorldEntity& worldEntity,
 			GameObjectID id,
 			ComponentTypeID compID
 		);
@@ -49,7 +46,7 @@ namespace powe
 
 		std::unordered_map<GameObjectID, std::unordered_map<ComponentTypeID, SparseHandle>> m_GameObjectToHandle;
 		std::unordered_map<ComponentTypeID, SparseSet> m_SparseComponentData;
-		WorldEntity& m_WorldEntity;
+		RefWrap<WorldEntity> m_WorldEntity;
 	};
 
 

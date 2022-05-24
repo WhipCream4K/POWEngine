@@ -20,6 +20,7 @@ namespace powe
 		AudioComponent& operator=(AudioComponent&&) = default;
 		~AudioComponent() override;
 
+
 		void Play();
 		void Play(const SoundInfo& info);
 		bool IsPlaying() const;

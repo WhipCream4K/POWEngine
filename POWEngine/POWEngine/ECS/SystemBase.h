@@ -1,3 +1,4 @@
+
 #pragma once
 
 //#include "ECSTypes.h"
@@ -51,6 +52,7 @@ namespace powe
 	private:
 
 		void SetWorld(WorldEntity* world);
+		//void SetWorld(WorldEntity& world);
 
 		//inline const SparseComponentManager& GetSparseComponentManager() const;
 

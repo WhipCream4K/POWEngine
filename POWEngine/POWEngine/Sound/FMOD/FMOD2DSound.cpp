@@ -300,7 +300,7 @@ void powe::FMOD2DSound::FMODSoundImpl::RunChannelChecking()
 {
 	while (!m_IsThreadExit)
 	{
-		std::this_thread::sleep_for(std::chrono::milliseconds(17));
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
 		{
 			std::scoped_lock lock{ m_ChannelMutex };

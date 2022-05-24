@@ -2,7 +2,6 @@
 #include "SpriteComponent.h"
 
 #include "POWEngine/Core/WorldEntity/WorldEntity.h"
-//#include "SpriteImpl.h"
 #include "POWEngine/Logger/LoggerUtils.h"
 
 #if USE_SFML_RENDERER
@@ -11,12 +10,12 @@ using SpriteType = powe::SFMLSprite;
 #endif
 
 powe::SpriteComponent::SpriteComponent()
-	: m_SpriteImpl(std::make_shared<SpriteType>())
+	: m_SpriteImpl(std::make_unique<SpriteType>())
 {
 }
 
 powe::SpriteComponent::SpriteComponent(WorldEntity* worldEntity, GameObjectID id)
-	: m_SpriteImpl(std::make_shared<SpriteType>(worldEntity,id))
+	: m_SpriteImpl(std::make_unique<SpriteType>(worldEntity,id))
 {
 }
 

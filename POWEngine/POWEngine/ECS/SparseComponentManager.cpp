@@ -9,7 +9,6 @@ powe::SparseComponentManager::SparseComponentManager(WorldEntity& world)
 }
 
 void powe::SparseComponentManager::AddComponentToSparseSet(
-	const WorldEntity& world,
 	GameObjectID id, ComponentTypeID componentTypeId,
 	const SharedPtr<RawByte[]>& data)
 {
@@ -17,7 +16,7 @@ void powe::SparseComponentManager::AddComponentToSparseSet(
 		return;
 
 
-	const SharedPtr<BaseComponent> componentTrait{ world.GetComponentTrait(componentTypeId) };
+	const SharedPtr<BaseComponent> componentTrait{ m_WorldEntity.get().GetComponentTrait(componentTypeId) };
 	const SizeType componentSize{ componentTrait->GetSize() };
 	auto& sparseSet{ m_SparseComponentData[componentTypeId] };
 
@@ -56,7 +55,7 @@ void powe::SparseComponentManager::AddComponentToSparseSet(
 	//m_SparseHandleMap.try_emplace(id, sparseSet.CurrentEmptyIndex);
 }
 
-void powe::SparseComponentManager::RemoveComponentFromGameObject(const WorldEntity& worldEntity, 
+void powe::SparseComponentManager::RemoveComponentFromGameObject(
 	GameObjectID id,
 	ComponentTypeID compID)
 {
@@ -67,7 +66,7 @@ void powe::SparseComponentManager::RemoveComponentFromGameObject(const WorldEnti
 
 		auto& sparseSet{ m_SparseComponentData[compID] };
 
-		const SharedPtr<BaseComponent> thisComponent{ worldEntity.GetComponentTrait(compID) };
+		const SharedPtr<BaseComponent> thisComponent{ m_WorldEntity.get().GetComponentTrait(compID) };
 		const SizeType componentSize{ thisComponent->GetSize() };
 
 		RawByte* sourceAddress{ &sparseSet.Data[int(handle * componentSize)] };
@@ -90,7 +89,7 @@ powe::SparseComponentManager::~SparseComponentManager()
 {
 	for (const auto& [componentTypeID, sparseSet] : m_SparseComponentData)
 	{
-		const SharedPtr<BaseComponent> thisComponent{ m_WorldEntity.GetComponentTrait(componentTypeID) };
+		const SharedPtr<BaseComponent> thisComponent{ m_WorldEntity.get().GetComponentTrait(componentTypeID) };
 		const SizeType componentSize{ thisComponent->GetSize() };
 
 		for (SparseHandle i = 0; i < sparseSet.CurrentEmptyIndex; ++i)
