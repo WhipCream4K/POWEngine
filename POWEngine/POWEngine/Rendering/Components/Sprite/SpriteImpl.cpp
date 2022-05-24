@@ -3,9 +3,8 @@
 
 powe::SpriteImpl::SpriteImpl() = default;
 
-powe::SpriteImpl::SpriteImpl(WorldEntity* , GameObjectID )
+powe::SpriteImpl::SpriteImpl(const SharedPtr<GameObject>&)
 {
-	
 }
 
 powe::SpriteImpl::~SpriteImpl() = default;

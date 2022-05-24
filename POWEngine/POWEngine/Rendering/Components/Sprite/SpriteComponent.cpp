@@ -14,11 +14,10 @@ powe::SpriteComponent::SpriteComponent()
 {
 }
 
-powe::SpriteComponent::SpriteComponent(WorldEntity* worldEntity, GameObjectID id)
-	: m_SpriteImpl(std::make_unique<SpriteType>(worldEntity,id))
+powe::SpriteComponent::SpriteComponent(const SharedPtr<GameObject>& gameObject)
+	: m_SpriteImpl(std::make_unique<SpriteType>(gameObject))
 {
 }
-
 
 powe::SpriteComponent::SpriteComponent(SpriteComponent&&) noexcept = default;
 

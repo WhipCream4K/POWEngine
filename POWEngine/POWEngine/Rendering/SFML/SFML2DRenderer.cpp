@@ -24,13 +24,13 @@ public:
 
 		for (const auto& drawEntt : m_SF2DDrawEntities)
 		{
-			renderWindow.draw(*drawEntt.sfDraw, *drawEntt.sfRenderStates);
+			renderWindow.draw(*drawEntt.sfDraw, drawEntt.sfRenderStates);
 		}
 
 		m_SF2DDrawEntities.clear();
 	}
 
-	void SubmitDrawSprite(sf::Drawable* drawObject, sf::RenderStates* renderStates, int drawOrder)
+	void SubmitDrawSprite(sf::Drawable* drawObject,const sf::RenderStates& renderStates, int drawOrder)
 	{
 		m_SF2DDrawEntities.emplace_back(drawObject, renderStates, drawOrder);
 	}
@@ -40,7 +40,7 @@ private:
 	struct DrawEntity
 	{
 		sf::Drawable* sfDraw{};
-		sf::RenderStates* sfRenderStates{};
+		sf::RenderStates sfRenderStates{};
 		int drawOrder{};
 	};
 
@@ -55,7 +55,7 @@ powe::SFML2DRenderer::SFML2DRenderer()
 
 powe::SFML2DRenderer::~SFML2DRenderer() = default;
 
-void powe::SFML2DRenderer::SubmitDrawSprite(sf::Drawable* drawable, sf::RenderStates* renderStates, int drawOrder) const
+void powe::SFML2DRenderer::SubmitDrawSprite(sf::Drawable* drawable,const sf::RenderStates& renderStates, int drawOrder) const
 {
 	m_RenderImpl->SubmitDrawSprite(drawable, renderStates, drawOrder);
 }

@@ -9,12 +9,13 @@
 namespace powe
 {
 	struct SFMLSpriteComponent;
+	class GameObject;
 	class SFMLSprite : public SpriteImpl
 	{
 	public:
 
 		SFMLSprite();
-		SFMLSprite(WorldEntity* worldEntity, GameObjectID id);
+		SFMLSprite(const SharedPtr<GameObject>& owner);
 		~SFMLSprite() override;
 		void SetOrigin(float x, float y) override;
 		void SetTexture(const Texture& texture) override;
@@ -24,8 +25,7 @@ namespace powe
 
 	private:
 
-		WorldEntity* m_pWorld{};
-		GameObjectID m_OwnerID{};
+		WeakPtr<GameObject> m_Owner;
 	};
 }
 

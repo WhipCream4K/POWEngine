@@ -14,6 +14,22 @@ powe::Archetype::Archetype()
 	ComponentData = SharedPtr<RawByte[]>{ new RawByte[TotalAllocatedData]{} };
 }
 
+SharedPtr<powe::Archetype> powe::Archetype::Create(const WorldEntity& world, const std::vector<ComponentTypeID>& types)
+{
+	const SharedPtr<Archetype> archetype{ std::make_shared<Archetype>() };
+
+	for (const ComponentTypeID componentTypeId : types)
+	{
+		const SharedPtr<BaseComponent> thisComponent{ world.GetComponentTrait(componentTypeId) };
+		const SizeType componentSize{ thisComponent->GetSize() };
+		archetype->Types.emplace_back(componentTypeId);
+		archetype->ComponentOffsets.try_emplace(componentTypeId, archetype->SizeOfComponentsBlock);
+		archetype->SizeOfComponentsBlock += componentSize;
+	}
+
+	return archetype;
+}
+
 powe::RawByte* powe::Archetype::GetPointer(int pointerDiff) const
 {
 	return &ComponentData[pointerDiff];
@@ -94,5 +110,6 @@ void powe::Archetype::AllocateComponentData(SizeType newSize,const WorldEntity& 
 		}
 	}
 
+	ComponentData = newComponentData;
 	TotalAllocatedData = newSize;
 }

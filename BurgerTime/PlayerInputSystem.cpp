@@ -2,6 +2,7 @@
 
 #include "BurgerTimeComponents.h"
 #include "POWEngine/Core/Components/AudioComponent.h"
+#include "POWEngine/Core/Components/Transform2D.h"
 
 PlayerInputSystem::PlayerInputSystem()
 {
@@ -12,7 +13,15 @@ PlayerInputSystem::PlayerInputSystem()
 
 void PlayerInputSystem::OnUpdate(float, powe::GameObjectID)
 {
-
+	using  namespace powe;
+	//constexpr float speed{ 20.0f };
+	//if(GetWorld()->GetInputSettings().GetInputEvent("Horizontal") == InputEvent::IE_Down)
+	//{
+	//	Transform2D* transform{ GetComponent<Transform2D>() };
+	//	glm::vec2 pos{ transform->GetWorldPosition() };
+	//	pos += glm::vec2{1.0f,0.0f} * speed;
+	//	transform->SetLocalPosition(pos);
+	//}
 }
 
 void PlayerInputSystem::OnCreate(powe::GameObjectID )
@@ -27,6 +36,4 @@ void PlayerInputSystem::OnCreate(powe::GameObjectID )
 	info.isLooped = false;
 
 	audio->Play(info);
-
-	//GetWorld()->RemoveComponentByType<AudioComponent>(id);
 }

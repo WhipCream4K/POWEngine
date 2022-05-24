@@ -6,12 +6,13 @@ namespace powe
 {
 	class Texture;
 	class WorldEntity;
+	class GameObject;
 	class SpriteImpl
 	{
 	public:
 
 		SpriteImpl();
-		SpriteImpl(WorldEntity* worldEntity, GameObjectID id);
+		SpriteImpl(const SharedPtr<GameObject>& gameObject);
 		virtual void SetTexture(const Texture& texture) = 0;
 		virtual void SetOrigin(float x, float y) = 0;
 		virtual void SetOrigin(const glm::fvec2& pos) = 0;

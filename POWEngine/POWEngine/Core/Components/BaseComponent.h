@@ -106,9 +106,10 @@ namespace powe
 
 	class SparseComponent : public BaseComponent
 	{
+		friend class WorldEntity;
+
 	public:
 
-		explicit SparseComponent() = default;
 		SparseComponent(const SparseComponent&) = default;
 		SparseComponent& operator=(const SparseComponent&) = default;
 		SparseComponent(SparseComponent&&) = default;
@@ -131,12 +132,9 @@ namespace powe
 
 	protected:
 
+		explicit SparseComponent() = default;
 	};
 
-	//namespace StaticComponent
-	//{
-	//	static SharedPtr<SparseComponent> SparseTrait{};
-	//}
 
 }
 

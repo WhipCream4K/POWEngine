@@ -7,12 +7,13 @@ namespace powe
 {
 	class Texture;
 	class SpriteImpl;
+	class GameObject;
 	class SpriteComponent : public Component<SpriteComponent>
 	{
 	public:
 
 		SpriteComponent();
-		SpriteComponent(WorldEntity* worldEntity,GameObjectID id);
+		SpriteComponent(const SharedPtr<GameObject>& gameObject);
 		SpriteComponent(const SpriteComponent&) = delete;
 		SpriteComponent& operator=(const SpriteComponent&) = delete;
 		SpriteComponent(SpriteComponent&&) noexcept;

@@ -5,35 +5,46 @@
 #include "SFMLSpriteComponent.h"
 #include "POWEngine/Rendering/Resources/Texture/Texture.h"
 #include "POWEngine/Rendering/Resources/Texture/SFML/SFMLTexture.h"
+#include "POWEngine/Core/GameObject/GameObject.h"
 
 
-powe::SFMLSprite::SFMLSprite() = default;
-
-powe::SFMLSprite::SFMLSprite(WorldEntity* worldEntity, GameObjectID id)
-	: m_pWorld(worldEntity)
-	, m_OwnerID(id)
+powe::SFMLSprite::SFMLSprite()
+	: m_Owner()
 {
-	if (worldEntity)
-		worldEntity->AddComponentToGameObject(id, SFMLSpriteComponent{}, ComponentFlag::Sparse);
+}
+
+powe::SFMLSprite::SFMLSprite(const SharedPtr<GameObject>& owner)
+	: m_Owner(owner)
+{
+	if(owner)
+	{
+		owner->AddComponent(SFMLSpriteComponent{}, ComponentFlag::Sparse);
+	}
 }
 
 powe::SFMLSprite::~SFMLSprite() = default;
 
 void powe::SFMLSprite::SetOrigin(float x, float y)
 {
-	if(SFMLSpriteComponent* sfmlSprite{ m_pWorld->GetComponent<SFMLSpriteComponent>(m_OwnerID) })
+	if (const auto gameObject{ m_Owner.lock() })
 	{
-		sfmlSprite->sprite.setOrigin({ x,y });
+		if (SFMLSpriteComponent * sfmlSprite{ gameObject->GetComponent<SFMLSpriteComponent>() })
+		{
+			sfmlSprite->sprite.setOrigin({ x,y });
+		}
 	}
 }
 
 void powe::SFMLSprite::SetTexture(const Texture& texture)
 {
-	if (SFMLSpriteComponent* sfmlSprite{ m_pWorld->GetComponent<SFMLSpriteComponent>(m_OwnerID) })
+	if(const auto gameObject{m_Owner.lock()})
 	{
-		if(SFMLTexture* sfmlTexture{ texture.GetTypeInstance<SFMLTexture>() })
+		if (SFMLSpriteComponent * sfmlSprite{ gameObject->GetComponent<SFMLSpriteComponent>() })
 		{
-			sfmlSprite->sprite.setTexture(sfmlTexture->GetSFTexture(), false);
+			if (SFMLTexture * sfmlTexture{ texture.GetTypeInstance<SFMLTexture>() })
+			{
+				sfmlSprite->sprite.setTexture(sfmlTexture->GetSFTexture(), false);
+			}
 		}
 	}
 }
@@ -45,13 +56,18 @@ void powe::SFMLSprite::SetOrigin(const glm::fvec2& pos)
 
 void powe::SFMLSprite::SetRect(const glm::fvec4& rect)
 {
-	if (SFMLSpriteComponent * sfmlSprite{ m_pWorld->GetComponent<SFMLSpriteComponent>(m_OwnerID) })
+	if(const auto gameObject{m_Owner.lock()})
 	{
-		sfmlSprite->sprite.setTextureRect(sf::IntRect{{int(rect.x),int(rect.y)},{int(rect.z),int(rect.w)}});
+		if (SFMLSpriteComponent * sfmlSprite{ gameObject->GetComponent<SFMLSpriteComponent>() })
+		{
+			sfmlSprite->sprite.setTextureRect(sf::IntRect{ {int(rect.x),int(rect.y)},{int(rect.z),int(rect.w)} });
+		}
 	}
+
 }
 
 powe::SFMLSpriteComponent* powe::SFMLSprite::GetSfSprite() const
 {
-	return m_pWorld->GetComponent<SFMLSpriteComponent>(m_OwnerID);
+	const auto gameObject{ m_Owner.lock() };
+	return gameObject ? nullptr : gameObject->GetComponent<SFMLSpriteComponent>();
 }

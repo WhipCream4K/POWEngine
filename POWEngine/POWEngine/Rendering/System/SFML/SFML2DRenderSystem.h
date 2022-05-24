@@ -13,7 +13,7 @@ namespace powe
 
 	protected:
 
-		void OnDraw(const WorldEntity& worldEntity, const SFML2DRenderer& renderer, GameObjectID id) override;
+		void OnDraw(const SFML2DRenderer& renderer, GameObjectID id) override;
 	};
 }
 

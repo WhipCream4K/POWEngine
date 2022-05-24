@@ -4,6 +4,7 @@
 
 namespace powe
 {
+	class GameObject;
 	class WorldEntity;
 	class WorldClock;
 	class Core;
@@ -20,9 +21,7 @@ public:
 private:
 
 	SharedPtr<powe::Texture> m_MainTexture;
-	//SharedPtr<powe::Core> m_EngineCore{};
-	//SharedPtr<powe::Window> m_Window{};
-	//SharedPtr<powe::WorldEntity> m_WorldEntity{};
-	//SharedPtr<powe::Renderer> m_MainRenderer{};
+	std::vector<SharedPtr<powe::GameObject>> m_GameObjectNodes;
+
 };
 

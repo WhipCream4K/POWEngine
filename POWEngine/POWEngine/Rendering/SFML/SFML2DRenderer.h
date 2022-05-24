@@ -24,7 +24,7 @@ namespace powe
 		SFML2DRenderer& operator=(SFML2DRenderer&&) = delete;
 		~SFML2DRenderer() override;
 
-		void SubmitDrawSprite(sf::Drawable* drawable,sf::RenderStates* renderStates,int drawOrder) const; 
+		void SubmitDrawSprite(sf::Drawable* drawable,const sf::RenderStates& renderStates,int drawOrder) const; 
 		void DrawBufferOnWindow(const Window& window) const override;
 
 	private:

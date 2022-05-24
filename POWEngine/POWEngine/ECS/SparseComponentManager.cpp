@@ -26,7 +26,7 @@ void powe::SparseComponentManager::AddComponentToSparseSet(
 	{
 		const SizeType newSize{ (sparseSet.CurrentEmptyIndex + 3) * componentSize };
 
-		const SharedPtr<RawByte[]> newAddress{ SharedPtr<RawByte[]>(new RawByte[newSize]) };
+		const SharedPtr<RawByte[]> newAddress{ SharedPtr<RawByte[]>(new RawByte[newSize]{}) };
 
 		// move all the data over to a new one
 		RawByte* sourceAddress{ sparseSet.Data.get() };

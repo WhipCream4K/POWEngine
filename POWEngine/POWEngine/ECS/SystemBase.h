@@ -26,9 +26,10 @@ namespace powe
 	public:
 
 		[[nodiscard]] const std::unordered_set<ComponentTypeID>& GetKeys() const { return m_Keys; }
-		WorldEntity* GetWorld() const { return m_World; }
 
 	protected:
+
+		WorldEntity* GetWorld() const { return m_World; }
 
 		void InternalUpdate(const Archetype&, float);
 		void InternalCreate(const Archetype&);
@@ -52,9 +53,6 @@ namespace powe
 	private:
 
 		void SetWorld(WorldEntity* world);
-		//void SetWorld(WorldEntity& world);
-
-		//inline const SparseComponentManager& GetSparseComponentManager() const;
 
 		template<typename T>
 		T* GetComponent(const Archetype& archetype) const;

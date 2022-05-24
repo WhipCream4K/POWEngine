@@ -17,6 +17,8 @@ namespace powe
 		Archetype& operator=(Archetype&&) noexcept = default;
 		~Archetype() = default;
 
+		static SharedPtr<Archetype> Create(const WorldEntity& world,const std::vector<ComponentTypeID>& types);
+
 		Archetype& Copy(const Archetype& other,const WorldEntity& world)
 		{
 			Types = other.Types;

@@ -128,8 +128,6 @@ namespace powe
 			int indexInArchetype,
 			ComponentType&& component);
 
-		SharedPtr<Archetype> CreateArchetype(const std::vector<ComponentTypeID>& types);
-
 		void DestroyComponentData(
 			const Archetype& archetype,
 			int index,

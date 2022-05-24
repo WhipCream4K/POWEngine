@@ -701,11 +701,6 @@ void powe::WorldEntity::RemoveGameObjectFromPreArchetype(GameObjectID id)
 	}
 }
 
-SharedPtr<powe::Archetype> powe::WorldEntity::CreateArchetype(const std::vector<ComponentTypeID>&)
-{
-	return {};
-}
-
 void powe::WorldEntity::DestroyComponentData(
 	const Archetype& archetype, int index, GameObjectID id,
 	const std::vector<ComponentTypeID>& components)
@@ -781,7 +776,7 @@ void powe::WorldEntity::InternalAddGameObjectToPipeline()
 		SharedPtr<Archetype> targetArchetype{ GetArchetypeFromActiveList(archetypeKeyString) };
 		if (!targetArchetype)
 		{
-			targetArchetype = std::make_shared<Archetype>();
+			targetArchetype = Archetype::Create(*this, archetypeKey);
 			shouldInitializeArchetype = true;
 			m_ArchetypesPool.try_emplace(archetypeKeyString, targetArchetype);
 		}
@@ -821,16 +816,16 @@ void powe::WorldEntity::InternalAddGameObjectToPipeline()
 
 
 
-			if (shouldInitializeArchetype)
-			{
-				targetArchetype->ComponentOffsets.try_emplace(componentTypeId, accumulateOffset);
+			//if (shouldInitializeArchetype)
+			//{
+			//	targetArchetype->ComponentOffsets.try_emplace(componentTypeId, accumulateOffset);
 
-				// safety block for duplicates
-				if (std::ranges::find(targetArchetype->Types, componentTypeId) == targetArchetype->Types.end())
-				{
-					targetArchetype->Types.emplace_back(componentTypeId);
-				}
-			}
+			//	// safety block for duplicates
+			//	if (std::ranges::find(targetArchetype->Types, componentTypeId) == targetArchetype->Types.end())
+			//	{
+			//		targetArchetype->Types.emplace_back(componentTypeId);
+			//	}
+			//}
 
 			accumulateOffset += componentTrait->GetSize();
 		}
