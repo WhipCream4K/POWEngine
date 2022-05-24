@@ -28,7 +28,7 @@ namespace powe
 	template <typename T>
 	T* Texture::GetTypeInstance() const
 	{
-		return dynamic_cast<T*>(m_TextureImpl.get());
+		return static_cast<T*>(m_TextureImpl.get());
 	}
 }
 

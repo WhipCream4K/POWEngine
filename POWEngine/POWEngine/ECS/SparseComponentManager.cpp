@@ -3,6 +3,11 @@
 
 #include "POWEngine/Core/WorldEntity/WorldEntity.h"
 
+powe::SparseComponentManager::SparseComponentManager(WorldEntity& world)
+	: m_WorldEntity(world)
+{
+}
+
 void powe::SparseComponentManager::AddComponentToSparseSet(
 	const WorldEntity& world,
 	GameObjectID id, ComponentTypeID componentTypeId,
@@ -60,7 +65,7 @@ void powe::SparseComponentManager::RemoveComponentFromGameObject(const WorldEnti
 	{
 		const SparseHandle handle{ findItr->second[compID] };
 
-		const auto& sparseSet{ m_SparseComponentData[compID] };
+		auto& sparseSet{ m_SparseComponentData[compID] };
 
 		const SharedPtr<BaseComponent> thisComponent{ worldEntity.GetComponentTrait(compID) };
 		const SizeType componentSize{ thisComponent->GetSize() };
@@ -68,7 +73,7 @@ void powe::SparseComponentManager::RemoveComponentFromGameObject(const WorldEnti
 		RawByte* sourceAddress{ &sparseSet.Data[int(handle * componentSize)] };
 		thisComponent->DestroyData(sourceAddress);
 
-		for (int i = int(handle); i < int(sparseSet.CurrentEmptyIndex); ++i)
+		for (int i = int(handle); i < int(sparseSet.CurrentEmptyIndex - 1); ++i)
 		{
 			RawByte* toAddress{ &sparseSet.Data[i * int(componentSize)] };
 			RawByte* formAddress{ &sparseSet.Data[(i + 1) * int(componentSize)] };
@@ -76,5 +81,21 @@ void powe::SparseComponentManager::RemoveComponentFromGameObject(const WorldEnti
 			thisComponent->MoveData(formAddress, toAddress);
 		}
 
+		--sparseSet.CurrentEmptyIndex;
+
+	}
+}
+
+powe::SparseComponentManager::~SparseComponentManager()
+{
+	for (const auto& [componentTypeID, sparseSet] : m_SparseComponentData)
+	{
+		const SharedPtr<BaseComponent> thisComponent{ m_WorldEntity.GetComponentTrait(componentTypeID) };
+		const SizeType componentSize{ thisComponent->GetSize() };
+
+		for (SparseHandle i = 0; i < sparseSet.CurrentEmptyIndex; ++i)
+		{
+			thisComponent->DestroyData(&sparseSet.Data[int(i * componentSize)]);
+		}
 	}
 }

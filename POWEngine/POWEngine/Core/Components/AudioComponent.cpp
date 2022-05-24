@@ -2,12 +2,14 @@
 #include "AudioComponent.h"
 
 #include "POWEngine/Services/ServiceLocator.h"
+#include "POWEngine/Logger/LoggerUtils.h"
 
 powe::AudioComponent::AudioComponent(const std::string& filePath, bool shouldPreloaded)
 	: m_SoundID()
 	, m_UsedChannel()
 {
 	m_SoundID = ServiceLocator::GetSoundSystem().RegisterSoundEntity(filePath, shouldPreloaded);
+	m_hey = std::make_unique<int>(42);
 }
 
 powe::AudioComponent::AudioComponent(const std::string& filePath, const SoundInfo& info, bool shouldPreloaded)

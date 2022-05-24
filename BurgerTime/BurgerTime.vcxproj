@@ -116,7 +116,8 @@
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /y "$(SolutionDir)3rdPartyLib\allDLLs\$(Platform)\*.dll" "$(OutputPath)"</Command>
+      <Command>xcopy /y "$(SolutionDir)3rdPartyLib\allDLLs\$(Platform)\*.dll" "$(OutputPath)"
+xcopy /y "$(SolutionDir)3rdPartyLib\allDLLs\$(Platform)\$(Configuration)\*.dll" "$(OutputPath)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -141,7 +142,8 @@
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /y "$(SolutionDir)3rdPartyLib\allDLLs\$(Platform)\*.dll" "$(OutputPath)"</Command>
+      <Command>xcopy /y "$(SolutionDir)3rdPartyLib\allDLLs\$(Platform)\*.dll" "$(OutputPath)"
+xcopy /y "$(SolutionDir)3rdPartyLib\allDLLs\$(Platform)\$(Configuration)\*.dll" "$(OutputPath)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -162,7 +164,8 @@
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /y "$(SolutionDir)3rdPartyLib\allDLLs\$(Platform)\*.dll" "$(OutputPath)"</Command>
+      <Command>xcopy /y "$(SolutionDir)3rdPartyLib\allDLLs\$(Platform)\*.dll" "$(OutputPath)"
+xcopy /y "$(SolutionDir)3rdPartyLib\allDLLs\$(Platform)\$(Configuration)\*.dll" "$(OutputPath)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -187,14 +190,17 @@
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /y "$(SolutionDir)3rdPartyLib\allDLLs\$(Platform)\*.dll" "$(OutputPath)"</Command>
+      <Command>xcopy /y "$(SolutionDir)3rdPartyLib\allDLLs\$(Platform)\*.dll" "$(OutputPath)"
+xcopy /y "$(SolutionDir)3rdPartyLib\allDLLs\$(Platform)\$(Configuration)\*.dll" "$(OutputPath)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BurgerTimeScene.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerCommand.cpp" />
     <ClCompile Include="PlayerInputSystem.cpp" />
+    <ClCompile Include="StateController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\POWEngine\POWEngine.vcxproj">
@@ -202,14 +208,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Resources\DeleteMe.txt" />
-    <Text Include="Resources\Test.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="BurgerTimeComponents.h" />
     <ClInclude Include="BurgerTimeScene.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerCommand.h" />
     <ClInclude Include="PlayerInputSystem.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="StateController.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

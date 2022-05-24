@@ -12,12 +12,10 @@ PlayerInputSystem::PlayerInputSystem()
 
 void PlayerInputSystem::OnUpdate(float, powe::GameObjectID)
 {
-	//POWLOGINFO("Hey");
-	//InputComponent* inputTest{ GetComponent<InputComponent>() };
-	//POWLOGINFO(std::to_string(inputTest->tag));
+
 }
 
-void PlayerInputSystem::OnCreate(powe::GameObjectID id)
+void PlayerInputSystem::OnCreate(powe::GameObjectID )
 {
 	using namespace powe;
 
@@ -25,10 +23,10 @@ void PlayerInputSystem::OnCreate(powe::GameObjectID id)
 
 	SoundInfo info{};
 	info.volume = 1.0f;
-	info.pitch = 1.0f;
+	info.pitch = 0.5f;
 	info.isLooped = false;
 
 	audio->Play(info);
 
-	GetWorld()->RemoveComponentByType<AudioComponent>(id);
+	//GetWorld()->RemoveComponentByType<AudioComponent>(id);
 }

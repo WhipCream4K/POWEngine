@@ -4,12 +4,20 @@
 #include "POWEngine/ECS/Archetype.h"
 #include "POWEngine/ECS/SystemBase.h"
 
-powe::WorldEntity::WorldEntity() = default;
+powe::WorldEntity::WorldEntity()
+	: m_SparseComponentManager(*this)
+{
+}
 
 void powe::WorldEntity::RegisterGameObject(GameObjectID id)
 {
 	if (!m_GameObjectRecords.contains(id))
 		m_GameObjectRecords.try_emplace(id, GameObjectRecord{});
+}
+
+powe::WorldEntity::~WorldEntity()
+{
+	ClearArchetype();
 }
 
 void powe::WorldEntity::AddSystem(PipelineLayer layer, const SharedPtr<SystemBase>& system)
@@ -226,7 +234,7 @@ void powe::WorldEntity::UpdatePipeline(PipelineLayer layer, float deltaTime)
 		{
 			if (!archetype->GameObjectIds.empty())
 			{
-				if (IsDigitExistInNumber(archetype->Types, system->GetKeys()))
+				if (IsDigitExistInNumber(archetype->ComponentOffsets, system->GetKeys()))
 					system->InternalUpdate(*archetype, deltaTime);
 			}
 		}
@@ -240,6 +248,7 @@ void powe::WorldEntity::ResolveEntities()
 	InternalAddGameObjectToPipeline();
 	InternalAddSystemToPipeline();
 	InternalRemoveSystemFromPipeline();
+	ClearEmptyArchetype();
 }
 
 SharedPtr<powe::Archetype> powe::WorldEntity::GetArchetypeByGameObject(GameObjectID id) const
@@ -347,21 +356,23 @@ void powe::WorldEntity::InternalRemoveGameObjectFromPipeline()
 
 			// 1. Destroy old component data
 			{
-				RawByte* startAddress{ &targetArchetype->ComponentData[int(thisGameObjectIndex * targetArchetype->SizeOfComponentsBlock)] };
-				SizeType accumulateOffset{};
-				for (const auto& componentID : targetArchetype->Types)
-				{
-					const SharedPtr<BaseComponent> componentTrait{ GetComponentTrait(componentID) };
+				//RawByte* startAddress{ &targetArchetype->ComponentData[int(thisGameObjectIndex * targetArchetype->SizeOfComponentsBlock)] };
+				//SizeType accumulateOffset{};
+				//for (const auto& componentID : targetArchetype->Types)
+				//{
+				//	const SharedPtr<BaseComponent> componentTrait{ GetComponentTrait(componentID) };
 
-					if (IsThisComponentSparse(componentID))
-					{
-						m_SparseComponentManager.RemoveComponentFromGameObject(*this, gameObjectIDs[deletingGameObjectIdx], componentID);
-					}
-					else
-						componentTrait->DestroyData(startAddress + accumulateOffset);
+				//	if (IsThisComponentSparse(componentID))
+				//	{
+				//		m_SparseComponentManager.RemoveComponentFromGameObject(*this, gameObjectIDs[deletingGameObjectIdx], componentID);
+				//	}
+				//	else
+				//		componentTrait->DestroyData(startAddress + accumulateOffset);
 
-					accumulateOffset += componentTrait->GetSize();
-				}
+				//	accumulateOffset += componentTrait->GetSize();
+				//}
+
+				DestroyComponentData(*targetArchetype, thisGameObjectIndex, gameObjectIDs[deletingGameObjectIdx], targetArchetype->Types);
 			}
 
 
@@ -439,16 +450,16 @@ void powe::WorldEntity::InternalRemoveComponentFromGameObject()
 		newTypes.erase(std::ranges::remove_if(newTypes, [&componentIDs](ComponentTypeID id)
 			{
 				return std::ranges::find_if(componentIDs, [&id](ComponentTypeID removeID)
-				{
-					// discard the flag of the component
+					{
+						// discard the flag of the component
 						return removeID == DiscardFlag(id);
-				}) != componentIDs.end();
+					}) != componentIDs.end();
 			}).begin(), newTypes.end());
 
 		const std::string newArchetypeKey{ CreateStringFromNumVector(newTypes) };
 		const std::string oldArchetypeKey{ CreateStringFromNumVector(oldArchetype->Types) };
 
-		const auto targetArchetype{ GetArchetypeFromActiveList(newArchetypeKey) };
+		auto targetArchetype{ GetArchetypeFromActiveList(newArchetypeKey) };
 
 		// 1. if the archetype is valid and is not the same archetype then move the remaining components to another archetype
 		if (targetArchetype && targetArchetype != oldArchetype)
@@ -461,20 +472,35 @@ void powe::WorldEntity::InternalRemoveComponentFromGameObject()
 				targetArchetype->AllocateComponentData(SizeType(targetOccupiedSize * 3), *this);
 			}
 
-			RawByte* sourceAddress{ &oldArchetype->ComponentData[int(gbRecords.IndexInArchetype * oldArchetype->SizeOfComponentsBlock)] };
-			RawByte* destinationAddress{ &targetArchetype->ComponentData[int(targetArchetype->GameObjectIds.size() * targetArchetype->SizeOfComponentsBlock)] };
+			RawByte* fromAddress{ &oldArchetype->ComponentData[int(gbRecords.IndexInArchetype * oldArchetype->SizeOfComponentsBlock)] };
+			RawByte* toAddress{ &targetArchetype->ComponentData[int(targetArchetype->GameObjectIds.size() * targetArchetype->SizeOfComponentsBlock)] };
 
-			SizeType accumulateOffset{};
 			for (const ComponentTypeID componentTypeId : newTypes)
 			{
 				const SharedPtr<BaseComponent> componentTrait{ GetComponentTrait(componentTypeId) };
-				componentTrait->MoveData(sourceAddress + accumulateOffset, destinationAddress + accumulateOffset);
-				accumulateOffset += componentTrait->GetSize();
+				componentTrait->MoveData(
+					fromAddress + oldArchetype->ComponentOffsets.at(componentTypeId),
+					toAddress + targetArchetype->ComponentOffsets.at(componentTypeId));
 			}
 		}
 		else
 		{
 			// 2. Else we need to create a new archetype and copy over all the data that we need
+			//targetArchetype = CreateArchetype(newTypes);
+
+			//SizeType offset{};
+			//RawByte* fromAddress{ &oldArchetype->ComponentData[int(gbRecords.IndexInArchetype * oldArchetype->SizeOfComponentsBlock)] };
+			//RawByte* toAddress{ &targetArchetype->ComponentData[0] };
+
+			//for (const ComponentTypeID componentTypeId : newTypes)
+			//{
+			//	const SharedPtr<BaseComponent> thisComponent{ GetComponentTrait(componentTypeId) };
+
+			//	thisComponent->MoveData(fromAddress + offset, toAddress + offset);
+
+			//	offset += thisComponent->GetSize();
+			//}
+
 			for (const ComponentTypeID componentType : newTypes)
 			{
 				const SharedPtr<BaseComponent> oldComp{ GetComponentTrait(componentType) };
@@ -493,13 +519,20 @@ void powe::WorldEntity::InternalRemoveComponentFromGameObject()
 			}
 		}
 
-		AddGameObjectToArchetypeRemoveList(oldArchetypeKey, gameObjectID);
+		// 3. Destroy the component and move over all the data after this gameobject
+
+		DestroyComponentData(*oldArchetype, gbRecords.IndexInArchetype, gameObjectID, componentIDs);
+		oldArchetype->BuryBlock(*this, gbRecords.IndexInArchetype);
+
+		oldArchetype->GameObjectIds.erase(
+			std::ranges::remove(oldArchetype->GameObjectIds, gameObjectID).begin(),
+			oldArchetype->GameObjectIds.end());
 	}
 
 	m_PendingDeleteComponentsFromGameObject.clear();
 
 	//const auto gameObjectItr{ m_GameObjectRecords.find(id) };
-//const auto componentItr{ m_ComponentTraitsMap.find(componentID) };
+	//const auto componentItr{ m_ComponentTraitsMap.find(componentID) };
 
 //if (gameObjectItr != m_GameObjectRecords.end() && componentItr != m_ComponentTraitsMap.end())
 //{
@@ -559,6 +592,23 @@ void powe::WorldEntity::InternalRemoveComponentFromGameObject()
 
 }
 
+void powe::WorldEntity::ClearArchetype()
+{
+	for (const auto& archetype : m_ArchetypesPool | std::views::values)
+	{
+		archetype->CleanUp(*this);
+	}
+}
+
+void powe::WorldEntity::ClearEmptyArchetype()
+{
+	for (auto it = m_ArchetypesPool.begin(); it != m_ArchetypesPool.end(); ++it)
+	{
+		if (it->second->GameObjectIds.empty())
+			it->second->CleanUp(*this);
+	}
+}
+
 
 void powe::WorldEntity::AddGameObjectToRecordRemoveList(GameObjectID id)
 {
@@ -596,7 +646,7 @@ void powe::WorldEntity::AddComponentToGameObjectRemoveList(GameObjectID id, Comp
 	else
 	{
 		std::vector<ComponentTypeID> temp{};
-		temp.emplace_back(id);
+		temp.emplace_back(componentTypeID);
 		//m_PendingDeleteComponentsFromGameObject[id] = temp;
 		m_PendingDeleteComponentsFromGameObject.try_emplace(id, temp);
 	}
@@ -650,6 +700,32 @@ void powe::WorldEntity::RemoveGameObjectFromPreArchetype(GameObjectID id)
 		m_PreArchetypes.erase(id);
 	}
 }
+
+SharedPtr<powe::Archetype> powe::WorldEntity::CreateArchetype(const std::vector<ComponentTypeID>&)
+{
+	return {};
+}
+
+void powe::WorldEntity::DestroyComponentData(
+	const Archetype& archetype, int index, GameObjectID id,
+	const std::vector<ComponentTypeID>& components)
+{
+	RawByte* startAddress{ &archetype.ComponentData[int(index * archetype.SizeOfComponentsBlock)] };
+
+	for (const ComponentTypeID componentTypeId : components)
+	{
+		const SizeType offset{ archetype.ComponentOffsets.at(componentTypeId) };
+		const SharedPtr<BaseComponent> componentTrait{ GetComponentTrait(componentTypeId) };
+
+		if (archetype.ComponentOffsets.contains(componentTypeId)) // check if this component id is a sparse component
+		{
+			m_SparseComponentManager.RemoveComponentFromGameObject(*this, id, componentTypeId);
+		}
+		else
+			componentTrait->DestroyData(startAddress + offset);
+	}
+}
+
 
 SharedPtr<powe::BaseComponent> powe::WorldEntity::GetComponentTrait(ComponentTypeID id) const
 {
@@ -734,17 +810,16 @@ void powe::WorldEntity::InternalAddGameObjectToPipeline()
 				//const ComponentTypeID discardCompFlag{ componentTypeId & ~SizeType(ComponentFlag::Count) };
 				m_SparseComponentManager.AddComponentToSparseSet(*this, gameObjectID, DiscardFlag(componentTypeId), compData);
 
-				//const SparseHandle handle{ m_SparseComponentManager.AddComponentToSparseSet(
-				//	*this,gameObjectID,discardCompFlag,compData) };
-
-				//// Initialize the handle
-				//new (destination) SparseHandle(handle);
+				// Initialize the handle
+				new (destination) SparseComponent();
 			}
 			else
 			{
 				RawByte* source{ componentTempDataMap.at(componentTypeId).get() };
 				componentTrait->MoveData(source, destination);
 			}
+
+
 
 			if (shouldInitializeArchetype)
 			{
@@ -789,7 +864,7 @@ void powe::WorldEntity::InternalAddSystemToPipeline()
 			{
 				if (!archetype->GameObjectIds.empty())
 				{
-					if (IsDigitExistInNumber(archetype->Types, system->GetKeys()))
+					if (IsDigitExistInNumber(archetype->ComponentOffsets, system->GetKeys()))
 						system->InternalCreate(*archetype);
 				}
 			}
@@ -827,7 +902,7 @@ void powe::WorldEntity::InternalRemoveSystemFromPipeline()
 			{
 				if (!archetype->GameObjectIds.empty())
 				{
-					if (IsDigitExistInNumber(archetype->Types, system->GetKeys()))
+					if (IsDigitExistInNumber(archetype->ComponentOffsets, system->GetKeys()))
 						system->InternalDestroy(*archetype);
 				}
 			}
@@ -838,31 +913,4 @@ void powe::WorldEntity::InternalRemoveSystemFromPipeline()
 }
 
 
-//bool powe::WorldEntity::GetPendingArchetypeTrait(const std::string& archetypeKey, PreArchetypeTrait& outArchetypeTrait) const
-//{
-//	if (m_PreArchetypes.contains(archetypeKey))
-//	{
-//		outArchetypeTrait = m_PreArchetypes.at(archetypeKey);
-//		return true;
-//	}
-//
-//	return false;
-//}
-
-
-//SharedPtr<powe::Archetype> powe::WorldEntity::GetValidArchetype(const std::string& key)
-//{
-//	auto archetypeItr{ m_ArchetypesPool.find(key) };
-//
-//	if(archetypeItr == m_ArchetypesPool.end())
-//	{
-//		archetypeItr = m_PendingAddArchetypes.find(key);
-//		if (archetypeItr == m_PendingAddArchetypes.end())
-//			return nullptr;
-//
-//		return archetypeItr->second;
-//	}
-//
-//	return archetypeItr->second;
-//}
 

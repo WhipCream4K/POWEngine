@@ -2,23 +2,25 @@
 
 
 #include "POWEngine/Rendering/Components/Sprite/SpriteImpl.h"
-#include "POWEngine/Core/Components/BaseComponent.h"
 
-#if USE_SFML_RENDERER
+
 #include <SFML/Graphics.hpp>
 
 namespace powe
 {
+	struct SFMLSpriteComponent;
 	class SFMLSprite : public SpriteImpl
 	{
 	public:
 
-		SFMLSprite() = default;
+		SFMLSprite();
 		SFMLSprite(WorldEntity* worldEntity, GameObjectID id);
+		~SFMLSprite() override;
 		void SetOrigin(float x, float y) override;
 		void SetTexture(const Texture& texture) override;
 		void SetOrigin(const glm::fvec2& pos) override;
 		void SetRect(const glm::fvec4& rect) override;
+		SFMLSpriteComponent* GetSfSprite() const;
 
 	private:
 
@@ -27,5 +29,4 @@ namespace powe
 	};
 }
 
-#endif
 

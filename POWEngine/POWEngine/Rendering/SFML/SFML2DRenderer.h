@@ -2,7 +2,7 @@
 
 #include "POWEngine/Rendering/RenderAPI.h"
 
-#if USE_SFML_RENDERER
+//#if USE_SFML_RENDERER
 
 namespace sf
 {
@@ -34,6 +34,6 @@ namespace powe
 	};
 }
 
-#endif
+
 
 

@@ -4,11 +4,6 @@
 #include <stdexcept>
 #include "POWEngine/ECS/ECSUtils.h"
 #include "POWEngine/Core/WorldEntity/WorldEntity.h"
-//#include "POWEngine/Core/Components/BaseComponent.h"
-//#include "POWEngine/ECS/Archetype.h"
-//#include "POWEngine/ECS/SparseComponentManager.h"
-
-//#include "POWEngine/Core/WorldEntity/WorldEntity.h"
 
 namespace powe
 {

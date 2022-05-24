@@ -1,3 +1,3 @@
 #pragma once
 
-#include "../POWEngine/ECS/SystemBase.h"
+#include "POWEngine/ECS/SystemBase.h"

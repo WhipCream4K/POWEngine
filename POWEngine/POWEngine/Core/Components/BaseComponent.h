@@ -95,7 +95,7 @@ namespace powe
 	template <typename T>
 	void Component<T>::MoveData(RawByte* source, RawByte* destination) const
 	{
-		new (destination) T{ std::move(*reinterpret_cast<T*>(source)) };
+		new (destination) T(std::move(*reinterpret_cast<T*>(source)));
 	}
 
 	template <typename T>
@@ -108,6 +108,7 @@ namespace powe
 	{
 	public:
 
+		explicit SparseComponent() = default;
 		SparseComponent(const SparseComponent&) = default;
 		SparseComponent& operator=(const SparseComponent&) = default;
 		SparseComponent(SparseComponent&&) = default;
@@ -122,14 +123,14 @@ namespace powe
 
 		void MoveData(RawByte* source, RawByte* destination) const override
 		{
-			new (destination) SizeType{*reinterpret_cast<SizeType*>(source)};
+			new (destination) SparseComponent{std::move(* reinterpret_cast<SparseComponent*>(source))};
+			//new (destination) SparseHandle(*reinterpret_cast<SparseHandle*>(source));
 		}
 
-		SizeType GetSize() const override { return sizeof(SparseHandle); }
+		SizeType GetSize() const override { return sizeof(SparseComponent); }
 
 	protected:
 
-		explicit SparseComponent() = default;
 	};
 
 	//namespace StaticComponent

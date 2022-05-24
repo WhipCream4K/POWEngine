@@ -11,7 +11,7 @@ namespace powe
 
 		NullRenderer(uint32_t width, uint32_t height, const OtherWindowParams& other);
 		NullRenderer() = default;
-		void DrawBufferOnWindow(const Window& ) const override{}
+		void DrawBufferOnWindow(const Window&) const override{}
 	};
 }
 

@@ -8,6 +8,7 @@
 #include <powengine.h>
 #include "BurgerTimeScene.h"
 #include "POWEngine/Logger/Console/ConsoleLogger.h"
+#include "POWEngine/Rendering/SFML/SFML2DRenderer.h"
 #include "POWEngine/Sound/FMOD/FMOD2DSound.h"
 
 
@@ -18,7 +19,7 @@ int main()
 	const SharedPtr<powe::WorldEntity> worldEntity{std::make_shared<powe::WorldEntity>()};
 
 	const SharedPtr<BurgerTimeScene> burgerTimeScene{ std::make_shared<BurgerTimeScene>() };
-	const SharedPtr<powe::WorldClock> worldClock{engineCore->GetWorldClock()};
+	const SharedPtr<powe::WorldClock> worldClock{ engineCore->GetWorldClock() };
 
 	engineCore->RegisterRendererType(std::make_unique<powe::SFML2DRenderer>());
 

@@ -50,8 +50,6 @@ bool powe::Core::TranslateWindowInputs(const Window& window, const SharedPtr<Wor
 		worldEntt->GetInputSettings().ParseHWMessages(hwMessages);
 	}
 
-	//SFMLRenderer some{};
-
 	return isEarlyExit;
 }
 
@@ -93,7 +91,7 @@ void powe::Core::Step(WorldEntity& worldEntity) const
 void powe::Core::Draw(const SharedPtr<Window>& window, const SharedPtr<WorldEntity>& worldEntt) const
 {
 	window->ClearWindow();
-	m_MainRenderer->UpdateSystem(worldEntt->GetActiveArchetypes());
+	m_MainRenderer->UpdateSystem(*worldEntt,worldEntt->GetActiveArchetypes());
 	m_MainRenderer->Draw(*window);
 	window->Display();
 }
@@ -101,7 +99,7 @@ void powe::Core::Draw(const SharedPtr<Window>& window, const SharedPtr<WorldEnti
 void powe::Core::Draw(const Window& window, const WorldEntity& worldEntt) const
 {
 	window.ClearWindow();
-	m_MainRenderer->UpdateSystem(worldEntt.GetActiveArchetypes());
+	m_MainRenderer->UpdateSystem(worldEntt,worldEntt.GetActiveArchetypes());
 	m_MainRenderer->Draw(window);
 	window.Display();
 }

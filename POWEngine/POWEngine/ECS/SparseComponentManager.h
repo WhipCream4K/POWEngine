@@ -15,6 +15,7 @@ namespace powe
 
 		SparseHandle CurrentEmptyIndex{};
 		SizeType TotalAllocateData{};
+		//SizeType BlockSize{};
 		SharedPtr<RawByte[]> Data{};
 	};
 
@@ -23,6 +24,8 @@ namespace powe
 	{
 
 	public:
+
+		SparseComponentManager(WorldEntity& world);
 
 		void AddComponentToSparseSet(
 			const WorldEntity& world,
@@ -40,10 +43,13 @@ namespace powe
 			ComponentTypeID compID
 		);
 
+		~SparseComponentManager();
+
 	private:
 
 		std::unordered_map<GameObjectID, std::unordered_map<ComponentTypeID, SparseHandle>> m_GameObjectToHandle;
 		std::unordered_map<ComponentTypeID, SparseSet> m_SparseComponentData;
+		WorldEntity& m_WorldEntity;
 	};
 
 

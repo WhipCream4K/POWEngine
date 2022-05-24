@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "SFML2DRenderer.h"
 
-#if USE_SFML_RENDERER
+//#if USE_SFML_RENDERER
 
 #include "POWEngine/Window/Window.h"
 #include "POWEngine/Window/SFML/SFMLWindow.h"
@@ -66,4 +66,4 @@ void powe::SFML2DRenderer::DrawBufferOnWindow(const Window& window) const
 }
 
 
-#endif
+//#endif

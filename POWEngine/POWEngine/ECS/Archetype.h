@@ -33,12 +33,12 @@ namespace powe
 		RawByte* GetPointer(int pointerDiff) const;
 
 		SharedPtr<RawByte[]> CopyComponentData(const Archetype& other, const WorldEntity& world) const;
-		//void CopyComponentData(const WorldEntity& world,const Archetype& other,int indexInArchetype);
+		void BuryBlock(const WorldEntity& world,int index) const;
+		void CleanUp(const WorldEntity& world) const;
 		void AllocateComponentData(SizeType newSize, const WorldEntity& world);
 
 		std::vector<ComponentTypeID> Types; // types of components of this archetypes
 		std::vector<GameObjectID> GameObjectIds; // GameObjectIds that has this archetype
-		//std::unordered_map<ComponentTypeID,uint32_t> ComponentOffsets; // map of component's offsets from the start of the array
 		ECSComponentMap<SizeType> ComponentOffsets;
 		SharedPtr<RawByte[]> ComponentData{}; // Array of component struct
 		SizeType SizeOfComponentsBlock{};

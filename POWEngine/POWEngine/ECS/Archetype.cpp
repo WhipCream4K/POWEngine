@@ -41,6 +41,41 @@ SharedPtr<powe::RawByte[]> powe::Archetype::CopyComponentData(const Archetype& o
 	return newComponentData;
 }
 
+void powe::Archetype::BuryBlock(const WorldEntity& world,int index) const
+{
+	for (int i = index; i < int(GameObjectIds.size() - 1); ++i)
+	{
+		RawByte* fromAddress{ &ComponentData[int((i + 1) * SizeOfComponentsBlock)] };
+		RawByte* toAddress{ &ComponentData[int(i * SizeOfComponentsBlock)] };
+
+		for (const ComponentTypeID componentTypeId : Types)
+		{
+			const SizeType offset{ComponentOffsets.at(componentTypeId)};
+			const SharedPtr<BaseComponent> thisComponent{ world.GetComponentTrait(componentTypeId) };
+			thisComponent->MoveData(fromAddress + offset, toAddress + offset);
+		}
+	}
+}
+
+void powe::Archetype::CleanUp(const WorldEntity& world) const
+{
+	for (const GameObjectID gameObjectId : GameObjectIds)
+	{
+		GameObjectRecord gbRecord{};
+		if(world.GetGameObjectRecords(gameObjectId, gbRecord))
+		{
+			RawByte* sourceAddress{ &ComponentData[int(gbRecord.IndexInArchetype * SizeOfComponentsBlock)] };
+			for (const ComponentTypeID componentTypeId : Types)
+			{
+				const SizeType offset{ ComponentOffsets.at(componentTypeId) };
+				const SharedPtr<BaseComponent> thisComponent{ world.GetComponentTrait(componentTypeId) };
+				thisComponent->DestroyData(sourceAddress + offset);
+			}
+		}
+	}
+}
+
+
 void powe::Archetype::AllocateComponentData(SizeType newSize,const WorldEntity& world)
 {
 	const SharedPtr<RawByte[]> newComponentData{ SharedPtr<RawByte[]>{new RawByte[newSize]{}} };

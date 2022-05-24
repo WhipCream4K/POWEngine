@@ -29,6 +29,7 @@ namespace powe
 
 		SoundInfo m_Info{};
 		SoundID m_SoundID{};
+		OwnedPtr<int> m_hey{};
 		ChannelID m_UsedChannel{};
 	};
 }

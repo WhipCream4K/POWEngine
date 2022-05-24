@@ -4,9 +4,16 @@
 #include "POWEngine/Rendering/System/RenderSystemBase.h"
 #include "NullRenderer.h"
 
+#if USE_SFML_RENDERER
+#include "POWEngine/Rendering/System/SFML/SFML2DRenderSystem.h"
+#endif
+
 powe::Renderer::Renderer()
 	: m_RenderAPI(std::make_unique<NullRenderer>())
 {
+#if USE_SFML_RENDERER
+	RegisterSystem(std::make_shared<SFML2DRenderSystem>());
+#endif
 }
 
 powe::Renderer::~Renderer() = default;
@@ -33,22 +40,15 @@ void powe::Renderer::RemoveSystem(const SharedPtr<RenderSystemBase>& system)
 	}
 }
 
-//void powe::Renderer::UpdateSystem(const SharedPtr<Archetype>& archetype)
-//{
-//	for (const auto& system : m_RenderSystems)
-//	{
-//		
-//	}
-//}
-
-void powe::Renderer::UpdateSystem(const std::unordered_map<std::string, SharedPtr<Archetype>>& archetypePool) const
+void powe::Renderer::UpdateSystem(const WorldEntity& worldEntity,
+	const std::unordered_map<std::string, SharedPtr<Archetype>>& archetypePool) const
 {
 	for (const auto& system : m_RenderSystems)
 	{
 		for (const auto& archetype : archetypePool | std::views::values) // since c++20
 		{
-			if (IsDigitExistInNumber(archetype->Types, system->GetKeys()))
-				system->InternalDraw(*m_RenderAPI);
+			if (IsDigitExistInNumber(archetype->ComponentOffsets, system->GetKeys()))
+				system->InternalDraw(worldEntity,*archetype, *m_RenderAPI);
 		}
 	}
 }

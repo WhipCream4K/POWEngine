@@ -2,20 +2,22 @@
 #include "SFMLSprite.h"
 
 #include "POWEngine/Core/WorldEntity/WorldEntity.h"
-#include "POWEngine/Rendering/RenderBridge.h"
+#include "SFMLSpriteComponent.h"
 #include "POWEngine/Rendering/Resources/Texture/Texture.h"
 #include "POWEngine/Rendering/Resources/Texture/SFML/SFMLTexture.h"
 
-#if USE_SFML_RENDERER
+
+powe::SFMLSprite::SFMLSprite() = default;
 
 powe::SFMLSprite::SFMLSprite(WorldEntity* worldEntity, GameObjectID id)
-	: SpriteImpl(worldEntity, id)
-	, m_pWorld(worldEntity)
+	: m_pWorld(worldEntity)
 	, m_OwnerID(id)
 {
 	if (worldEntity)
 		worldEntity->AddComponentToGameObject(id, SFMLSpriteComponent{}, ComponentFlag::Sparse);
 }
+
+powe::SFMLSprite::~SFMLSprite() = default;
 
 void powe::SFMLSprite::SetOrigin(float x, float y)
 {
@@ -49,4 +51,7 @@ void powe::SFMLSprite::SetRect(const glm::fvec4& rect)
 	}
 }
 
-#endif
+powe::SFMLSpriteComponent* powe::SFMLSprite::GetSfSprite() const
+{
+	return m_pWorld->GetComponent<SFMLSpriteComponent>(m_OwnerID);
+}

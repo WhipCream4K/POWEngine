@@ -36,14 +36,12 @@
     <ClCompile Include="BurgerTimeScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="Resources\DeleteMe.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-    <Text Include="Resources\Test.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
+    <ClCompile Include="PlayerCommand.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StateController.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PlayerInputSystem.h">
@@ -57,6 +55,15 @@
     </ClInclude>
     <ClInclude Include="BurgerTimeComponents.h">
       <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerCommand.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StateController.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

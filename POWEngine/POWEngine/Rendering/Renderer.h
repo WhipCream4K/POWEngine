@@ -9,6 +9,7 @@ namespace powe
 	class Window;
 	class RenderSystemBase;
 	class RenderAPI;
+	class WorldEntity;
 	class Renderer
 	{
 	public:
@@ -24,10 +25,14 @@ namespace powe
 	public:
 
 		void Draw(const Window& window) const;
+
 		void RegisterSystem(const SharedPtr<RenderSystemBase>& system);
 		void RemoveSystem(const SharedPtr<RenderSystemBase>& system);
-		//void UpdateSystem(const SharedPtr<Archetype>& archetype);
-		void UpdateSystem(const std::unordered_map<std::string, SharedPtr<Archetype>>& archetypePool) const;
+
+		void UpdateSystem(
+			const WorldEntity& worldEntity,
+			const std::unordered_map<std::string, SharedPtr<Archetype>>& archetypePool) const;
+
 		void RegisterRenderAPI(OwnedPtr<RenderAPI>&& renderInst);
 
 

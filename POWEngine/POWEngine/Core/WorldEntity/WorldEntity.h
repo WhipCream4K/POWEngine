@@ -23,7 +23,7 @@ namespace powe
 		WorldEntity& operator=(const WorldEntity&) = delete;
 		WorldEntity(WorldEntity&&) noexcept = default;
 		WorldEntity& operator=(WorldEntity&&) noexcept = default;
-		~WorldEntity() = default;
+		~WorldEntity();
 
 	public:
 
@@ -74,6 +74,7 @@ namespace powe
 
 		//static bool IsDigitExistInNumber(const std::vector<ComponentTypeID>& compIds, const std::unordered_set<ComponentTypeID>& digit);
 		static std::string CreateStringFromNumVector(const std::vector<ComponentTypeID>& numList);
+		bool GetGameObjectRecords(GameObjectID id, GameObjectRecord& outRecord) const;
 
 #ifdef RUNTIME_TEST
 	public:
@@ -89,6 +90,8 @@ namespace powe
 		void InternalRemoveSystemFromPipeline();
 		void InternalRemoveGameObjectFromPipeline();
 		void InternalRemoveComponentFromGameObject();
+		void ClearArchetype();
+		void ClearEmptyArchetype();
 
 #endif
 
@@ -101,7 +104,6 @@ namespace powe
 
 		SharedPtr<Archetype> GetArchetypeFromActiveList(const std::string& key) const;
 		const auto& GetComponentMap() const { return m_ComponentTraitsMap; }
-		bool GetGameObjectRecords(GameObjectID id, GameObjectRecord& outRecord) const;
 		bool GetPreArchetypeTrait(GameObjectID id, PreArchetypeTrait& outTrait) const;
 
 		// Actually trying to remove gameobjects from pending delete list
@@ -126,7 +128,13 @@ namespace powe
 			int indexInArchetype,
 			ComponentType&& component);
 
-		SharedPtr<SystemBase> InternCreateSystem();
+		SharedPtr<Archetype> CreateArchetype(const std::vector<ComponentTypeID>& types);
+
+		void DestroyComponentData(
+			const Archetype& archetype,
+			int index,
+			GameObjectID id,
+			const std::vector<ComponentTypeID>& components);
 
 
 	private:
@@ -184,6 +192,7 @@ namespace powe
 
 		// Although this is not thread safe but the initialization of GameObject should be in main thread
 		GameObjectID m_GameObjectCounter{};
+
 	};
 
 	template <typename ComponentType>
@@ -226,17 +235,17 @@ namespace powe
 		PreArchetypeTrait preArchetypeTrait{};
 		if (GetPreArchetypeTrait(id, preArchetypeTrait))
 		{
-			// if the gameobject has been prepared to be added into the pipeline then check for the current
-			// types of component that this gameobject is possessed;
-			if (!preArchetypeTrait.componentData.contains(componentId))
-				return nullptr;
+			// if the gameobject has been prepared to be added into the pipeline then check if it already has one
+			// if true then return it
+			if (preArchetypeTrait.componentData.contains(componentId))
+				return  reinterpret_cast<ComponentType*>(preArchetypeTrait.componentData[componentId].get());
 		}
 
 		// Create data for the pre-archetype container
 		const SharedPtr<RawByte[]> componentData{ SharedPtr<RawByte[]>{new RawByte[sizeof(ComponentType)]} };
 
 		// Initialize data
-		ComponentType* outPointer{ new (componentData.get())
+		ComponentType* outPointer{ new ( componentData.get())
 			ComponentType(std::forward<ComponentType>(component)) };
 
 		AddPreArchetype(id, componentId, componentData);

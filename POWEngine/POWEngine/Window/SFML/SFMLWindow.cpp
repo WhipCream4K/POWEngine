@@ -341,7 +341,10 @@ const glm::uvec4& powe::SFMLWindow::GetClearColor() const
 	return m_ClearColor;
 }
 
-powe::SFMLWindow::~SFMLWindow() = default;
+powe::SFMLWindow::~SFMLWindow()
+{
+	m_WndHandle.close();
+}
 
 
 #endif

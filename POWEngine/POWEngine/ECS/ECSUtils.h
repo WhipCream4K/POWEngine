@@ -29,6 +29,27 @@ namespace powe
 		return true;
 	}
 
+	static inline bool IsDigitExistInNumber(const ECSComponentMap<SizeType>& compIds,
+		const std::unordered_set<ComponentTypeID>& digit)
+	{
+		for (const ComponentTypeID key : digit)
+		{
+			if (!compIds.contains(key))
+				return false;
+		}
+
+		return true;
+		//for (const auto& id : compIds)
+		//{
+		//	// this checks also take into account the hierarchy of the components
+		//	const ComponentTypeID number{ id & ~(SizeType(ComponentFlag::Count)) }; // clearing the child of bit flag
+		//	if (!digit.contains(number))
+		//		return false;
+		//}
+
+		//return true;
+	}
+
 	static constexpr inline ComponentTypeID DiscardFlag(ComponentTypeID id)
 	{
 		return id & ~SizeType(ComponentFlag::Count);
