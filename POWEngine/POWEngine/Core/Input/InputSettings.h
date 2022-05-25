@@ -58,6 +58,8 @@ namespace powe
 		[[nodiscard]] float GetInputAxis(const std::string& axisName, uint8_t playerIndex = 0) const;
 		[[nodiscard]] InputEvent GetInputEvent(const std::string& actionName, uint8_t playerIndex = 0) const;
 
+		void AddInputEvent(const std::string& actionName,const std::initializer_list<ActionKey>& keys);
+
 		static bool IsKeyBoardPressed(KeyType key);
 
 	private:

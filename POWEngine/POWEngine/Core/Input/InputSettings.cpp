@@ -202,6 +202,11 @@ InputEvent powe::InputSettings::GetInputEvent(const std::string& actionName, uin
 	return InputEvent::IE_None;
 }
 
+void powe::InputSettings::AddInputEvent(const std::string& , const std::initializer_list<ActionKey>& )
+{
+	
+}
+
 bool powe::InputSettings::IsKeyBoardPressed(KeyType key)
 {
 	return sf::Keyboard::isKeyPressed(sf::Keyboard::Key(key));

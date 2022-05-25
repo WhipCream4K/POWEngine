@@ -520,10 +520,9 @@ void powe::WorldEntity::InternalRemoveComponentFromGameObject()
 		}
 
 		// 3. Destroy the component and move over all the data after this gameobject
-
 		DestroyComponentData(*oldArchetype, gbRecords.IndexInArchetype, gameObjectID, componentIDs);
-		oldArchetype->BuryBlock(*this, gbRecords.IndexInArchetype);
 
+		oldArchetype->BuryBlock(*this, gbRecords.IndexInArchetype);
 		oldArchetype->GameObjectIds.erase(
 			std::ranges::remove(oldArchetype->GameObjectIds, gameObjectID).begin(),
 			oldArchetype->GameObjectIds.end());
@@ -772,12 +771,10 @@ void powe::WorldEntity::InternalAddGameObjectToPipeline()
 
 		const std::string archetypeKeyString{ CreateStringFromNumVector(archetypeKey) };
 
-		bool shouldInitializeArchetype{};
 		SharedPtr<Archetype> targetArchetype{ GetArchetypeFromActiveList(archetypeKeyString) };
 		if (!targetArchetype)
 		{
 			targetArchetype = Archetype::Create(*this, archetypeKey);
-			shouldInitializeArchetype = true;
 			m_ArchetypesPool.try_emplace(archetypeKeyString, targetArchetype);
 		}
 
@@ -810,24 +807,15 @@ void powe::WorldEntity::InternalAddGameObjectToPipeline()
 			}
 			else
 			{
-				RawByte* source{ componentTempDataMap.at(componentTypeId).get() };
+				RawByte* source{ compData.get() };
 				componentTrait->MoveData(source, destination);
 			}
 
-
-
-			//if (shouldInitializeArchetype)
-			//{
-			//	targetArchetype->ComponentOffsets.try_emplace(componentTypeId, accumulateOffset);
-
-			//	// safety block for duplicates
-			//	if (std::ranges::find(targetArchetype->Types, componentTypeId) == targetArchetype->Types.end())
-			//	{
-			//		targetArchetype->Types.emplace_back(componentTypeId);
-			//	}
-			//}
-
 			accumulateOffset += componentTrait->GetSize();
+
+			// NOTE: Need to call the destructor of the component because sometimes when the component owns
+			// a vector which sometimes allocates data it will not destroy itself hence leaking memory
+			componentTrait->DestroyData(compData.get());
 		}
 
 		// add the record to this gameobject

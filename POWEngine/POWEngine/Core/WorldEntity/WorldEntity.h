@@ -21,8 +21,8 @@ namespace powe
 		WorldEntity();
 		WorldEntity(const WorldEntity&) = delete;
 		WorldEntity& operator=(const WorldEntity&) = delete;
-		WorldEntity(WorldEntity&&) noexcept = default;
-		WorldEntity& operator=(WorldEntity&&) noexcept = default;
+		WorldEntity(WorldEntity&&) noexcept = delete;
+		WorldEntity& operator=(WorldEntity&&) noexcept = delete;
 		~WorldEntity();
 
 	public:
@@ -72,7 +72,6 @@ namespace powe
 		const std::unordered_map<std::string, SharedPtr<Archetype>> GetActiveArchetypes() const { return m_ArchetypesPool; }
 		SharedPtr<BaseComponent> GetComponentTrait(ComponentTypeID id) const;
 
-		//static bool IsDigitExistInNumber(const std::vector<ComponentTypeID>& compIds, const std::unordered_set<ComponentTypeID>& digit);
 		static std::string CreateStringFromNumVector(const std::vector<ComponentTypeID>& numList);
 		bool GetGameObjectRecords(GameObjectID id, GameObjectRecord& outRecord) const;
 
@@ -240,7 +239,7 @@ namespace powe
 		}
 
 		// Create data for the pre-archetype container
-		const SharedPtr<RawByte[]> componentData{ SharedPtr<RawByte[]>{new RawByte[sizeof(ComponentType)]} };
+		const SharedPtr<RawByte[]> componentData{ SharedPtr<RawByte[]>{new RawByte[sizeof(ComponentType)]{}} };
 
 		// Initialize data
 		ComponentType* outPointer{ new ( componentData.get())

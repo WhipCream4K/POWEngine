@@ -4,11 +4,54 @@
 #include "POWEngine/Core/GameObject/GameObject.h"
 
 powe::Transform2D::Transform2D()
-	: m_WorldScales(1.0f,1.0f)
-	, m_LocalScales(1.0f,1.0f)
+	: m_WorldScales(1.0f, 1.0f)
+	, m_LocalScales(1.0f, 1.0f)
 {
 }
 
+powe::Transform2D::Transform2D(const SharedPtr<GameObject>& owner)
+	: m_Owner(owner)
+	, m_WorldScales(1.0f, 1.0f)
+	, m_LocalScales(1.0f, 1.0f)
+{
+}
+
+powe::Transform2D::~Transform2D()
+{
+	if (m_ParentNode.lock())
+		SetParent(nullptr);
+
+	for (const auto& childrenNode : m_ChildrenNode)
+	{
+		if (const auto child{childrenNode.lock()})
+		{
+			Transform2D* transform2D{ child->GetComponent<Transform2D>() };
+			if(transform2D)
+			{
+				transform2D->SetParent(nullptr);
+			}
+		}
+	}
+}
+
+
+void powe::Transform2D::SetWorldPosition(const glm::vec2& position)
+{
+	m_WorldPosition = position;
+	SetChildrenDirtyFlag(DirtyFlag::Position);
+}
+
+void powe::Transform2D::SetWorldScale(const glm::vec2& scales)
+{
+	m_WorldScales = scales;
+	SetChildrenDirtyFlag(DirtyFlag::Scale);
+}
+
+void powe::Transform2D::SetWorldRotation(float zRotation)
+{
+	m_WorldZRotation = zRotation;
+	SetChildrenDirtyFlag(DirtyFlag::Rotation);
+}
 
 void powe::Transform2D::SetLocalPosition(const glm::vec2& position)
 {
@@ -16,27 +59,11 @@ void powe::Transform2D::SetLocalPosition(const glm::vec2& position)
 	SetDirtyFlag(DirtyFlag::Position);
 }
 
-void powe::Transform2D::SetWorldPosition(const glm::vec2& position)
-{
-	m_WorldPosition = position;
-}
-
-void powe::Transform2D::SetWorldScale(const glm::vec2& scales)
-{
-	m_WorldScales = scales;
-}
-
-void powe::Transform2D::SetWorldRotation(float zRotation)
-{
-	m_WorldZRotation = zRotation;
-}
-
 void powe::Transform2D::SetLocalScale(const glm::vec2& scales)
 {
 	m_LocalScales = scales;
 	SetDirtyFlag(DirtyFlag::Scale);
 }
-
 
 void powe::Transform2D::SetLocalRotation(float zRotation)
 {
@@ -70,7 +97,10 @@ float powe::Transform2D::GetWorldRotation()
 
 float powe::Transform2D::GetLocalRotation() const
 {
-	return m_LocalZRotation;
+	if (m_ParentNode.lock())
+		return m_LocalZRotation;
+
+	return m_WorldZRotation;
 }
 
 const glm::vec2& powe::Transform2D::GetLocalPosition() const
@@ -98,10 +128,12 @@ void powe::Transform2D::SetParent(const SharedPtr<GameObject>& gameObject, bool 
 			SetLocalRotation(parentTransform->GetWorldRotation() + GetLocalRotation());
 			SetLocalScale(parentTransform->GetWorldScale() + GetLocalScale());
 		}
-
-		SetDirtyFlag(DirtyFlag::Position);
-		SetDirtyFlag(DirtyFlag::Rotation);
-		SetDirtyFlag(DirtyFlag::Scale);
+		else
+		{
+			SetDirtyFlag(DirtyFlag::Position);
+			SetDirtyFlag(DirtyFlag::Rotation);
+			SetDirtyFlag(DirtyFlag::Scale);
+		}
 
 		parentTransform->AddChild(m_Owner.lock());
 	}
@@ -168,10 +200,13 @@ void powe::Transform2D::UpdateData(DirtyFlag flag)
 void powe::Transform2D::SetDirtyFlag(DirtyFlag flag)
 {
 	m_DirtyFlag |= uint8_t(flag);
+}
 
+void powe::Transform2D::SetChildrenDirtyFlag(DirtyFlag flag)
+{
 	for (auto it = m_ChildrenNode.begin(); it != m_ChildrenNode.end();)
 	{
-		if(const auto child{it->lock()})
+		if (const auto child{ it->lock() })
 		{
 			Transform2D* transform2D{ child->GetComponent<Transform2D>() };
 			transform2D->SetDirtyFlag(flag);
@@ -186,6 +221,7 @@ void powe::Transform2D::SetDirtyFlag(DirtyFlag flag)
 
 void powe::Transform2D::AddChild(const SharedPtr<GameObject>& gameObject)
 {
+	gameObject;
 	if (std::ranges::find_if(m_ChildrenNode, [&gameObject](const WeakPtr<GameObject>& item)
 		{
 			return item.lock() == gameObject;
@@ -197,6 +233,7 @@ void powe::Transform2D::AddChild(const SharedPtr<GameObject>& gameObject)
 
 void powe::Transform2D::RemoveChild(const SharedPtr<GameObject>& gameObject)
 {
+	gameObject;
 	const auto removeItr{ std::ranges::find_if(m_ChildrenNode,[&gameObject](const WeakPtr<GameObject>& item)
 	{
 		return item.lock() == gameObject;

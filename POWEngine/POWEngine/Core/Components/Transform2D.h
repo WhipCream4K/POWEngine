@@ -18,6 +18,8 @@ namespace powe
 	public:
 
 		Transform2D();
+		Transform2D(const SharedPtr<GameObject>& owner);
+		~Transform2D() override;
 
 		void SetWorldPosition(const glm::vec2& position);
 		void SetWorldScale(const glm::vec2& scales);
@@ -41,6 +43,7 @@ namespace powe
 	private:
 
 		void SetDirtyFlag(DirtyFlag flag);
+		void SetChildrenDirtyFlag(DirtyFlag flag);
 		void AddChild(const SharedPtr<GameObject>& gameObject);
 		void RemoveChild(const SharedPtr<GameObject>& gameObject);
 		bool IsDirty(DirtyFlag flag) const;

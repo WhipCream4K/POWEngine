@@ -95,7 +95,7 @@ namespace powe
 	template <typename T>
 	void Component<T>::MoveData(RawByte* source, RawByte* destination) const
 	{
-		new (destination) T(std::move(*reinterpret_cast<T*>(source)));
+		new (destination) T{ std::move(*reinterpret_cast<T*>(source)) };
 	}
 
 	template <typename T>
