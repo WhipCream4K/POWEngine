@@ -190,6 +190,7 @@
     <ClInclude Include="POWEngine\Core\Components\AudioComponent.h" />
     <ClInclude Include="include\poweComponent.h" />
     <ClInclude Include="POWEngine\Rendering\Components\Sprite\SFML\SFMLSpriteComponent.h" />
+    <ClInclude Include="POWEngine\Singleton\InstanceUtils.h" />
     <ClInclude Include="POWEngine\Sound\FMOD\AudioClip.h" />
     <ClInclude Include="POWEngine\Sound\FMOD\Channel.h" />
     <ClInclude Include="include\poweCustomtype.h" />
@@ -253,6 +254,7 @@
     <ClInclude Include="POWEngine\Rendering\RenderAPI.h" />
     <ClInclude Include="POWEngine\ECS\SystemUtils.h" />
     <ClInclude Include="POWEngine\Rendering\System\SFML\SFML2DRenderSystem.h" />
+    <ClInclude Include="POWEngine\Singleton\ThreadSafeSingleton.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="POWEngine\Core\Components\AudioComponent.cpp" />
@@ -304,6 +306,7 @@
     <ClCompile Include="POWEngine\Rendering\System\RenderSystemBase.cpp" />
     <ClCompile Include="POWEngine\Rendering\RenderAPI.cpp" />
     <ClCompile Include="POWEngine\Rendering\System\SFML\SFML2DRenderSystem.cpp" />
+    <ClCompile Include="POWEngine\Singleton\ThreadSafeSingleton.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -11,7 +11,7 @@ namespace powe
 	class Texture;
 }
 
-class BurgerTimeScene
+class BurgerTimeGame
 {
 public:
 
@@ -21,7 +21,6 @@ public:
 private:
 
 	SharedPtr<powe::Texture> m_MainTexture;
-	std::vector<SharedPtr<powe::GameObject>> m_GameObjectNodes;
 
 };
 

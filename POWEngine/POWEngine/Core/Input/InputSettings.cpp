@@ -202,9 +202,15 @@ InputEvent powe::InputSettings::GetInputEvent(const std::string& actionName, uin
 	return InputEvent::IE_None;
 }
 
-void powe::InputSettings::AddInputEvent(const std::string& , const std::initializer_list<ActionKey>& )
+void powe::InputSettings::AddInputEvent(const std::string& actionName, const std::initializer_list<ActionKey>& keys)
 {
-	
+	if(!m_ActionKeyMappings.contains(actionName))
+	{
+		for (const auto& key : keys)
+		{
+			m_MainKeyPool.try_emplace(key.key, InputState{});
+		}
+	}
 }
 
 bool powe::InputSettings::IsKeyBoardPressed(KeyType key)

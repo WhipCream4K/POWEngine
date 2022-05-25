@@ -6,7 +6,7 @@
 
 #define USE_SFML_RENDERER 1
 #include <powengine.h>
-#include "BurgerTimeScene.h"
+#include "BurgerTimeGame.h"
 #include "POWEngine/Logger/Console/ConsoleLogger.h"
 #include "POWEngine/Rendering/SFML/SFML2DRenderer.h"
 #include "POWEngine/Sound/FMOD/FMOD2DSound.h"
@@ -18,7 +18,7 @@ int main()
 	const SharedPtr<powe::Window> window{ std::make_shared<powe::Window>(1280,720,"BurgerTime")};
 	const SharedPtr<powe::WorldEntity> worldEntity{std::make_shared<powe::WorldEntity>()};
 
-	const SharedPtr<BurgerTimeScene> burgerTimeScene{ std::make_shared<BurgerTimeScene>() };
+	const SharedPtr<BurgerTimeGame> burgerTimeScene{ std::make_shared<BurgerTimeGame>() };
 	const SharedPtr<powe::WorldClock> worldClock{ engineCore->GetWorldClock() };
 
 	engineCore->RegisterRendererType(std::make_unique<powe::SFML2DRenderer>());
