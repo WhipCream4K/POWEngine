@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "InputSettings.h"
+
 #include "POWEngine/Logger/LoggerUtils.h"
 #include "POWEngine/Window/WindowEvents.h"
 
@@ -89,62 +90,65 @@
 
 void powe::InputSettings::ParseHWMessages(const HardwareMessages& hwMessages)
 {
-	AxisKey inKey{};
+	// we need syskeys alive through this frame
+	// to check against all the key that needs them
+	uint8_t sysKeys{};
+
+	m_LastFrameSystemKey = m_CurrentFrameSystemKey;
+
+	UpdateMainKeyPool();
 
 	for (int i = 0; i < hwMessages.totalMessages; ++i)
 	{
 		const HardwareBus& hwBus{ hwMessages.hwMessages[i] };
+		KeyData inKey{};
 
 		if (hwBus.inDevice == InputDevice::D_Keyboard)
 		{
 			const bool isKeyPressed{ WindowEvents(hwBus.eventId) == WindowEvents::KeyPressed ? true : false };
-			inKey.scale = float(isKeyPressed);
-			inKey.key = { hwBus.inDevice, std::get<KeyboardData>(hwBus.hData).keyCode };
-
-			ValidateKeyState(inKey, isKeyPressed);
+			KeyboardData kData{ std::get<KeyboardData>(hwBus.hData) };
+			inKey.isDown = isKeyPressed;
+			inKey.key = { hwBus.inDevice,kData.keyCode };
+			inKey.axisValue = float(isKeyPressed);
+			inKey.playerIndex = 0;
+			sysKeys |= kData.sysKey; // syskeys here
 		}
 		else if (hwBus.inDevice == InputDevice::D_Mouse)
 		{
-			bool isKeyPressed{};
+			inKey.playerIndex = 0;
 
 			switch (WindowEvents(hwBus.eventId))
 			{
 			case WindowEvents::MouseWheelScrolled:
-
-				isKeyPressed = true;
+			{
+				MouseData mouseData{ std::get<MouseData>(hwBus.hData) };
 				inKey.key = { hwBus.inDevice,KeyType(MouseKey::MK_Middle) };
-				inKey.scale = GetMouseData<MouseWheelDelta>(hwBus.hData);
-
-				ValidateKeyState(inKey, isKeyPressed);
-
-				m_ShouldRevalidateMouseValue = true;
-
-				continue; // continue with the loop
+				inKey.isDown = true;
+				inKey.axisValue = std::get<MouseWheelDelta>(mouseData.axisData);
+			}
 			case WindowEvents::MouseButtonPressed:
-
-				isKeyPressed = true;
-				inKey.key = { hwBus.inDevice,GetMouseData<MouseCharKey>(hwBus.hData) };
-				inKey.scale = 1.0f;
-
-				ValidateKeyState(inKey, isKeyPressed);
-
-				continue; // continue with the loop
+			{
+				MouseData mData{ std::get<MouseData>(hwBus.hData) };
+				inKey.key = { hwBus.inDevice,mData.keyCode };
+				inKey.isDown = true;
+			}
 			case WindowEvents::MouseButtonReleased:
-
-				isKeyPressed = false;
-				inKey.key = { hwBus.inDevice,GetMouseData<MouseCharKey>(hwBus.hData) };
-				inKey.scale = 0.0f;
-
-				ValidateKeyState(inKey, isKeyPressed);
-
-				continue; // continue with the loop
+			{
+				MouseData mData{ std::get<MouseData>(hwBus.hData) };
+				inKey.key = { hwBus.inDevice,mData.keyCode };
+				inKey.isDown = false;
+			}
 			default: break;
 			}
 
 			// If we past this line then we know that this is a mouse move
-			ValidateMouseDelta(GetMouseData<MousePos>(hwBus.hData));
-			m_ShouldRevalidateMouseValue = true;
+			//ValidateMouseDelta(GetMouseData<MousePos>(hwBus.hData));
+			//m_ShouldRevalidateMouseValue = true;
 		}
+
+		m_CurrentFrameSystemKey |= sysKeys;
+		const InputEvent thisFrameEvent{ EvaluateMainKeyPool(inKey, sysKeys) };
+		UpdateAxisMapping(inKey, thisFrameEvent);
 	}
 
 
@@ -152,88 +156,75 @@ void powe::InputSettings::ParseHWMessages(const HardwareMessages& hwMessages)
 
 float powe::InputSettings::GetInputAxis(const std::string& axisName, uint8_t playerIndex) const
 {
-	try
-	{
-		const auto& axisMap{ m_AxisKeyMappings.at(axisName) };
+	//try
+	//{
+	//}
+	//catch (const std::exception& e)
+	//{
+	//	std::string log{ e.what() };
+	//	log.append(" Can't find given axis name, maybe you forgot to add it?");
+	//	POWLOGERROR(log);
+	//}
 
-		for (const auto& val : axisMap.keys)
-		{
-			const InputState& state{ m_MainKeyPool.at(val.key) };
-
-			if (state.userIndex == playerIndex &&
-				(state.keyEvent == InputEvent::IE_Down ||
-					state.keyEvent == InputEvent::IE_Pressed))
-			{
-				return val.scale * state.axisValue;
-			}
-		}
-	}
-	catch (const std::exception& e)
+	assert(playerIndex < MAXPLAYER && "Player index isn't not in range of max player");
+	const auto findItr{ m_AxisKeyMappings.find(axisName) };
+	if (findItr != m_AxisKeyMappings.end())
 	{
-		std::string log{ e.what() };
-		log.append(" Can't find given axis name, maybe you forgot to add it?");
-		POWLOGERROR(log);
+		return findItr->second.currentSumAxis[playerIndex];
 	}
 
 	return 0.0f;
 }
 
-InputEvent powe::InputSettings::GetInputEvent(const std::string& actionName, uint8_t playerIndex) const
+void powe::InputSettings::AddActionMapping(const std::string& name,
+	const std::vector<ActionMap::ActionKeyPack>& keyPacks)
 {
-	try
+	const auto findItr{ m_ActionKeyMappings.find(name) };
+	if (findItr == m_ActionKeyMappings.end())
 	{
-		const auto& axisMap{ m_AxisKeyMappings.at(actionName) };
-
-		for (const auto& val : axisMap.keys)
+		ActionMap actionMap{ keyPacks };
+		m_ActionKeyMappings.try_emplace(name, actionMap);
+	}
+	else
+	{
+		for (const auto& keyPack : keyPacks)
 		{
-			const InputState& state{ m_MainKeyPool.at(val.key) };
-
-			if (state.userIndex == playerIndex)
-				return state.keyEvent;
+			findItr->second.AddKey(keyPack);
 		}
 	}
-	catch (const std::exception& e)
-	{
-		std::string log{ e.what() };
-		log.append(" Can't find given action name, maybe you forgot to add it?");
-		POWLOGERROR(log);
-	}
 
-	return InputEvent::IE_None;
+	for (const auto& keyPack : keyPacks)
+	{
+		AddKeyToMainKeyPool(keyPack.key);
+	}
 }
 
-void powe::InputSettings::AddInputEvent(const std::string& actionName, const std::initializer_list<ActionKey>& keys)
+void powe::InputSettings::AddAxisMapping(const std::string& name, const std::vector<AxisMap::AxisKeyPack>& keyPacks)
 {
-	if(!m_ActionKeyMappings.contains(actionName))
+	const auto findItr{ m_AxisKeyMappings.find(name) };
+	if (findItr == m_AxisKeyMappings.end())
 	{
-		for (const auto& key : keys)
+		AxisMap axisMap{ keyPacks };
+		m_AxisKeyMappings.try_emplace(name, axisMap);
+	}
+	else
+	{
+		for (const auto& keyPack : keyPacks)
 		{
-			m_MainKeyPool.try_emplace(key.key, InputState{});
+			findItr->second.AddKey(keyPack);
 		}
 	}
+
+	for (const auto& keyPack : keyPacks)
+	{
+		AddKeyToMainKeyPool(keyPack.key);
+	}
 }
+
 
 bool powe::InputSettings::IsKeyBoardPressed(KeyType key)
 {
 	return sf::Keyboard::isKeyPressed(sf::Keyboard::Key(key));
-}
-
-void powe::InputSettings::ValidateKeyState(const AxisKey& key, bool isKeyPressed)
-{
-	const auto& itr{ m_MainKeyPool.find(key.key) };
-	if (itr != m_MainKeyPool.end())
-	{
-		InputState& currentInputState{ itr->second };
-
-		currentInputState.keyEvent = InterpretInputState(isKeyPressed, currentInputState.keyEvent);
-
-		// Interpret Axis value
-		if ((currentInputState.keyEvent == InputEvent::IE_Down) ||
-			(currentInputState.keyEvent == InputEvent::IE_Pressed))
-			currentInputState.axisValue = key.scale;
-		else
-			currentInputState.axisValue = 0.0f;
-	}
 }
 
 InputEvent powe::InputSettings::InterpretInputState(bool isKeyPressed, const InputEvent& savedInputState)
@@ -268,16 +259,93 @@ InputEvent powe::InputSettings::InterpretInputState(bool isKeyPressed, const Inp
 	return InputEvent::IE_None;
 }
 
-void powe::InputSettings::ValidateMouseDelta(const MousePos& mousePos)
+void powe::InputSettings::AddKeyToMainKeyPool(const Key& key)
 {
-	// Mouse AxisX
-	// TODO: Implement mouse axis movement
-	const auto& itrMouseAxisX{ m_MainKeyPool.find(Key{ InputDevice::D_Mouse,KeyType(MouseKey::MK_AxisX) }) };
-	if (itrMouseAxisX != m_MainKeyPool.end())
+	if (key.inputDevice == InputDevice::D_Gamepad)
 	{
-		InputState& currentInputState{ itrMouseAxisX->second };
-		currentInputState.axisValue = (currentInputState.axisValue - float(mousePos.relativePosX));
+		for (auto& mainKeyPool : m_MainKeyPool)
+		{
+			mainKeyPool.try_emplace(key, KeyState{});
+		}
 	}
+	else
+	{
+		// Keyboard and mouse is always assigned to the first player
+		m_MainKeyPool[0].try_emplace(key, KeyState{});
+	}
+
+}
+
+void powe::InputSettings::UpdateMainKeyPool()
+{
+	for (auto& playerKeyPool : m_MainKeyPool)
+	{
+		for (auto& currentState : playerKeyPool | std::views::values)
+		{
+			currentState.inputLastFrame = currentState.inputThisFrame;
+		}
+	}
+}
+
+
+InputEvent powe::InputSettings::EvaluateMainKeyPool(const KeyData& inKey, uint8_t)
+{
+	auto& mainKeyPool{ m_MainKeyPool[inKey.playerIndex] };
+
+	InputEvent thisFrameEvent{ InputEvent::IE_None };
+
+	if (mainKeyPool.contains(inKey.key))
+	{
+		auto& currentState = mainKeyPool.at(inKey.key);
+
+		currentState.inputThisFrame = inKey.isDown;
+		currentState.axisThisFrame = inKey.axisValue;
+
+		thisFrameEvent = InputEvent((currentState.inputLastFrame << 0) | (currentState.inputThisFrame << 1));
+
+		//if (userInput.inputThisFrame && userInput.inputLastFrame)
+		//	thisFrameEvent = InputEvent::IE_Down;
+		//else if (userInput.inputThisFrame && !userInput.inputLastFrame)
+		//	thisFrameEvent = InputEvent::IE_Pressed;
+		//else if (!userInput.inputThisFrame && userInput.inputLastFrame)
+		//	thisFrameEvent = InputEvent::IE_Released;
+	}
+
+	return thisFrameEvent;
+}
+
+void powe::InputSettings::UpdateAxisMapping(const KeyData& inKey, InputEvent thisFrameEvent)
+{
+	if (thisFrameEvent == InputEvent::IE_Pressed ||
+		thisFrameEvent == InputEvent::IE_Released)
+	{
+		for (auto& axisMap : m_AxisKeyMappings)
+		{
+			// re calculate total axis map
+			axisMap.second.currentSumAxis[inKey.playerIndex] = 0;
+			for (const auto& [key, scale] : axisMap.second.keyPool)
+			{
+				if (m_MainKeyPool[inKey.playerIndex].contains(key))
+				{
+					const auto& currentState{ m_MainKeyPool[inKey.playerIndex].at(key) };
+					axisMap.second.currentSumAxis[inKey.playerIndex] += currentState.axisThisFrame * scale;
+				}
+			}
+		}
+	}
+}
+
+
+void powe::InputSettings::ValidateMouseDelta(const MousePos&)
+{
+	//// Mouse AxisX
+	//// TODO: Implement mouse axis movement
+	//const auto& itrMouseAxisX{ m_MainKeyPool.find(Key{ InputDevice::D_Mouse,KeyType(MouseKey::MK_AxisX) }) };
+	//if (itrMouseAxisX != m_MainKeyPool.end())
+	//{
+	//	InputState& currentInputState{ itrMouseAxisX->second };
+	//	currentInputState.axisValue = (currentInputState.axisValue - float(mousePos.relativePosX));
+	//}
 }
 
 //void powe::InputSettings::ParseMouseKey(const MouseData& key, uint8_t eventId, bool isKeyPressed)

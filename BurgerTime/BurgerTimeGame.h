@@ -11,9 +11,11 @@ namespace powe
 	class Texture;
 }
 
+class TestScene;
 class BurgerTimeGame
 {
 public:
+
 
 	void Start(const SharedPtr<powe::Core>& core,const SharedPtr<powe::WorldEntity>& worldEntity);
 	void Run(const SharedPtr<powe::WorldEntity>& worldEntity,const SharedPtr<powe::WorldClock>& worldClock);
@@ -21,6 +23,8 @@ public:
 private:
 
 	SharedPtr<powe::Texture> m_MainTexture;
+	SharedPtr<TestScene> m_PlayScene;
+	int m_Test{};
 
 };
 

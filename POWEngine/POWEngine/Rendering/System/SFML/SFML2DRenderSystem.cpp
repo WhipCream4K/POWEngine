@@ -16,16 +16,17 @@ void powe::SFML2DRenderSystem::OnDraw(const SFML2DRenderer& renderer, GameObject
 		GetComponentsView<Transform2D, SpriteComponent, SFMLSpriteComponent>();
 
 	const glm::vec2 position{ transform2D->GetWorldPosition() };
-	const glm::vec2 scale{ transform2D->GetLocalScale() };
+	const glm::vec2 scale{ transform2D->GetWorldScale() };
 	const float rotation{ transform2D->GetWorldRotation() };
+
+	//const glm::fvec2 spriteOrigin{ sprite->GetOrigin() };
 
 	sf::RenderStates renderStates{};
 	auto& sfTransform{ renderStates.transform };
 
-	// TODO: Set origin of the sprite here
+	sfTransform.translate({ position.x,position.y });
 	sfTransform.rotate(sf::degrees(rotation));
 	sfTransform.scale({ scale.x,scale.y });
-	sfTransform.translate({ position.x,position.y });
 
 	renderer.SubmitDrawSprite(&sfmlSprite->sprite, renderStates, int(sprite->GetZDepth()));
 }

@@ -3,6 +3,7 @@
 #include "SFMLWindow.h"
 #include "POWEngine/Window/WindowEvents.h"
 #include "POWEngine/Core/Input/Key.h"
+#include "POWEngine/Core/Input/ListsOfKeys.h"
 
 #if USE_SFML_WINDOW
 
@@ -240,7 +241,7 @@ const powe::HardwareMessages& powe::SFMLWindow::PollHardwareMessages(bool& shoul
 			}
 			case sf::Event::MouseButtonPressed:
 			{
-				messageData.hData = MouseCharKey(sfmlEvent.mouseButton.button);
+				messageData.hData = MouseData{ MouseCharKey(sfmlEvent.mouseButton.button) };
 				messageData.eventId = uint8_t(WindowEvents::MouseButtonPressed);
 				messageData.inDevice = InputDevice::D_Mouse;
 
@@ -250,7 +251,7 @@ const powe::HardwareMessages& powe::SFMLWindow::PollHardwareMessages(bool& shoul
 			}
 			case sf::Event::MouseButtonReleased:
 			{
-				messageData.hData = MouseCharKey(sfmlEvent.mouseButton.button);
+				messageData.hData = MouseData{ MouseCharKey(sfmlEvent.mouseButton.button) };
 				messageData.eventId = uint8_t(WindowEvents::MouseButtonReleased);
 				messageData.inDevice = InputDevice::D_Mouse;
 
@@ -260,7 +261,7 @@ const powe::HardwareMessages& powe::SFMLWindow::PollHardwareMessages(bool& shoul
 			}
 			case sf::Event::MouseWheelScrolled:
 			{
-				messageData.hData = MouseWheelDelta(sfmlEvent.mouseWheelScroll.delta);
+				messageData.hData = MouseData{ MouseCharKey(MouseKey::MK_Middle),MouseWheelDelta(sfmlEvent.mouseWheelScroll.delta)};
 				messageData.eventId = uint8_t(WindowEvents::MouseWheelScrolled);
 				messageData.inDevice = InputDevice::D_Mouse;
 
@@ -276,11 +277,13 @@ const powe::HardwareMessages& powe::SFMLWindow::PollHardwareMessages(bool& shoul
 				m_DeltaMousePos.x = float(sfmlEvent.mouseMove.x - m_MousePosLastPoll.x);
 				m_DeltaMousePos.y = float(m_MousePosLastPoll.y - sfmlEvent.mouseMove.y);
 
-				messageData.hData = MousePos{
+				MousePos mousePos = MousePos{
 					m_DeltaMousePos.x,
 					m_DeltaMousePos.y,
 					sfmlEvent.mouseMove.x,
 					sfmlEvent.mouseMove.y };
+
+				messageData.hData = MouseData{ MouseCharKey(MouseKey::MK_None),mousePos };
 
 				m_MousePosLastPoll.x = sfmlEvent.mouseMove.x;
 				m_MousePosLastPoll.y = sfmlEvent.mouseMove.y;

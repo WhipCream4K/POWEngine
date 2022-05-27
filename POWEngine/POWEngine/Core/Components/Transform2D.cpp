@@ -110,7 +110,10 @@ const glm::vec2& powe::Transform2D::GetLocalPosition() const
 
 const glm::vec2& powe::Transform2D::GetLocalScale() const
 {
-	return m_LocalScales;
+	if (m_ParentNode.lock())
+		return m_LocalScales;
+
+	return m_WorldScales;
 }
 
 

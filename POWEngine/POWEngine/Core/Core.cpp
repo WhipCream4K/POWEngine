@@ -81,11 +81,11 @@ void powe::Core::Step(WorldEntity& worldEntity) const
 
 	const float deltaTime{ m_WorldClock->GetDeltaTime() };
 
+	worldEntity.UpdatePipeline(PipelineLayer::InputValidation, deltaTime);
 	worldEntity.UpdatePipeline(PipelineLayer::Async, deltaTime);
 	worldEntity.UpdatePipeline(PipelineLayer::Update, deltaTime);
 	worldEntity.UpdatePipeline(PipelineLayer::PostUpdate, deltaTime);
 
-	//ServiceLocator::GetSoundSystem().Update();
 }
 
 void powe::Core::Draw(const SharedPtr<Window>& window, const SharedPtr<WorldEntity>& worldEntt) const
@@ -99,9 +99,11 @@ void powe::Core::Draw(const SharedPtr<Window>& window, const SharedPtr<WorldEnti
 void powe::Core::Draw(const Window& window, const WorldEntity& worldEntt) const
 {
 	window.ClearWindow();
-	m_MainRenderer->UpdateSystem(worldEntt,worldEntt.GetActiveArchetypes());
+	m_MainRenderer->UpdateSystem(worldEntt, worldEntt.GetActiveArchetypes());
 	m_MainRenderer->Draw(window);
 	window.Display();
+
+	m_WorldClock->End();
 }
 
 void powe::Core::RegisterRendererType(OwnedPtr<RenderAPI>&& renderAPI) const

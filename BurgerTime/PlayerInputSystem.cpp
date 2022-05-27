@@ -3,6 +3,7 @@
 #include "BurgerTimeComponents.h"
 #include "POWEngine/Core/Components/AudioComponent.h"
 #include "POWEngine/Core/Components/Transform2D.h"
+#include "POWEngine/Logger/LoggerUtils.h"
 
 PlayerInputSystem::PlayerInputSystem()
 {
@@ -14,6 +15,11 @@ PlayerInputSystem::PlayerInputSystem()
 void PlayerInputSystem::OnUpdate(float, powe::GameObjectID)
 {
 	using  namespace powe;
+
+	//const float axis = GetWorld()->GetInputSettings().GetInputAxis("Horizontal");
+
+	//POWLOGNORMAL(std::to_string(axis));
+
 	//constexpr float speed{ 20.0f };
 	//if(GetWorld()->GetInputSettings().GetInputEvent("Horizontal") == InputEvent::IE_Down)
 	//{

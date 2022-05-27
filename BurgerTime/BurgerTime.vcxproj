@@ -195,6 +195,7 @@ xcopy /y "$(SolutionDir)3rdPartyLib\allDLLs\$(Platform)\$(Configuration)\*.dll" 
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AnimationSystem.cpp" />
     <ClCompile Include="AssetManager.cpp" />
     <ClCompile Include="BurgerTimeGame.cpp" />
     <ClCompile Include="main.cpp" />
@@ -202,7 +203,10 @@ xcopy /y "$(SolutionDir)3rdPartyLib\allDLLs\$(Platform)\$(Configuration)\*.dll" 
     <ClCompile Include="PlayerCommand.cpp" />
     <ClCompile Include="PlayerInputSystem.cpp" />
     <ClCompile Include="PlayScene.cpp" />
+    <ClCompile Include="SceneFactory.cpp" />
     <ClCompile Include="StateController.cpp" />
+    <ClCompile Include="TestCommand.cpp" />
+    <ClCompile Include="TestScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\POWEngine\POWEngine.vcxproj">
@@ -210,6 +214,7 @@ xcopy /y "$(SolutionDir)3rdPartyLib\allDLLs\$(Platform)\$(Configuration)\*.dll" 
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AnimationSystem.h" />
     <ClInclude Include="AssetManager.h" />
     <ClInclude Include="BurgerTimeComponents.h" />
     <ClInclude Include="BurgerTimeGame.h" />
@@ -218,7 +223,11 @@ xcopy /y "$(SolutionDir)3rdPartyLib\allDLLs\$(Platform)\$(Configuration)\*.dll" 
     <ClInclude Include="PlayerInputSystem.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="SceneFactory.h" />
     <ClInclude Include="StateController.h" />
+    <ClInclude Include="StaticVariables.h" />
+    <ClInclude Include="TestCommand.h" />
+    <ClInclude Include="TestScene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

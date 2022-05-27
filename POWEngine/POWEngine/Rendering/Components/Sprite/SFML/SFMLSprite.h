@@ -20,6 +20,7 @@ namespace powe
 		void SetOrigin(float x, float y) override;
 		void SetTexture(const Texture& texture) override;
 		void SetOrigin(const glm::fvec2& pos) override;
+		glm::fvec2 GetOrigin() const override;
 		void SetRect(const glm::fvec4& rect) override;
 		SFMLSpriteComponent* GetSfSprite() const;
 

@@ -5,12 +5,12 @@
 enum class InputEvent
 {
 	IE_None,
-	IE_Pressed,
-	IE_Released,
-	IE_Down,
+	IE_Released = 0b10,
+	IE_Pressed = 0b01,
+	IE_Down = 0b11,
 };
 
-enum class MouseKey : uint8_t
+enum MouseKey : uint8_t
 {
 	MK_Left,
 	MK_Right,
@@ -22,15 +22,15 @@ enum class MouseKey : uint8_t
 	MK_None
 };
 
-enum class KeyboardSysKey
+enum KeyboardSysKey : uint8_t
 {
-	KS_Ctrl		,
-	KS_Shift	,
-	KS_Alt		,
-	KS_System	
+	KS_Ctrl	,
+	KS_Shift,	
+	KS_Alt	,	
+	KS_System,	
 };
 
-enum class GamePadKey : uint16_t
+enum GamePadKey : uint16_t
 {
 	GPK_None = 0,
 	GPK_DPAD_Up = (1 << 0),
@@ -54,6 +54,114 @@ enum class GamePadKey : uint16_t
 
 
 	GPK_KEY_CHECK = 0b111100111111111
+};
+
+
+enum Keyboard : uint8_t
+{
+	A = 0,
+	B,
+	C,
+	D,
+	E,
+	F,
+	G,
+	H,
+	I,
+	J,
+	K,
+	L,
+	M,
+	N,
+	O,
+	P,
+	Q,
+	R,
+	S,
+	T,
+	U,
+	V,
+	W,
+	X,
+	Y,
+	Z,
+	Num0,
+	Num1,
+	Num2,
+	Num3,
+	Num4,
+	Num5,
+	Num6,
+	Num7,
+	Num8,
+	Num9,
+	Escape,
+	LControl,
+	LShift,
+	LAlt,
+	LSystem,
+	RControl,
+	RShift,
+	RAlt,
+	RSystem,
+	Menu,
+	LBracket,
+	RBracket,
+	Semicolon,
+	Comma,
+	Period,
+	Quote,
+	Slash,
+	Backslash,
+	Tilde,
+	Equal,
+	Hyphen,
+	Space,
+	Enter,
+	Backspace,
+	Tab,
+	PageUp,
+	PageDown,
+	End,
+	Home,
+	Insert,
+	Delete,
+	Add,
+	Subtract,
+	Multiply,
+	Divide,
+	Left,
+	Right,
+	Up,
+	Down,
+	Numpad0,
+	Numpad1,
+	Numpad2,
+	Numpad3,
+	Numpad4,
+	Numpad5,
+	Numpad6,
+	Numpad7,
+	Numpad8,
+	Numpad9,
+	F1,
+	F2,
+	F3,
+	F4,
+	F5,
+	F6,
+	F7,
+	F8,
+	F9,
+	F10,
+	F11,
+	F12,
+	F13,
+	F14,
+	F15,
+	Pause,
+
+	KeyCount
 };
 
 //static constexpr uint32_t MaxHardWareInputs{UINT8_MAX + }

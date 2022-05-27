@@ -13,6 +13,7 @@ namespace powe
 	};
 
 	using KeyType = uint16_t;
+	using SysKeyType = uint8_t;
 
 	struct Key
 	{

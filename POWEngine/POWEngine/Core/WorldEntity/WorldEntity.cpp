@@ -26,9 +26,9 @@ void powe::WorldEntity::AddSystem(PipelineLayer layer, const SharedPtr<SystemBas
 	m_PendingAddSystem.Push(SystemTrait{ system,layer });
 }
 
-void powe::WorldEntity::RemoveSystem(PipelineLayer layer, const SharedPtr<SystemBase>& system)
+void powe::WorldEntity::RemoveSystem(const SharedPtr<SystemBase>& system)
 {
-	m_PendingDeleteSystem.Push(SystemTrait{ system,layer });
+	m_PendingDeleteSystem.Push(system);
 }
 
 powe::GameObjectID powe::WorldEntity::GetNewEntityID()
@@ -243,11 +243,14 @@ void powe::WorldEntity::UpdatePipeline(PipelineLayer layer, float deltaTime)
 
 void powe::WorldEntity::ResolveEntities()
 {
+
+	InternalRemoveSystemFromPipeline();
 	InternalRemoveGameObjectFromPipeline();
 	InternalRemoveComponentFromGameObject();
+
 	InternalAddGameObjectToPipeline();
 	InternalAddSystemToPipeline();
-	InternalRemoveSystemFromPipeline();
+
 	ClearEmptyArchetype();
 }
 
@@ -456,7 +459,7 @@ void powe::WorldEntity::InternalRemoveComponentFromGameObject()
 					}) != componentIDs.end();
 			}).begin(), newTypes.end());
 
-		const std::string newArchetypeKey{ CreateStringFromNumVector(newTypes) }; 
+		const std::string newArchetypeKey{ CreateStringFromNumVector(newTypes) };
 		const std::string oldArchetypeKey{ CreateStringFromNumVector(oldArchetype->Types) };
 
 		auto targetArchetype{ GetArchetypeFromActiveList(newArchetypeKey) };
@@ -623,6 +626,14 @@ void powe::WorldEntity::RemoveGameObjectFromPreArchetype(GameObjectID id)
 {
 	if (m_PreArchetypes.contains(id))
 	{
+		for (const auto& [componentID,data] : m_PreArchetypes[id].componentData)
+		{
+			const ComponentTypeID discardTypeID{ DiscardFlag(componentID) };
+			const SharedPtr<BaseComponent> thisComponent{ GetComponentTrait(discardTypeID) };
+			
+			thisComponent->DestroyData(data.get());
+		}
+
 		m_PreArchetypes.erase(id);
 	}
 }
@@ -642,8 +653,8 @@ void powe::WorldEntity::DestroyComponentData(
 		{
 			m_SparseComponentManager.RemoveComponentFromGameObject(id, componentTypeId);
 		}
-		else
-			componentTrait->DestroyData(startAddress + offset);
+		
+		componentTrait->DestroyData(startAddress + offset);
 	}
 }
 
@@ -787,39 +798,42 @@ void powe::WorldEntity::InternalAddSystemToPipeline()
 
 void powe::WorldEntity::InternalRemoveSystemFromPipeline()
 {
-	std::unordered_map<PipelineLayer, std::vector<SharedPtr<SystemBase>>> removingSystems{};
+	std::vector<SharedPtr<SystemBase>> removingSystems{};
 
 	while (!m_PendingDeleteSystem.Empty())
 	{
-		const auto systemTrait{ m_PendingDeleteSystem.Front() };
+		const auto system{ m_PendingDeleteSystem.Front() };
 		m_PendingDeleteSystem.Pop();
-		removingSystems[systemTrait.layer].emplace_back(systemTrait.system);
+		removingSystems.emplace_back(system);
 	}
 
-	for (const auto& [layer, removeSystem] : removingSystems)
+	if(!removingSystems.empty())
 	{
-		auto& existingSystems{ m_SystemPipeline[int(layer)] };
-
-		const auto removeItr = std::ranges::remove_if(existingSystems, [&removeSystem](const SharedPtr<SystemBase>& system)
-			{
-				return std::ranges::find(removeSystem, system) != removeSystem.end();
-			});
-
-		for (auto it = removeItr.begin(); it != existingSystems.end(); ++it)
+		for (auto& systemPipeline : m_SystemPipeline)
 		{
-			const auto& system{ it->get() };
-			for (const auto& archetype : m_ArchetypesPool | std::views::values)
+			const auto findItr{ std::ranges::remove_if(systemPipeline,[&removingSystems](const SharedPtr<SystemBase>& activeSystem)
 			{
-				if (!archetype->GameObjectIds.empty())
+				return std::ranges::find(removingSystems,activeSystem) != removingSystems.end();
+			}) };
+
+			for (auto it = findItr.begin(); it != findItr.end(); ++it)
+			{
+				for (const auto& archetype : m_ArchetypesPool | std::views::values)
 				{
-					if (IsDigitExistInNumber(archetype->ComponentOffsets, system->GetKeys()))
-						system->InternalDestroy(*archetype);
+					if (!archetype->GameObjectIds.empty())
+					{
+						if (IsDigitExistInNumber(archetype->ComponentOffsets, it->get()->GetKeys()))
+							it->get()->InternalDestroy(*archetype);
+					}
 				}
 			}
-		}
 
-		existingSystems.erase(removeItr.begin(), existingSystems.end());
+
+			systemPipeline.erase(findItr.begin(), systemPipeline.end());
+		}
 	}
+
+
 }
 
 

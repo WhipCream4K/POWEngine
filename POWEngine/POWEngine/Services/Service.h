@@ -22,7 +22,7 @@ namespace powe
 
 		// Generate Id for their sub class
 		template<typename T>
-		static size_t GetId();
+		static ServiceKey GetId();
 
 		//virtual std::function<SharedPtr<Service>> GetDefault() = 0;
 		//virtual SharedPtr<Service> GetDefault() const = 0;
@@ -33,6 +33,7 @@ namespace powe
 		static std::atomic<ServiceKey> m_Id;
 
 	};
+
 
 	template <typename T>
 	ServiceKey Service::GetId()

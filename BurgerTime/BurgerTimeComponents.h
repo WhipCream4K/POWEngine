@@ -2,12 +2,18 @@
 
 #include <poweComponent.h>
 
-struct InputComponent : powe::Component<InputComponent>
+struct AnimationComponent : powe::Component<AnimationComponent>
 {
-	int tag{};
-};
+	AnimationComponent() = default;
 
-struct Set : powe::Component<Set>
-{
-	int lmao{};
+	AnimationComponent(int nbSprites,float timeSpan)
+		: spritePerSec(timeSpan / float(nbSprites))
+		, totalSprite(nbSprites)
+	{
+	}
+
+	float spritePerSec{};
+	float totalTime{};
+	int totalSprite{};
+	int currentSprite{};
 };

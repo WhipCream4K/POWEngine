@@ -45,6 +45,11 @@ void powe::SpriteComponent::SetOrigin(const glm::fvec2& pos) const
 	m_SpriteImpl->SetOrigin(pos);
 }
 
+glm::fvec2 powe::SpriteComponent::GetOrigin() const
+{
+	return m_SpriteImpl->GetOrigin();
+}
+
 float powe::SpriteComponent::GetZDepth() const
 {
 	return m_ZDepth;

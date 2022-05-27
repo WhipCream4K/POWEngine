@@ -31,8 +31,7 @@ namespace powe
 
 		// Lock-free add system
 		void AddSystem(PipelineLayer layer, const SharedPtr<SystemBase>& system);
-
-		void RemoveSystem(PipelineLayer layer,const SharedPtr<SystemBase>& system);
+		void RemoveSystem(const SharedPtr<SystemBase>& system);
 
 		// TODO: Maybe do a thread safe registering component
 		template<typename ComponentType>
@@ -158,7 +157,7 @@ namespace powe
 		};
 
 		LFStack<SystemTrait> m_PendingAddSystem;
-		LFStack<SystemTrait> m_PendingDeleteSystem;
+		LFStack<SharedPtr<SystemBase>> m_PendingDeleteSystem;
 
 		// -------------------------------
 		// --------- Component -----------

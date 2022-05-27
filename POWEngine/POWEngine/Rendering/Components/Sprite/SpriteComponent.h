@@ -27,6 +27,9 @@ namespace powe
 		void SetRect(const glm::fvec4& rect) const;
 		void SetOrigin(float x, float y) const;
 		void SetOrigin(const glm::fvec2& pos) const;
+
+		glm::fvec2 GetOrigin() const;
+
 		float GetZDepth() const;
 
 		template<typename T>

@@ -187,8 +187,12 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="POWEngine\Core\Input\InputSystem.h" />
+    <ClInclude Include="POWEngine\Core\Components\InputComponent.h" />
     <ClInclude Include="POWEngine\Core\Components\AudioComponent.h" />
     <ClInclude Include="include\poweComponent.h" />
+    <ClInclude Include="POWEngine\Core\Input\InputMapping.h" />
+    <ClInclude Include="POWEngine\Core\Input\InputVars.h" />
     <ClInclude Include="POWEngine\Rendering\Components\Sprite\SFML\SFMLSpriteComponent.h" />
     <ClInclude Include="POWEngine\Singleton\InstanceUtils.h" />
     <ClInclude Include="POWEngine\Sound\FMOD\AudioClip.h" />
@@ -210,7 +214,7 @@
     <ClInclude Include="POWEngine\Core\Components\BaseComponent.h" />
     <ClInclude Include="POWEngine\ECS\ECSTypes.h" />
     <ClInclude Include="POWEngine\Core\Input\InputStruct.h" />
-    <ClInclude Include="POWEngine\Core\Input\InputTypes.h" />
+    <ClInclude Include="POWEngine\Core\Input\ListsOfKeys.h" />
     <ClInclude Include="POWEngine\Core\Input\InputSettings.h" />
     <ClInclude Include="POWEngine\Core\Input\InputManager.h" />
     <ClInclude Include="POWEngine\Core\Input\Key.h" />
@@ -257,7 +261,10 @@
     <ClInclude Include="POWEngine\Singleton\ThreadSafeSingleton.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="POWEngine\Core\Input\InputSystem.cpp" />
+    <ClCompile Include="POWEngine\Core\Components\InputComponent.cpp" />
     <ClCompile Include="POWEngine\Core\Components\AudioComponent.cpp" />
+    <ClCompile Include="POWEngine\Core\Input\InputMapping.cpp" />
     <ClCompile Include="POWEngine\Sound\FMOD\AudioClip.cpp" />
     <ClCompile Include="POWEngine\Sound\FMOD\Channel.cpp" />
     <ClCompile Include="POWEngine\Rendering\NullRenderer.cpp" />

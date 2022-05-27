@@ -1,6 +1,6 @@
 #pragma once
 
-#include "InputTypes.h"
+#include "ListsOfKeys.h"
 #include <variant>
 
 namespace powe
@@ -10,6 +10,13 @@ namespace powe
 		InputEvent keyEvent{ InputEvent::IE_None };
 		uint8_t userIndex{};
 		float axisValue{};
+	};
+
+	struct KeyState
+	{
+		float axisThisFrame{};
+		bool inputLastFrame{};
+		bool inputThisFrame{};
 	};
 
 	// reduce 8 bytes of information when separate wheel data out 
@@ -32,7 +39,13 @@ namespace powe
 
 	using MouseCharKey = uint8_t;
 
-	using MouseData = std::variant<MouseCharKey, MouseWheelDelta, MousePos>;
+	//using MouseData = std::variant<MouseCharKey, MouseWheelDelta, MousePos>;
+
+	struct MouseData
+	{
+		MouseCharKey keyCode{};
+		std::variant<MouseWheelDelta, MousePos> axisData{};
+	};
 
 	// The implementation is almost like union
 	using HardWareInputData = std::variant<MouseData, KeyboardData>;
