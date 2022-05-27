@@ -1,4 +1,4 @@
-#pragma once
+	#pragma once
 
 #include "POWEngine/Core/Input/InputSettings.h"
 #include "POWEngine/ECS/Archetype.h"
@@ -30,7 +30,7 @@ namespace powe
 		InputSettings& GetInputSettings() { return  m_InputSettings; }
 
 		// Lock-free add system
-		void AddSystem(PipelineLayer layer, const SharedPtr<SystemBase>& system);
+		void RegisterSystem(PipelineLayer layer, const SharedPtr<SystemBase>& system);
 		void RemoveSystem(const SharedPtr<SystemBase>& system);
 
 		// TODO: Maybe do a thread safe registering component

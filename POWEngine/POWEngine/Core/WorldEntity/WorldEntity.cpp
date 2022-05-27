@@ -20,7 +20,7 @@ powe::WorldEntity::~WorldEntity()
 	ClearArchetype();
 }
 
-void powe::WorldEntity::AddSystem(PipelineLayer layer, const SharedPtr<SystemBase>& system)
+void powe::WorldEntity::RegisterSystem(PipelineLayer layer, const SharedPtr<SystemBase>& system)
 {
 	system->SetWorld(this);
 	m_PendingAddSystem.Push(SystemTrait{ system,layer });

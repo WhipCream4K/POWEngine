@@ -43,13 +43,13 @@ void TestScene::LoadScene(powe::WorldEntity& worldEntity)
 	AddGameObject(audioTest);
 
 	SharedPtr<SystemBase> system{ std::make_shared<PlayerInputSystem>() };
-	worldEntity.AddSystem(PipelineLayer::Update, system);
+	worldEntity.RegisterSystem(PipelineLayer::Update, system);
 
 	AddSystem(system);
 	
 	system = std::make_shared<AnimationSystem>();
 
-	worldEntity.AddSystem(PipelineLayer::PostUpdate, system);
+	worldEntity.RegisterSystem(PipelineLayer::PostUpdate, system);
 
 	const auto& inputTest{ std::make_shared<GameObject>(worldEntity) };
 	InputComponent* inputComponent = inputTest->AddComponent(InputComponent{});

@@ -19,7 +19,7 @@ void BurgerTimeGame::Start(const SharedPtr<powe::Core>& ,
 	using namespace powe;
 
 	//SharedPtr<PlayerInputSystem> system{ std::make_shared<PlayerInputSystem>() };
-	//worldEntity->AddSystem(PipelineLayer::Update, system);
+	//worldEntity->RegisterSystem(PipelineLayer::Update, system);
 
 	//const SharedPtr<GameObject> testObject{std::make_shared<GameObject>(*worldEntity)};
 	//m_GameObjectNodes.emplace_back(testObject);
@@ -57,7 +57,7 @@ void BurgerTimeGame::Start(const SharedPtr<powe::Core>& ,
 		{InputDevice::D_Keyboard,Keyboard::Space}
 		});
 
-	worldEntity->AddSystem(PipelineLayer::InputValidation, std::make_shared<InputSystem>());
+	worldEntity->RegisterSystem(PipelineLayer::InputValidation, std::make_shared<InputSystem>());
 }
 
 void BurgerTimeGame::Run(const SharedPtr<powe::WorldEntity>& ,

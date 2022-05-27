@@ -9,6 +9,7 @@
 #include "BurgerTimeGame.h"
 #include "POWEngine/Logger/Console/ConsoleLogger.h"
 #include "POWEngine/Rendering/SFML/SFML2DRenderer.h"
+#include "POWEngine/Rendering/System/SFML/SFML2DRenderSystem.h"
 #include "POWEngine/Sound/FMOD/FMOD2DSound.h"
 
 
@@ -25,6 +26,8 @@ int main()
 
 	powe::ServiceLocator::RegisterLogger(std::make_shared<powe::ConsoleLogger>());
 	powe::ServiceLocator::RegisterSoundSystem(std::make_shared<powe::FMOD2DSound>(20));
+
+	engineCore->GetRenderer()->RegisterSystem(std::make_shared<powe::SFML2DRenderSystem>());
 
 	burgerTimeScene->Start(engineCore,worldEntity);
 

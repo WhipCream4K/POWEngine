@@ -4,16 +4,9 @@
 #include "POWEngine/Rendering/System/RenderSystemBase.h"
 #include "NullRenderer.h"
 
-#if USE_SFML_RENDERER
-#include "POWEngine/Rendering/System/SFML/SFML2DRenderSystem.h"
-#endif
-
 powe::Renderer::Renderer()
 	: m_RenderAPI(std::make_unique<NullRenderer>())
 {
-#if USE_SFML_RENDERER
-	RegisterSystem(std::make_shared<SFML2DRenderSystem>());
-#endif
 }
 
 powe::Renderer::~Renderer() = default;
