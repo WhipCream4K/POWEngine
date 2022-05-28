@@ -15,6 +15,8 @@
 #include "StaticVariables.h"
 #include "POWEngine/Core/Components/InputComponent.h"
 #include "TestCommand.h"
+#include "BurgerTimeComponents.h"
+#include "PlayerCommands.h"
 
 
 void TestScene::LoadScene(powe::WorldEntity& worldEntity)
@@ -29,6 +31,7 @@ void TestScene::LoadScene(powe::WorldEntity& worldEntity)
 	spriteComp->SetRect({ 0.0f,0.0f,16.0f,16.0f });
 
 	spriteTest->AddComponent(AnimationComponent{ 3,0.5f });
+	spriteTest->AddComponent(PlayerSpeed{150.0f});
 	
 	Transform2D* transform2D = spriteTest->AddComponent(Transform2D{ spriteTest });
 
@@ -51,12 +54,10 @@ void TestScene::LoadScene(powe::WorldEntity& worldEntity)
 
 	worldEntity.RegisterSystem(PipelineLayer::PostUpdate, system);
 
-	const auto& inputTest{ std::make_shared<GameObject>(worldEntity) };
-	InputComponent* inputComponent = inputTest->AddComponent(InputComponent{});
-	inputComponent->AddAxisCommand("Horizontal", std::make_shared<TestCommand>());
-	inputComponent->AddActionCommand("Fire", InputEvent::IE_Pressed, std::make_shared<FireCommand>());
+	InputComponent* inputComponent = spriteTest->AddComponent(InputComponent{});
 
-	AddGameObject(inputTest);
+	inputComponent->AddAxisCommand("Horizontal", std::make_shared<HorizontalMovement>());
+	inputComponent->AddAxisCommand("Vertical", std::make_shared<VerticalMovement>());
 
 	AddSystem(system);
 }

@@ -5,12 +5,12 @@
 
 namespace powe
 {
-	struct InputState
-	{
-		InputEvent keyEvent{ InputEvent::IE_None };
-		uint8_t userIndex{};
-		float axisValue{};
-	};
+	//struct InputState
+	//{
+	//	InputEvent keyEvent{ InputEvent::IE_None };
+	//	uint8_t userIndex{};
+	//	float axisValue{};
+	//};
 
 	struct KeyState
 	{
@@ -39,23 +39,29 @@ namespace powe
 
 	using MouseCharKey = uint8_t;
 
-	//using MouseData = std::variant<MouseCharKey, MouseWheelDelta, MousePos>;
-
 	struct MouseData
 	{
 		MouseCharKey keyCode{};
 		std::variant<MouseWheelDelta, MousePos> axisData{};
 	};
 
-	// The implementation is almost like union
-	using HardWareInputData = std::variant<MouseData, KeyboardData>;
-
-	// Just some helper function to get mouse data
-	template<typename T>
-	inline static decltype(auto) GetMouseData(const HardWareInputData& hData)
+	struct GamepadAxisData
 	{
-		return std::get<T>(std::get<MouseData>(hData));
-	}
+		float LThumbX{}, LThumbY{};
+		float RThumbX{}, RThumbY{};
+		float LShoulder{}, RShoulder{};
+		uint8_t playerIndex{};
+	};
+
+	struct GamepadButtonData
+	{
+		uint16_t buttons{};
+		uint8_t playerIndex{};
+	};
+
+	// The implementation is almost like union
+	using HardWareInputData = std::variant<MouseData, KeyboardData,GamepadButtonData,GamepadAxisData>;
+
 }
 
 

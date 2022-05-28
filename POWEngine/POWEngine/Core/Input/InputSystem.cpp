@@ -8,7 +8,7 @@ powe::InputSystem::InputSystem()
 	DEFINE_SYSTEM_KEY(InputComponent);
 }
 
-void powe::InputSystem::OnUpdate(float, powe::GameObjectID)
+void powe::InputSystem::OnUpdate(float deltaTime, powe::GameObjectID id)
 {
 	const InputComponent* inputComponent{ GetComponent<InputComponent>() };
 	const InputSettings& inputSettings{ GetWorld()->GetInputSettings() };
@@ -22,7 +22,7 @@ void powe::InputSystem::OnUpdate(float, powe::GameObjectID)
 		if (commands.empty())
 			continue;
 
-		ExecuteAxisCommands(worldAxisMap, axisName, realGamePadKey, commands);
+		ExecuteAxisCommands(worldAxisMap, axisName, realGamePadKey, commands, deltaTime, id);
 	}
 
 	const auto& worldActionMap{ inputSettings.GetActionMap() };
@@ -33,7 +33,7 @@ void powe::InputSystem::OnUpdate(float, powe::GameObjectID)
 		if (actionPack.empty())
 			continue;
 
-		ExecuteActionCommands(worldActionMap, actionName, realGamePadKey, actionPack, thisFrameSysKey);
+		ExecuteActionCommands(worldActionMap, actionName, realGamePadKey, actionPack, thisFrameSysKey, deltaTime, id);
 	}
 
 }
@@ -43,7 +43,9 @@ void powe::InputSystem::ExecuteAxisCommands(
 	const std::unordered_map<std::string, AxisMap>& worldAxisMap,
 	const std::string& actionName,
 	const InputSettings::KeyPool& priorityKeyPool,
-	const std::vector<SharedPtr<AxisCommand>>& commands) const
+	const std::vector<SharedPtr<AxisCommand>>& commands,
+	float deltaTime,
+	GameObjectID id) const
 {
 	const auto findItr{ worldAxisMap.find(actionName) };
 
@@ -64,7 +66,7 @@ void powe::InputSystem::ExecuteAxisCommands(
 			{
 				for (const auto& command : commands)
 				{
-					command->Execute(*GetWorld(), currentState.axisThisFrame * scale);
+					command->Execute(*GetWorld(), deltaTime, id, currentState.axisThisFrame * scale);
 				}
 			}
 		}
@@ -76,7 +78,9 @@ void powe::InputSystem::ExecuteActionCommands(
 	const std::string& actionName,
 	const InputSettings::KeyPool& priorityKeyPool,
 	const std::vector<ActionPack>& commands,
-	SysKeyType inSysKey) const
+	SysKeyType inSysKey,
+	float deltaTime,
+	GameObjectID id) const
 {
 	const auto findItr{ worldActionMap.find(actionName) };
 
@@ -105,7 +109,7 @@ void powe::InputSystem::ExecuteActionCommands(
 				for (const auto& [command, targetEvent] : commands)
 				{
 					if (targetEvent == thisFrameEvent)
-						command->Execute(*GetWorld());
+						command->Execute(*GetWorld(), deltaTime, id);
 				}
 			}
 		}

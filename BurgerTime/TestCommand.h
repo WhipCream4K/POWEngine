@@ -6,13 +6,13 @@ class TestCommand : public powe::AxisCommand
 {
 public:
 
-	void Execute(powe::WorldEntity& worldEntity, float axisValue) override;
+	void Execute(powe::WorldEntity& worldEntity, float deltaTime, powe::GameObjectID id, float axisValue) override;
 };
 
 class FireCommand : public powe::ActionCommand
 {
 public:
 
-	void Execute(powe::WorldEntity& worldEntity) override;
+	void Execute(powe::WorldEntity& worldEntity, float deltaTime, powe::GameObjectID id) override;
 };
 

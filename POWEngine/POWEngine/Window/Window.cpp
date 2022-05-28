@@ -27,14 +27,15 @@ powe::Window::Window(uint32_t width, uint32_t height, const std::string& title, 
 	}
 }
 
-const powe::WindowMessages& powe::Window::PollWindowMessages(bool& shouldEarlyExit, bool& shouldIgnoreInputs) const
-{
-	return m_WindowImpl->PollWindowMessages(shouldEarlyExit, shouldIgnoreInputs);
-}
-
 const powe::HardwareMessages& powe::Window::PollHardwareMessages(bool& shouldEarlyExit, bool& shouldIgnoreInputs) const
 {
 	return m_WindowImpl->PollHardwareMessages(shouldEarlyExit, shouldIgnoreInputs);
+}
+
+void powe::Window::PollHardwareMessages(HardwareMessages& hwMessages, bool& shouldEarlyExit,
+	bool& shouldIgnoreInputs) const
+{
+	m_WindowImpl->PollHardwareMessages(hwMessages, shouldEarlyExit, shouldIgnoreInputs);
 }
 
 void powe::Window::Resize(uint32_t width, uint32_t height)

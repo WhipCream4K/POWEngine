@@ -1,8 +1,10 @@
 #pragma once
+#include "POWEngine/Window/WindowContext.h"
 //#include "POWEngine/Rendering/Renderer.h"
 
 namespace powe
 {
+	class InputManager;
 	class RenderAPI;
 	class ServiceLocator;
 	class Window;
@@ -69,6 +71,7 @@ namespace powe
 
 		SharedPtr<WorldClock> m_WorldClock;
 		SharedPtr<Renderer> m_MainRenderer;
+		OwnedPtr<InputManager> m_InputManager{};
 	};
 }
 

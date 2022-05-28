@@ -14,7 +14,7 @@ namespace powe
 		ActionCommand() = default;
 		virtual ~ActionCommand() = default;
 
-		virtual void Execute(WorldEntity& worldEntity) = 0;
+		virtual void Execute(WorldEntity& worldEntity, float deltaTime, GameObjectID id) = 0;
 	};
 
 	class AxisCommand
@@ -24,7 +24,7 @@ namespace powe
 		AxisCommand() = default;
 		virtual ~AxisCommand() = default;
 
-		virtual void Execute(WorldEntity& worldEntity, float axisValue) = 0;
+		virtual void Execute(WorldEntity& worldEntity, float deltaTime, GameObjectID id, float axisValue) = 0;
 	};
 
 	struct ActionPack
@@ -42,7 +42,7 @@ namespace powe
 
 		InputComponent(uint8_t playerIndex = 0);
 
-		void AddActionCommand(const std::string& name, InputEvent inputEvent,const SharedPtr<ActionCommand>& actionCommand);
+		void AddActionCommand(const std::string& name, InputEvent inputEvent, const SharedPtr<ActionCommand>& actionCommand);
 		void AddAxisCommand(const std::string& name, const SharedPtr<AxisCommand>& axisCommand);
 
 		uint8_t GetRealPlayerIndex() const { return m_PlayerIndex; }

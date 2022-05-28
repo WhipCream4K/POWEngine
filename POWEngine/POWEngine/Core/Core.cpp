@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Core.h"
 
+#include "Input/InputManager.h"
 #include "POWEngine/Window/Window.h"
 #include "POWEngine/Core/Clock/WorldClock.h"
 #include "POWEngine/Rendering/RenderAPI.h"
@@ -11,6 +12,7 @@
 powe::Core::Core()
 	: m_WorldClock(std::make_shared<WorldClock>())
 	, m_MainRenderer(std::make_shared<Renderer>())
+	, m_InputManager(std::make_unique<InputManager>())
 {
 }
 
@@ -56,10 +58,14 @@ bool powe::Core::TranslateWindowInputs(const Window& window, WorldEntity& worldE
 	bool isEarlyExit{};
 	bool ignoreInputs{};
 
-	const HardwareMessages& hwMessages{ window.PollHardwareMessages(isEarlyExit,ignoreInputs) };
+	HardwareMessages hwMessages{};
+	//const HardwareMessages& hwMessages{ window.PollHardwareMessages(isEarlyExit,ignoreInputs) };
+	window.PollHardwareMessages(hwMessages, isEarlyExit, ignoreInputs);
 
 	if (!ignoreInputs)
 	{
+		const float deltaTime{ m_WorldClock->GetDeltaTime() };
+		m_InputManager->PollHardWareMessages(hwMessages, deltaTime);
 		worldEntt.GetInputSettings().ParseHWMessages(hwMessages);
 	}
 
@@ -78,7 +84,6 @@ void powe::Core::Step(WorldEntity& worldEntity) const
 	const float deltaTime{ m_WorldClock->GetDeltaTime() };
 
 	worldEntity.UpdatePipeline(PipelineLayer::InputValidation, deltaTime);
-	worldEntity.UpdatePipeline(PipelineLayer::Async, deltaTime);
 	worldEntity.UpdatePipeline(PipelineLayer::Update, deltaTime);
 	worldEntity.UpdatePipeline(PipelineLayer::PostUpdate, deltaTime);
 

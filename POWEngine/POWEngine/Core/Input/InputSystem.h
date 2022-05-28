@@ -23,14 +23,18 @@ namespace powe
 			const std::unordered_map<std::string, AxisMap>& worldAxisMap,
 			const std::string& actionName,
 			const InputSettings::KeyPool& priorityKeyPool,
-			const std::vector<SharedPtr<AxisCommand>>& commands) const;
+			const std::vector<SharedPtr<AxisCommand>>& commands,
+			float deltaTime,
+			GameObjectID id) const;
 
 		void ExecuteActionCommands(
 			const std::unordered_map<std::string, ActionMap>& worldActionMap,
 			const std::string& actionName,
 			const InputSettings::KeyPool& priorityKeyPool,
 			const std::vector<ActionPack>& commands,
-			SysKeyType inSysKey) const;
+			SysKeyType inSysKey,
+			float deltaTime,
+			GameObjectID id) const;
 	};
 }
 

@@ -5,6 +5,7 @@
 
 namespace powe
 {
+	struct HardwareMessages;
 	/**
 	 * \brief Implementation of OS specific or framework specific input handling
 	 * I don't know wether to use window sensitive events or key events
@@ -13,20 +14,20 @@ namespace powe
 	{
 	public:
 
-		InputManager() = default;
+		InputManager();
 
-		void GetUserInput();
+		void PollHardWareMessages(HardwareMessages& hwMessages,float deltaTime) const;
 
 		InputManager(const InputManager&) = delete;
 		InputManager& operator=(const InputManager&) = delete;
 		InputManager(InputManager&&) = default;
 		InputManager& operator=(InputManager&&) = default;
-		~InputManager() = default;
+		~InputManager();
 
 	private:
 
-		// keyboard lookup
-		std::unordered_map<uint32_t, bool> m_KeyboardTable;
+		class XInputImpl;
+		OwnedPtr<XInputImpl> m_XInputImpl;
 	};
 	
 }

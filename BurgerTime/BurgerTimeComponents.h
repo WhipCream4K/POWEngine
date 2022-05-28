@@ -17,3 +17,15 @@ struct AnimationComponent : powe::Component<AnimationComponent>
 	int totalSprite{};
 	int currentSprite{};
 };
+
+struct PlayerSpeed : powe::Component<PlayerSpeed>
+{
+	PlayerSpeed() = default;
+
+	PlayerSpeed(float inSpeed)
+		: speed(inSpeed)
+	{
+	}
+
+	float speed{};
+};

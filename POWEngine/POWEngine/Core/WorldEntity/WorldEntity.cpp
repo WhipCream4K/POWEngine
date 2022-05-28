@@ -737,11 +737,7 @@ void powe::WorldEntity::InternalAddGameObjectToPipeline()
 			// Check if this component is sparse or not
 			if (IsThisComponentSparse(componentTypeId))
 			{
-				//const ComponentTypeID discardCompFlag{ componentTypeId & ~SizeType(ComponentFlag::Count) };
 				m_SparseComponentManager.AddComponentToSparseSet(gameObjectID, DiscardFlag(componentTypeId), compData);
-
-				// Initialize the handle
-				new (destination) SparseComponent();
 			}
 			else
 			{

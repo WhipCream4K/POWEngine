@@ -200,7 +200,7 @@ xcopy /y "$(SolutionDir)3rdPartyLib\allDLLs\$(Platform)\$(Configuration)\*.dll" 
     <ClCompile Include="BurgerTimeGame.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="PlayerCommand.cpp" />
+    <ClCompile Include="PlayerCommands.cpp" />
     <ClCompile Include="PlayerInputSystem.cpp" />
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="SceneFactory.cpp" />
@@ -219,7 +219,7 @@ xcopy /y "$(SolutionDir)3rdPartyLib\allDLLs\$(Platform)\$(Configuration)\*.dll" 
     <ClInclude Include="BurgerTimeComponents.h" />
     <ClInclude Include="BurgerTimeGame.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="PlayerCommand.h" />
+    <ClInclude Include="PlayerCommands.h" />
     <ClInclude Include="PlayerInputSystem.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="resource.h" />

@@ -122,13 +122,13 @@ namespace powe
 
 		void DestroyData(RawByte*) override {}
 
-		void MoveData(RawByte* source, RawByte* destination) const override
+		void MoveData(RawByte* , RawByte*) const override
 		{
-			new (destination) SparseComponent{std::move(* reinterpret_cast<SparseComponent*>(source))};
+			//new (destination) SparseComponent{std::move(* reinterpret_cast<SparseComponent*>(source))};
 			//new (destination) SparseHandle(*reinterpret_cast<SparseHandle*>(source));
 		}
 
-		SizeType GetSize() const override { return sizeof(SparseComponent); }
+		SizeType GetSize() const override { return 0; }
 
 	protected:
 

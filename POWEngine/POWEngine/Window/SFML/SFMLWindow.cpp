@@ -9,7 +9,6 @@
 
 powe::SFMLWindow::SFMLWindow(uint32_t width, uint32_t height, const std::string& title, OtherWindowParams others)
 	: WindowImpl(width, height, title, others)
-	, m_WndMessages()
 	, m_HWMessages()
 	, m_WndHandle(
 		sf::VideoMode(width, height),
@@ -27,7 +26,6 @@ powe::SFMLWindow::SFMLWindow(uint32_t width, uint32_t height, const std::string&
 
 powe::SFMLWindow::SFMLWindow(uint32_t width, uint32_t height, const std::string& title)
 	: WindowImpl(width, height, title)
-	, m_WndMessages()
 	, m_HWMessages()
 	, m_WndHandle(sf::VideoMode(width, height), sf::String{ title.c_str() })
 	, m_MousePosLastPoll()
@@ -37,135 +35,6 @@ powe::SFMLWindow::SFMLWindow(uint32_t width, uint32_t height, const std::string&
 	const auto mousePos = sf::Mouse::getPosition(m_WndHandle);
 	m_MousePosLastPoll.x = mousePos.x;
 	m_MousePosLastPoll.y = mousePos.y;
-}
-
-const powe::WindowMessages& powe::SFMLWindow::PollWindowMessages(bool& shouldEarlyExit, bool& shouldIgnoreInputs)
-{
-	m_WndMessages.totalMessages = 0;
-
-	uint8_t messageCnt{};
-
-	if (m_WndHandle.isOpen())
-	{
-		sf::Event sfmlEvent{};
-
-		while (m_WndHandle.pollEvent(sfmlEvent))
-		{
-			if (messageCnt > MinimumWindowEventCnt)
-				break;
-
-			MessageBus messageData{};
-
-			switch (sfmlEvent.type)
-			{
-
-			case sf::Event::Closed:
-			{
-				shouldEarlyExit = true;
-				return m_WndMessages;
-			}
-			case sf::Event::GainedFocus:
-			{
-				break;
-			}
-			case sf::Event::LostFocus:
-			{
-				shouldIgnoreInputs = true;
-				return m_WndMessages;
-			}
-			case sf::Event::KeyPressed:
-			case sf::Event::KeyReleased:
-			{
-				//messageData.data = sfmlEvent.key;
-				//messageData.size = sizeof(sf::Event::KeyEvent);
-
-				KeyboardData keyboardData{ uint8_t(sfmlEvent.key.code) };
-				keyboardData.sysKey = uint8_t(sfmlEvent.key.alt << int(KeyboardSysKey::KS_Alt) |
-					sfmlEvent.key.control << int(KeyboardSysKey::KS_Ctrl) |
-					sfmlEvent.key.shift << int(KeyboardSysKey::KS_Shift) |
-					sfmlEvent.key.system << int(KeyboardSysKey::KS_System));
-
-				messageData.data = keyboardData;
-
-				break;
-			}
-			//case sf::Event::TextEntered:
-			//{
-			//	
-			//	break;
-			//}
-			case sf::Event::Resized:
-			{
-				//messageData.data = sfmlEvent.size;
-				//messageData.size = sizeof(sf::Event::SizeEvent);
-
-				Resize(sfmlEvent.size.width, sfmlEvent.size.height);
-
-				break;
-			}
-			case sf::Event::MouseButtonPressed:
-			case sf::Event::MouseButtonReleased:
-			{
-
-				messageData.data = MouseKey(sfmlEvent.mouseButton.button);
-
-				//messageData.data = sfmlEvent.mouseButton;
-				//messageData.size = sizeof(sf::Event::MouseButtonEvent);
-
-				break;
-			}
-			case sf::Event::MouseWheelScrolled:
-			{
-				messageData.data = MouseWheelDelta(sfmlEvent.mouseWheelScroll.delta);
-				//messageData.data = sfmlEvent.mouseWheelScroll;
-				//messageData.size = sizeof(sf::Event::MouseWheelScrollEvent);
-
-				break;
-			}
-			case sf::Event::MouseMoved:
-			{
-				messageData.eventId = uint8_t(WindowEvents::MouseMoved);
-
-				m_DeltaMousePos.x = float(sfmlEvent.mouseMove.x - m_MousePosLastPoll.x);
-				m_DeltaMousePos.y = float(m_MousePosLastPoll.y - sfmlEvent.mouseMove.y);
-
-				messageData.data = MousePos{
-					m_DeltaMousePos.x,
-					m_DeltaMousePos.y,
-					sfmlEvent.mouseMove.x,
-					sfmlEvent.mouseMove.y };
-
-				m_MousePosLastPoll.x = sfmlEvent.mouseMove.x;
-				m_MousePosLastPoll.y = sfmlEvent.mouseMove.y;
-
-				break;
-			}
-			// TODO: Maybe support this using XInput
-			//case sf::Event::TextEntered: break;
-			//case sf::Event::MouseEntered: break;
-			//case sf::Event::MouseLeft: break;
-			//case sf::Event::JoystickButtonPressed: break;
-			//case sf::Event::JoystickButtonReleased: break;
-			//case sf::Event::JoystickMoved: break;
-			//case sf::Event::JoystickConnected: break;
-			//case sf::Event::JoystickDisconnected: break;
-			//case sf::Event::TouchBegan: break;
-			//case sf::Event::TouchMoved: break;
-			//case sf::Event::TouchEnded: break;
-			//case sf::Event::SensorChanged: break;
-			//case sf::Event::Count: break;
-			default: break;
-			}
-
-			messageData.eventId = uint8_t(sfmlEvent.type);
-
-			m_WndMessages.wndMessages[messageCnt++] = messageData;
-		}
-
-		m_WndMessages.totalMessages = messageCnt;
-	}
-
-	return m_WndMessages;
 }
 
 const powe::HardwareMessages& powe::SFMLWindow::PollHardwareMessages(bool& shouldEarlyExit, bool& shouldIgnoreInputs)
@@ -293,6 +162,7 @@ const powe::HardwareMessages& powe::SFMLWindow::PollHardwareMessages(bool& shoul
 				break;
 			}
 			// TODO: Implement gamepad using XInput
+			case sf::Event::JoystickButtonPressed
 
 			default: break;
 			}
@@ -302,6 +172,141 @@ const powe::HardwareMessages& powe::SFMLWindow::PollHardwareMessages(bool& shoul
 	}
 
 	return m_HWMessages;
+}
+
+void powe::SFMLWindow::PollHardwareMessages(
+	HardwareMessages& hardwareMessages, 
+	bool& shouldEarlyExit,
+	bool& shouldIgnoreInputs)
+{
+	int messageCnt{hardwareMessages.totalMessages};
+
+	if (m_WndHandle.isOpen())
+	{
+		sf::Event sfmlEvent{};
+
+		while (m_WndHandle.pollEvent(sfmlEvent))
+		{
+			if (messageCnt > MinimumWindowEventCnt)
+				break;
+
+			HardwareBus messageData{};
+
+			switch (sfmlEvent.type)
+			{
+
+			case sf::Event::Closed:
+			{
+				shouldEarlyExit = true;
+				return;
+			}
+			case sf::Event::GainedFocus:
+			{
+				break;
+			}
+			case sf::Event::LostFocus:
+			{
+				shouldIgnoreInputs = true;
+				return;
+			}
+			case sf::Event::KeyPressed:
+			{
+				KeyboardData keyboardData{ uint8_t(sfmlEvent.key.code) };
+				keyboardData.sysKey = uint8_t(sfmlEvent.key.alt << int(KeyboardSysKey::KS_Alt) |
+					sfmlEvent.key.control << int(KeyboardSysKey::KS_Ctrl) |
+					sfmlEvent.key.shift << int(KeyboardSysKey::KS_Shift) |
+					sfmlEvent.key.system << int(KeyboardSysKey::KS_System));
+
+				messageData.hData = keyboardData;
+				messageData.eventId = uint8_t(WindowEvents::KeyPressed);
+				messageData.inDevice = InputDevice::D_Keyboard;
+
+				hardwareMessages.hwMessages[messageCnt++] = messageData;
+
+				break;
+			}
+			case sf::Event::KeyReleased:
+			{
+				KeyboardData keyboardData{ uint8_t(sfmlEvent.key.code) };
+				keyboardData.sysKey = uint8_t(sfmlEvent.key.alt << int(KeyboardSysKey::KS_Alt) |
+					sfmlEvent.key.control << int(KeyboardSysKey::KS_Ctrl) |
+					sfmlEvent.key.shift << int(KeyboardSysKey::KS_Shift) |
+					sfmlEvent.key.system << int(KeyboardSysKey::KS_System));
+
+				messageData.hData = keyboardData;
+				messageData.eventId = uint8_t(WindowEvents::KeyReleased);
+				messageData.inDevice = InputDevice::D_Keyboard;
+
+				hardwareMessages.hwMessages[messageCnt++] = messageData;
+
+				break;
+			}
+			case sf::Event::Resized:
+			{
+				Resize(sfmlEvent.size.width, sfmlEvent.size.height);
+				break;
+			}
+			case sf::Event::MouseButtonPressed:
+			{
+				messageData.hData = MouseData{ MouseCharKey(sfmlEvent.mouseButton.button) };
+				messageData.eventId = uint8_t(WindowEvents::MouseButtonPressed);
+				messageData.inDevice = InputDevice::D_Mouse;
+
+				hardwareMessages.hwMessages[messageCnt++] = messageData;
+
+				break;
+			}
+			case sf::Event::MouseButtonReleased:
+			{
+				messageData.hData = MouseData{ MouseCharKey(sfmlEvent.mouseButton.button) };
+				messageData.eventId = uint8_t(WindowEvents::MouseButtonReleased);
+				messageData.inDevice = InputDevice::D_Mouse;
+
+				hardwareMessages.hwMessages[messageCnt++] = messageData;
+
+				break;
+			}
+			case sf::Event::MouseWheelScrolled:
+			{
+				messageData.hData = MouseData{ MouseCharKey(MouseKey::MK_Middle),MouseWheelDelta(sfmlEvent.mouseWheelScroll.delta) };
+				messageData.eventId = uint8_t(WindowEvents::MouseWheelScrolled);
+				messageData.inDevice = InputDevice::D_Mouse;
+
+				hardwareMessages.hwMessages[messageCnt++] = messageData;
+
+				break;
+			}
+			case sf::Event::MouseMoved:
+			{
+				messageData.eventId = uint8_t(WindowEvents::MouseMoved);
+				messageData.inDevice = InputDevice::D_Mouse;
+
+				m_DeltaMousePos.x = float(sfmlEvent.mouseMove.x - m_MousePosLastPoll.x);
+				m_DeltaMousePos.y = float(m_MousePosLastPoll.y - sfmlEvent.mouseMove.y);
+
+				MousePos mousePos = MousePos{
+					m_DeltaMousePos.x,
+					m_DeltaMousePos.y,
+					sfmlEvent.mouseMove.x,
+					sfmlEvent.mouseMove.y };
+
+				messageData.hData = MouseData{ MouseCharKey(MouseKey::MK_None),mousePos };
+
+				m_MousePosLastPoll.x = sfmlEvent.mouseMove.x;
+				m_MousePosLastPoll.y = sfmlEvent.mouseMove.y;
+
+				hardwareMessages.hwMessages[messageCnt++] = messageData;
+
+				break;
+			}
+			// TODO: Implement gamepad using XInput
+
+			default: break;
+			}
+		}
+
+		hardwareMessages.totalMessages = messageCnt;
+	}
 }
 
 void powe::SFMLWindow::Resize(uint32_t width, uint32_t height)

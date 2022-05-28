@@ -5,6 +5,5 @@ enum class PipelineLayer
 	InputValidation,
 	Update,
 	PostUpdate,
-	Async,
 	Count
 };

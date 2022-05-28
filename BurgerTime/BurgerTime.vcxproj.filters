@@ -39,9 +39,6 @@
     <ClCompile Include="BurgerTimeGame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerCommand.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="StateController.cpp">
       <Filter>Systems</Filter>
     </ClCompile>
@@ -69,6 +66,9 @@
     <ClCompile Include="TestCommand.cpp">
       <Filter>Commands</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerCommands.cpp">
+      <Filter>Commands</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BurgerTimeGame.h">
@@ -76,9 +76,6 @@
     </ClInclude>
     <ClInclude Include="BurgerTimeComponents.h">
       <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerCommand.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="StateController.h">
       <Filter>Systems</Filter>
@@ -111,6 +108,9 @@
       <Filter>Systems</Filter>
     </ClInclude>
     <ClInclude Include="TestCommand.h">
+      <Filter>Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerCommands.h">
       <Filter>Commands</Filter>
     </ClInclude>
   </ItemGroup>
