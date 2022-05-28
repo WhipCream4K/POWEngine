@@ -122,7 +122,7 @@ void powe::InputSettings::ParseHWMessages(const HardwareMessages& hwMessages)
 			case WindowEvents::MouseWheelScrolled:
 			{
 				MouseData mouseData{ std::get<MouseData>(hwBus.hData) };
-				inKey.key = { hwBus.inDevice,KeyType(MouseKey::MK_Middle) };
+				inKey.key = { hwBus.inDevice,MouseKey::MK_Middle };
 				inKey.isDown = true;
 				inKey.axisValue = std::get<MouseWheelDelta>(mouseData.axisData);
 			}

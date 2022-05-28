@@ -162,7 +162,6 @@ const powe::HardwareMessages& powe::SFMLWindow::PollHardwareMessages(bool& shoul
 				break;
 			}
 			// TODO: Implement gamepad using XInput
-			case sf::Event::JoystickButtonPressed
 
 			default: break;
 			}

@@ -7,7 +7,7 @@ powe::WorldClock::WorldClock()
 	, m_DeltaTime()
 	, m_TotalElapsedTime()
 {
-	m_CurrentFrame = std::chrono::high_resolution_clock::now();
+	m_EndFrame = std::chrono::high_resolution_clock::now();
 }
 
 void powe::WorldClock::Start()
@@ -22,4 +22,9 @@ void powe::WorldClock::Start()
 void powe::WorldClock::End()
 {
 	m_EndFrame = m_CurrentFrame;
+}
+
+void powe::WorldClock::ResetTime()
+{
+	m_EndFrame = std::chrono::high_resolution_clock::now();
 }

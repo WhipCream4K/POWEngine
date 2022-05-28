@@ -8,6 +8,8 @@ namespace powe
 	{
 	public:
 
+		friend class Core;
+
 		WorldClock();
 
 		void Start();
@@ -17,6 +19,8 @@ namespace powe
 		[[nodiscard]] float GetDeltaTime() const { return m_DeltaTime; }
 
 	private:
+
+		void ResetTime();
 
 		std::chrono::high_resolution_clock::time_point m_CurrentFrame;
 		std::chrono::high_resolution_clock::time_point m_EndFrame;

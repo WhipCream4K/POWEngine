@@ -15,6 +15,9 @@
 
 int main()
 {
+	powe::ServiceLocator::RegisterLogger(std::make_shared<powe::ConsoleLogger>());
+	powe::ServiceLocator::RegisterSoundSystem(std::make_shared<powe::FMOD2DSound>(20));
+
 	const SharedPtr<powe::Core> engineCore{ std::make_shared<powe::Core>() };
 	const SharedPtr<powe::Window> window{ std::make_shared<powe::Window>(1280,720,"BurgerTime")};
 	const SharedPtr<powe::WorldEntity> worldEntity{std::make_shared<powe::WorldEntity>()};
@@ -23,9 +26,6 @@ int main()
 	const SharedPtr<powe::WorldClock> worldClock{ engineCore->GetWorldClock() };
 
 	engineCore->RegisterRendererType(std::make_unique<powe::SFML2DRenderer>());
-
-	powe::ServiceLocator::RegisterLogger(std::make_shared<powe::ConsoleLogger>());
-	powe::ServiceLocator::RegisterSoundSystem(std::make_shared<powe::FMOD2DSound>(20));
 
 	engineCore->GetRenderer()->RegisterSystem(std::make_shared<powe::SFML2DRenderSystem>());
 

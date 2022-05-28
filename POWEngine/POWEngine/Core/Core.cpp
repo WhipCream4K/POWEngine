@@ -75,6 +75,7 @@ bool powe::Core::TranslateWindowInputs(const Window& window, WorldEntity& worldE
 void powe::Core::StartWorldClock()
 {
 	m_WorldClock = std::make_shared<WorldClock>();
+	m_WorldClock->ResetTime();
 }
 
 void powe::Core::Step(WorldEntity& worldEntity) const
