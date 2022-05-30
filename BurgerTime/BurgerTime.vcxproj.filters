@@ -31,6 +31,12 @@
     <Filter Include="Commands">
       <UniqueIdentifier>{f4f92e74-15e9-42f3-be64-3dbf2d9e56da}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scenes\SinglePlayer">
+      <UniqueIdentifier>{4fe641f1-7d9b-43fa-93ba-d7ef49fb12cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SharedData">
+      <UniqueIdentifier>{8e331e6c-49b6-4068-8d29-5379c634e3b5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -68,6 +74,9 @@
     </ClCompile>
     <ClCompile Include="PlayerCommands.cpp">
       <Filter>Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerManager.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -112,6 +121,9 @@
     </ClInclude>
     <ClInclude Include="PlayerCommands.h">
       <Filter>Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerManager.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

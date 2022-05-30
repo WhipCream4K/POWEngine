@@ -202,6 +202,7 @@ xcopy /y "$(SolutionDir)3rdPartyLib\allDLLs\$(Platform)\$(Configuration)\*.dll" 
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerCommands.cpp" />
     <ClCompile Include="PlayerInputSystem.cpp" />
+    <ClCompile Include="PlayerManager.cpp" />
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="SceneFactory.cpp" />
     <ClCompile Include="StateController.cpp" />
@@ -221,6 +222,7 @@ xcopy /y "$(SolutionDir)3rdPartyLib\allDLLs\$(Platform)\$(Configuration)\*.dll" 
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerCommands.h" />
     <ClInclude Include="PlayerInputSystem.h" />
+    <ClInclude Include="PlayerManager.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SceneFactory.h" />

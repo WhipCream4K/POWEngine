@@ -18,7 +18,7 @@ powe::DebugRectangle::DebugRectangle(const SharedPtr<GameObject>& owner)
 
 powe::DebugRectangle::DebugRectangle(DebugRectangle&&) noexcept = default;
 
-powe::DebugRectangle& powe::DebugRectangle::operator=(DebugRectangle&&) = default;
+powe::DebugRectangle& powe::DebugRectangle::operator=(DebugRectangle&&) noexcept = default;
 
 powe::DebugRectangle::~DebugRectangle() = default;
 

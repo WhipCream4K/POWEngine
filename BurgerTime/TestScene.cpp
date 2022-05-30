@@ -34,9 +34,9 @@ void TestScene::LoadScene(powe::WorldEntity& worldEntity)
 
 	spriteTest->AddComponent(AnimationComponent{ 3,0.5f });
 	spriteTest->AddComponent(PlayerSpeed{ 150.0f });
-	DebugRectangle* debugRect = spriteTest->AddComponent(DebugRectangle{ spriteTest }, ComponentFlag::Sparse);
+	spriteTest->AddComponent(DebugRectangle{ spriteTest }, ComponentFlag::Sparse);
 
-	debugRect->SetSize({ 20.0f,20.0f });
+	//debugRect->SetSize({ 20.0f,20.0f });
 
 	Transform2D* transform2D = spriteTest->AddComponent(Transform2D{ spriteTest });
 
@@ -77,9 +77,14 @@ void TestScene::LoadScene(powe::WorldEntity& worldEntity)
 	AddGameObject(textTest);
 
 	const auto& levelTest{ std::make_shared<GameObject>(worldEntity) };
-	levelTest->AddComponent(Transform2D{ levelTest });
+	Transform2D* levelTransform = levelTest->AddComponent(Transform2D{ levelTest });
+
+	levelTransform->SetWorldPosition({ 640.0f,480.0f });
+	levelTransform->SetWorldScale(burger::SpriteScale);
+
 	spriteComp = levelTest->AddComponent(SpriteComponent{ levelTest }, ComponentFlag::Sparse);
+	spriteComp->SetRenderOrder(burger::RenderOrder::Background);
 	spriteComp->SetTexture(*Instance<AssetManager>()->GetAsset<Texture>(burger::MainLevelSprite));
-	
+
 	AddGameObject(levelTest);
 }

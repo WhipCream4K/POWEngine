@@ -7,17 +7,7 @@ PlayScene::PlayScene()
 {
 }
 
-void PlayScene::Load(powe::WorldEntity& )
+void PlayScene::LoadScene(powe::WorldEntity&)
 {
 	
-}
-
-void PlayScene::UnLoad(powe::WorldEntity& worldEntity)
-{
-	for (const auto& gameObject : m_GameObjects)
-	{
-		worldEntity.RemoveGameObject(gameObject->GetID());
-	}
-
-	m_GameObjects.clear();
 }

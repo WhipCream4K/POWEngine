@@ -21,7 +21,7 @@ namespace powe
 		virtual void SetOrigin(const glm::fvec2& origin) = 0;
 		virtual const glm::fvec2& GetOrigin() const = 0;
 		virtual void SetOutlineThickness(float thickness) = 0;
-		virtual ~RectangleImpl() = default;
+		virtual ~RectangleImpl() override = default;
 	};
 }
 

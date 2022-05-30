@@ -2,6 +2,7 @@
 
 #include <vector>
 #include "poweCustomtype.h"
+#include "SceneFactory.h"
 
 namespace powe
 {
@@ -9,14 +10,13 @@ namespace powe
 	class GameObject;
 }
 
-class PlayScene
+class PlayScene : public SceneFactory
 {
 public:
 
 	PlayScene();
 
-	void Load(powe::WorldEntity& worldEntity);
-	void UnLoad(powe::WorldEntity& worldEntity);
+	void LoadScene(powe::WorldEntity&) override;
 
 private:
 
