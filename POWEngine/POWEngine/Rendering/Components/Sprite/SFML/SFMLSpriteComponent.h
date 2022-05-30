@@ -1,15 +1,15 @@
 #pragma once
 
-#include "POWEngine/Core/Components/BaseComponent.h"
-
 #include <SFML/Graphics.hpp>
 
 namespace powe
 {
-	struct SFMLSpriteComponent : Component<SFMLSpriteComponent>
+	struct SFMLSpriteComponent : public Component<SFMLSpriteComponent>
 	{
+		SFMLSpriteComponent() = default;
+
 		sf::Sprite sprite{};
-		sf::RenderStates renderStates{};
+		int drawOrder{};
 	};
 }
 

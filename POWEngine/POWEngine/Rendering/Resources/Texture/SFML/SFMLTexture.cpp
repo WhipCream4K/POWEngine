@@ -14,7 +14,7 @@ powe::SFMLTexture::SFMLTexture(const std::string& filePath)
 {
 	if(!m_Texture.loadFromFile(filePath))
 	{
-		const std::string errMsg{ "Load SFML Texture failed" };
+		const std::string errMsg{ "SFML Texture has failed to load" };
 		POWLOGERROR(errMsg);
 		throw std::runtime_error(errMsg.c_str());
 	}

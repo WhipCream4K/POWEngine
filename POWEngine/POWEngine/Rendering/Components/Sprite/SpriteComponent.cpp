@@ -3,6 +3,7 @@
 
 #include "POWEngine/Core/WorldEntity/WorldEntity.h"
 #include "POWEngine/Logger/LoggerUtils.h"
+#include "POWEngine/Core/GameObject/GameObject.h"
 
 #if USE_SFML_RENDERER
 #include "POWEngine/Rendering/Components/Sprite/SFML/SFMLSprite.h"
@@ -16,6 +17,7 @@ powe::SpriteComponent::SpriteComponent()
 
 powe::SpriteComponent::SpriteComponent(const SharedPtr<GameObject>& gameObject)
 	: m_SpriteImpl(std::make_unique<SpriteType>(gameObject))
+	, m_Owner(gameObject)
 {
 }
 
@@ -45,13 +47,19 @@ void powe::SpriteComponent::SetOrigin(const glm::fvec2& pos) const
 	m_SpriteImpl->SetOrigin(pos);
 }
 
+void powe::SpriteComponent::SetRenderOrder(int order) const
+{
+	m_SpriteImpl->SetRenderOrder(order);
+}
+
+int powe::SpriteComponent::GetRenderOrder() const
+{
+	return m_SpriteImpl->GetRenderOrder();
+}
+
 glm::fvec2 powe::SpriteComponent::GetOrigin() const
 {
 	return m_SpriteImpl->GetOrigin();
 }
 
-float powe::SpriteComponent::GetZDepth() const
-{
-	return m_ZDepth;
-}
 

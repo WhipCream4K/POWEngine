@@ -1,10 +1,12 @@
 #pragma once
 
+//#include "POWEngine/Rendering/2D/Draw2DObject.h"
 #include "POWEngine/Core/Components/BaseComponent.h"
 #include "POWEngine/Math/Math.h"
 
 namespace powe
 {
+
 	class Texture;
 	class SpriteImpl;
 	class GameObject;
@@ -22,15 +24,15 @@ namespace powe
 
 	public:
 
-
 		void SetTexture(const Texture& texture) const;
 		void SetRect(const glm::fvec4& rect) const;
 		void SetOrigin(float x, float y) const;
 		void SetOrigin(const glm::fvec2& pos) const;
 
-		glm::fvec2 GetOrigin() const;
+		void SetRenderOrder(int order) const;
+		int GetRenderOrder() const;
 
-		float GetZDepth() const;
+		glm::fvec2 GetOrigin() const;
 
 		template<typename T>
 		T* GetTypeInstance() const;
@@ -38,7 +40,7 @@ namespace powe
 	private:
 
 		OwnedPtr<SpriteImpl> m_SpriteImpl;
-		float m_ZDepth{};
+		WeakPtr<GameObject> m_Owner;
 	};
 
 	template <typename T>

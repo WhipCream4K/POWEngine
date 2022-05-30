@@ -637,7 +637,8 @@ void powe::WorldEntity::DestroyComponentData(
 		{
 			m_SparseComponentManager.RemoveComponentFromGameObject(id, componentTypeId);
 		}
-		
+
+		componentTrait->OnDestroy(*this, id);
 		componentTrait->DestroyData(startAddress + offset);
 	}
 }

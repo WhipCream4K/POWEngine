@@ -9,7 +9,9 @@
 #include "BurgerTimeGame.h"
 #include "POWEngine/Logger/Console/ConsoleLogger.h"
 #include "POWEngine/Rendering/SFML/SFML2DRenderer.h"
+#include "POWEngine/Rendering/System/SFML/SFML2DBoundingBoxRender.h"
 #include "POWEngine/Rendering/System/SFML/SFML2DRenderSystem.h"
+#include "POWEngine/Rendering/System/SFML/SFMLTextRender.h"
 #include "POWEngine/Sound/FMOD/FMOD2DSound.h"
 
 
@@ -28,6 +30,8 @@ int main()
 	engineCore->RegisterRendererType(std::make_unique<powe::SFML2DRenderer>());
 
 	engineCore->GetRenderer()->RegisterSystem(std::make_shared<powe::SFML2DRenderSystem>());
+	engineCore->GetRenderer()->RegisterSystem(std::make_shared<powe::SFMLTextRender>());
+	engineCore->GetRenderer()->RegisterSystem(std::make_shared<powe::SFML2DBoundingBoxRender>());
 
 	burgerTimeScene->Start(engineCore,worldEntity);
 

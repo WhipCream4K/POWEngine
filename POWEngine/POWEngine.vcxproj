@@ -187,6 +187,11 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="POWEngine\Rendering\2D\Draw2DObject.h" />
+    <ClInclude Include="POWEngine\Rendering\Components\Debug\SFML\SFMLDebugRectangleComponent.h" />
+    <ClInclude Include="POWEngine\Rendering\Components\Text\SFML\SFMLTextComponent.h" />
+    <ClInclude Include="POWEngine\Rendering\Resources\Font\FontImpl.h" />
+    <ClInclude Include="POWEngine\Rendering\Resources\Font\Font.h" />
     <ClInclude Include="POWEngine\Core\Input\EventType.h" />
     <ClInclude Include="POWEngine\Core\Input\InputSystem.h" />
     <ClInclude Include="POWEngine\Core\Components\InputComponent.h" />
@@ -260,8 +265,21 @@
     <ClInclude Include="POWEngine\ECS\SystemUtils.h" />
     <ClInclude Include="POWEngine\Rendering\System\SFML\SFML2DRenderSystem.h" />
     <ClInclude Include="POWEngine\Singleton\ThreadSafeSingleton.h" />
+    <ClInclude Include="POWEngine\Rendering\Components\Text\TextComponent.h" />
+    <ClInclude Include="POWEngine\Rendering\Components\Text\SFML\SFMLText.h" />
+    <ClInclude Include="POWEngine\Rendering\Components\Text\TextImpl.h" />
+    <ClInclude Include="POWEngine\Rendering\Resources\Font\SFML\SFMLFont.h" />
+    <ClInclude Include="POWEngine\Rendering\System\SFML\SFMLTextRender.h" />
+    <ClInclude Include="POWEngine\Rendering\System\SFML\SFML2DBoundingBoxRender.h" />
+    <ClInclude Include="POWEngine\Rendering\Components\Debug\DebugRectangle.h" />
+    <ClInclude Include="POWEngine\Rendering\Components\Debug\SFML\SFMLDebugRectangle.h" />
+    <ClInclude Include="POWEngine\Rendering\Components\Debug\RectangleImpl.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="POWEngine\Rendering\2D\Draw2DObject.cpp" />
+    <ClCompile Include="POWEngine\Rendering\Components\Debug\DebugRectangle.cpp" />
+    <ClCompile Include="POWEngine\Rendering\Resources\Font\FontImpl.cpp" />
+    <ClCompile Include="POWEngine\Rendering\Resources\Font\Font.cpp" />
     <ClCompile Include="POWEngine\Core\Input\InputSystem.cpp" />
     <ClCompile Include="POWEngine\Core\Components\InputComponent.cpp" />
     <ClCompile Include="POWEngine\Core\Components\AudioComponent.cpp" />
@@ -315,6 +333,14 @@
     <ClCompile Include="POWEngine\Rendering\RenderAPI.cpp" />
     <ClCompile Include="POWEngine\Rendering\System\SFML\SFML2DRenderSystem.cpp" />
     <ClCompile Include="POWEngine\Singleton\ThreadSafeSingleton.cpp" />
+    <ClCompile Include="POWEngine\Rendering\Components\Text\TextComponent.cpp" />
+    <ClCompile Include="POWEngine\Rendering\Components\Text\SFML\SFMLText.cpp" />
+    <ClCompile Include="POWEngine\Rendering\Components\Text\TextImpl.cpp" />
+    <ClCompile Include="POWEngine\Rendering\Resources\Font\SFML\SFMLFont.cpp" />
+    <ClCompile Include="POWEngine\Rendering\System\SFML\SFMLTextRender.cpp" />
+    <ClCompile Include="POWEngine\Rendering\System\SFML\SFML2DBoundingBoxRender.cpp" />
+    <ClCompile Include="POWEngine\Rendering\Components\Debug\SFML\SFMLDebugRectangle.cpp" />
+    <ClCompile Include="POWEngine\Rendering\Components\Debug\RectangleImpl.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

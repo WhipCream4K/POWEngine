@@ -89,3 +89,28 @@ powe::SFMLSpriteComponent* powe::SFMLSprite::GetSfSprite() const
 	const auto gameObject{ m_Owner.lock() };
 	return gameObject ? nullptr : gameObject->GetComponent<SFMLSpriteComponent>();
 }
+
+int powe::SFMLSprite::GetRenderOrder() const
+{
+	if (const auto gameObject{ m_Owner.lock() })
+	{
+		if (SFMLSpriteComponent * sfmlSprite{ gameObject->GetComponent<SFMLSpriteComponent>() })
+		{
+			return sfmlSprite->drawOrder;
+		}
+	}
+
+	return 0;
+}
+
+void powe::SFMLSprite::SetRenderOrder(int order)
+{
+	if (const auto gameObject{ m_Owner.lock() })
+	{
+		if (SFMLSpriteComponent * sfmlSprite{ gameObject->GetComponent<SFMLSpriteComponent>() })
+		{
+			sfmlSprite->drawOrder = order;
+		}
+	}
+
+}

@@ -13,13 +13,23 @@
 
 #include <powengine.h>
 
+#include "POWEngine/Rendering/Resources/Font/Font.h"
+
 void BurgerTimeGame::Start(const SharedPtr<powe::Core>&,
-	const SharedPtr<powe::WorldEntity>& worldEntity)
+						   const SharedPtr<powe::WorldEntity>& worldEntity)
 {
 	using namespace powe;
 
-	Instance<AssetManager>()->RegisterAsset(burger::MainSprite,
+	const auto assetManager{ Instance<AssetManager>() };
+
+	assetManager->RegisterAsset(burger::MainObjectSprite,
 		std::make_shared<powe::Texture>("./Resources/Sprites/BurgerTime_Main.png"));
+
+	assetManager->RegisterAsset(burger::MainFont,
+		std::make_shared<Font>("./Resources/Fonts/VCR_OSD_MONO_1.001.ttf"));
+
+	assetManager->RegisterAsset(burger::MainLevelSprite,
+		std::make_shared<Texture>("./Resources/Sprites/BurgerTime_Stages.png"));
 
 	m_PlayScene = std::make_shared<TestScene>();
 

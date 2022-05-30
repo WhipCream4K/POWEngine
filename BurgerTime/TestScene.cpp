@@ -17,6 +17,8 @@
 #include "TestCommand.h"
 #include "BurgerTimeComponents.h"
 #include "PlayerCommands.h"
+#include "POWEngine/Rendering/Components/Text/TextComponent.h"
+#include "POWEngine/Rendering/Components/Debug/DebugRectangle.h"
 
 
 void TestScene::LoadScene(powe::WorldEntity& worldEntity)
@@ -27,12 +29,15 @@ void TestScene::LoadScene(powe::WorldEntity& worldEntity)
 
 	SpriteComponent* spriteComp = spriteTest->AddComponent(SpriteComponent{ spriteTest }, ComponentFlag::Sparse);
 
-	spriteComp->SetTexture(*Instance<AssetManager>()->GetAsset<Texture>(burger::MainSprite));
+	spriteComp->SetTexture(*Instance<AssetManager>()->GetAsset<Texture>(burger::MainObjectSprite));
 	spriteComp->SetRect({ 0.0f,0.0f,16.0f,16.0f });
 
 	spriteTest->AddComponent(AnimationComponent{ 3,0.5f });
-	spriteTest->AddComponent(PlayerSpeed{150.0f});
-	
+	spriteTest->AddComponent(PlayerSpeed{ 150.0f });
+	DebugRectangle* debugRect = spriteTest->AddComponent(DebugRectangle{ spriteTest }, ComponentFlag::Sparse);
+
+	debugRect->SetSize({ 20.0f,20.0f });
+
 	Transform2D* transform2D = spriteTest->AddComponent(Transform2D{ spriteTest });
 
 	transform2D->SetWorldPosition({ 640.0f,360.0f });
@@ -49,7 +54,7 @@ void TestScene::LoadScene(powe::WorldEntity& worldEntity)
 	worldEntity.RegisterSystem(PipelineLayer::Update, system);
 
 	AddSystem(system);
-	
+
 	system = std::make_shared<AnimationSystem>();
 
 	worldEntity.RegisterSystem(PipelineLayer::PostUpdate, system);
@@ -60,4 +65,21 @@ void TestScene::LoadScene(powe::WorldEntity& worldEntity)
 	inputComponent->AddAxisCommand("Vertical", std::make_shared<VerticalMovement>());
 
 	AddSystem(system);
+
+	const auto& textTest{ std::make_shared<GameObject>(worldEntity) };
+	Transform2D* textTransform = textTest->AddComponent(Transform2D{ textTest });
+	textTransform->SetParent(spriteTest);
+
+	TextComponent* textComponent{ textTest->AddComponent(TextComponent{40,textTest},ComponentFlag::Sparse) };
+	textComponent->SetFont(Instance<AssetManager>()->GetAsset<Font>(burger::MainFont));
+	textComponent->SetText("Hello World");
+
+	AddGameObject(textTest);
+
+	const auto& levelTest{ std::make_shared<GameObject>(worldEntity) };
+	levelTest->AddComponent(Transform2D{ levelTest });
+	spriteComp = levelTest->AddComponent(SpriteComponent{ levelTest }, ComponentFlag::Sparse);
+	spriteComp->SetTexture(*Instance<AssetManager>()->GetAsset<Texture>(burger::MainLevelSprite));
+	
+	AddGameObject(levelTest);
 }

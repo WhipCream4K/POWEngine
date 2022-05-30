@@ -70,6 +70,7 @@ void powe::SparseComponentManager::RemoveComponentFromGameObject(
 		const SizeType componentSize{ thisComponent->GetSize() };
 
 		RawByte* sourceAddress{ &sparseSet.Data[int(handle * componentSize)] };
+		thisComponent->OnDestroy(m_WorldEntity.get(), id);
 		thisComponent->DestroyData(sourceAddress);
 
 		for (int i = int(handle); i < int(sparseSet.CurrentEmptyIndex - 1); ++i)

@@ -19,7 +19,12 @@ namespace powe
 
 		Transform2D();
 		Transform2D(const SharedPtr<GameObject>& owner);
+		Transform2D(const Transform2D&) = default;
+		Transform2D& operator=(const Transform2D&) = default;
 		~Transform2D() override;
+
+		void OnDestroy(WorldEntity&, GameObjectID) override;
+
 
 		void SetWorldPosition(const glm::vec2& position);
 		void SetWorldScale(const glm::vec2& scales);
@@ -48,9 +53,9 @@ namespace powe
 		void RemoveChild(const SharedPtr<GameObject>& gameObject);
 		bool IsDirty(DirtyFlag flag) const;
 
-		WeakPtr<GameObject> m_ParentNode;
-		std::vector<WeakPtr<GameObject>> m_ChildrenNode;
-		WeakPtr<GameObject> m_Owner;
+		WeakPtr<GameObject> m_ParentNode{};
+		std::vector<WeakPtr<GameObject>> m_ChildrenNode{};
+		WeakPtr<GameObject> m_Owner{};
 
 		glm::vec2 m_WorldPosition{};
 		glm::vec2 m_WorldScales{};

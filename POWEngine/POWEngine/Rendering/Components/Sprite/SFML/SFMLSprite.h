@@ -23,6 +23,8 @@ namespace powe
 		glm::fvec2 GetOrigin() const override;
 		void SetRect(const glm::fvec4& rect) override;
 		SFMLSpriteComponent* GetSfSprite() const;
+		int GetRenderOrder() const override;
+		void SetRenderOrder(int order) override;
 
 	private:
 
