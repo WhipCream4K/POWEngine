@@ -187,6 +187,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="POWEngine\Core\Input\EventType.h" />
     <ClInclude Include="POWEngine\Core\Input\InputSystem.h" />
     <ClInclude Include="POWEngine\Core\Components\InputComponent.h" />
     <ClInclude Include="POWEngine\Core\Components\AudioComponent.h" />

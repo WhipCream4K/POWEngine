@@ -1,17 +1,22 @@
 #pragma once
 
-#include "POWEngine/Window/WindowContext.h"
 #include "Key.h"
 #include "ListsOfKeys.h"
-#include <unordered_set>
 #include <unordered_map>
 #include <array>
 
 #include "InputVars.h"
 #include "InputMapping.h"
+#include "InputStruct.h"
 
 namespace powe
 {
+	struct GamepadData;
+	enum class EventType;
+	struct MousePos;
+	struct KeyState;
+	struct HardwareMessages;
+	struct HardwareBus;
 	struct KeyData
 	{
 		Key key{};
@@ -52,6 +57,7 @@ namespace powe
 	private:
 
 		static InputEvent InterpretInputState(bool isKeyPressed, const InputEvent& savedInputState);
+		void ProcessHWData(const HardwareBus& hardwareBus);
 
 		void AddKeyToMainKeyPool(const Key& key);
 		void UpdateMainKeyPool();
@@ -61,10 +67,8 @@ namespace powe
 		* \param key treat every input key as an AxisKey in case there's a float value passing from the window event
 		* \param isKeyPressed if this key is pressed this frame
 		*/
-		InputEvent EvaluateMainKeyPool(const KeyData& inKey, uint8_t sysKeys);
+		InputEvent EvaluateMainKeyPool(const KeyData& inKey);
 		void UpdateAxisMapping(const KeyData& inKey,InputEvent thisFrameEvent);
-
-		void ValidateMouseDelta(const MousePos& mousePos);
 
 		std::unordered_map<std::string, ActionMap> m_ActionKeyMappings;
 		std::unordered_map<std::string, AxisMap> m_AxisKeyMappings;

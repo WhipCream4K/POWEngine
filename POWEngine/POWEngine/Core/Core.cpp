@@ -7,6 +7,7 @@
 #include "POWEngine/Rendering/RenderAPI.h"
 #include "POWEngine/Rendering/Renderer.h"
 #include "WorldEntity/WorldEntity.h"
+#include "POWEngine/Core/Input/InputStruct.h"
 
 
 powe::Core::Core()

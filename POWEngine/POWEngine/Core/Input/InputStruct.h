@@ -1,17 +1,12 @@
 #pragma once
 
+#include "POWEngine/Window/WindowContext.h"
 #include "ListsOfKeys.h"
+#include "Key.h"
 #include <variant>
 
 namespace powe
 {
-	//struct InputState
-	//{
-	//	InputEvent keyEvent{ InputEvent::IE_None };
-	//	uint8_t userIndex{};
-	//	float axisValue{};
-	//};
-
 	struct KeyState
 	{
 		float axisThisFrame{};
@@ -31,36 +26,55 @@ namespace powe
 
 	using MouseWheelDelta = float;
 
+	// Keyboard Data per key
 	struct KeyboardData
 	{
 		uint8_t keyCode{};
 		uint8_t sysKey{};
+		bool isPressed{};
 	};
 
-	using MouseCharKey = uint8_t;
+	using MouseKeyType = uint8_t;
 
-	struct MouseData
+	struct MouseKeyData
 	{
-		MouseCharKey keyCode{};
-		std::variant<MouseWheelDelta, MousePos> axisData{};
+		uint8_t keyCode{};
+		bool isPressed{};
 	};
 
-	struct GamepadAxisData
+	struct GamepadData
 	{
-		float LThumbX{}, LThumbY{};
-		float RThumbX{}, RThumbY{};
+		//GamepadAxisData axisData{};
+		float thumbAxisData[GamepadKey::ThumbAxisCount]{};
 		float LShoulder{}, RShoulder{};
-		uint8_t playerIndex{};
-	};
-
-	struct GamepadButtonData
-	{
 		uint16_t buttons{};
 		uint8_t playerIndex{};
 	};
 
 	// The implementation is almost like union
-	using HardWareInputData = std::variant<MouseData, KeyboardData,GamepadButtonData,GamepadAxisData>;
+	using HardWareInputData = std::variant<MouseKeyData, MouseWheelDelta, MousePos, KeyboardData, GamepadData>;
+
+	enum class EventType
+	{
+		MouseButton,
+		MouseWheelMoved,
+		MouseMoved,
+		KeyboardButton,
+		Gamepad
+	};
+
+	struct HardwareBus
+	{
+		HardWareInputData hData{};
+		InputDevice inDevice{};
+		uint8_t eventId{};
+	};
+
+	struct HardwareMessages
+	{
+		std::array<HardwareBus, MinimumWindowEventCnt> hwMessages{};
+		int totalMessages{};
+	};
 
 }
 

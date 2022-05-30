@@ -6,6 +6,7 @@
 
 namespace powe
 {
+	struct HardwareMessages;
 	class WindowImpl;
 	class Window final
 	{

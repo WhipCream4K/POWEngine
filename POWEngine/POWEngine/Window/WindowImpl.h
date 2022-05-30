@@ -5,6 +5,7 @@
 namespace powe
 {
 	// Platform specific windows
+	struct HardwareMessages;
 	class WindowImpl
 	{
 	public:

@@ -359,22 +359,6 @@ void powe::WorldEntity::InternalRemoveGameObjectFromPipeline()
 
 			// 1. Destroy old component data
 			{
-				//RawByte* startAddress{ &targetArchetype->ComponentData[int(thisGameObjectIndex * targetArchetype->SizeOfComponentsBlock)] };
-				//SizeType accumulateOffset{};
-				//for (const auto& componentID : targetArchetype->Types)
-				//{
-				//	const SharedPtr<BaseComponent> componentTrait{ GetComponentTrait(componentID) };
-
-				//	if (IsThisComponentSparse(componentID))
-				//	{
-				//		m_SparseComponentManager.RemoveComponentFromGameObject(*this, gameObjectIDs[deletingGameObjectIdx], componentID);
-				//	}
-				//	else
-				//		componentTrait->DestroyData(startAddress + accumulateOffset);
-
-				//	accumulateOffset += componentTrait->GetSize();
-				//}
-
 				DestroyComponentData(*targetArchetype, thisGameObjectIndex, gameObjectIDs[deletingGameObjectIdx], targetArchetype->Types);
 			}
 

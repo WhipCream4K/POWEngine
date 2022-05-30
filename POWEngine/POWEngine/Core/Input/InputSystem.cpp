@@ -2,6 +2,7 @@
 #include "InputSystem.h"
 
 #include "POWEngine/Core/Components/InputComponent.h"
+#include "POWEngine/Core/Input/InputStruct.h"
 
 powe::InputSystem::InputSystem()
 {

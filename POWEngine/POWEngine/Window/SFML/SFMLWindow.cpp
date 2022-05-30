@@ -79,8 +79,10 @@ const powe::HardwareMessages& powe::SFMLWindow::PollHardwareMessages(bool& shoul
 					sfmlEvent.key.shift << int(KeyboardSysKey::KS_Shift) |
 					sfmlEvent.key.system << int(KeyboardSysKey::KS_System));
 
+				keyboardData.isPressed = true;
+
 				messageData.hData = keyboardData;
-				messageData.eventId = uint8_t(WindowEvents::KeyPressed);
+				messageData.eventId = uint8_t(EventType::KeyboardButton);
 				messageData.inDevice = InputDevice::D_Keyboard;
 
 				m_HWMessages.hwMessages[messageCnt++] = messageData;
@@ -95,8 +97,10 @@ const powe::HardwareMessages& powe::SFMLWindow::PollHardwareMessages(bool& shoul
 					sfmlEvent.key.shift << int(KeyboardSysKey::KS_Shift) |
 					sfmlEvent.key.system << int(KeyboardSysKey::KS_System));
 
+				keyboardData.isPressed = false;
+
 				messageData.hData = keyboardData;
-				messageData.eventId = uint8_t(WindowEvents::KeyReleased);
+				messageData.eventId = uint8_t(EventType::KeyboardButton);
 				messageData.inDevice = InputDevice::D_Keyboard;
 
 				m_HWMessages.hwMessages[messageCnt++] = messageData;
@@ -110,8 +114,9 @@ const powe::HardwareMessages& powe::SFMLWindow::PollHardwareMessages(bool& shoul
 			}
 			case sf::Event::MouseButtonPressed:
 			{
-				messageData.hData = MouseData{ MouseCharKey(sfmlEvent.mouseButton.button) };
-				messageData.eventId = uint8_t(WindowEvents::MouseButtonPressed);
+				//messageData.hData = MouseData{ MouseCharKey(sfmlEvent.mouseButton.button) };
+				messageData.hData = MouseKeyData{ uint8_t(sfmlEvent.mouseButton.button),true };
+				messageData.eventId = uint8_t(EventType::MouseButton);
 				messageData.inDevice = InputDevice::D_Mouse;
 
 				m_HWMessages.hwMessages[messageCnt++] = messageData;
@@ -120,8 +125,9 @@ const powe::HardwareMessages& powe::SFMLWindow::PollHardwareMessages(bool& shoul
 			}
 			case sf::Event::MouseButtonReleased:
 			{
-				messageData.hData = MouseData{ MouseCharKey(sfmlEvent.mouseButton.button) };
-				messageData.eventId = uint8_t(WindowEvents::MouseButtonReleased);
+				//messageData.hData = MouseData{ MouseCharKey(sfmlEvent.mouseButton.button) };
+				messageData.hData = MouseKeyData{ uint8_t(sfmlEvent.mouseButton.button),false };
+				messageData.eventId = uint8_t(EventType::MouseButton);
 				messageData.inDevice = InputDevice::D_Mouse;
 
 				m_HWMessages.hwMessages[messageCnt++] = messageData;
@@ -130,8 +136,9 @@ const powe::HardwareMessages& powe::SFMLWindow::PollHardwareMessages(bool& shoul
 			}
 			case sf::Event::MouseWheelScrolled:
 			{
-				messageData.hData = MouseData{ MouseCharKey(MouseKey::MK_Middle),MouseWheelDelta(sfmlEvent.mouseWheelScroll.delta)};
-				messageData.eventId = uint8_t(WindowEvents::MouseWheelScrolled);
+				//messageData.hData = MouseData{ MouseCharKey(MouseKey::MK_Middle),MouseWheelDelta(sfmlEvent.mouseWheelScroll.delta)};
+				messageData.hData = MouseWheelDelta(sfmlEvent.mouseWheelScroll.delta);
+				messageData.eventId = uint8_t(EventType::MouseWheelMoved);
 				messageData.inDevice = InputDevice::D_Mouse;
 
 				m_HWMessages.hwMessages[messageCnt++] = messageData;
@@ -140,7 +147,7 @@ const powe::HardwareMessages& powe::SFMLWindow::PollHardwareMessages(bool& shoul
 			}
 			case sf::Event::MouseMoved:
 			{
-				messageData.eventId = uint8_t(WindowEvents::MouseMoved);
+				messageData.eventId = uint8_t(EventType::MouseMoved);
 				messageData.inDevice = InputDevice::D_Mouse;
 
 				m_DeltaMousePos.x = float(sfmlEvent.mouseMove.x - m_MousePosLastPoll.x);
@@ -152,7 +159,8 @@ const powe::HardwareMessages& powe::SFMLWindow::PollHardwareMessages(bool& shoul
 					sfmlEvent.mouseMove.x,
 					sfmlEvent.mouseMove.y };
 
-				messageData.hData = MouseData{ MouseCharKey(MouseKey::MK_None),mousePos };
+				//messageData.hData = MouseData{ MouseKey::MK_Count,0.0f,mousePos };
+				messageData.hData = mousePos;
 
 				m_MousePosLastPoll.x = sfmlEvent.mouseMove.x;
 				m_MousePosLastPoll.y = sfmlEvent.mouseMove.y;
@@ -216,8 +224,9 @@ void powe::SFMLWindow::PollHardwareMessages(
 					sfmlEvent.key.shift << int(KeyboardSysKey::KS_Shift) |
 					sfmlEvent.key.system << int(KeyboardSysKey::KS_System));
 
+				keyboardData.isPressed = true;
 				messageData.hData = keyboardData;
-				messageData.eventId = uint8_t(WindowEvents::KeyPressed);
+				messageData.eventId = uint8_t(EventType::KeyboardButton);
 				messageData.inDevice = InputDevice::D_Keyboard;
 
 				hardwareMessages.hwMessages[messageCnt++] = messageData;
@@ -232,8 +241,10 @@ void powe::SFMLWindow::PollHardwareMessages(
 					sfmlEvent.key.shift << int(KeyboardSysKey::KS_Shift) |
 					sfmlEvent.key.system << int(KeyboardSysKey::KS_System));
 
+				keyboardData.isPressed = false;
+
 				messageData.hData = keyboardData;
-				messageData.eventId = uint8_t(WindowEvents::KeyReleased);
+				messageData.eventId = uint8_t(EventType::KeyboardButton);
 				messageData.inDevice = InputDevice::D_Keyboard;
 
 				hardwareMessages.hwMessages[messageCnt++] = messageData;
@@ -247,8 +258,8 @@ void powe::SFMLWindow::PollHardwareMessages(
 			}
 			case sf::Event::MouseButtonPressed:
 			{
-				messageData.hData = MouseData{ MouseCharKey(sfmlEvent.mouseButton.button) };
-				messageData.eventId = uint8_t(WindowEvents::MouseButtonPressed);
+				messageData.hData = MouseKeyData{ uint8_t(sfmlEvent.mouseButton.button),true };
+				messageData.eventId = uint8_t(EventType::MouseButton);
 				messageData.inDevice = InputDevice::D_Mouse;
 
 				hardwareMessages.hwMessages[messageCnt++] = messageData;
@@ -257,8 +268,8 @@ void powe::SFMLWindow::PollHardwareMessages(
 			}
 			case sf::Event::MouseButtonReleased:
 			{
-				messageData.hData = MouseData{ MouseCharKey(sfmlEvent.mouseButton.button) };
-				messageData.eventId = uint8_t(WindowEvents::MouseButtonReleased);
+				messageData.hData = MouseKeyData{ uint8_t(sfmlEvent.mouseButton.button),false };
+				messageData.eventId = uint8_t(EventType::MouseButton);
 				messageData.inDevice = InputDevice::D_Mouse;
 
 				hardwareMessages.hwMessages[messageCnt++] = messageData;
@@ -267,8 +278,8 @@ void powe::SFMLWindow::PollHardwareMessages(
 			}
 			case sf::Event::MouseWheelScrolled:
 			{
-				messageData.hData = MouseData{ MouseCharKey(MouseKey::MK_Middle),MouseWheelDelta(sfmlEvent.mouseWheelScroll.delta) };
-				messageData.eventId = uint8_t(WindowEvents::MouseWheelScrolled);
+				messageData.hData = MouseWheelDelta(sfmlEvent.mouseWheelScroll.delta);
+				messageData.eventId = uint8_t(EventType::MouseWheelMoved);
 				messageData.inDevice = InputDevice::D_Mouse;
 
 				hardwareMessages.hwMessages[messageCnt++] = messageData;
@@ -277,7 +288,7 @@ void powe::SFMLWindow::PollHardwareMessages(
 			}
 			case sf::Event::MouseMoved:
 			{
-				messageData.eventId = uint8_t(WindowEvents::MouseMoved);
+				messageData.eventId = uint8_t(EventType::MouseMoved);
 				messageData.inDevice = InputDevice::D_Mouse;
 
 				m_DeltaMousePos.x = float(sfmlEvent.mouseMove.x - m_MousePosLastPoll.x);
@@ -289,7 +300,7 @@ void powe::SFMLWindow::PollHardwareMessages(
 					sfmlEvent.mouseMove.x,
 					sfmlEvent.mouseMove.y };
 
-				messageData.hData = MouseData{ MouseCharKey(MouseKey::MK_None),mousePos };
+				messageData.hData = mousePos;
 
 				m_MousePosLastPoll.x = sfmlEvent.mouseMove.x;
 				m_MousePosLastPoll.y = sfmlEvent.mouseMove.y;

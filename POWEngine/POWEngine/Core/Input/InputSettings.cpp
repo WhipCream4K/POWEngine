@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "InputSettings.h"
 
+#include "InputStruct.h"
 #include "POWEngine/Logger/LoggerUtils.h"
-#include "POWEngine/Window/WindowEvents.h"
 
 #if USE_SFML_WINDOW
 
@@ -92,7 +92,7 @@ void powe::InputSettings::ParseHWMessages(const HardwareMessages& hwMessages)
 {
 	// we need syskeys alive through this frame
 	// to check against all the key that needs them
-	uint8_t sysKeys{};
+	//uint8_t sysKeys{};
 
 	m_LastFrameSystemKey = m_CurrentFrameSystemKey;
 
@@ -101,54 +101,66 @@ void powe::InputSettings::ParseHWMessages(const HardwareMessages& hwMessages)
 	for (int i = 0; i < hwMessages.totalMessages; ++i)
 	{
 		const HardwareBus& hwBus{ hwMessages.hwMessages[i] };
-		KeyData inKey{};
+		ProcessHWData(hwBus);
 
-		if (hwBus.inDevice == InputDevice::D_Keyboard)
-		{
-			const bool isKeyPressed{ WindowEvents(hwBus.eventId) == WindowEvents::KeyPressed ? true : false };
-			KeyboardData kData{ std::get<KeyboardData>(hwBus.hData) };
-			inKey.isDown = isKeyPressed;
-			inKey.key = { hwBus.inDevice,kData.keyCode };
-			inKey.axisValue = float(isKeyPressed);
-			inKey.playerIndex = 0;
-			sysKeys |= kData.sysKey; // syskeys here
-		}
-		else if (hwBus.inDevice == InputDevice::D_Mouse)
-		{
-			inKey.playerIndex = 0;
+		//switch (hwBus.inDevice)
+		//{
+		//case InputDevice::D_Keyboard: 
 
-			switch (WindowEvents(hwBus.eventId))
-			{
-			case WindowEvents::MouseWheelScrolled:
-			{
-				MouseData mouseData{ std::get<MouseData>(hwBus.hData) };
-				inKey.key = { hwBus.inDevice,MouseKey::MK_Middle };
-				inKey.isDown = true;
-				inKey.axisValue = std::get<MouseWheelDelta>(mouseData.axisData);
-			}
-			case WindowEvents::MouseButtonPressed:
-			{
-				MouseData mData{ std::get<MouseData>(hwBus.hData) };
-				inKey.key = { hwBus.inDevice,mData.keyCode };
-				inKey.isDown = true;
-			}
-			case WindowEvents::MouseButtonReleased:
-			{
-				MouseData mData{ std::get<MouseData>(hwBus.hData) };
-				inKey.key = { hwBus.inDevice,mData.keyCode };
-				inKey.isDown = false;
-			}
-			default: break;
-			}
+		//	break;
+		//case InputDevice::D_Mouse: break;
+		//case InputDevice::D_Gamepad: break;
+		//default: ;
+		//}
 
-			// If we past this line then we know that this is a mouse move
-			//ValidateMouseDelta(GetMouseData<MousePos>(hwBus.hData));
-			//m_ShouldRevalidateMouseValue = true;
-		}
+		//KeyData inKey{};
 
-		m_CurrentFrameSystemKey |= sysKeys;
-		const InputEvent thisFrameEvent{ EvaluateMainKeyPool(inKey, sysKeys) };
-		UpdateAxisMapping(inKey, thisFrameEvent);
+		//if (hwBus.inDevice == InputDevice::D_Keyboard)
+		//{
+		//	//const bool isKeyPressed{ WindowEvents(hwBus.eventId) == WindowEvents::KeyPressed ? true : false };
+		//	KeyboardData kData{ std::get<KeyboardData>(hwBus.hData) };
+		//	inKey.isDown = kData.isPressed;
+		//	inKey.key = { hwBus.inDevice,kData.keyCode };
+		//	inKey.axisValue = float(kData.isPressed);
+		//	inKey.playerIndex = 0;
+		//	sysKeys |= kData.sysKey; // syskeys here
+		//}
+		//else if (hwBus.inDevice == InputDevice::D_Mouse)
+		//{
+		//	inKey.playerIndex = 0;
+
+		//	//switch (WindowEvents(hwBus.eventId))
+		//	//{
+		//	//case WindowEvents::MouseWheelScrolled:
+		//	//{
+		//	//	MouseData mouseData{ std::get<MouseData>(hwBus.hData) };
+		//	//	inKey.key = { hwBus.inDevice,MouseKey::MK_Middle };
+		//	//	inKey.isDown = true;
+		//	//	inKey.axisValue = std::get<MouseWheelDelta>(mouseData.axisData);
+		//	//}
+		//	//case WindowEvents::MouseButtonPressed:
+		//	//{
+		//	//	MouseData mData{ std::get<MouseData>(hwBus.hData) };
+		//	//	inKey.key = { hwBus.inDevice,mData.keyCode };
+		//	//	inKey.isDown = true;
+		//	//}
+		//	//case WindowEvents::MouseButtonReleased:
+		//	//{
+		//	//	MouseData mData{ std::get<MouseData>(hwBus.hData) };
+		//	//	inKey.key = { hwBus.inDevice,mData.keyCode };
+		//	//	inKey.isDown = false;
+		//	//}
+		//	//default: break;
+		//	//}
+
+		//	// If we past this line then we know that this is a mouse move
+		//	//ValidateMouseDelta(GetMouseData<MousePos>(hwBus.hData));
+		//	//m_ShouldRevalidateMouseValue = true;
+		//}
+
+		//m_CurrentFrameSystemKey |= sysKeys;
+		//const InputEvent thisFrameEvent{ EvaluateMainKeyPool(inKey, sysKeys) };
+		//UpdateAxisMapping(inKey, thisFrameEvent);
 	}
 
 
@@ -259,6 +271,96 @@ InputEvent powe::InputSettings::InterpretInputState(bool isKeyPressed, const Inp
 	return InputEvent::IE_None;
 }
 
+void powe::InputSettings::ProcessHWData(const HardwareBus& hardwareBus)
+{
+	KeyData keyData{};
+	switch (EventType(hardwareBus.eventId))
+	{
+	case EventType::MouseButton:
+	{
+		const MouseKeyData mouseKey{ std::get<MouseKeyData>(hardwareBus.hData) };
+		keyData.axisValue = float(mouseKey.isPressed);
+		keyData.isDown = mouseKey.isPressed;
+		keyData.key = { hardwareBus.inDevice,mouseKey.keyCode };
+		keyData.playerIndex = 0;
+	}
+	break;
+	case EventType::MouseWheelMoved:
+	{
+		const MouseWheelDelta mouseWheelDelta{ std::get<MouseWheelDelta>(hardwareBus.hData) };
+		keyData.axisValue = mouseWheelDelta;
+		keyData.isDown = bool(mouseWheelDelta);
+
+		keyData.key = { hardwareBus.inDevice, keyData.axisValue > 0.0f ?
+			MouseKey::MK_MiddleUp : MouseKey::MK_MiddleDown };
+
+		keyData.playerIndex = 0;
+	}
+	break;
+	case EventType::MouseMoved:
+		//TODO: Do mouse moved event
+		break;
+	case EventType::KeyboardButton:
+	{
+		KeyboardData kData{ std::get<KeyboardData>(hardwareBus.hData) };
+		keyData.isDown = kData.isPressed;
+		keyData.key = { hardwareBus.inDevice,kData.keyCode };
+		keyData.axisValue = float(kData.isPressed);
+		keyData.playerIndex = 0;
+		m_CurrentFrameSystemKey |= kData.sysKey; // syskeys here
+	}
+
+	break;
+	case EventType::Gamepad: // specialize gamepad handling
+	{
+		const GamepadData gData{ std::get<GamepadData>(hardwareBus.hData) };
+
+		// Gamepad Buttons Data
+		for (int i = 0; i < GamepadKey::ButtonCount; ++i)
+		{
+			const Key gamepadKey{ InputDevice::D_Gamepad,KeyType(i) };
+
+			if (!m_MainKeyPool[gData.playerIndex].contains(gamepadKey))
+				continue;
+
+			KeyData kData{ gamepadKey,gData.playerIndex,0.0f,false };
+			if (i == GamepadKey::GPK_Left_Shoulder)
+				kData.axisValue = gData.LShoulder;
+
+			else if (i == GamepadKey::GPK_Right_Shoulder)
+				kData.axisValue = gData.RShoulder;
+			else
+				kData.axisValue = float(GamepadKey::GetKeyCodeFromBitPos(i) & gData.buttons);
+
+			kData.isDown = bool(kData.axisValue);
+
+			const InputEvent thisFrameEvent = EvaluateMainKeyPool(kData);
+			UpdateAxisMapping(kData, thisFrameEvent);
+		}
+
+		// Thumb Axis Data
+		for (int i = int(GamepadKey::GPK_Right_AxisX); i < int(GamepadKey::GPK_Count); ++i)
+		{
+			const Key gamepadKey{ InputDevice::D_Gamepad, KeyType(i) };
+
+			if (!m_MainKeyPool[gData.playerIndex].contains(gamepadKey))
+				continue;
+
+			KeyData kData{ gamepadKey,gData.playerIndex,gData.thumbAxisData[GamepadKey::GetThumbIndexDataFromKeyCode(i)] };
+			kData.isDown = bool(kData.axisValue);
+
+			const InputEvent thisFrameEvent = EvaluateMainKeyPool(kData);
+			UpdateAxisMapping(kData, thisFrameEvent);
+		}
+	}
+	return;
+	default:;
+	}
+
+	const InputEvent thisFrameEvent = EvaluateMainKeyPool(keyData);
+	UpdateAxisMapping(keyData, thisFrameEvent);
+}
+
 void powe::InputSettings::AddKeyToMainKeyPool(const Key& key)
 {
 	if (key.inputDevice == InputDevice::D_Gamepad)
@@ -288,7 +390,7 @@ void powe::InputSettings::UpdateMainKeyPool()
 }
 
 
-InputEvent powe::InputSettings::EvaluateMainKeyPool(const KeyData& inKey, uint8_t)
+InputEvent powe::InputSettings::EvaluateMainKeyPool(const KeyData& inKey)
 {
 	auto& mainKeyPool{ m_MainKeyPool[inKey.playerIndex] };
 
@@ -302,13 +404,6 @@ InputEvent powe::InputSettings::EvaluateMainKeyPool(const KeyData& inKey, uint8_
 		currentState.axisThisFrame = inKey.axisValue;
 
 		thisFrameEvent = InputEvent((currentState.inputLastFrame << 0) | (currentState.inputThisFrame << 1));
-
-		//if (userInput.inputThisFrame && userInput.inputLastFrame)
-		//	thisFrameEvent = InputEvent::IE_Down;
-		//else if (userInput.inputThisFrame && !userInput.inputLastFrame)
-		//	thisFrameEvent = InputEvent::IE_Pressed;
-		//else if (!userInput.inputThisFrame && userInput.inputLastFrame)
-		//	thisFrameEvent = InputEvent::IE_Released;
 	}
 
 	return thisFrameEvent;
@@ -334,41 +429,6 @@ void powe::InputSettings::UpdateAxisMapping(const KeyData& inKey, InputEvent thi
 		}
 	}
 }
-
-
-void powe::InputSettings::ValidateMouseDelta(const MousePos&)
-{
-	//// Mouse AxisX
-	//// TODO: Implement mouse axis movement
-	//const auto& itrMouseAxisX{ m_MainKeyPool.find(Key{ InputDevice::D_Mouse,KeyType(MouseKey::MK_AxisX) }) };
-	//if (itrMouseAxisX != m_MainKeyPool.end())
-	//{
-	//	InputState& currentInputState{ itrMouseAxisX->second };
-	//	currentInputState.axisValue = (currentInputState.axisValue - float(mousePos.relativePosX));
-	//}
-}
-
-//void powe::InputSettings::ParseMouseKey(const MouseData& key, uint8_t eventId, bool isKeyPressed)
-//{
-//}
-//
-//void powe::InputSettings::ParseMouseKey(const Key& key, bool isKeyPressed)
-//{
-//	const auto& itr{ m_MainKeyPool.find(key) };
-//	if (itr != m_MainKeyPool.end())
-//	{
-//		InputState& currentInputState{ itr->second };
-//
-//		currentInputState.keyEvent = InterpretInputState(isKeyPressed, currentInputState.keyEvent);
-//
-//		// Interpret Axis value
-//		if ((currentInputState.keyEvent == InputEvent::IE_Down) ||
-//			(currentInputState.keyEvent == InputEvent::IE_Pressed))
-//			currentInputState.axisValue = 1.0f;
-//		else
-//			currentInputState.axisValue = 0.0f;
-//	}
-//}
 
 #endif
 

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "POWEngine/Core/Input/InputStruct.h"
 #include "POWEngine/Window/WindowImpl.h"
 
 #if USE_SFML_WINDOW

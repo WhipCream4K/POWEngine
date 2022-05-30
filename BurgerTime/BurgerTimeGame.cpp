@@ -13,12 +13,12 @@
 
 #include <powengine.h>
 
-void BurgerTimeGame::Start(const SharedPtr<powe::Core>& ,
-							const SharedPtr<powe::WorldEntity>& worldEntity )
+void BurgerTimeGame::Start(const SharedPtr<powe::Core>&,
+	const SharedPtr<powe::WorldEntity>& worldEntity)
 {
 	using namespace powe;
 
-	Instance<AssetManager>()->RegisterAsset(burger::MainSprite, 
+	Instance<AssetManager>()->RegisterAsset(burger::MainSprite,
 		std::make_shared<powe::Texture>("./Resources/Sprites/BurgerTime_Main.png"));
 
 	m_PlayScene = std::make_shared<TestScene>();
@@ -29,12 +29,14 @@ void BurgerTimeGame::Start(const SharedPtr<powe::Core>& ,
 
 	inputSetting.AddAxisMapping("Horizontal", {
 		{InputDevice::D_Keyboard, Keyboard::Left,-1.0f },
-		{InputDevice::D_Keyboard,Keyboard::Right,1.0f}
+		{InputDevice::D_Keyboard,Keyboard::Right,1.0f},
+		{InputDevice::D_Gamepad,GamepadKey::GPK_Left_AxisX,1.0f}
 		});
 
 	inputSetting.AddAxisMapping("Vertical", {
 		{InputDevice::D_Keyboard,Keyboard::Up,-1.0f},
-		{InputDevice::D_Keyboard,Keyboard::Down,1.0f}
+		{InputDevice::D_Keyboard,Keyboard::Down,1.0f},
+		{InputDevice::D_Gamepad,GamepadKey::GPK_Left_AxisY,-1.0f}
 		});
 
 	inputSetting.AddActionMapping("Fire", {
@@ -44,8 +46,8 @@ void BurgerTimeGame::Start(const SharedPtr<powe::Core>& ,
 	worldEntity->RegisterSystem(PipelineLayer::InputValidation, std::make_shared<InputSystem>());
 }
 
-void BurgerTimeGame::Run(const SharedPtr<powe::WorldEntity>& ,
-	const SharedPtr<powe::WorldClock>& )
+void BurgerTimeGame::Run(const SharedPtr<powe::WorldEntity>&,
+	const SharedPtr<powe::WorldClock>&)
 {
 	using namespace powe;
 	// manages Scene here. Save the gameobject which manages the states throughout the scene
