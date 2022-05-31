@@ -34,8 +34,8 @@ void PlayScene::LoadScene(powe::WorldEntity& worldEntity)
 	{
 	case PlayMode::SinglePlayer:
 	{
-		//const auto player{ Player::Create(worldEntity,midScreen,mainSceneData->currentLevel) };
-		//AddGameObject(player);
+		const auto player{ Player::Create(worldEntity,midScreen,mainSceneData->currentLevel) };
+		AddGameObject(player);
 	}
 	break;
 	default:;

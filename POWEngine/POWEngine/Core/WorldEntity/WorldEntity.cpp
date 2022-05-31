@@ -711,7 +711,7 @@ void powe::WorldEntity::InternalAddGameObjectToPipeline()
 			targetArchetype->AllocateComponentData(futureSize * 3, *this);
 		}
 
-		SizeType accumulateOffset{};
+		//SizeType accumulateOffset{};
 		for (const ComponentTypeID componentTypeId : archetypeKey)
 		{
 			const ComponentTypeID discardFlagComponentID{ DiscardFlag(componentTypeId) };
@@ -721,7 +721,7 @@ void powe::WorldEntity::InternalAddGameObjectToPipeline()
 
 			RawByte* destination{ &targetArchetype->ComponentData[int(
 				(targetArchetype->GameObjectIds.size() * targetArchetype->SizeOfComponentsBlock) +
-				accumulateOffset)] };
+				targetArchetype->ComponentOffsets.at(discardFlagComponentID))] };
 
 			// Check if this component is sparse or not
 			if (IsThisComponentSparse(componentTypeId))
@@ -734,7 +734,7 @@ void powe::WorldEntity::InternalAddGameObjectToPipeline()
 				componentTrait->MoveData(source, destination);
 			}
 
-			accumulateOffset += componentTrait->GetSize();
+			//accumulateOffset += componentTrait->GetSize();
 
 			// NOTE: Need to call the destructor of the component because sometimes when the component owns
 			// a vector which sometimes allocates data it will not destroy itself hence leaking memory
