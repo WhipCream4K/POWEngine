@@ -18,14 +18,37 @@ struct AnimationComponent : powe::Component<AnimationComponent>
 	int currentSprite{};
 };
 
-struct PlayerSpeed : powe::Component<PlayerSpeed>
+struct Speed : powe::Component<Speed>
 {
-	PlayerSpeed() = default;
+	Speed() = default;
 
-	PlayerSpeed(float inSpeed)
+	Speed(float inSpeed)
 		: speed(inSpeed)
 	{
 	}
 
 	float speed{};
+};
+
+enum class PlayMode
+{
+	SinglePlayer
+};
+
+struct DynamicSceneData : powe::Component<DynamicSceneData>
+{
+	int currentLevel{};
+	PlayMode currentPlayMode{};
+};
+
+struct SceneReference : powe::Component<SceneReference>
+{
+	powe::GameObjectID sceneID{};
+};
+
+struct CanWalkOnTile : powe::Component<CanWalkOnTile>
+{
+	powe::GameObjectID walkableTileID{};
+	int currentCol{};
+	int currentRow{};
 };

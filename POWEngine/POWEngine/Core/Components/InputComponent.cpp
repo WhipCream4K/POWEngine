@@ -6,9 +6,14 @@ powe::InputComponent::InputComponent(uint8_t playerIndex)
 {
 }
 
+powe::InputComponent::~InputComponent()
+{
+	
+}
+
 void powe::InputComponent::AddActionCommand(const std::string& name, 
-	InputEvent inputEvent,
-	const SharedPtr<ActionCommand>& actionCommand)
+											InputEvent inputEvent,
+											const SharedPtr<ActionCommand>& actionCommand)
 {
 	auto& commands{ m_ActionCommands[name] };
 	if (std::ranges::find_if(commands, [&inputEvent,&actionCommand](const ActionPack& actionPack)

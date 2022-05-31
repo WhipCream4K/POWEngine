@@ -6,6 +6,7 @@
 #include "POWEngine/Rendering/Components/Sprite/SpriteComponent.h"
 #include "POWEngine/Core/Components/Transform2D.h"
 #include "POWEngine/Rendering/Resources/Texture/Texture.h"
+#include "POWEngine/Core/Clock/WorldClock.h"
 #include "POWEngine/Core/Input/InputSystem.h"
 #include "StaticVariables.h"
 #include "AssetManager.h"
@@ -13,6 +14,7 @@
 
 #include <powengine.h>
 
+#include "PlayScene.h"
 #include "POWEngine/Rendering/Resources/Font/Font.h"
 
 void BurgerTimeGame::Start(const SharedPtr<powe::Core>&,
@@ -31,8 +33,11 @@ void BurgerTimeGame::Start(const SharedPtr<powe::Core>&,
 	assetManager->RegisterAsset(burger::MainLevelSprite,
 		std::make_shared<Texture>("./Resources/Sprites/BurgerTime_Stages.png"));
 
-	m_PlayScene = std::make_shared<TestScene>();
+	const auto dynamicSceneData{ std::make_shared<GameObject>(*worldEntity) };
+	dynamicSceneData->AddComponent(DynamicSceneData{});
+	m_SceneDataID = dynamicSceneData->GetID();
 
+	m_PlayScene = std::make_shared<PlayScene>(dynamicSceneData);
 	m_PlayScene->LoadScene(*worldEntity);
 
 	auto& inputSetting{ worldEntity->GetInputSettings() };
@@ -56,10 +61,13 @@ void BurgerTimeGame::Start(const SharedPtr<powe::Core>&,
 	worldEntity->RegisterSystem(PipelineLayer::InputValidation, std::make_shared<InputSystem>());
 }
 
-void BurgerTimeGame::Run(const SharedPtr<powe::WorldEntity>&,
-	const SharedPtr<powe::WorldClock>&)
+void BurgerTimeGame::Run(const SharedPtr<powe::WorldEntity>& ,
+	const SharedPtr<powe::WorldClock>& )
 {
 	using namespace powe;
+
+	//const float delta{ worldClock->GetDeltaTime() };
+
 	// manages Scene here. Save the gameobject which manages the states throughout the scene
 	//if(m_Test < 1)
 	//{

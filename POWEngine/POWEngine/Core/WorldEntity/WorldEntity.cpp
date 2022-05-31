@@ -403,6 +403,8 @@ void powe::WorldEntity::InternalRemoveGameObjectFromPipeline()
 			targetArchetype->GameObjectIds.erase(
 				std::ranges::remove(targetArchetype->GameObjectIds, gameObjectIDs[deletingGameObjectIdx]).begin(),
 				targetArchetype->GameObjectIds.end());
+
+			//gbRecords.Archetype.reset();
 		}
 
 	}
@@ -712,8 +714,10 @@ void powe::WorldEntity::InternalAddGameObjectToPipeline()
 		SizeType accumulateOffset{};
 		for (const ComponentTypeID componentTypeId : archetypeKey)
 		{
-			const SharedPtr<BaseComponent> componentTrait{ GetComponentTrait(componentTypeId) };
-			const SharedPtr<RawByte[]> compData{ componentTempDataMap.at(componentTypeId) };
+			const ComponentTypeID discardFlagComponentID{ DiscardFlag(componentTypeId) };
+
+			const SharedPtr<BaseComponent> componentTrait{ GetComponentTrait(discardFlagComponentID) };
+			const SharedPtr<RawByte[]> compData{ componentTempDataMap.at(discardFlagComponentID) };
 
 			RawByte* destination{ &targetArchetype->ComponentData[int(
 				(targetArchetype->GameObjectIds.size() * targetArchetype->SizeOfComponentsBlock) +
@@ -722,7 +726,7 @@ void powe::WorldEntity::InternalAddGameObjectToPipeline()
 			// Check if this component is sparse or not
 			if (IsThisComponentSparse(componentTypeId))
 			{
-				m_SparseComponentManager.AddComponentToSparseSet(gameObjectID, DiscardFlag(componentTypeId), compData);
+				m_SparseComponentManager.AddComponentToSparseSet(gameObjectID, discardFlagComponentID, compData);
 			}
 			else
 			{

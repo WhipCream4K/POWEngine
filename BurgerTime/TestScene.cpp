@@ -27,13 +27,15 @@ void TestScene::LoadScene(powe::WorldEntity& worldEntity)
 
 	const auto& spriteTest{ std::make_shared<GameObject>(worldEntity) };
 
+	m_Player = spriteTest;
+
 	SpriteComponent* spriteComp = spriteTest->AddComponent(SpriteComponent{ spriteTest }, ComponentFlag::Sparse);
 
 	spriteComp->SetTexture(*Instance<AssetManager>()->GetAsset<Texture>(burger::MainObjectSprite));
 	spriteComp->SetRect({ 0.0f,0.0f,16.0f,16.0f });
 
 	spriteTest->AddComponent(AnimationComponent{ 3,0.5f });
-	spriteTest->AddComponent(PlayerSpeed{ 150.0f });
+	spriteTest->AddComponent(Speed{ 150.0f });
 	spriteTest->AddComponent(DebugRectangle{ spriteTest }, ComponentFlag::Sparse);
 
 	//debugRect->SetSize({ 20.0f,20.0f });
@@ -47,7 +49,7 @@ void TestScene::LoadScene(powe::WorldEntity& worldEntity)
 	const auto& audioTest{ std::make_shared<GameObject>(worldEntity) };
 	audioTest->AddComponent(AudioComponent{ "./Resources/Sound/Jump.wav" }, ComponentFlag::Sparse);
 
-	AddGameObject(spriteTest);
+	//AddGameObject(spriteTest);
 	AddGameObject(audioTest);
 
 	SharedPtr<SystemBase> system{ std::make_shared<PlayerInputSystem>() };
@@ -79,12 +81,22 @@ void TestScene::LoadScene(powe::WorldEntity& worldEntity)
 	const auto& levelTest{ std::make_shared<GameObject>(worldEntity) };
 	Transform2D* levelTransform = levelTest->AddComponent(Transform2D{ levelTest });
 
-	levelTransform->SetWorldPosition({ 640.0f,480.0f });
+	levelTransform->SetWorldPosition({ 640.0f,360.0f });
 	levelTransform->SetWorldScale(burger::SpriteScale);
 
 	spriteComp = levelTest->AddComponent(SpriteComponent{ levelTest }, ComponentFlag::Sparse);
 	spriteComp->SetRenderOrder(burger::RenderOrder::Background);
 	spriteComp->SetTexture(*Instance<AssetManager>()->GetAsset<Texture>(burger::MainLevelSprite));
+	spriteComp->SetRect({ 0.0f,0.0f,208.0f,200.0f });
 
 	AddGameObject(levelTest);
+}
+
+void TestScene::Run(powe::WorldEntity& worldEntity,float delta)
+{
+
+	if (m_ExpiredTime < 2.5f)
+		m_ExpiredTime += delta;
+	else
+		worldEntity.RemoveGameObject(m_Player->GetID());
 }

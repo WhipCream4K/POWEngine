@@ -25,7 +25,6 @@ namespace powe
 
 		void OnDestroy(WorldEntity&, GameObjectID) override;
 
-
 		void SetWorldPosition(const glm::vec2& position);
 		void SetWorldScale(const glm::vec2& scales);
 		void SetWorldRotation(float zRotation);

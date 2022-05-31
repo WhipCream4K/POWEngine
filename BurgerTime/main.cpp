@@ -25,7 +25,7 @@ int main()
 	const SharedPtr<powe::WorldEntity> worldEntity{std::make_shared<powe::WorldEntity>()};
 
 	const SharedPtr<BurgerTimeGame> burgerTimeScene{ std::make_shared<BurgerTimeGame>() };
-	const SharedPtr<powe::WorldClock> worldClock{ engineCore->GetWorldClock() };
+	//const SharedPtr<powe::WorldClock> worldClock{ engineCore->GetWorldClock() };
 
 	engineCore->RegisterRendererType(std::make_unique<powe::SFML2DRenderer>());
 
@@ -39,7 +39,7 @@ int main()
 
 	while (!engineCore->TranslateWindowInputs(*window,*worldEntity))
 	{
-		burgerTimeScene->Run(worldEntity,worldClock);
+		burgerTimeScene->Run(worldEntity,engineCore->GetWorldClock());
 		engineCore->Step(*worldEntity);
 
 		engineCore->Draw(*window, *worldEntity);

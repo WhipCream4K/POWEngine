@@ -19,4 +19,10 @@ namespace burger
 			Enemy
 		};
 	};
+
+	enum class PlayMode
+	{
+		
+	};
 }
+

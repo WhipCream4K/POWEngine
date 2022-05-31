@@ -14,12 +14,13 @@ class PlayScene : public SceneFactory
 {
 public:
 
-	PlayScene();
+	PlayScene(const SharedPtr<powe::GameObject>& dynamicScene);
 
 	void LoadScene(powe::WorldEntity&) override;
 
 private:
 
-	std::vector<SharedPtr<powe::GameObject>> m_GameObjects;
+	WeakPtr<powe::GameObject> m_SceneData{};
+	//powe::GameObjectID m_SceneDataID;
 };
 

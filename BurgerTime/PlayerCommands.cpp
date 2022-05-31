@@ -14,7 +14,7 @@ void HorizontalMovement::Execute(
 	using namespace powe;
 
 	Transform2D* transform2D{ worldEntity.GetComponent<Transform2D>(id) };
-	PlayerSpeed* playerSpeed{ worldEntity.GetComponent<PlayerSpeed>(id) };
+	Speed* playerSpeed{ worldEntity.GetComponent<Speed>(id) };
 
 	if (!transform2D || !playerSpeed)
 		return;
@@ -32,7 +32,7 @@ void VerticalMovement::Execute(
 	using namespace powe;
 
 	Transform2D* transform2D{ worldEntity.GetComponent<Transform2D>(id) };
-	PlayerSpeed* playerSpeed{ worldEntity.GetComponent<PlayerSpeed>(id) };
+	Speed* playerSpeed{ worldEntity.GetComponent<Speed>(id) };
 
 	if (!transform2D || !playerSpeed)
 		return;

@@ -41,6 +41,7 @@ namespace powe
 	public:
 
 		InputComponent(uint8_t playerIndex = 0);
+		~InputComponent() override;
 
 		void AddActionCommand(const std::string& name, InputEvent inputEvent, const SharedPtr<ActionCommand>& actionCommand);
 		void AddAxisCommand(const std::string& name, const SharedPtr<AxisCommand>& axisCommand);

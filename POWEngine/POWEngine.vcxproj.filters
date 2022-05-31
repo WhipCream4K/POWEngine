@@ -276,6 +276,9 @@
     <ClInclude Include="POWEngine\Rendering\Components\Debug\SFML\SFMLDebugRectangleComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="POWEngine\JSON\JSONParser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PCH\pch.cpp">

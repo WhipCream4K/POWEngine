@@ -1,4 +1,4 @@
-	#pragma once
+#pragma once
 
 #include "POWEngine/Core/Input/InputSettings.h"
 #include "POWEngine/ECS/Archetype.h"
@@ -65,7 +65,8 @@ namespace powe
 		void UpdatePipeline(PipelineLayer layer, float deltaTime);
 		void ResolveEntities();
 
-
+		template<typename ComponentType>
+		EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> FindUniqueComponent() const;
 
 		SharedPtr<Archetype> GetArchetypeByGameObject(GameObjectID id) const;
 		const std::unordered_map<std::string, SharedPtr<Archetype>> GetActiveArchetypes() const { return m_ArchetypesPool; }
@@ -241,7 +242,7 @@ namespace powe
 		const SharedPtr<RawByte[]> componentData{ SharedPtr<RawByte[]>{new RawByte[sizeof(ComponentType)]{}} };
 
 		// Initialize data
-		ComponentType* outPointer{ new ( componentData.get())
+		ComponentType* outPointer{ new (componentData.get())
 			ComponentType(std::forward<ComponentType>(component)) };
 
 		AddPreArchetype(id, componentId, componentData);
@@ -366,7 +367,7 @@ namespace powe
 					//RawByte* sourceAddress{ &archetype->ComponentData[
 					//	gbRecords.IndexInArchetype * archetype->SizeOfComponentsBlock
 					// + findItr->second] };
-					
+
 					// check the key if it's a sparse component or not
 					if (!IsThisComponentSparse(findItr->first))
 					{
@@ -387,7 +388,7 @@ namespace powe
 			else // if some how user ask for a component before the gameobject got registered to the pipeline
 			{
 				PreArchetypeTrait preArchetypeTrait{};
-				if(GetPreArchetypeTrait(id, preArchetypeTrait))
+				if (GetPreArchetypeTrait(id, preArchetypeTrait))
 				{
 					const auto findItr{ preArchetypeTrait.componentData.find(compID) };
 					if (findItr != preArchetypeTrait.componentData.end())
@@ -404,6 +405,43 @@ namespace powe
 	{
 		const ComponentTypeID componentID{ BaseComponent::GetId<Component>() };
 		RemoveComponentByID(id, componentID);
+	}
+
+	template <typename ComponentType>
+	EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> WorldEntity::FindUniqueComponent() const
+	{
+		const ComponentTypeID componentTypeId{ BaseComponent::GetId<ComponentType>() };
+
+		for (const auto& [id, gbRecords] : m_GameObjectRecords)
+		{
+			if (const auto archetype = gbRecords.Archetype.lock())
+			{
+				RawByte* outData{};
+				const auto findItr{ archetype->ComponentOffsets.find(componentTypeId) };
+				if (findItr == archetype->ComponentOffsets.end())
+					continue;
+
+				if (IsThisComponentSparse(findItr->second))
+					outData = m_SparseComponentManager.GetComponentData<ComponentType>(id, componentTypeId);
+				else
+					outData = &archetype->ComponentData[gbRecords.IndexInArchetype * archetype->SizeOfComponentsBlock + findItr->second];
+
+				return reinterpret_cast<ComponentType*>(outData);
+
+			}
+
+			// if there's no archetype then go for pre archetype
+			PreArchetypeTrait preArchetypeTrait{};
+			if (GetPreArchetypeTrait(id, preArchetypeTrait))
+			{
+				const auto findItr{ preArchetypeTrait.componentData.find(componentTypeId) };
+				if (findItr != preArchetypeTrait.componentData.end())
+					return reinterpret_cast<ComponentType*>(findItr->second.get());
+			}
+
+		}
+
+		return nullptr;
 	}
 
 	template <typename ComponentType>

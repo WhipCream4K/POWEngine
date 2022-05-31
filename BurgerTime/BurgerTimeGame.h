@@ -2,6 +2,9 @@
 
 #include <poweCustomtype.h>
 
+class PlayScene;
+class SceneFactory;
+
 namespace powe
 {
 	class GameObject;
@@ -23,7 +26,8 @@ public:
 private:
 
 	SharedPtr<powe::Texture> m_MainTexture;
-	SharedPtr<TestScene> m_PlayScene;
+	SharedPtr<SceneFactory> m_PlayScene;
+	powe::GameObjectID m_SceneDataID{};
 	int m_Test{};
 
 };
