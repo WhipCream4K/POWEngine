@@ -11,6 +11,7 @@
 #include "StaticVariables.h"
 #include "AssetManager.h"
 #include "TestScene.h"
+#include "MenuScene.h"
 
 #include <powengine.h>
 
@@ -18,7 +19,7 @@
 #include "POWEngine/Rendering/Resources/Font/Font.h"
 
 void BurgerTimeGame::Start(const SharedPtr<powe::Core>&,
-						   const SharedPtr<powe::WorldEntity>& worldEntity)
+	const SharedPtr<powe::WorldEntity>& worldEntity)
 {
 	using namespace powe;
 
@@ -33,12 +34,16 @@ void BurgerTimeGame::Start(const SharedPtr<powe::Core>&,
 	assetManager->RegisterAsset(burger::MainLevelSprite,
 		std::make_shared<Texture>("./Resources/Sprites/BurgerTime_Stages.png"));
 
-	const auto dynamicSceneData{ std::make_shared<GameObject>(*worldEntity) };
-	dynamicSceneData->AddComponent(DynamicSceneData{});
-	m_SceneDataID = dynamicSceneData->GetID();
+	assetManager->RegisterAsset(burger::MenuPointer,
+		std::make_shared<powe::Texture>("./Resources/Sprites/Pointer.png"));
 
-	m_PlayScene = std::make_shared<PlayScene>(dynamicSceneData);
-	m_PlayScene->LoadScene(*worldEntity);
+	// Initialize persistent GameObject
+	const auto dynamicSceneData{ std::make_shared<GameObject>(*worldEntity) };
+	m_SceneDataID = dynamicSceneData->GetID();
+	dynamicSceneData->AddComponent(DynamicSceneData{ m_SceneDataID });
+
+	m_MenuScene = std::make_shared<MenuScene>(m_SceneDataID);
+	m_MenuScene->LoadScene(*worldEntity);
 
 	auto& inputSetting{ worldEntity->GetInputSettings() };
 
@@ -54,6 +59,15 @@ void BurgerTimeGame::Start(const SharedPtr<powe::Core>&,
 		{InputDevice::D_Gamepad,GamepadKey::GPK_Left_AxisY,-1.0f}
 		});
 
+	inputSetting.AddAxisMapping("MenuVertical", {
+		{InputDevice::D_Keyboard,Keyboard::Up,-1.0f},
+		{InputDevice::D_Keyboard,Keyboard::Down,1.0f}
+		});
+
+	inputSetting.AddActionMapping("Select", {
+		{InputDevice::D_Keyboard,Keyboard::Enter}
+		});
+
 	inputSetting.AddActionMapping("Fire", {
 		{InputDevice::D_Keyboard,Keyboard::Space}
 		});
@@ -61,8 +75,8 @@ void BurgerTimeGame::Start(const SharedPtr<powe::Core>&,
 	worldEntity->RegisterSystem(PipelineLayer::InputValidation, std::make_shared<InputSystem>());
 }
 
-void BurgerTimeGame::Run(const SharedPtr<powe::WorldEntity>& ,
-	const SharedPtr<powe::WorldClock>& )
+void BurgerTimeGame::Run(const SharedPtr<powe::WorldEntity>&,
+	const SharedPtr<powe::WorldClock>&)
 {
 	using namespace powe;
 

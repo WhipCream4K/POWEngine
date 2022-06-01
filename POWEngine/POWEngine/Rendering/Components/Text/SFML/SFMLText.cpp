@@ -12,7 +12,9 @@ powe::SFMLText::SFMLText(int fontSize, const SharedPtr<GameObject>& gameObject)
 {
 	if(gameObject)
 	{
-		gameObject->AddComponent(SFMLTextComponent{}, ComponentFlag::Sparse);
+		SFMLTextComponent* realData = gameObject->AddComponent(SFMLTextComponent{}, ComponentFlag::Sparse);
+		if(realData)
+			realData->text.setCharacterSize(fontSize);
 	}
 }
 

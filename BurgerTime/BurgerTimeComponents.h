@@ -2,11 +2,15 @@
 
 #include <poweComponent.h>
 
+#include "PlayModeObserver.h"
+#include "PlayModeSubject.h"
+#include "StaticVariables.h"
+
 struct AnimationComponent : powe::Component<AnimationComponent>
 {
 	AnimationComponent() = default;
 
-	AnimationComponent(int nbSprites,float timeSpan)
+	AnimationComponent(int nbSprites, float timeSpan)
 		: spritePerSec(timeSpan / float(nbSprites))
 		, totalSprite(nbSprites)
 	{
@@ -30,15 +34,29 @@ struct Speed : powe::Component<Speed>
 	float speed{};
 };
 
-enum class PlayMode
+struct MenuData : powe::Component<MenuData>
 {
-	SinglePlayer
+	MenuData()
+		: playModeSubject(std::make_shared<PlayModeSubject>())
+	{
+	}
+
+	SharedPtr<PlayModeSubject> playModeSubject{};
 };
 
 struct DynamicSceneData : powe::Component<DynamicSceneData>
 {
+	DynamicSceneData() = default;
+
+	DynamicSceneData(powe::GameObjectID ownerID)
+		: playModeObserver(std::make_shared<PlayModeObserver>(ownerID))
+	{
+	}
+
 	int currentLevel{};
-	PlayMode currentPlayMode{};
+	PlayMode currentPlayMode{ PlayMode::SinglePlayer };
+
+	SharedPtr<PlayModeObserver> playModeObserver{};
 };
 
 struct SceneReference : powe::Component<SceneReference>

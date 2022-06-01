@@ -199,7 +199,12 @@ xcopy /y "$(SolutionDir)3rdPartyLib\allDLLs\$(Platform)\$(Configuration)\*.dll" 
     <ClCompile Include="AssetManager.cpp" />
     <ClCompile Include="BurgerLevel.cpp" />
     <ClCompile Include="BurgerTimeGame.cpp" />
+    <ClCompile Include="PlayModeObserver.cpp" />
+    <ClCompile Include="PlayModeSubject.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MenuCommands.cpp" />
+    <ClCompile Include="MenuScene.cpp" />
+    <ClCompile Include="Observer.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerCommands.cpp" />
     <ClCompile Include="PlayerInputSystem.cpp" />
@@ -207,6 +212,7 @@ xcopy /y "$(SolutionDir)3rdPartyLib\allDLLs\$(Platform)\$(Configuration)\*.dll" 
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="SceneFactory.cpp" />
     <ClCompile Include="StateController.cpp" />
+    <ClCompile Include="Subject.cpp" />
     <ClCompile Include="TestCommand.cpp" />
     <ClCompile Include="TestScene.cpp" />
     <ClCompile Include="WalkableTiles.cpp" />
@@ -222,6 +228,11 @@ xcopy /y "$(SolutionDir)3rdPartyLib\allDLLs\$(Platform)\$(Configuration)\*.dll" 
     <ClInclude Include="BurgerLevel.h" />
     <ClInclude Include="BurgerTimeComponents.h" />
     <ClInclude Include="BurgerTimeGame.h" />
+    <ClInclude Include="PlayModeObserver.h" />
+    <ClInclude Include="PlayModeSubject.h" />
+    <ClInclude Include="MenuCommands.h" />
+    <ClInclude Include="MenuScene.h" />
+    <ClInclude Include="Observer.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerCommands.h" />
     <ClInclude Include="PlayerInputSystem.h" />
@@ -231,6 +242,7 @@ xcopy /y "$(SolutionDir)3rdPartyLib\allDLLs\$(Platform)\$(Configuration)\*.dll" 
     <ClInclude Include="SceneFactory.h" />
     <ClInclude Include="StateController.h" />
     <ClInclude Include="StaticVariables.h" />
+    <ClInclude Include="Subject.h" />
     <ClInclude Include="TestCommand.h" />
     <ClInclude Include="TestScene.h" />
     <ClInclude Include="WalkableTiles.h" />

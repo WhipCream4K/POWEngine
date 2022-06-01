@@ -27,6 +27,7 @@ private:
 
 	SharedPtr<powe::Texture> m_MainTexture;
 	SharedPtr<SceneFactory> m_PlayScene;
+	SharedPtr<SceneFactory> m_MenuScene;
 	powe::GameObjectID m_SceneDataID{};
 	int m_Test{};
 
