@@ -12,5 +12,9 @@ protected:
 
 	void OnUpdate(float, powe::GameObjectID) override;
 	void OnCreate(powe::GameObjectID) override;
+
+private:
+
+	float m_Timer{};
 };
 

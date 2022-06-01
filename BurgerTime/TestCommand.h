@@ -13,6 +13,7 @@ class FireCommand : public powe::ActionCommand
 {
 public:
 
-	void Execute(powe::WorldEntity& worldEntity, float deltaTime, powe::GameObjectID id) override;
+	void Execute(powe::WorldEntity& worldEntity, float deltaTime, powe::GameObjectID id, InputEvent inputEvent) override;
+	//void Execute(powe::WorldEntity& worldEntity, float deltaTime, powe::GameObjectID id) override;
 };
 

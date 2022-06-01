@@ -2,6 +2,7 @@
 #include "Transform2D.h"
 
 #include "POWEngine/Core/GameObject/GameObject.h"
+#include "POWEngine/Logger/LoggerUtils.h"
 
 powe::Transform2D::Transform2D()
 	: m_ParentNode()
@@ -18,14 +19,16 @@ powe::Transform2D::Transform2D(const SharedPtr<GameObject>& owner)
 {
 }
 
-void powe::Transform2D::OnDestroy(WorldEntity& , GameObjectID )
+
+
+void powe::Transform2D::OnDestroy(WorldEntity&, GameObjectID)
 {
 	if (m_ParentNode.lock())
 		SetParent(nullptr);
 
 	for (const auto& childrenNode : m_ChildrenNode)
 	{
-		if (const auto child{childrenNode.lock()})
+		if (const auto child{ childrenNode.lock() })
 		{
 			Transform2D* transform2D{ child->GetComponent<Transform2D>() };
 			if (transform2D)
@@ -35,8 +38,6 @@ void powe::Transform2D::OnDestroy(WorldEntity& , GameObjectID )
 		}
 	}
 }
-
-powe::Transform2D::~Transform2D() = default;
 
 
 void powe::Transform2D::SetWorldPosition(const glm::vec2& position)
@@ -149,7 +150,7 @@ void powe::Transform2D::SetParent(const SharedPtr<GameObject>& gameObject, bool 
 		//SetLocalScale(GetLocalScale());
 	}
 
-	if (const auto parent{m_ParentNode.lock()})
+	if (const auto parent{ m_ParentNode.lock() })
 	{
 		Transform2D* parentTransform{ parent->GetComponent<Transform2D>() };
 		if (!parentTransform)
@@ -209,6 +210,7 @@ void powe::Transform2D::SetDirtyFlag(DirtyFlag flag)
 
 void powe::Transform2D::SetChildrenDirtyFlag(DirtyFlag flag)
 {
+	flag;
 	for (auto it = m_ChildrenNode.begin(); it != m_ChildrenNode.end();)
 	{
 		if (const auto child{ it->lock() })

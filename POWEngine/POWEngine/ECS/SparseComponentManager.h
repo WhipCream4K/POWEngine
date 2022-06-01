@@ -14,8 +14,8 @@ namespace powe
 		}
 
 		SparseHandle CurrentEmptyIndex{};
+		std::vector<GameObjectID> GameObjectIDs;
 		SizeType TotalAllocateData{};
-		//SizeType BlockSize{};
 		SharedPtr<RawByte[]> Data{};
 	};
 

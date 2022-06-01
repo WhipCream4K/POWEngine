@@ -18,10 +18,12 @@ namespace powe
 	public:
 
 		Transform2D();
-		Transform2D(const SharedPtr<GameObject>& owner);
+		explicit Transform2D(const SharedPtr<GameObject>& owner);
 		Transform2D(const Transform2D&) = default;
 		Transform2D& operator=(const Transform2D&) = default;
-		~Transform2D() override;
+		Transform2D(Transform2D&&) noexcept = default;
+		Transform2D& operator=(Transform2D&&) noexcept = default;
+		~Transform2D() override = default;
 
 		void OnDestroy(WorldEntity&, GameObjectID) override;
 
@@ -53,8 +55,13 @@ namespace powe
 		bool IsDirty(DirtyFlag flag) const;
 
 		WeakPtr<GameObject> m_ParentNode{};
+		//GameObject* m_ParentNode{};
 		std::vector<WeakPtr<GameObject>> m_ChildrenNode{};
+		//std::vector<GameObject*> m_ChildrenNode;
+		//std::vector<GameObjectID> m_ChildrenNode;
+		//SharedPtr<std::vector<GameObject*>> m_ChildrenNode;
 		WeakPtr<GameObject> m_Owner{};
+		//GameObject* m_Owner{};
 
 		glm::vec2 m_WorldPosition{};
 		glm::vec2 m_WorldScales{};

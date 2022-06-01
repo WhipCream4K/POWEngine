@@ -5,6 +5,7 @@
 
 #include "POWEngine/Window/Window.h"
 #include "POWEngine/Window/SFML/SFMLWindow.h"
+#include "POWEngine/Logger/LoggerUtils.h"
 #include <SFML/Graphics.hpp>
 
 class powe::SFML2DRenderer::SFML2DRendererImpl
@@ -24,15 +25,17 @@ public:
 
 		for (const auto& drawEntt : m_SF2DDrawEntities)
 		{
+			//POWLOGERROR(std::to_string(m_SF2DDrawEntities.size()));
 			renderWindow.draw(*drawEntt.sfDraw, drawEntt.sfRenderStates);
 		}
 
 		m_SF2DDrawEntities.clear();
 	}
 
-	void SubmitDrawSprite(sf::Drawable* drawObject,const sf::RenderStates& renderStates, int drawOrder)
+	void SubmitDrawSprite(sf::Drawable* drawObject, const sf::RenderStates& renderStates, int drawOrder)
 	{
-		m_SF2DDrawEntities.emplace_back(drawObject, renderStates, drawOrder);
+		if (drawObject)
+			m_SF2DDrawEntities.emplace_back(drawObject, renderStates, drawOrder);
 	}
 
 private:
@@ -55,7 +58,7 @@ powe::SFML2DRenderer::SFML2DRenderer()
 
 powe::SFML2DRenderer::~SFML2DRenderer() = default;
 
-void powe::SFML2DRenderer::SubmitDrawSprite(sf::Drawable* drawable,const sf::RenderStates& renderStates, int drawOrder) const
+void powe::SFML2DRenderer::SubmitDrawSprite(sf::Drawable* drawable, const sf::RenderStates& renderStates, int drawOrder) const
 {
 	m_RenderImpl->SubmitDrawSprite(drawable, renderStates, drawOrder);
 }

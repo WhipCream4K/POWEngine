@@ -43,6 +43,9 @@
     <Filter Include="MainGame">
       <UniqueIdentifier>{58536bf1-f49b-44ee-a27c-6ccf59b83933}</UniqueIdentifier>
     </Filter>
+    <Filter Include="States">
+      <UniqueIdentifier>{4c926246-ab18-46c9-bad1-ff0ad6371578}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -107,6 +110,18 @@
     </ClCompile>
     <ClCompile Include="Subject.cpp">
       <Filter>Observers</Filter>
+    </ClCompile>
+    <ClCompile Include="GameState.cpp">
+      <Filter>States</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuState.cpp">
+      <Filter>States</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayState.cpp">
+      <Filter>States</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStart.cpp">
+      <Filter>States</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -178,6 +193,18 @@
     </ClInclude>
     <ClInclude Include="Observer.h">
       <Filter>Observers</Filter>
+    </ClInclude>
+    <ClInclude Include="GameState.h">
+      <Filter>States</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuState.h">
+      <Filter>States</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayState.h">
+      <Filter>States</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStart.h">
+      <Filter>States</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -11,19 +11,28 @@ powe::InputComponent::~InputComponent()
 	
 }
 
-void powe::InputComponent::AddActionCommand(const std::string& name, 
-											InputEvent inputEvent,
-											const SharedPtr<ActionCommand>& actionCommand)
+void powe::InputComponent::AddActionCommand(const std::string& name, const SharedPtr<ActionCommand>& actionCommand)
 {
 	auto& commands{ m_ActionCommands[name] };
-	if (std::ranges::find_if(commands, [&inputEvent,&actionCommand](const ActionPack& actionPack)
+	if (std::ranges::find(commands, actionCommand) == commands.end())
 	{
-			return inputEvent == actionPack.targetEvent && actionCommand == actionPack.command;
-	}) == commands.end())
-	{
-		commands.emplace_back(ActionPack{actionCommand,inputEvent});
+		commands.emplace_back(actionCommand);
 	}
 }
+
+//void powe::InputComponent::AddActionCommand(const std::string& name, 
+//											InputEvent inputEvent,
+//											const SharedPtr<ActionCommand>& actionCommand)
+//{
+//	auto& commands{ m_ActionCommands[name] };
+//	if (std::ranges::find_if(commands, [&inputEvent,&actionCommand](const ActionPack& actionPack)
+//	{
+//			return inputEvent == actionPack.targetEvent && actionCommand == actionPack.command;
+//	}) == commands.end())
+//	{
+//		commands.emplace_back(ActionPack{actionCommand,inputEvent});
+//	}
+//}
 
 void powe::InputComponent::AddAxisCommand(const std::string& name, const SharedPtr<AxisCommand>& axisCommand)
 {

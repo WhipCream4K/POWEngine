@@ -47,8 +47,13 @@ void powe::SparseComponentManager::AddComponentToSparseSet(
 
 	componentTrait->MoveData(sourceAddress, endAddress);
 
+	//m_GameObjectToHandle[id].try_emplace(componentTypeId, sparseSet.CurrentEmptyIndex++);
+	m_GameObjectToHandle[id][componentTypeId] = sparseSet.CurrentEmptyIndex++;
 
-	m_GameObjectToHandle[id].try_emplace(componentTypeId, sparseSet.CurrentEmptyIndex++);
+	if(std::ranges::find(sparseSet.GameObjectIDs,id) == sparseSet.GameObjectIDs.end())
+	{
+		sparseSet.GameObjectIDs.emplace_back(id);
+	}
 
 	//m_RegisteredGameObjects.insert(id);
 	//sparseSet.CurrentEmptyIndex++;
@@ -70,15 +75,29 @@ void powe::SparseComponentManager::RemoveComponentFromGameObject(
 		const SizeType componentSize{ thisComponent->GetSize() };
 
 		RawByte* sourceAddress{ &sparseSet.Data[int(handle * componentSize)] };
-		thisComponent->OnDestroy(m_WorldEntity.get(), id);
+		thisComponent->InternalDestroy(sourceAddress,m_WorldEntity.get(), id);
 		thisComponent->DestroyData(sourceAddress);
 
+		// 1. Move data in sparse set up once block
 		for (int i = int(handle); i < int(sparseSet.CurrentEmptyIndex - 1); ++i)
 		{
 			RawByte* toAddress{ &sparseSet.Data[i * int(componentSize)] };
-			RawByte* formAddress{ &sparseSet.Data[(i + 1) * int(componentSize)] };
+			RawByte* fromAddress{ &sparseSet.Data[(i + 1) * int(componentSize)] };
 
-			thisComponent->MoveData(formAddress, toAddress);
+			// Move data over to the new block
+			thisComponent->MoveData(fromAddress, toAddress);
+
+			// Invalidate the old block
+			//thisComponent->DestroyData(fromAddress);
+		}
+
+		const auto removeItr{ std::ranges::find(sparseSet.GameObjectIDs,id) };
+		sparseSet.GameObjectIDs.erase(removeItr);
+
+		// 2. Reassign SparseHandle of every GameObject in this sparse set up 1 index
+		for (const GameObjectID gameObject : sparseSet.GameObjectIDs)
+		{
+			--m_GameObjectToHandle[gameObject].at(compID);
 		}
 
 		--sparseSet.CurrentEmptyIndex;

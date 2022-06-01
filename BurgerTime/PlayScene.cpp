@@ -8,17 +8,17 @@
 #include "Player.h"
 
 
-PlayScene::PlayScene(const SharedPtr<powe::GameObject>& dynamicScene)
-	: m_SceneData(dynamicScene)
+PlayScene::PlayScene(powe::GameObjectID sceneGameObject)
+	: m_SceneDataID(sceneGameObject)
 {
 }
 
 void PlayScene::LoadScene(powe::WorldEntity& worldEntity)
 {
 	// Spawn level
-	const auto sceneData{ m_SceneData.lock() };
-	if (!sceneData)
-		return;
+	//const auto sceneData{ m_SceneData.lock() };
+	//if (!sceneData)
+	//	return;
 
 	const DynamicSceneData* mainSceneData{ worldEntity.FindUniqueComponent<DynamicSceneData>() };
 	if (!mainSceneData)

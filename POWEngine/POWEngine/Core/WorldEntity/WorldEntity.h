@@ -127,7 +127,7 @@ namespace powe
 			int indexInArchetype,
 			ComponentType&& component);
 
-		void DestroyComponentData(
+		void DestroyAllComponentDataInGameObject(
 			const Archetype& archetype,
 			int index,
 			GameObjectID id,
@@ -239,7 +239,7 @@ namespace powe
 		}
 
 		// Create data for the pre-archetype container
-		const SharedPtr<RawByte[]> componentData{ SharedPtr<RawByte[]>{new RawByte[sizeof(ComponentType)]{}} };
+		const SharedPtr<RawByte[]> componentData{ SharedPtr<RawByte[]>{new RawByte[sizeof(ComponentType)]{}}};
 
 		// Initialize data
 		ComponentType* outPointer{ new (componentData.get())

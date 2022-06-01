@@ -16,15 +16,17 @@ powe::Archetype::Archetype()
 
 SharedPtr<powe::Archetype> powe::Archetype::Create(const WorldEntity& world, const std::vector<ComponentTypeID>& types)
 {
-	const SharedPtr<Archetype> archetype{ std::make_shared<Archetype>() };
+	SharedPtr<Archetype> archetype{ std::make_shared<Archetype>() };
 
+	SizeType offset{};
 	for (const ComponentTypeID componentTypeId : types)
 	{
 		const SharedPtr<BaseComponent> thisComponent{ world.GetComponentTrait(componentTypeId) };
 		const SizeType componentSize{ thisComponent->GetSize() };
 		archetype->Types.emplace_back(componentTypeId);
-		archetype->ComponentOffsets.try_emplace(componentTypeId, archetype->SizeOfComponentsBlock);
+		archetype->ComponentOffsets.try_emplace(componentTypeId, offset);
 		archetype->SizeOfComponentsBlock += componentSize;
+		offset += componentSize;
 	}
 
 	return archetype;

@@ -15,6 +15,7 @@
 
 #include <powengine.h>
 
+#include "GameState.h"
 #include "PlayScene.h"
 #include "POWEngine/Rendering/Resources/Font/Font.h"
 
@@ -42,54 +43,69 @@ void BurgerTimeGame::Start(const SharedPtr<powe::Core>&,
 	m_SceneDataID = dynamicSceneData->GetID();
 	dynamicSceneData->AddComponent(DynamicSceneData{ m_SceneDataID });
 
-	m_MenuScene = std::make_shared<MenuScene>(m_SceneDataID);
-	m_MenuScene->LoadScene(*worldEntity);
+	//m_MenuScene = std::make_shared<MenuScene>(m_SceneDataID);
+	//m_MenuScene->LoadScene(*worldEntity);
 
-	auto& inputSetting{ worldEntity->GetInputSettings() };
+	// Initialize Game State
+	{
+		m_MainGameState = GameState::GameStart;
+	}
 
-	inputSetting.AddAxisMapping("Horizontal", {
-		{InputDevice::D_Keyboard, Keyboard::Left,-1.0f },
-		{InputDevice::D_Keyboard,Keyboard::Right,1.0f},
-		{InputDevice::D_Gamepad,GamepadKey::GPK_Left_AxisX,1.0f}
-		});
 
-	inputSetting.AddAxisMapping("Vertical", {
-		{InputDevice::D_Keyboard,Keyboard::Up,-1.0f},
-		{InputDevice::D_Keyboard,Keyboard::Down,1.0f},
-		{InputDevice::D_Gamepad,GamepadKey::GPK_Left_AxisY,-1.0f}
-		});
+	// Initialize Main input data
+	{
+		auto& inputSetting{ worldEntity->GetInputSettings() };
 
-	inputSetting.AddAxisMapping("MenuVertical", {
-		{InputDevice::D_Keyboard,Keyboard::Up,-1.0f},
-		{InputDevice::D_Keyboard,Keyboard::Down,1.0f}
-		});
+		inputSetting.AddAxisMapping("Horizontal", {
+			{InputDevice::D_Keyboard, Keyboard::Left,-1.0f },
+			{InputDevice::D_Keyboard,Keyboard::Right,1.0f},
+			{InputDevice::D_Gamepad,GamepadKey::GPK_Left_AxisX,1.0f}
+			});
 
-	inputSetting.AddActionMapping("Select", {
-		{InputDevice::D_Keyboard,Keyboard::Enter}
-		});
+		inputSetting.AddAxisMapping("Vertical", {
+			{InputDevice::D_Keyboard,Keyboard::Up,-1.0f},
+			{InputDevice::D_Keyboard,Keyboard::Down,1.0f},
+			{InputDevice::D_Gamepad,GamepadKey::GPK_Left_AxisY,-1.0f}
+			});
 
-	inputSetting.AddActionMapping("Fire", {
-		{InputDevice::D_Keyboard,Keyboard::Space}
-		});
+		inputSetting.AddAxisMapping("MenuVertical", {
+			{InputDevice::D_Keyboard,Keyboard::Up,-1.0f},
+			{InputDevice::D_Keyboard,Keyboard::Down,1.0f}
+			});
+
+		inputSetting.AddAxisMapping("Select", {
+			{InputDevice::D_Keyboard,Keyboard::Enter,1.0f}
+			});
+
+		inputSetting.AddActionMapping("Fire", {
+			{InputDevice::D_Keyboard,Keyboard::Space}
+			});
+	}
+
 
 	worldEntity->RegisterSystem(PipelineLayer::InputValidation, std::make_shared<InputSystem>());
 }
 
-void BurgerTimeGame::Run(const SharedPtr<powe::WorldEntity>&,
-	const SharedPtr<powe::WorldClock>&)
+void BurgerTimeGame::Run(const SharedPtr<powe::WorldEntity>& worldEntity,
+	const SharedPtr<powe::WorldClock>& worldClock)
 {
 	using namespace powe;
 
-	//const float delta{ worldClock->GetDeltaTime() };
+	const float deltaTime{ worldClock->GetDeltaTime() };
 
-	// manages Scene here. Save the gameobject which manages the states throughout the scene
-	//if(m_Test < 1)
-	//{
-	//	++m_Test;
-	//}
-	//else
-	//{
-	//	m_PlayScene->UnloadScene(*worldEntity);
-	//}
+	if(m_MainGameState)
+	{
+		const auto& oldState{ m_MainGameState };
+		const auto newState{ m_MainGameState->HandleInput(*worldEntity, m_SceneDataID) };
+
+		if(oldState != newState)
+		{
+			oldState->Exit(*worldEntity, m_SceneDataID);
+			newState->Enter(*worldEntity, m_SceneDataID);
+			m_MainGameState = newState;
+		}
+
+		m_MainGameState->Update(*worldEntity, deltaTime, m_SceneDataID);
+	}
 }
 

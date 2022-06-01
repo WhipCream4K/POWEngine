@@ -9,13 +9,19 @@ PlayerInputSystem::PlayerInputSystem()
 {
 	using namespace powe;
 
-	DEFINE_SYSTEM_KEY(AudioComponent);
+	DEFINE_SYSTEM_KEY(Transform2D);
 }
 
-void PlayerInputSystem::OnUpdate(float, powe::GameObjectID)
+void PlayerInputSystem::OnUpdate(float deltaTime, powe::GameObjectID )
 {
 	using  namespace powe;
 
+	if (m_Timer < 2.0f)
+		m_Timer += deltaTime;
+	else
+	{
+		GetWorld()->RemoveGameObject(1);
+	}
 	//const float axis = GetWorld()->GetInputSettings().GetInputAxis("Horizontal");
 
 	//POWLOGNORMAL(std::to_string(axis));
@@ -32,14 +38,14 @@ void PlayerInputSystem::OnUpdate(float, powe::GameObjectID)
 
 void PlayerInputSystem::OnCreate(powe::GameObjectID )
 {
-	using namespace powe;
+	//using namespace powe;
 
-	AudioComponent* audio{ GetComponent<AudioComponent>() };
+	//AudioComponent* audio{ GetComponent<AudioComponent>() };
 
-	SoundInfo info{};
-	info.volume = 1.0f;
-	info.pitch = 0.5f;
-	info.isLooped = false;
+	//SoundInfo info{};
+	//info.volume = 1.0f;
+	//info.pitch = 0.5f;
+	//info.isLooped = false;
 
-	audio->Play(info);
+	//audio->Play(info);
 }

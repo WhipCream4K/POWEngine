@@ -2,6 +2,7 @@
 
 #include <poweCustomtype.h>
 
+class GameState;
 class PlayScene;
 class SceneFactory;
 
@@ -25,9 +26,12 @@ public:
 
 private:
 
-	SharedPtr<powe::Texture> m_MainTexture;
+
 	SharedPtr<SceneFactory> m_PlayScene;
 	SharedPtr<SceneFactory> m_MenuScene;
+
+	SharedPtr<GameState> m_MainGameState;
+
 	powe::GameObjectID m_SceneDataID{};
 	int m_Test{};
 

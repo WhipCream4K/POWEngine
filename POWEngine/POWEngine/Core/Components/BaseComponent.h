@@ -26,8 +26,8 @@ namespace powe
 			
 		virtual void DestroyData(RawByte* address) = 0;
 		virtual void MoveData(RawByte* source, RawByte* destination) const = 0;
-		virtual void OnCreate(WorldEntity&, GameObjectID ) {}
-		virtual void OnDestroy(WorldEntity&, GameObjectID ) {}
+		virtual void InternalCreate(RawByte* , WorldEntity&, GameObjectID) {}  
+		virtual void InternalDestroy(RawByte* , WorldEntity&, GameObjectID) {}
 
 		[[nodiscard]] virtual SizeType GetSize() const = 0;
 
@@ -77,7 +77,14 @@ namespace powe
 
 		void DestroyData(RawByte* address) override;
 		void MoveData(RawByte* source, RawByte* destination) const override;
+		void InternalCreate(RawByte* source, WorldEntity&, GameObjectID) final;
+		void InternalDestroy(RawByte* source, WorldEntity&, GameObjectID) final;
 		[[nodiscard]] SizeType GetSize() const override;
+
+	protected:
+
+		virtual void OnDestroy(WorldEntity&, GameObjectID) {}
+		virtual void OnCreate(WorldEntity&,GameObjectID) {}
 
 	protected:
 
@@ -88,14 +95,26 @@ namespace powe
 	template <typename T>
 	void Component<T>::DestroyData(RawByte* address)
 	{
-		T* object{ reinterpret_cast<T*>(address) };
-		object->~T();
+		reinterpret_cast<T*>(address)->~T();
 	}
 
 	template <typename T>
 	void Component<T>::MoveData(RawByte* source, RawByte* destination) const
 	{
 		new (destination) T{ std::move(*reinterpret_cast<T*>(source)) };
+		reinterpret_cast<T*>(source)->~T(); // Invalidate the old memory
+	}
+
+	template <typename T>
+	void Component<T>::InternalCreate(RawByte* source, WorldEntity& worldEntity, GameObjectID gameObjectId)
+	{
+		reinterpret_cast<T*>(source)->OnCreate(worldEntity, gameObjectId);
+	}
+
+	template <typename T>
+	void Component<T>::InternalDestroy(RawByte* source, WorldEntity& worldEntity, GameObjectID gameObjectId)
+	{
+		reinterpret_cast<T*>(source)->OnDestroy(worldEntity, gameObjectId);
 	}
 
 	template <typename T>

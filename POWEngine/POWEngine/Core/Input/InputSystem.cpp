@@ -78,7 +78,7 @@ void powe::InputSystem::ExecuteActionCommands(
 	const std::unordered_map<std::string, ActionMap>& worldActionMap,
 	const std::string& actionName,
 	const InputSettings::KeyPool& priorityKeyPool,
-	const std::vector<ActionPack>& commands,
+	const std::vector<SharedPtr<ActionCommand>>& commands,
 	SysKeyType inSysKey,
 	float deltaTime,
 	GameObjectID id) const
@@ -107,10 +107,9 @@ void powe::InputSystem::ExecuteActionCommands(
 
 			if (thisFrameEvent != InputEvent::IE_None && (sysCouple == 0 || (inSysKey & sysCouple)))
 			{
-				for (const auto& [command, targetEvent] : commands)
+				for (const auto& command : commands)
 				{
-					if (targetEvent == thisFrameEvent)
-						command->Execute(*GetWorld(), deltaTime, id);
+					command->Execute(*GetWorld(), deltaTime, id,thisFrameEvent);
 				}
 			}
 		}

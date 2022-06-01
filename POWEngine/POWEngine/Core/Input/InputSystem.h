@@ -31,7 +31,7 @@ namespace powe
 			const std::unordered_map<std::string, ActionMap>& worldActionMap,
 			const std::string& actionName,
 			const InputSettings::KeyPool& priorityKeyPool,
-			const std::vector<ActionPack>& commands,
+			const std::vector<SharedPtr<ActionCommand>>& commands,
 			SysKeyType inSysKey,
 			float deltaTime,
 			GameObjectID id) const;

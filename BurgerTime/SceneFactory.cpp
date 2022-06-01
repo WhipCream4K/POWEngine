@@ -14,6 +14,9 @@ void SceneFactory::UnloadScene(powe::WorldEntity& worldEntity)
 	{
 		worldEntity.RemoveSystem(system);
 	}
+
+	m_Systems.clear();
+	m_GameObjects.clear();
 }
 
 void SceneFactory::AddGameObject(const SharedPtr<powe::GameObject>& gameObject)

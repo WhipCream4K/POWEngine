@@ -31,8 +31,8 @@ namespace burger
 
 	const glm::fvec2 MenuPos[int(PlayMode::Count)]
 	{
-		{640.0f,360.0f},
-		{640.0f,400.0f}
+		{650.0f,360.0f},
+		{650.0f,400.0f}
 	};
 
 }

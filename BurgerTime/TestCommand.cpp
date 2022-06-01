@@ -18,7 +18,7 @@ void TestCommand::Execute(powe::WorldEntity& worldEntity,float deltaTime, powe::
 	transform2D->SetWorldPosition(horizontal);
 }
 
-void FireCommand::Execute(powe::WorldEntity&,float,powe::GameObjectID )
+void FireCommand::Execute(powe::WorldEntity& , float , powe::GameObjectID , InputEvent )
 {
-	POWLOGNORMAL("I'm shooting");
+	POWLOGNORMAL("Some");
 }

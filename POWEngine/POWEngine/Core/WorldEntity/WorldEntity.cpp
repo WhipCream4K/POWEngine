@@ -243,7 +243,6 @@ void powe::WorldEntity::UpdatePipeline(PipelineLayer layer, float deltaTime)
 
 void powe::WorldEntity::ResolveEntities()
 {
-
 	InternalRemoveSystemFromPipeline();
 	InternalRemoveGameObjectFromPipeline();
 	InternalRemoveComponentFromGameObject();
@@ -347,65 +346,109 @@ void powe::WorldEntity::InternalRemoveGameObjectFromPipeline()
 	// Deletes GameObject from archetype
 	for (const auto& gameObjectIDs : m_PendingDeleteGameObjectsFromArchetype | std::views::values)
 	{
-		for (int deletingGameObjectIdx = 0; deletingGameObjectIdx < int(gameObjectIDs.size()); ++deletingGameObjectIdx)
+		for (const GameObjectID removeGameObjectID : gameObjectIDs)
 		{
 			GameObjectRecord gbRecords{};
 
-			// No need to check for null at this point
-			GetGameObjectRecords(gameObjectIDs[deletingGameObjectIdx], gbRecords);
+			if (!GetGameObjectRecords(removeGameObjectID, gbRecords))
+				continue;
 
 			const auto targetArchetype{ gbRecords.Archetype.lock() };
-			const int thisGameObjectIndex{ gbRecords.IndexInArchetype };
 
-			// 1. Destroy old component data
+			DestroyAllComponentDataInGameObject(*targetArchetype, gbRecords.IndexInArchetype, removeGameObjectID, targetArchetype->Types);
+
+			// Shift data up one index
+			if (gbRecords.IndexInArchetype < int(targetArchetype->GameObjectIds.size() - 1))
 			{
-				DestroyComponentData(*targetArchetype, thisGameObjectIndex, gameObjectIDs[deletingGameObjectIdx], targetArchetype->Types);
-			}
-
-
-			// 2. Shift the data from everything below this GameObject until the next id that needed to be destroy
-			if (thisGameObjectIndex < int(targetArchetype->GameObjectIds.size()))
-			{
-				// if there's a gameobject that suppose to be destroy next then we early stop the move data and
-				// skip to the next block
-				const GameObjectID stopGameObjectID{
-					gameObjectIDs[(deletingGameObjectIdx + 1) % int(gameObjectIDs.size())] };
-
-				const GameObjectID startGameObjectID{ targetArchetype->GameObjectIds[thisGameObjectIndex] };
-
-				for (int i = thisGameObjectIndex; i < int(targetArchetype->GameObjectIds.size() - 1); ++i)
+				for (int i = gbRecords.IndexInArchetype; i < int(targetArchetype->GameObjectIds.size() - 1); ++i)
 				{
-					const GameObjectID thisGameObjectID{ targetArchetype->GameObjectIds[i] };
-
-					if (thisGameObjectID == stopGameObjectID &&
-						stopGameObjectID != startGameObjectID)
-						break;
-
-					SizeType accumulateOffset{};
 					RawByte* toAddress{ &targetArchetype->ComponentData[int(i * targetArchetype->SizeOfComponentsBlock)] };
 					RawByte* fromAddress{ &targetArchetype->ComponentData[int((i + 1) * targetArchetype->SizeOfComponentsBlock)] };
 
-					for (const auto& componentID : targetArchetype->Types)
+					for (const ComponentTypeID componentID : targetArchetype->Types)
 					{
 						const SharedPtr<BaseComponent> componentTrait{ GetComponentTrait(componentID) };
 
-						componentTrait->MoveData(fromAddress + accumulateOffset,
-							toAddress + accumulateOffset);
+						const SizeType offset{ targetArchetype->ComponentOffsets.at(componentID) };
 
-						accumulateOffset += componentTrait->GetSize();
+						// Move Data over to the new block
+						componentTrait->MoveData(fromAddress + offset,
+							toAddress + offset);
+
+						// Invalidate the old block
+						//componentTrait->DestroyData(fromAddress + offset);
 					}
 
-				}
 
+					--m_GameObjectRecords.at(targetArchetype->GameObjectIds[i + 1]).IndexInArchetype;
+				}
 			}
 
 			// 3. Remove the GameObject ID out of this archetype
 			targetArchetype->GameObjectIds.erase(
-				std::ranges::remove(targetArchetype->GameObjectIds, gameObjectIDs[deletingGameObjectIdx]).begin(),
+				std::ranges::remove(targetArchetype->GameObjectIds, removeGameObjectID).begin(),
 				targetArchetype->GameObjectIds.end());
-
-			//gbRecords.Archetype.reset();
 		}
+
+		//int lastDestroyIndex{};
+		//for (int deletingGameObjectIdx = 0; deletingGameObjectIdx < int(gameObjectIDs.size()); ++deletingGameObjectIdx)
+		//{
+		//	GameObjectRecord gbRecords{};
+
+		//	// No need to check for null at this point
+		//	GetGameObjectRecords(gameObjectIDs[deletingGameObjectIdx], gbRecords);
+
+		//	const auto targetArchetype{ gbRecords.Archetype.lock() };
+		//	const int thisGameObjectIndex{ gbRecords.IndexInArchetype };
+
+		//	// 1. Destroy old component data
+		//	{
+		//		DestroyAllComponentDataInGameObject(*targetArchetype, thisGameObjectIndex, gameObjectIDs[deletingGameObjectIdx], targetArchetype->Types);
+		//	}
+
+		//	// 2. Shift the data from everything below this GameObject until the next id that needed to be destroy
+		//	//if (thisGameObjectIndex < int(targetArchetype->GameObjectIds.size()))
+		//	//{
+		//	//	// if there's a gameobject that suppose to be destroy next then we early stop the move data and
+		//	//	// skip to the next block
+		//	//	const GameObjectID stopGameObjectID{
+		//	//		gameObjectIDs[(deletingGameObjectIdx + 1) % int(gameObjectIDs.size())] };
+
+		//	//	lastDestroyIndex = deletingGameObjectIdx;
+
+		//	//	const GameObjectID startGameObjectID{ targetArchetype->GameObjectIds[thisGameObjectIndex] };
+
+		//	//	for (int i = thisGameObjectIndex; i < int(targetArchetype->GameObjectIds.size() - 1); ++i)
+		//	//	{
+		//	//		//const GameObjectID thisGameObjectID{ targetArchetype->GameObjectIds[i] };
+		//	//		const GameObjectID nextGameObjectID{ targetArchetype->GameObjectIds[i + 1] };
+
+		//	//		if(nextGameObjectID == stopGameObjectID)
+		//	//			break;
+
+		//	//		SizeType accumulateOffset{};
+		//	//		RawByte* toAddress{ &targetArchetype->ComponentData[int(i * targetArchetype->SizeOfComponentsBlock)] };
+		//	//		RawByte* fromAddress{ &targetArchetype->ComponentData[int((i + 1) * targetArchetype->SizeOfComponentsBlock)] };
+
+		//	//		for (const auto& componentID : targetArchetype->Types)
+		//	//		{
+		//	//			const SharedPtr<BaseComponent> componentTrait{ GetComponentTrait(componentID) };
+
+		//	//			componentTrait->MoveData(fromAddress + accumulateOffset,
+		//	//				toAddress + accumulateOffset);
+
+		//	//			accumulateOffset += componentTrait->GetSize();
+		//	//		}
+		//	//	}
+
+		//	//}
+
+		//	//// 3. Remove the GameObject ID out of this archetype
+		//	//targetArchetype->GameObjectIds.erase(
+		//	//	std::ranges::remove(targetArchetype->GameObjectIds, gameObjectIDs[deletingGameObjectIdx]).begin(),
+		//	//	targetArchetype->GameObjectIds.end());
+		//}
+
 
 	}
 
@@ -495,7 +538,7 @@ void powe::WorldEntity::InternalRemoveComponentFromGameObject()
 		}
 
 		// 3. Destroy the component and move over all the data after this gameobject
-		DestroyComponentData(*oldArchetype, gbRecords.IndexInArchetype, gameObjectID, componentIDs);
+		DestroyAllComponentDataInGameObject(*oldArchetype, gbRecords.IndexInArchetype, gameObjectID, componentIDs);
 
 		oldArchetype->BuryBlock(*this, gbRecords.IndexInArchetype);
 		oldArchetype->GameObjectIds.erase(
@@ -517,10 +560,15 @@ void powe::WorldEntity::ClearArchetype()
 
 void powe::WorldEntity::ClearEmptyArchetype()
 {
-	for (auto it = m_ArchetypesPool.begin(); it != m_ArchetypesPool.end(); ++it)
+	for (auto it = m_ArchetypesPool.begin(); it != m_ArchetypesPool.end();)
 	{
 		if (it->second->GameObjectIds.empty())
+		{
 			it->second->CleanUp(*this);
+			it = m_ArchetypesPool.erase(it);
+		}
+		else
+			++it;
 	}
 }
 
@@ -612,11 +660,11 @@ void powe::WorldEntity::RemoveGameObjectFromPreArchetype(GameObjectID id)
 {
 	if (m_PreArchetypes.contains(id))
 	{
-		for (const auto& [componentID,data] : m_PreArchetypes[id].componentData)
+		for (const auto& [componentID, data] : m_PreArchetypes[id].componentData)
 		{
 			const ComponentTypeID discardTypeID{ DiscardFlag(componentID) };
 			const SharedPtr<BaseComponent> thisComponent{ GetComponentTrait(discardTypeID) };
-			
+
 			thisComponent->DestroyData(data.get());
 		}
 
@@ -624,7 +672,7 @@ void powe::WorldEntity::RemoveGameObjectFromPreArchetype(GameObjectID id)
 	}
 }
 
-void powe::WorldEntity::DestroyComponentData(
+void powe::WorldEntity::DestroyAllComponentDataInGameObject(
 	const Archetype& archetype, int index, GameObjectID id,
 	const std::vector<ComponentTypeID>& components)
 {
@@ -637,10 +685,10 @@ void powe::WorldEntity::DestroyComponentData(
 
 		if (archetype.ComponentOffsets.contains(componentTypeId)) // check if this component id is a sparse component
 		{
-			m_SparseComponentManager.RemoveComponentFromGameObject(id, componentTypeId);
+			m_SparseComponentManager.RemoveComponentFromGameObject(id, DiscardFlag(componentTypeId));
 		}
 
-		componentTrait->OnDestroy(*this, id);
+		componentTrait->InternalDestroy(startAddress + offset, *this, id);
 		componentTrait->DestroyData(startAddress + offset);
 	}
 }
@@ -717,7 +765,7 @@ void powe::WorldEntity::InternalAddGameObjectToPipeline()
 			const ComponentTypeID discardFlagComponentID{ DiscardFlag(componentTypeId) };
 
 			const SharedPtr<BaseComponent> componentTrait{ GetComponentTrait(discardFlagComponentID) };
-			const SharedPtr<RawByte[]> compData{ componentTempDataMap.at(discardFlagComponentID) };
+			SharedPtr<RawByte[]> compData{ componentTempDataMap.at(discardFlagComponentID) };
 
 			RawByte* destination{ &targetArchetype->ComponentData[int(
 				(targetArchetype->GameObjectIds.size() * targetArchetype->SizeOfComponentsBlock) +
@@ -734,11 +782,10 @@ void powe::WorldEntity::InternalAddGameObjectToPipeline()
 				componentTrait->MoveData(source, destination);
 			}
 
-			//accumulateOffset += componentTrait->GetSize();
 
 			// NOTE: Need to call the destructor of the component because sometimes when the component owns
 			// a vector which sometimes allocates data it will not destroy itself hence leaking memory
-			componentTrait->DestroyData(compData.get());
+			//componentTrait->DestroyData(compData.get());
 		}
 
 		// add the record to this gameobject
@@ -792,7 +839,7 @@ void powe::WorldEntity::InternalRemoveSystemFromPipeline()
 		removingSystems.emplace_back(system);
 	}
 
-	if(!removingSystems.empty())
+	if (!removingSystems.empty())
 	{
 		for (auto& systemPipeline : m_SystemPipeline)
 		{
