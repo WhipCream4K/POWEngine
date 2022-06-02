@@ -279,6 +279,9 @@
     <ClInclude Include="POWEngine\JSON\JSONParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="POWEngine\JSON\json.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PCH\pch.cpp">

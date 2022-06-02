@@ -86,22 +86,19 @@ void powe::SparseComponentManager::RemoveComponentFromGameObject(
 
 			// Move data over to the new block
 			thisComponent->MoveData(fromAddress, toAddress);
-
-			// Invalidate the old block
-			//thisComponent->DestroyData(fromAddress);
 		}
 
-		const auto removeItr{ std::ranges::find(sparseSet.GameObjectIDs,id) };
-		sparseSet.GameObjectIDs.erase(removeItr);
-
 		// 2. Reassign SparseHandle of every GameObject in this sparse set up 1 index
-		if(handle < SparseHandle(sparseSet.GameObjectIDs.size() - 1))
+		if(handle < SparseHandle(sparseSet.GameObjectIDs.size()))
 		{
 			for (const GameObjectID gameObject : sparseSet.GameObjectIDs)
 			{
 				--m_GameObjectToHandle[gameObject].at(compID);
 			}
 		}
+
+		const auto removeItr{ std::ranges::find(sparseSet.GameObjectIDs,id) };
+		sparseSet.GameObjectIDs.erase(removeItr);
 
 		--sparseSet.CurrentEmptyIndex;
 

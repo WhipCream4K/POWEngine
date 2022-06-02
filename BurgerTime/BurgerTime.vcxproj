@@ -198,6 +198,7 @@ xcopy /y "$(SolutionDir)3rdPartyLib\allDLLs\$(Platform)\$(Configuration)\*.dll" 
     <ClCompile Include="AnimationSystem.cpp" />
     <ClCompile Include="AssetManager.cpp" />
     <ClCompile Include="BurgerLevel.cpp" />
+    <ClCompile Include="BurgerParser.cpp" />
     <ClCompile Include="BurgerTimeGame.cpp" />
     <ClCompile Include="GameStart.cpp" />
     <ClCompile Include="GameState.cpp" />
@@ -216,6 +217,7 @@ xcopy /y "$(SolutionDir)3rdPartyLib\allDLLs\$(Platform)\$(Configuration)\*.dll" 
     <ClCompile Include="PlayState.cpp" />
     <ClCompile Include="SceneFactory.cpp" />
     <ClCompile Include="StateController.cpp" />
+    <ClCompile Include="StaticSceneData.cpp" />
     <ClCompile Include="Subject.cpp" />
     <ClCompile Include="TestCommand.cpp" />
     <ClCompile Include="TestScene.cpp" />
@@ -230,6 +232,7 @@ xcopy /y "$(SolutionDir)3rdPartyLib\allDLLs\$(Platform)\$(Configuration)\*.dll" 
     <ClInclude Include="AnimationSystem.h" />
     <ClInclude Include="AssetManager.h" />
     <ClInclude Include="BurgerLevel.h" />
+    <ClInclude Include="BurgerParser.h" />
     <ClInclude Include="BurgerTimeComponents.h" />
     <ClInclude Include="BurgerTimeGame.h" />
     <ClInclude Include="GameStart.h" />
@@ -249,6 +252,7 @@ xcopy /y "$(SolutionDir)3rdPartyLib\allDLLs\$(Platform)\$(Configuration)\*.dll" 
     <ClInclude Include="resource.h" />
     <ClInclude Include="SceneFactory.h" />
     <ClInclude Include="StateController.h" />
+    <ClInclude Include="StaticSceneData.h" />
     <ClInclude Include="StaticVariables.h" />
     <ClInclude Include="Subject.h" />
     <ClInclude Include="TestCommand.h" />

@@ -1,5 +1,7 @@
 #include "BurgerTimeGame.h"
 
+#include <powengine.h>
+
 #include "BurgerTimeComponents.h"
 #include "PlayerInputSystem.h"
 #include "POWEngine/Core/Components/AudioComponent.h"
@@ -12,8 +14,7 @@
 #include "AssetManager.h"
 #include "TestScene.h"
 #include "MenuScene.h"
-
-#include <powengine.h>
+#include "StaticSceneData.h"
 
 #include "GameState.h"
 #include "PlayScene.h"
@@ -37,6 +38,8 @@ void BurgerTimeGame::Start(const SharedPtr<powe::Core>&,
 
 	assetManager->RegisterAsset(burger::MenuPointer,
 		std::make_shared<powe::Texture>("./Resources/Sprites/Pointer.png"));
+
+	Instance<StaticSceneData>()->Initialize();
 
 	// Initialize persistent GameObject
 	const auto dynamicSceneData{ std::make_shared<GameObject>(*worldEntity) };

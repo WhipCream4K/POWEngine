@@ -14,11 +14,11 @@ SharedPtr<GameState> MenuState::HandleInput(powe::WorldEntity& worldEntity, powe
 	return GameState::MenuState;
 }
 
-void MenuState::Enter(powe::WorldEntity& worldEntity, powe::GameObjectID gameObjectId)
+void MenuState::Enter(powe::WorldEntity& worldEntity, powe::GameObjectID sceneID)
 {
 	if (!m_MenuScene)
 	{
-		m_MenuScene = std::make_shared<MenuScene>(gameObjectId);
+		m_MenuScene = std::make_shared<MenuScene>(sceneID);
 	}
 
 	m_MenuScene->LoadScene(worldEntity);
@@ -26,8 +26,6 @@ void MenuState::Enter(powe::WorldEntity& worldEntity, powe::GameObjectID gameObj
 
 void MenuState::Exit(powe::WorldEntity& worldEntity, powe::GameObjectID )
 {
-	//if (m_MenuScene)	
-	//	m_MenuScene->UnloadScene(worldEntity);
-	worldEntity.RemoveGameObject(2);
-	worldEntity.RemoveGameObject(5);
+	if (m_MenuScene)	
+		m_MenuScene->UnloadScene(worldEntity);
 }

@@ -11,12 +11,15 @@ SharedPtr<GameState> PlayState::HandleInput(powe::WorldEntity&, powe::GameObject
 
 void PlayState::Enter(powe::WorldEntity& worldEntity, powe::GameObjectID gameObjectId)
 {
-	if (!m_PlayScene)
-	{
-		m_PlayScene = std::make_shared<PlayScene>(gameObjectId);
-	}
+	worldEntity;
+	gameObjectId;
 
-	m_PlayScene->LoadScene(worldEntity);
+	//if (!m_PlayScene)
+	//{
+	//	m_PlayScene = std::make_shared<PlayScene>(gameObjectId);
+	//}
+
+	//m_PlayScene->LoadScene(worldEntity);
 }
 
 void PlayState::Exit(powe::WorldEntity& worldEntity, powe::GameObjectID)

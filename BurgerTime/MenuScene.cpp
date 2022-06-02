@@ -49,7 +49,7 @@ void MenuScene::LoadScene(powe::WorldEntity& worldEntity)
 	transform2D = banner1->AddComponent(Transform2D{ banner1 }, ComponentFlag::Sparse);
 	transform2D->SetWorldPosition({ burger::MenuPos[0].x,burger::MenuPos[0].y - 10.0f });
 
-	TextComponent* textComp = banner1->AddComponent(TextComponent{ 30,banner1 });
+	TextComponent* textComp = banner1->AddComponent(TextComponent{ 30,banner1 },ComponentFlag::Sparse);
 	textComp->SetFont(assetManager->GetAsset<Font>(burger::MainFont));
 	textComp->SetText("SinglePlayer");
 
@@ -61,27 +61,27 @@ void MenuScene::LoadScene(powe::WorldEntity& worldEntity)
 	transform2D = banner2->AddComponent(Transform2D{ banner2 },ComponentFlag::Sparse);
 	transform2D->SetWorldPosition({ burger::MenuPos[1].x,burger::MenuPos[1].y - 10.0f });
 
-	textComp = banner2->AddComponent(TextComponent{ 30,banner2 });
+	textComp = banner2->AddComponent(TextComponent{ 30,banner2 },ComponentFlag::Sparse);
 	textComp->SetFont(assetManager->GetAsset<Font>(burger::MainFont));
 	textComp->SetText("CoOp");
 
-	const auto banner3{ std::make_shared<GameObject>(worldEntity) };
-	AddGameObject(banner3);
-	transform2D = banner3->AddComponent(Transform2D{ banner3 }, ComponentFlag::Sparse);
-	transform2D->SetWorldPosition({ burger::MenuPos[1].x,burger::MenuPos[1].y - 10.0f });
+	//const auto banner3{ std::make_shared<GameObject>(worldEntity) };
+	//AddGameObject(banner3);
+	//transform2D = banner3->AddComponent(Transform2D{ banner3 }, ComponentFlag::Sparse);
+	//transform2D->SetWorldPosition({ burger::MenuPos[1].x,burger::MenuPos[1].y - 10.0f });
 
-	textComp = banner3->AddComponent(TextComponent{ 30,banner3 });
-	textComp->SetFont(assetManager->GetAsset<Font>(burger::MainFont));
-	textComp->SetText("CoOp");
+	//textComp = banner3->AddComponent(TextComponent{ 30,banner3 });
+	//textComp->SetFont(assetManager->GetAsset<Font>(burger::MainFont));
+	//textComp->SetText("CoOp");
 
-	const auto banner4{ std::make_shared<GameObject>(worldEntity) };
-	AddGameObject(banner4);
-	transform2D = banner4->AddComponent(Transform2D{ banner4 }, ComponentFlag::Sparse);
-	transform2D->SetWorldPosition({ burger::MenuPos[1].x,burger::MenuPos[1].y - 10.0f });
+	//const auto banner4{ std::make_shared<GameObject>(worldEntity) };
+	//AddGameObject(banner4);
+	//transform2D = banner4->AddComponent(Transform2D{ banner4 }, ComponentFlag::Sparse);
+	//transform2D->SetWorldPosition({ burger::MenuPos[1].x,burger::MenuPos[1].y - 10.0f });
 
-	textComp = banner4->AddComponent(TextComponent{ 30,banner4 });
-	textComp->SetFont(assetManager->GetAsset<Font>(burger::MainFont));
-	textComp->SetText("CoOp");
+	//textComp = banner4->AddComponent(TextComponent{ 30,banner4 });
+	//textComp->SetFont(assetManager->GetAsset<Font>(burger::MainFont));
+	//textComp->SetText("CoOp");
 
 
 }

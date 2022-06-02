@@ -21,6 +21,7 @@ SharedPtr<powe::GameObject> Player::Create(powe::WorldEntity& worldEntity, const
 	const SpriteComponent* spriteComponent = gameObject->AddComponent(SpriteComponent{ gameObject }, ComponentFlag::Sparse);
 	spriteComponent->SetTexture(*Instance<AssetManager>()->GetAsset<Texture>(burger::MainObjectSprite));
 	spriteComponent->SetRect({ 0.0f,0.0f,16.0f,16.0f });
+	spriteComponent->SetRenderOrder(burger::RenderOrder::Player);
 
 	gameObject->AddComponent(AnimationComponent{ 3,0.5f });
 
