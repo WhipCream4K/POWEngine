@@ -26,7 +26,8 @@ void MenuState::Enter(powe::WorldEntity& worldEntity, powe::GameObjectID gameObj
 
 void MenuState::Exit(powe::WorldEntity& worldEntity, powe::GameObjectID )
 {
-	if (m_MenuScene)	
-		m_MenuScene->UnloadScene(worldEntity);
-
+	//if (m_MenuScene)	
+	//	m_MenuScene->UnloadScene(worldEntity);
+	worldEntity.RemoveGameObject(2);
+	worldEntity.RemoveGameObject(5);
 }

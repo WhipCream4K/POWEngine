@@ -344,12 +344,22 @@ void powe::WorldEntity::InternalRemoveGameObjectFromPipeline()
 #pragma endregion
 
 	// Deletes GameObject from archetype
-	for (const auto& gameObjectIDs : m_PendingDeleteGameObjectsFromArchetype | std::views::values)
+	for (const auto& tobeRemoveGameObjects : m_PendingDeleteGameObjectsFromArchetype | std::views::values)
 	{
-		for (const GameObjectID removeGameObjectID : gameObjectIDs)
-		{
-			GameObjectRecord gbRecords{};
+		SharedPtr<Archetype> revalidateArchetype{};
+		std::vector<GameObjectID> gameObjectsIDCopy{};
 
+		// Grab the archetype and save the current game object that are going to be destroyed
+		GameObjectRecord tempRec{};
+		GetGameObjectRecords(tobeRemoveGameObjects[0], tempRec);
+		revalidateArchetype = tempRec.Archetype.lock();
+		gameObjectsIDCopy = revalidateArchetype->GameObjectIds;
+		
+
+		for (const GameObjectID removeGameObjectID : tobeRemoveGameObjects)
+		{
+
+			GameObjectRecord gbRecords{};
 			if (!GetGameObjectRecords(removeGameObjectID, gbRecords))
 				continue;
 
@@ -357,37 +367,58 @@ void powe::WorldEntity::InternalRemoveGameObjectFromPipeline()
 
 			DestroyAllComponentDataInGameObject(*targetArchetype, gbRecords.IndexInArchetype, removeGameObjectID, targetArchetype->Types);
 
-			// Shift data up one index
-			if (gbRecords.IndexInArchetype < int(targetArchetype->GameObjectIds.size() - 1))
-			{
-				for (int i = gbRecords.IndexInArchetype; i < int(targetArchetype->GameObjectIds.size() - 1); ++i)
-				{
-					RawByte* toAddress{ &targetArchetype->ComponentData[int(i * targetArchetype->SizeOfComponentsBlock)] };
-					RawByte* fromAddress{ &targetArchetype->ComponentData[int((i + 1) * targetArchetype->SizeOfComponentsBlock)] };
 
-					for (const ComponentTypeID componentID : targetArchetype->Types)
-					{
-						const SharedPtr<BaseComponent> componentTrait{ GetComponentTrait(componentID) };
-
-						const SizeType offset{ targetArchetype->ComponentOffsets.at(componentID) };
-
-						// Move Data over to the new block
-						componentTrait->MoveData(fromAddress + offset,
-							toAddress + offset);
-
-						// Invalidate the old block
-						//componentTrait->DestroyData(fromAddress + offset);
-					}
-
-
-					--m_GameObjectRecords.at(targetArchetype->GameObjectIds[i + 1]).IndexInArchetype;
-				}
-			}
-
-			// 3. Remove the GameObject ID out of this archetype
+			// Remove the GameObject ID out of this archetype
 			targetArchetype->GameObjectIds.erase(
 				std::ranges::remove(targetArchetype->GameObjectIds, removeGameObjectID).begin(),
 				targetArchetype->GameObjectIds.end());
+
+			m_GameObjectRecords.at(removeGameObjectID).IndexInArchetype = -1;
+
+		}
+
+		if (revalidateArchetype)
+		{
+			if (revalidateArchetype->GameObjectIds.empty())
+				continue;
+
+			// 1. find first destroyed GameObject
+			int fistRemovedObjectIdx{};
+
+			for (int idx = 0; idx < int(gameObjectsIDCopy.size()); ++idx)
+			{
+				const auto findItr = std::ranges::find(tobeRemoveGameObjects, gameObjectsIDCopy[idx]);
+				if (findItr != tobeRemoveGameObjects.end())
+				{
+					fistRemovedObjectIdx = idx;
+					break;
+				}
+			}
+
+			// Replace the dead block with alive block
+			for (int idx = fistRemovedObjectIdx; idx < int(revalidateArchetype->GameObjectIds.size()); ++idx)
+			{
+				const GameObjectID nextAliveGameObjectID{ revalidateArchetype->GameObjectIds[idx] };
+				const auto aliveBlockIdx{ m_GameObjectRecords.at(nextAliveGameObjectID).IndexInArchetype };
+
+				RawByte* fromAddress{ &revalidateArchetype->ComponentData[int(aliveBlockIdx * revalidateArchetype->SizeOfComponentsBlock)] };
+				RawByte* toAddress{ &revalidateArchetype->ComponentData[int(idx * revalidateArchetype->SizeOfComponentsBlock)] };
+
+
+				for (const ComponentTypeID componentID : revalidateArchetype->Types)
+				{
+					const SharedPtr<BaseComponent> componentTrait{ GetComponentTrait(componentID) };
+
+					const SizeType offset{ revalidateArchetype->ComponentOffsets.at(componentID) };
+
+					// Move Data over to the new block
+					componentTrait->MoveData(fromAddress + offset,
+						toAddress + offset);
+				}
+
+				m_GameObjectRecords.at(nextAliveGameObjectID).IndexInArchetype = idx;
+			}
+
 		}
 
 		//int lastDestroyIndex{};

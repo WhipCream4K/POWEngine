@@ -53,7 +53,6 @@ void MenuScene::LoadScene(powe::WorldEntity& worldEntity)
 	textComp->SetFont(assetManager->GetAsset<Font>(burger::MainFont));
 	textComp->SetText("SinglePlayer");
 
-	banner1->AddComponent(AudioComponent{ "./Resources/Sound/Jump.wav" }, ComponentFlag::Sparse);
 
 
 	//TextComponent* textComp;
@@ -66,6 +65,23 @@ void MenuScene::LoadScene(powe::WorldEntity& worldEntity)
 	textComp->SetFont(assetManager->GetAsset<Font>(burger::MainFont));
 	textComp->SetText("CoOp");
 
-	banner2->AddComponent(AudioComponent{ "./Resources/Sound/Jump.wav" }, ComponentFlag::Sparse);
+	const auto banner3{ std::make_shared<GameObject>(worldEntity) };
+	AddGameObject(banner3);
+	transform2D = banner3->AddComponent(Transform2D{ banner3 }, ComponentFlag::Sparse);
+	transform2D->SetWorldPosition({ burger::MenuPos[1].x,burger::MenuPos[1].y - 10.0f });
+
+	textComp = banner3->AddComponent(TextComponent{ 30,banner3 });
+	textComp->SetFont(assetManager->GetAsset<Font>(burger::MainFont));
+	textComp->SetText("CoOp");
+
+	const auto banner4{ std::make_shared<GameObject>(worldEntity) };
+	AddGameObject(banner4);
+	transform2D = banner4->AddComponent(Transform2D{ banner4 }, ComponentFlag::Sparse);
+	transform2D->SetWorldPosition({ burger::MenuPos[1].x,burger::MenuPos[1].y - 10.0f });
+
+	textComp = banner4->AddComponent(TextComponent{ 30,banner4 });
+	textComp->SetFont(assetManager->GetAsset<Font>(burger::MainFont));
+	textComp->SetText("CoOp");
+
 
 }

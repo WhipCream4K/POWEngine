@@ -40,6 +40,10 @@ namespace powe
 			ComponentTypeID compID
 		);
 
+		void RemoveGameObjectFromSparse(
+			const std::vector<GameObjectID>& gameObjects
+		);
+
 		~SparseComponentManager();
 
 	private:

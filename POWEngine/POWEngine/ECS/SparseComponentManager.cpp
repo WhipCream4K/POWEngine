@@ -95,14 +95,22 @@ void powe::SparseComponentManager::RemoveComponentFromGameObject(
 		sparseSet.GameObjectIDs.erase(removeItr);
 
 		// 2. Reassign SparseHandle of every GameObject in this sparse set up 1 index
-		for (const GameObjectID gameObject : sparseSet.GameObjectIDs)
+		if(handle < SparseHandle(sparseSet.GameObjectIDs.size() - 1))
 		{
-			--m_GameObjectToHandle[gameObject].at(compID);
+			for (const GameObjectID gameObject : sparseSet.GameObjectIDs)
+			{
+				--m_GameObjectToHandle[gameObject].at(compID);
+			}
 		}
 
 		--sparseSet.CurrentEmptyIndex;
 
 	}
+}
+
+void powe::SparseComponentManager::RemoveGameObjectFromSparse(const std::vector<GameObjectID>&)
+{
+
 }
 
 powe::SparseComponentManager::~SparseComponentManager()
