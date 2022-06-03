@@ -770,8 +770,23 @@ void powe::WorldEntity::InternalAddGameObjectToPipeline()
 {
 	for (const auto& [gameObjectID, preArchetypeTrait] : m_PreArchetypes)
 	{
-		const auto& archetypeKey{ preArchetypeTrait.archetypeKey };
+		std::vector<ComponentTypeID> archetypeKey{};
 		const auto& componentTempDataMap{ preArchetypeTrait.componentData };
+
+		// Check if this gameobject already has its archetype
+		bool shouldMoveOldToNew{};
+		GameObjectRecord oldRecord{};
+		if (GetGameObjectRecords(gameObjectID, oldRecord))
+		{
+			if (const auto oldArchetype = oldRecord.Archetype.lock())
+			{
+				archetypeKey = oldArchetype->Types;
+				shouldMoveOldToNew = true;
+			}
+		}
+
+		// We don't need to check for duplicate types because we already check when we add component
+		archetypeKey.insert(archetypeKey.end(), preArchetypeTrait.archetypeKey.begin(), preArchetypeTrait.archetypeKey.end());
 
 		const std::string archetypeKeyString{ CreateStringFromNumVector(archetypeKey) };
 
@@ -790,26 +805,45 @@ void powe::WorldEntity::InternalAddGameObjectToPipeline()
 			targetArchetype->AllocateComponentData(futureSize * 3, *this);
 		}
 
-		GameObjectRecord oldRecords{};
-		GetGameObjectRecords(gameObjectID, oldRecords);
 
-		if(const auto oldArchetype{oldRecords.Archetype.lock()})
+		// if this gameobject already has an archetype then move everything to the new archetype
+		int startComponentIdx{};
+		if (shouldMoveOldToNew)
 		{
-			
+			if (const auto oldArchetype = oldRecord.Archetype.lock())
+			{
+				RawByte* fromAddress{ &oldArchetype->ComponentData[int(oldRecord.IndexInArchetype * oldArchetype->SizeOfComponentsBlock)] };
+				RawByte* toAddress{ &targetArchetype->ComponentData[int(targetArchetype->GameObjectIds.size() * targetArchetype->SizeOfComponentsBlock)] };
+
+				for (const ComponentTypeID componentTypeId : oldArchetype->Types)
+				{
+					const SharedPtr<BaseComponent> componentTrait{ GetComponentTrait(componentTypeId) };
+
+					const SizeType offset{ oldArchetype->ComponentOffsets.at(componentTypeId) };
+					componentTrait->MoveData(fromAddress + offset, toAddress + offset);
+				}
+
+				startComponentIdx = int(oldArchetype->Types.size());
+
+				oldArchetype->BuryBlock(*this, oldRecord.IndexInArchetype);
+
+				const auto findItr{ std::ranges::find(oldArchetype->GameObjectIds,gameObjectID) };
+				if (findItr != oldArchetype->GameObjectIds.end())
+					oldArchetype->GameObjectIds.erase(findItr);
+			}
 		}
 
-		for (const ComponentTypeID componentTypeId : archetypeKey)
+		// resume to move data from pre-archetype to the target archetype
+		RawByte* destination{ &targetArchetype->ComponentData[int(targetArchetype->GameObjectIds.size() * targetArchetype->SizeOfComponentsBlock)] };
+
+		for (int i = startComponentIdx; i < int(archetypeKey.size()); ++i)
 		{
-			const ComponentTypeID discardFlagComponentID{ DiscardFlag(componentTypeId) };
+			const ComponentTypeID componentTypeId{ targetArchetype->Types[i] };
+			const ComponentTypeID discardFlagComponentID{ DiscardFlag(componentTypeId)};
 
 			const SharedPtr<BaseComponent> componentTrait{ GetComponentTrait(discardFlagComponentID) };
 			SharedPtr<RawByte[]> compData{ componentTempDataMap.at(discardFlagComponentID) };
 
-			RawByte* destination{ &targetArchetype->ComponentData[int(
-				(targetArchetype->GameObjectIds.size() * targetArchetype->SizeOfComponentsBlock) +
-				targetArchetype->ComponentOffsets.at(discardFlagComponentID))] };
-
-			// Check if this component is sparse or not
 			if (IsThisComponentSparse(componentTypeId))
 			{
 				m_SparseComponentManager.AddComponentToSparseSet(gameObjectID, discardFlagComponentID, compData);
@@ -817,12 +851,11 @@ void powe::WorldEntity::InternalAddGameObjectToPipeline()
 			else
 			{
 				RawByte* source{ compData.get() };
-				componentTrait->MoveData(source, destination);
+				componentTrait->MoveData(source, destination + targetArchetype->ComponentOffsets.at(componentTypeId));
 			}
 		}
 
 		// add the record to this gameobject
-		//GetGameObjectRecords(gameObjectID, gbRecord);
 		GameObjectRecord gbRecord{};
 		gbRecord.Archetype = targetArchetype;
 		gbRecord.IndexInArchetype = int(targetArchetype->GameObjectIds.size());
