@@ -1,6 +1,7 @@
 #include "MovementBlocking.h"
 
 #include "BurgerTimeComponents.h"
+#include "Rect2DCollider.h"
 #include "POWEngine/Core/Components/Transform2D.h"
 #include "StaticVariables.h"
 #include "StaticSceneData.h"
@@ -9,7 +10,7 @@ MovementBlocking::MovementBlocking(int currentLevelIdx)
 	: m_CurrentTileData()
 {
 	using namespace powe;
-	DEFINE_SYSTEM_KEY(Transform2D, CanWalkOnTile, CharacterSize);
+	DEFINE_SYSTEM_KEY(Transform2D, CanWalkOnTile, Rect2DCollider);
 
 	const auto& staticSceneData{ Instance<StaticSceneData>() };
 	m_CurrentTileData = staticSceneData->GetAllTileInLevel(currentLevelIdx);
@@ -21,7 +22,7 @@ void MovementBlocking::OnUpdate(float, powe::GameObjectID)
 {
 	using namespace powe;
 
-	const auto& [transform2D, canWalkOnTile, charSize] = GetComponentsView<Transform2D, CanWalkOnTile, CharacterSize>();
+	const auto& [transform2D, canWalkOnTile, extent] = GetComponentsView<Transform2D, CanWalkOnTile, Rect2DCollider>();
 
 	const MoveDir currentMoveDir{ canWalkOnTile->movementDetails.currentMovementDir };
 	if (currentMoveDir != MoveDir::None)
@@ -30,12 +31,12 @@ void MovementBlocking::OnUpdate(float, powe::GameObjectID)
 		if (currentMoveDir == MoveDir::Left || currentMoveDir == MoveDir::Right)
 		{
 			horizontal = currentMoveDir == MoveDir::Left ? -1 : 1;
-			HandleHorizontalMovement(horizontal, transform2D, canWalkOnTile, charSize);
+			HandleHorizontalMovement(horizontal, transform2D, canWalkOnTile, extent);
 		}
 		else
 		{
 			const int vertical = currentMoveDir == MoveDir::Up ? -1 : 1;
-			HandleVerticalMovement(vertical, transform2D, canWalkOnTile, charSize);
+			HandleVerticalMovement(vertical, transform2D, canWalkOnTile, extent);
 		}
 
 		canWalkOnTile->movementDetails.currentMovementDir = MoveDir::None;
@@ -44,7 +45,7 @@ void MovementBlocking::OnUpdate(float, powe::GameObjectID)
 }
 
 void MovementBlocking::HandleHorizontalMovement(int direction, powe::Transform2D* transform2D,
-	CanWalkOnTile* canWalkOnTile, CharacterSize* charSize) const
+	CanWalkOnTile* canWalkOnTile, Rect2DCollider* collider) const
 {
 	// handle column movement
 	const int nextTileCol{ canWalkOnTile->currentCol + direction };
@@ -94,7 +95,7 @@ void MovementBlocking::HandleHorizontalMovement(int direction, powe::Transform2D
 		return;
 
 	if (IsOutOfBound(direction,
-		canWalkOnTile->movementDetails.futurePos.x + (charSize->size.x * float(direction)),
+		canWalkOnTile->movementDetails.futurePos.x + (collider->Size.x * float(direction)),
 		nextTileData.position.x))
 	{
 		// Approved of the movement
@@ -110,7 +111,7 @@ void MovementBlocking::HandleHorizontalMovement(int direction, powe::Transform2D
 }
 
 void MovementBlocking::HandleVerticalMovement(int direction, powe::Transform2D* transform2D,
-	CanWalkOnTile* canWalkOnTile, CharacterSize* charSize) const
+	CanWalkOnTile* canWalkOnTile, Rect2DCollider* collider) const
 {
 	const int nextTileRow{ canWalkOnTile->currentRow + direction };
 	const int currentCol{ canWalkOnTile->currentCol };
@@ -159,7 +160,7 @@ void MovementBlocking::HandleVerticalMovement(int direction, powe::Transform2D* 
 		return;
 
 	if (IsOutOfBound(direction,
-		canWalkOnTile->movementDetails.futurePos.y + (charSize->size.y * float(direction)),
+		canWalkOnTile->movementDetails.futurePos.y + (collider->Size.y * float(direction)),
 		nextTileData.position.y))
 	{
 		// Approved of the movement

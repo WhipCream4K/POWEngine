@@ -87,6 +87,7 @@ void powe::Core::Step(WorldEntity& worldEntity) const
 
 	worldEntity.UpdatePipeline(PipelineLayer::InputValidation, deltaTime);
 	worldEntity.UpdatePipeline(PipelineLayer::Update, deltaTime);
+	worldEntity.UpdatePipeline(PipelineLayer::PhysicsValidation, deltaTime);
 	worldEntity.UpdatePipeline(PipelineLayer::PostUpdate, deltaTime);
 
 }

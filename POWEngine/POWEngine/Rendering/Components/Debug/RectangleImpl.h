@@ -12,6 +12,7 @@ namespace powe
 
 		RectangleImpl() = default;
 		RectangleImpl(const SharedPtr<GameObject>& owner);
+		RectangleImpl(const SharedPtr<GameObject>& owner,const glm::fvec2& size);
 		virtual void SetSize(const glm::fvec2& size) = 0;
 		virtual const glm::fvec2& GetSize() const = 0;
 		virtual void SetFillColor(const glm::uvec4& color) = 0;

@@ -16,9 +16,15 @@
 #include "POWEngine/Core/Components/InputComponent.h"
 #include "TestCommand.h"
 #include "BurgerTimeComponents.h"
+#include "ColliderCommand.h"
 #include "PlayerCommands.h"
 #include "POWEngine/Rendering/Components/Text/TextComponent.h"
 #include "POWEngine/Rendering/Components/Debug/DebugRectangle.h"
+#include "Rect2DCollider.h"
+#include "ColliderResolver.h"
+#include "ColliderCommand.h"
+#include "RectColliderDetectionSystem.h"
+#include "FallingSystem.h"
 
 
 void TestScene::LoadScene(powe::WorldEntity& worldEntity)
@@ -34,11 +40,12 @@ void TestScene::LoadScene(powe::WorldEntity& worldEntity)
 	spriteComp->SetTexture(*Instance<AssetManager>()->GetAsset<Texture>(burger::MainObjectSprite));
 	spriteComp->SetRect({ 0.0f,0.0f,16.0f,16.0f });
 
+	const glm::fvec2 boundSize{16.0f,16.0f};
+
 	spriteTest->AddComponent(AnimationComponent{ 3,0.5f });
 	spriteTest->AddComponent(Speed{ 150.0f });
-	spriteTest->AddComponent(DebugRectangle{ spriteTest }, ComponentFlag::Sparse);
+	spriteTest->AddComponent(DebugRectangle{ spriteTest ,boundSize * burger::SpriteScale}, ComponentFlag::Sparse);
 
-	//debugRect->SetSize({ 20.0f,20.0f });
 
 	Transform2D* transform2D = spriteTest->AddComponent(Transform2D{ spriteTest });
 
@@ -52,10 +59,7 @@ void TestScene::LoadScene(powe::WorldEntity& worldEntity)
 	//AddGameObject(spriteTest);
 	AddGameObject(audioTest);
 
-	SharedPtr<SystemBase> system{ std::make_shared<PlayerInputSystem>() };
-	worldEntity.RegisterSystem(PipelineLayer::Update, system);
-
-	AddSystem(system);
+	SharedPtr<SystemBase> system{};
 
 	system = std::make_shared<AnimationSystem>();
 
@@ -63,14 +67,15 @@ void TestScene::LoadScene(powe::WorldEntity& worldEntity)
 
 	InputComponent* inputComponent = spriteTest->AddComponent(InputComponent{});
 
-	inputComponent->AddAxisCommand("Horizontal", std::make_shared<HorizontalMovement>());
-	inputComponent->AddAxisCommand("Vertical", std::make_shared<VerticalMovement>());
+	inputComponent->AddAxisCommand("Horizontal", std::make_shared<DebugHorizontalMovement>());
+	inputComponent->AddAxisCommand("Vertical", std::make_shared<DebugVerticalMovement>());
 
 	AddSystem(system);
 
 	const auto& textTest{ std::make_shared<GameObject>(worldEntity) };
 	Transform2D* textTransform = textTest->AddComponent(Transform2D{ textTest });
-	textTransform->SetParent(spriteTest);
+	textTransform;
+	//textTransform->SetParent(spriteTest);
 
 	TextComponent* textComponent{ textTest->AddComponent(TextComponent{40,textTest},ComponentFlag::Sparse) };
 	textComponent->SetFont(Instance<AssetManager>()->GetAsset<Font>(burger::MainFont));
@@ -90,13 +95,41 @@ void TestScene::LoadScene(powe::WorldEntity& worldEntity)
 	spriteComp->SetRect({ 0.0f,0.0f,208.0f,200.0f });
 
 	AddGameObject(levelTest);
+
+
+	const auto colliderManager{ std::make_shared<GameObject>(worldEntity) };
+	colliderManager->AddComponent(ColliderResolver{});
+	AddGameObject(colliderManager);
+
+	spriteTest->AddComponent(Rect2DCollider{ spriteTest,colliderManager,boundSize,OverlapLayer::Player });
+	//rect2DCollider->OnEnterCallback = std::make_shared<DebugTriggerEnter>();
+
+	const auto someItem{ std::make_shared<GameObject>(worldEntity) };
+	transform2D = someItem->AddComponent(Transform2D{someItem});
+	transform2D->SetWorldPosition({ 700.0f,360.0f });
+
+	spriteTest->AddComponent(PlayerTag{});
+
+	someItem->AddComponent(DebugRectangle{ someItem,boundSize });
+	Rect2DCollider* rect2DCollider = someItem->AddComponent(Rect2DCollider{ someItem,colliderManager,boundSize,OverlapLayer::Ingredients,OverlapLayer::Player });
+	rect2DCollider->OnEnterCallback = std::make_shared<OnStaticIngredientTrigger>();
+
+
+	const auto rectColliderDetection{ std::make_shared<RectColliderDetectionSystem>() };
+	AddSystem(rectColliderDetection);
+	worldEntity.RegisterSystem(PipelineLayer::Update, rectColliderDetection);
+
+	const auto fallingSystem{ std::make_shared<FallingSystem>() };
+	AddSystem(fallingSystem);
+	worldEntity.RegisterSystem(PipelineLayer::Update, fallingSystem);
 }
 
 void TestScene::Run(powe::WorldEntity& worldEntity,float delta)
 {
-
-	if (m_ExpiredTime < 2.5f)
-		m_ExpiredTime += delta;
-	else
-		worldEntity.RemoveGameObject(m_Player->GetID());
+	worldEntity;
+	delta;
+	//if (m_ExpiredTime < 2.5f)
+	//	m_ExpiredTime += delta;
+	//else
+	//	worldEntity.RemoveGameObject(m_Player->GetID());
 }

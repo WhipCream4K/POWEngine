@@ -17,7 +17,16 @@
                 "col" : 8,
                 "row" : 9
             },
-            "TileData" : "Level1Tile.csv"
+            "TileData" : "Level1Tile.csv",
+            "IngredientPos" : [
+                {
+                    "col" : 0,
+                    "row" : 0
+                },
+                {
+                    
+                }
+            ]
         }
     ],
     "1" : [

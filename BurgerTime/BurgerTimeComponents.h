@@ -77,7 +77,7 @@ struct MovementDetails
 {
 	glm::fvec2 oldPos{};
 	glm::fvec2 futurePos{};
-	MoveDir currentMovementDir{MoveDir::None};
+	MoveDir currentMovementDir{ MoveDir::None };
 };
 
 struct LimitPlayArea : powe::Component<LimitPlayArea>
@@ -85,16 +85,9 @@ struct LimitPlayArea : powe::Component<LimitPlayArea>
 	glm::fvec4 rect{};
 };
 
-struct CharacterSize : powe::Component<CharacterSize>
+struct PlayerTag : powe::Component<PlayerTag>
 {
-	CharacterSize() = default;
 
-	CharacterSize(const glm::fvec2& inSize)
-		: size(inSize)
-	{
-	}
-
-	glm::fvec2 size{};
 };
 
 struct DelayedMovement : powe::Component<DelayedMovement>
@@ -102,6 +95,18 @@ struct DelayedMovement : powe::Component<DelayedMovement>
 	float timeToReachNextSplit{};
 	float timeCounter{};
 	bool isMoving{};
+};
+
+struct FallingComponent : powe::Component<FallingComponent>
+{
+	FallingComponent() = default;
+
+	FallingComponent(float inSpeed)
+		: speed(inSpeed)
+	{
+	}
+
+	float speed{};
 };
 
 struct CanWalkOnTile : powe::Component<CanWalkOnTile>

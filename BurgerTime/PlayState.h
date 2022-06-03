@@ -1,6 +1,9 @@
 #pragma once
 
 #include "GameState.h"
+#include "POWEngine/Math/Math.h"
+
+
 
 class PlayScene;
 class PlayState : public GameState

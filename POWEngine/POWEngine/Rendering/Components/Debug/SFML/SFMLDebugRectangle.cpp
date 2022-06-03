@@ -24,6 +24,23 @@ powe::SFMLDebugRectangle::SFMLDebugRectangle(const SharedPtr<GameObject>& owner)
 	}
 }
 
+powe::SFMLDebugRectangle::SFMLDebugRectangle(const SharedPtr<GameObject>& owner, const glm::fvec2& size)
+	: m_Owner(owner)
+	, m_Size(size)
+{
+	if (owner)
+	{
+		SFMLDebugRectangleComponent* debugRect = owner->AddComponent(SFMLDebugRectangleComponent{}, ComponentFlag::Sparse);
+		debugRect->rectangle.setFillColor(sf::Color{ 255,255,255,0 });
+		debugRect->rectangle.setOutlineThickness(1.5f);
+		debugRect->rectangle.setOutlineColor({ 0,255,0,255 });
+		const sf::Vector2f defaultSize{ size.x,size.y };
+		debugRect->rectangle.setSize(defaultSize);
+		debugRect->rectangle.setOrigin({ size.x / 2.0f,size.y / 2.0f });
+		debugRect->drawOrder = 300;
+	}
+}
+
 void powe::SFMLDebugRectangle::SetOutlineThickness(float thickness)
 {
 	if (const auto gameObject{ m_Owner.lock() })

@@ -10,7 +10,7 @@ namespace powe
 
 		SFMLDebugRectangle();
 		SFMLDebugRectangle(const SharedPtr<GameObject>& owner);
-
+		SFMLDebugRectangle(const SharedPtr<GameObject>& owner, const glm::fvec2& size);
 		void SetFillColor(const glm::uvec4& color) override;
 		void SetSize(const glm::fvec2& size) override;
 		const glm::uvec4& GetFillColor() const override;

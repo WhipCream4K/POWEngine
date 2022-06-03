@@ -16,6 +16,11 @@ powe::DebugRectangle::DebugRectangle(const SharedPtr<GameObject>& owner)
 {
 }
 
+powe::DebugRectangle::DebugRectangle(const SharedPtr<GameObject>& owner, const glm::fvec2& size)
+	: m_RectangleImpl(std::make_unique<RectangleType>(owner,size))
+{
+}
+
 powe::DebugRectangle::DebugRectangle(DebugRectangle&&) noexcept = default;
 
 powe::DebugRectangle& powe::DebugRectangle::operator=(DebugRectangle&&) noexcept = default;
@@ -60,6 +65,11 @@ void powe::DebugRectangle::SetOrigin(const glm::fvec2& origin) const
 const glm::fvec2& powe::DebugRectangle::GetOrigin() const
 {
 	return m_RectangleImpl->GetOrigin();
+}
+
+void powe::DebugRectangle::SetOutlineThickness(float thickness) const
+{
+	m_RectangleImpl->SetOutlineThickness(thickness);
 }
 
 

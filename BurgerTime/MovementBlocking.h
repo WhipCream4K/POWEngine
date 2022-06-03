@@ -4,8 +4,9 @@
 
 #include "WalkableTiles.h"
 
+class Rect2DCollider;
 struct CanWalkOnTile;
-struct CharacterSize;
+struct ObjectExtent;
 
 namespace powe
 {
@@ -29,12 +30,12 @@ private:
 	void HandleHorizontalMovement(int direction,
 		powe::Transform2D* transform2D,
 		CanWalkOnTile* canWalkOnTile,
-		CharacterSize* charSize) const;
+		Rect2DCollider* collider) const;
 
 	void HandleVerticalMovement(int direction,
 		powe::Transform2D* transform2D,
 		CanWalkOnTile* canWalkOnTile,
-		CharacterSize* charSize) const;
+		Rect2DCollider* collider) const;
 
 	bool IsOutOfBound(int direction,float pos,float against) const;
 	bool IsAligned(float posY, float againstY,float epsilon) const;

@@ -25,6 +25,7 @@ namespace burger
 		enum : uint8_t
 		{
 			Background,
+			PickUps,
 			Player,
 			Enemy
 		};
@@ -37,12 +38,48 @@ namespace burger
 	};
 }
 
-struct PlayerDescriptor
+struct SpriteInfo
 {
-	glm::fvec2 spawnPos{};
-	int currentLevelIdx{};
-	uint8_t playerIndex{};
+	glm::fvec4 rect{};
 };
+
+enum class IngredientsType
+{
+	TopBun,
+	BottomBun,
+	Mayo,
+	Patty,
+	Tomato,
+	Lettuce
+};
+
+
+
+class OverlapLayer
+{
+public:
+
+	enum : uint32_t
+	{
+		Player = (1 << 0),
+		Ingredients = (1 << 1),
+		Enemy = (1 << 2),
+
+		Count = 3
+	};
+
+	static uint32_t LayerToIndex(uint32_t layer)
+	{
+		for (uint32_t i = 0; i < uint32_t(Count); ++i)
+		{
+			if ((1u << i) & layer)
+				return i;
+		}
+
+		return uint32_t(Count);
+	}
+};
+
 
 
 

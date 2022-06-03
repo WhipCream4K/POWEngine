@@ -140,7 +140,8 @@ void powe::WorldEntity::RemoveGameObject(GameObjectID id, bool removeRecord)
 	{
 		// GameObject can only be deleted if it's in the pipeline
 		const auto archetype{ gbRecords.Archetype.lock() };
-		if (archetype)
+		const int index{ gbRecords.IndexInArchetype }; // safe-guard
+		if (archetype && index >= 0)
 		{
 			AddGameObjectToArchetypeRemoveList(CreateStringFromNumVector(archetype->Types), id);
 		}
@@ -789,7 +790,14 @@ void powe::WorldEntity::InternalAddGameObjectToPipeline()
 			targetArchetype->AllocateComponentData(futureSize * 3, *this);
 		}
 
-		//SizeType accumulateOffset{};
+		GameObjectRecord oldRecords{};
+		GetGameObjectRecords(gameObjectID, oldRecords);
+
+		if(const auto oldArchetype{oldRecords.Archetype.lock()})
+		{
+			
+		}
+
 		for (const ComponentTypeID componentTypeId : archetypeKey)
 		{
 			const ComponentTypeID discardFlagComponentID{ DiscardFlag(componentTypeId) };
@@ -811,11 +819,6 @@ void powe::WorldEntity::InternalAddGameObjectToPipeline()
 				RawByte* source{ compData.get() };
 				componentTrait->MoveData(source, destination);
 			}
-
-
-			// NOTE: Need to call the destructor of the component because sometimes when the component owns
-			// a vector which sometimes allocates data it will not destroy itself hence leaking memory
-			//componentTrait->DestroyData(compData.get());
 		}
 
 		// add the record to this gameobject

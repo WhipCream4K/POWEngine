@@ -3,6 +3,7 @@
 #include "WalkableTiles.h"
 #include "POWEngine/Singleton/ThreadSafeSingleton.h"
 #include "POWEngine/Math/Math.h"
+#include "StaticVariables.h"
 
 struct LevelData
 {
@@ -24,13 +25,16 @@ public:
 	const glm::ivec2& GetPlayerStartTile(int levelIdx) const;
 	int GetMaxColTile() const { return m_MaxColTile; }
 	int GetMaxRowTile() const { return m_MaxRowTile; }
-	
+	const SpriteInfo& GetIngredientSpriteInfo(IngredientsType type) const;
 
 private:
+
+	void ParseIngredientSpriteInfo();
 
 	std::unordered_map<int, LevelData> m_LevelData;
 	std::unordered_map<int, std::vector<TileData>> m_LevelTiles;
 	std::unordered_map<int, glm::ivec2> m_PlayerStartTile;
+	std::unordered_map<IngredientsType, SpriteInfo> m_IngredientSpriteInfo;
 	int m_MaxColTile{ 17 };
 	int m_MaxRowTile{ 13 };
 };

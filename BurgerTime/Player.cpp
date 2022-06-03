@@ -10,6 +10,7 @@
 #include "StaticSceneData.h"
 #include "POWEngine/Core/Components/InputComponent.h"
 #include "PlayerCommands.h"
+#include "Rect2DCollider.h"
 #include "POWEngine/Rendering/Components/Debug/DebugRectangle.h"
 
 SharedPtr<powe::GameObject> Player::Create(powe::WorldEntity& worldEntity, const PlayerDescriptor& playerDescriptor)
@@ -41,19 +42,25 @@ SharedPtr<powe::GameObject> Player::Create(powe::WorldEntity& worldEntity, const
 	canWalkOnTile->currentRow = playerStartTile.y;
 
 	const glm::fvec2 charSize{ 16.0f,16.0f };
-	gameObject->AddComponent(CharacterSize{ charSize });
+	//gameObject->AddComponent(CharacterSize{ charSize });
 
 	InputComponent* inputComp = gameObject->AddComponent(InputComponent{ playerDescriptor.playerIndex });
 	inputComp->AddAxisCommand("Horizontal", std::make_shared<HorizontalMovement>());
 	inputComp->AddAxisCommand("Vertical", std::make_shared<VerticalMovement>());
 
-	//DelayedMovement* delayedMovement = gameObject->AddComponent(DelayedMovement{});
-	//delayedMovement->timeToReachNextSplit = (6.0f * burger::SpriteScale.x) / speed;
+	gameObject->AddComponent(Rect2DCollider{ worldEntity,
+	gameObject->GetID(),
+	playerDescriptor.colliderManager,
+	charSize,
+	OverlapLayer::Player });
+
+	gameObject->AddComponent(PlayerTag{}, ComponentFlag::Sparse);
 
 #ifdef _DEBUG
 
 	DebugRectangle* debugRect{ gameObject->AddComponent(DebugRectangle{gameObject},ComponentFlag::Sparse) };
 	debugRect->SetSize(charSize);
+	debugRect->SetOutlineThickness(0.5f);
 
 #endif
 

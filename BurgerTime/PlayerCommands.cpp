@@ -52,3 +52,38 @@ void VerticalMovement::Execute(
 	canWalkOnTile->movementDetails.currentMovementDir = axisValue > 0.0f ? MoveDir::Down : MoveDir::Up;
 	canWalkOnTile->movementDetails.futurePos = currentPos;
 }
+
+void DebugHorizontalMovement::Execute(powe::WorldEntity& worldEntity, float deltaTime, powe::GameObjectID id,
+	float axisValue)
+{
+	using namespace powe;
+
+	Transform2D* transform2D{ worldEntity.GetComponent<Transform2D>(id) };
+	const Speed* playerSpeed{ worldEntity.GetComponent<Speed>(id) };
+	//DelayedMovement* delayedMovement{ worldEntity.GetComponent<DelayedMovement>(id) };
+
+	if (!transform2D || !playerSpeed)
+		return;
+
+	glm::fvec2 horizontal{ transform2D->GetWorldPosition() };
+	horizontal.x += axisValue * deltaTime * playerSpeed->speed;
+
+	transform2D->SetWorldPosition(horizontal);
+}
+
+void DebugVerticalMovement::Execute(powe::WorldEntity& worldEntity, float deltaTime, powe::GameObjectID id,
+	float axisValue)
+{
+	using namespace powe;
+
+	Transform2D* transform2D{ worldEntity.GetComponent<Transform2D>(id) };
+	const Speed* playerSpeed{ worldEntity.GetComponent<Speed>(id) };
+
+	if (!transform2D || !playerSpeed)
+		return;
+
+	glm::fvec2 vertical{ transform2D->GetWorldPosition() };
+	vertical.y += axisValue * deltaTime * playerSpeed->speed;
+
+	transform2D->SetWorldPosition(vertical);
+}

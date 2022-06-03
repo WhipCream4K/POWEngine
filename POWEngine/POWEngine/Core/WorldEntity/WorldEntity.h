@@ -226,7 +226,7 @@ namespace powe
 			}
 
 			// we need to remove this gameobject from its own archetype as well
-			AddGameObjectToArchetypeRemoveList(oldArchetypeKey, id);
+			//AddGameObjectToArchetypeRemoveList(oldArchetypeKey, id);
 		}
 
 		PreArchetypeTrait preArchetypeTrait{};

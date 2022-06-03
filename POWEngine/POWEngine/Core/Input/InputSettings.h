@@ -42,6 +42,7 @@ namespace powe
 		void ParseHWMessages(const HardwareMessages& hwMessages);
 
 		[[nodiscard]] float GetInputAxis(const std::string& axisName, uint8_t playerIndex = 0) const;
+		bool GetInputAction(const std::string& actionName, InputEvent targetEvent, uint8_t playerIndex = 0);
 
 		const std::unordered_map<std::string, ActionMap>& GetActionMap() const { return m_ActionKeyMappings; }
 		const std::unordered_map<std::string, AxisMap>& GetAxisMap() const { return m_AxisKeyMappings; }

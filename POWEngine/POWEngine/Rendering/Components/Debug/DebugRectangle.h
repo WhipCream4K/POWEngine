@@ -13,6 +13,7 @@ namespace powe
 
 		DebugRectangle();
 		DebugRectangle(const SharedPtr<GameObject>& owner);
+		DebugRectangle(const SharedPtr<GameObject>& owner, const glm::fvec2& size);
 		DebugRectangle(const DebugRectangle&) = delete;
 		DebugRectangle& operator=(const DebugRectangle&) = delete;
 		DebugRectangle(DebugRectangle&&) noexcept;
@@ -30,6 +31,7 @@ namespace powe
 		const glm::fvec2& GetOrigin() const;
 		void SetShouldRender(bool state) { m_ShouldRender = state; }
 		bool GetShouldRender() const { return m_ShouldRender; }
+		void SetOutlineThickness(float thickness) const;
 
 	private:
 

@@ -85,7 +85,7 @@ void PlayScene::LoadScene(powe::WorldEntity& worldEntity)
 	{
 		const PlayerDescriptor player1Desc{
 			levelData.playerSpawnPoints * burger::SpriteScale + midScreen,
-			mainSceneData->currentLevel };
+			mainSceneData->currentLevel,0,m_SceneDataID };
 
 		const auto player{ Player::Create(worldEntity,player1Desc) };
 		AddGameObject(player);

@@ -76,7 +76,7 @@ void StaticSceneData::Initialize()
 		-floor(maxRow / 2.0f) * boxRowSize.x };
 
 
-	const glm::fvec2 midScreen{640.0f,360.0f};
+	const glm::fvec2 midScreen{ 640.0f,360.0f };
 
 	for (auto& tile : tileData | std::views::values)
 	{
@@ -92,7 +92,7 @@ void StaticSceneData::Initialize()
 				currentTile.position = boxPos * burger::SpriteScale + midScreen;
 
 				currentTile.size = { boxColSize.x,
-					boxRowSize.x};
+					boxRowSize.x };
 
 				currentTile.size *= burger::SpriteScale;
 
@@ -108,6 +108,9 @@ void StaticSceneData::Initialize()
 	std::string outdebug{ "File loaded" };
 	outdebug.append("-> " + levelFilePath);
 	POWLOGNORMAL(outdebug);
+
+
+	ParseIngredientSpriteInfo();
 }
 
 LevelData StaticSceneData::GetLevelData(int levelIdx) const
@@ -137,4 +140,41 @@ const std::vector<TileData>& StaticSceneData::GetAllTileInLevel(int levelIdx) co
 const glm::ivec2& StaticSceneData::GetPlayerStartTile(int levelIdx) const
 {
 	return m_PlayerStartTile.at(levelIdx);
+}
+
+const SpriteInfo& StaticSceneData::GetIngredientSpriteInfo(IngredientsType type) const
+{
+	return m_IngredientSpriteInfo.at(type);
+}
+
+void StaticSceneData::ParseIngredientSpriteInfo()
+{
+	const std::string spriteFilePath{ "./Resources/Level/IngredientProperties.json" };
+	std::ifstream ifstream{ spriteFilePath };
+
+	nlohmann::json json{};
+
+	ifstream >> json;
+
+	for (const auto& [key,value] : json.items())
+	{
+		const IngredientsType type{ IngredientsType(std::stoi(key))};
+
+		for (const auto& item : value)
+		{
+			const auto& rect{ item["Rect"] };
+			SpriteInfo info{};
+			info.rect.x = rect["x"];
+			info.rect.y = rect["y"];
+			info.rect.z = rect["width"];
+			info.rect.w = rect["height"];
+
+			m_IngredientSpriteInfo.try_emplace(type, info);
+		}
+	}
+
+
+	std::string outdebug{ "File loaded" };
+	outdebug.append("-> " + spriteFilePath);
+	POWLOGNORMAL(outdebug);
 }

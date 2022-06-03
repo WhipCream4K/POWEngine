@@ -20,6 +20,8 @@
 #include "GameState.h"
 #include "PlayScene.h"
 #include "POWEngine/Rendering/Resources/Font/Font.h"
+#include "ColliderResolver.h"
+#include "RectColliderDetectionSystem.h"
 
 void BurgerTimeGame::Start(const SharedPtr<powe::Core>&,
 	const SharedPtr<powe::WorldEntity>& worldEntity)
@@ -46,9 +48,10 @@ void BurgerTimeGame::Start(const SharedPtr<powe::Core>&,
 	const auto dynamicSceneData{ std::make_shared<GameObject>(*worldEntity) };
 	m_SceneDataID = dynamicSceneData->GetID();
 	dynamicSceneData->AddComponent(DynamicSceneData{ m_SceneDataID });
+	dynamicSceneData->AddComponent(ColliderResolver{});
 
-	//m_MenuScene = std::make_shared<MenuScene>(m_SceneDataID);
-	//m_MenuScene->LoadScene(*worldEntity);
+	m_MenuScene = std::make_shared<TestScene>();
+	m_MenuScene->LoadScene(*worldEntity);
 
 	// Initialize Game State
 	{
@@ -83,8 +86,8 @@ void BurgerTimeGame::Start(const SharedPtr<powe::Core>&,
 			{InputDevice::D_Gamepad,GamepadKey::GPK_A,1.0f}
 			});
 
-		inputSetting.AddAxisMapping("ShowDebug", {
-			{InputDevice::D_Keyboard,Keyboard::F8,1.0f}
+		inputSetting.AddActionMapping("ShowDebug", {
+			{InputDevice::D_Keyboard,Keyboard::F8}
 			});
 
 		inputSetting.AddActionMapping("Fire", {
@@ -94,6 +97,7 @@ void BurgerTimeGame::Start(const SharedPtr<powe::Core>&,
 
 
 	worldEntity->RegisterSystem(PipelineLayer::InputValidation, std::make_shared<InputSystem>());
+	worldEntity->RegisterSystem(PipelineLayer::PhysicsValidation, std::make_shared<RectColliderDetectionSystem>());
 
 #ifdef _DEBUG
 	worldEntity->RegisterSystem(PipelineLayer::Update, std::make_shared<DebugControllerSystem>());
@@ -104,22 +108,24 @@ void BurgerTimeGame::Run(const SharedPtr<powe::WorldEntity>& worldEntity,
 	const SharedPtr<powe::WorldClock>& worldClock)
 {
 	using namespace powe;
+	worldEntity;
+	worldClock;
 
-	const float deltaTime{ worldClock->GetDeltaTime() };
+	//const float deltaTime{ worldClock->GetDeltaTime() };
 
-	if (m_MainGameState)
-	{
-		const auto& oldState{ m_MainGameState };
-		const auto newState{ m_MainGameState->HandleInput(*worldEntity, m_SceneDataID) };
+	//if (m_MainGameState)
+	//{
+	//	const auto& oldState{ m_MainGameState };
+	//	const auto newState{ m_MainGameState->HandleInput(*worldEntity, m_SceneDataID) };
 
-		if (oldState != newState)
-		{
-			oldState->Exit(*worldEntity, m_SceneDataID);
-			newState->Enter(*worldEntity, m_SceneDataID);
-			m_MainGameState = newState;
-		}
+	//	if (oldState != newState)
+	//	{
+	//		oldState->Exit(*worldEntity, m_SceneDataID);
+	//		newState->Enter(*worldEntity, m_SceneDataID);
+	//		m_MainGameState = newState;
+	//	}
 
-		m_MainGameState->Update(*worldEntity, deltaTime, m_SceneDataID);
-	}
+	//	m_MainGameState->Update(*worldEntity, deltaTime, m_SceneDataID);
+	//}
 }
 

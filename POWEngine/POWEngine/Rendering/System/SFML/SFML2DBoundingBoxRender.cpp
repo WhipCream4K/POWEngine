@@ -20,7 +20,7 @@ void powe::SFML2DBoundingBoxRender::OnDraw(const SFML2DRenderer& renderer, GameO
 			GetComponentsView<Transform2D, SFMLDebugRectangleComponent>();
 
 		const glm::vec2 position{ transform2D->GetWorldPosition() };
-		const glm::vec2 scale{ transform2D->GetWorldScale() };
+		//const glm::vec2 scale{ transform2D->GetWorldScale() };
 		const float rotation{ transform2D->GetWorldRotation() };
 
 		sf::RenderStates renderStates{};
@@ -28,7 +28,7 @@ void powe::SFML2DBoundingBoxRender::OnDraw(const SFML2DRenderer& renderer, GameO
 
 		sfTransform.translate({ position.x,position.y });
 		sfTransform.rotate(sf::degrees(rotation));
-		sfTransform.scale({ scale.x,scale.y });
+		//sfTransform.scale({ scale.x,scale.y });
 
 		renderer.SubmitDrawSprite(&sfmlDraw->rectangle, renderStates, sfmlDraw->drawOrder);
 	}

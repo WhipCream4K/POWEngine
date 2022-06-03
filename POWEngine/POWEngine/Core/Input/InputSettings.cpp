@@ -48,8 +48,29 @@ float powe::InputSettings::GetInputAxis(const std::string& axisName, uint8_t pla
 	return 0.0f;
 }
 
+bool powe::InputSettings::GetInputAction(const std::string& actionName, InputEvent targetEvent, uint8_t playerIndex)
+{
+	assert(playerIndex < MAXPLAYER && "Player index isn't not in range of max player");
+	const auto findItr{ m_ActionKeyMappings.find(actionName) };
+	if(findItr != m_ActionKeyMappings.end())
+	{
+		for (const auto& actionKey : findItr->second.keyPool)
+		{
+			if(m_MainKeyPool[playerIndex].contains(actionKey))
+			{
+				const auto& keyState = m_MainKeyPool[playerIndex].at(actionKey);
+				const InputEvent thisFrameEvent = InputEvent((keyState.inputLastFrame << 0) | (keyState.inputThisFrame << 1));
+
+				return thisFrameEvent == targetEvent;
+			}
+		}
+	}
+
+	return false;
+}
+
 void powe::InputSettings::AddActionMapping(const std::string& name,
-	const std::vector<ActionMap::ActionKeyPack>& keyPacks)
+										   const std::vector<ActionMap::ActionKeyPack>& keyPacks)
 {
 	const auto findItr{ m_ActionKeyMappings.find(name) };
 	if (findItr == m_ActionKeyMappings.end())

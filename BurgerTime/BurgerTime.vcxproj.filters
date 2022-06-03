@@ -136,7 +136,25 @@
       <Filter>Systems</Filter>
     </ClCompile>
     <ClCompile Include="DebugControllerSystem.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="IngredientsStatic.cpp">
+      <Filter>Prefabs</Filter>
+    </ClCompile>
+    <ClCompile Include="ColliderCommand.cpp">
+      <Filter>Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Rect2DCollider.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="RectColliderDetectionSystem.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="ColliderResolver.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="FallingSystem.cpp">
+      <Filter>Systems</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -234,7 +252,28 @@
       <Filter>Systems</Filter>
     </ClInclude>
     <ClInclude Include="DebugControllerSystem.h">
-      <Filter>Header Files</Filter>
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="IngredientsStatic.h">
+      <Filter>Prefabs</Filter>
+    </ClInclude>
+    <ClInclude Include="ColliderCommand.h">
+      <Filter>Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Rect2DCollider.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="RectColliderDetectionSystem.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="ColliderResolver.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="PrefabDesc.h">
+      <Filter>Prefabs</Filter>
+    </ClInclude>
+    <ClInclude Include="FallingSystem.h">
+      <Filter>Systems</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

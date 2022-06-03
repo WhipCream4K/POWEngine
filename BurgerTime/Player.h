@@ -4,6 +4,14 @@
 #include "POWEngine/Math/Math.h"
 #include "StaticVariables.h"
 
+struct PlayerDescriptor
+{
+	glm::fvec2 spawnPos{};
+	int currentLevelIdx{};
+	uint8_t playerIndex{};
+	powe::GameObjectID colliderManager{};
+};
+
 namespace powe
 {
 	class GameObject;

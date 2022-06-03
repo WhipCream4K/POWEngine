@@ -13,7 +13,7 @@ void DebugControllerSystem::OnUpdate(float, powe::GameObjectID)
 {
 	using namespace powe;
 
-	if(GetWorld()->GetInputSettings().GetInputAxis("ShowDebug") > 0.0f)
+	if(GetWorld()->GetInputSettings().GetInputAction("ShowDebug",InputEvent::IE_Pressed))
 	{
 		const auto& debugRect{ GetComponent<DebugRectangle>() };
 		debugRect->SetShouldRender(!debugRect->GetShouldRender());
