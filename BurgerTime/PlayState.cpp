@@ -14,12 +14,12 @@ void PlayState::Enter(powe::WorldEntity& worldEntity, powe::GameObjectID gameObj
 	worldEntity;
 	gameObjectId;
 
-	//if (!m_PlayScene)
-	//{
-	//	m_PlayScene = std::make_shared<PlayScene>(gameObjectId);
-	//}
+	if (!m_PlayScene)
+	{
+		m_PlayScene = std::make_shared<PlayScene>(gameObjectId);
+	}
 
-	//m_PlayScene->LoadScene(worldEntity);
+	m_PlayScene->LoadScene(worldEntity);
 }
 
 void PlayState::Exit(powe::WorldEntity& worldEntity, powe::GameObjectID)

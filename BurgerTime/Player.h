@@ -2,6 +2,7 @@
 
 #include <poweCustomtype.h>
 #include "POWEngine/Math/Math.h"
+#include "StaticVariables.h"
 
 namespace powe
 {
@@ -14,7 +15,7 @@ class Player
 public:
 
 	static SharedPtr<powe::GameObject> Create(powe::WorldEntity& worldEntity,
-		const glm::fvec2& position,int currentLevel);
+		const PlayerDescriptor& playerDescriptor);
 
 };
 

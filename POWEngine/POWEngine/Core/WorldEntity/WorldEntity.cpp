@@ -11,8 +11,7 @@ powe::WorldEntity::WorldEntity()
 
 void powe::WorldEntity::RegisterGameObject(GameObjectID id)
 {
-	if (!m_GameObjectRecords.contains(id))
-		m_GameObjectRecords.try_emplace(id, GameObjectRecord{});
+	m_GameObjectRecords.try_emplace(id, GameObjectRecord{});
 }
 
 powe::WorldEntity::~WorldEntity()
@@ -354,7 +353,7 @@ void powe::WorldEntity::InternalRemoveGameObjectFromPipeline()
 		GetGameObjectRecords(tobeRemoveGameObjects[0], tempRec);
 		revalidateArchetype = tempRec.Archetype.lock();
 		gameObjectsIDCopy = revalidateArchetype->GameObjectIds;
-		
+
 
 		for (const GameObjectID removeGameObjectID : tobeRemoveGameObjects)
 		{

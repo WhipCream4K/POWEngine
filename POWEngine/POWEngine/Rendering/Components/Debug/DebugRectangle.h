@@ -1,6 +1,7 @@
 #pragma once
 
 #include "POWEngine/Core/Components/BaseComponent.h"
+#include "POWEngine/Math/Math.h"
 
 namespace powe
 {
@@ -27,9 +28,12 @@ namespace powe
 		const glm::uvec4& GetFillColor() const;
 		void SetOrigin(const glm::fvec2& origin) const;
 		const glm::fvec2& GetOrigin() const;
+		void SetShouldRender(bool state) { m_ShouldRender = state; }
+		bool GetShouldRender() const { return m_ShouldRender; }
 
 	private:
 
 		OwnedPtr<RectangleImpl> m_RectangleImpl;
+		bool m_ShouldRender{ true };
 	};
 }

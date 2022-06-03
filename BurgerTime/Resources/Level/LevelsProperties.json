@@ -6,45 +6,60 @@
                     "x" : 0.0,
                     "y" : 0.0,
                     "width" : 208.0,
-                    "height" : 200.0
+                    "height" : 208.0
                 }
             ,
-            "PlayerSpawn" : {
-                "x" : 640.0,
-                "y" : 360.0
-            }
+            "PlayerSpawnPos" : {
+                "x" : 0.0,
+                "y" : 46.0
+            },
+            "PlayerSpawnTile" : {
+                "col" : 8,
+                "row" : 9
+            },
+            "TileData" : "Level1Tile.csv"
         }
     ],
     "1" : [
         {
             "Rect" : 
                 {
-                    "x" : 0.0,
+                    "x" : 216.0,
                     "y" : 0.0,
                     "width" : 208.0,
-                    "height" : 200.0
+                    "height" : 208.0
                 }
             ,
-            "PlayerSpawn" : {
-                "x" : 640.0,
-                "y" : 360.0
-            }
+            "PlayerSpawnPos" : {
+                "x" : 0.0,
+                "y" : 30.0
+            },
+            "PlayerSpawnTile" : {
+                "col" : 8,
+                "row" : 8
+            },
+            "TileData" : "Level2Tile.csv"
         }
     ],
     "2" : [
         {
             "Rect" : 
                 {
-                    "x" : 0.0,
+                    "x" : 432.0,
                     "y" : 0.0,
                     "width" : 208.0,
-                    "height" : 200.0
+                    "height" : 208.0
                 }
             ,
-            "PlayerSpawn" : {
-                "x" : 640.0,
-                "y" : 360.0
-            }
+            "PlayerSpawnPos" : {
+                "x" : 0.0,
+                "y" : 78.0
+            },
+            "PlayerSpawnTile" : {
+                "col" : 8,
+                "row" : 10
+            },
+            "TileData" : "Level3Tile.csv"
         }
     ]
 }

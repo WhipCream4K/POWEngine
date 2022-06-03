@@ -64,9 +64,57 @@ struct SceneReference : powe::Component<SceneReference>
 	powe::GameObjectID sceneID{};
 };
 
+enum class MoveDir
+{
+	None,
+	Left,
+	Right,
+	Up,
+	Down
+};
+
+struct MovementDetails
+{
+	glm::fvec2 oldPos{};
+	glm::fvec2 futurePos{};
+	MoveDir currentMovementDir{MoveDir::None};
+};
+
+struct LimitPlayArea : powe::Component<LimitPlayArea>
+{
+	glm::fvec4 rect{};
+};
+
+struct CharacterSize : powe::Component<CharacterSize>
+{
+	CharacterSize() = default;
+
+	CharacterSize(const glm::fvec2& inSize)
+		: size(inSize)
+	{
+	}
+
+	glm::fvec2 size{};
+};
+
+struct DelayedMovement : powe::Component<DelayedMovement>
+{
+	float timeToReachNextSplit{};
+	float timeCounter{};
+	bool isMoving{};
+};
+
 struct CanWalkOnTile : powe::Component<CanWalkOnTile>
 {
-	powe::GameObjectID walkableTileID{};
+	CanWalkOnTile() = default;
+
+	CanWalkOnTile(int levelIdx)
+		: currentLevel(levelIdx)
+	{
+	}
+
+	MovementDetails movementDetails{};
+	int currentLevel{};
 	int currentCol{};
 	int currentRow{};
 };

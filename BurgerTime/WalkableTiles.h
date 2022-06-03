@@ -4,11 +4,20 @@
 
 #include "POWEngine/Math/Math.h"
 
+enum class TileType
+{
+	None,
+	Platform,
+	Ladder,
+};
+
 struct TileData
 {
+	// relative position of the tile from the center of the owner
+	glm::fvec2 relativePos{};
 	glm::fvec2 position{};
 	glm::fvec2 size{};
-	bool isWalkable{};
+	TileType tileType{};
 };
 
 class WalkableTiles : public powe::Component<WalkableTiles>
@@ -17,7 +26,6 @@ public:
 
 	WalkableTiles() = default;
 
-	bool IsWalkable(int index) const;
 
 private:
 

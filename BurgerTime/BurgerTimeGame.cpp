@@ -15,6 +15,7 @@
 #include "TestScene.h"
 #include "MenuScene.h"
 #include "StaticSceneData.h"
+#include "DebugControllerSystem.h"
 
 #include "GameState.h"
 #include "PlayScene.h"
@@ -54,7 +55,6 @@ void BurgerTimeGame::Start(const SharedPtr<powe::Core>&,
 		m_MainGameState = GameState::GameStart;
 	}
 
-
 	// Initialize Main input data
 	{
 		auto& inputSetting{ worldEntity->GetInputSettings() };
@@ -62,13 +62,15 @@ void BurgerTimeGame::Start(const SharedPtr<powe::Core>&,
 		inputSetting.AddAxisMapping("Horizontal", {
 			{InputDevice::D_Keyboard, Keyboard::Left,-1.0f },
 			{InputDevice::D_Keyboard,Keyboard::Right,1.0f},
-			{InputDevice::D_Gamepad,GamepadKey::GPK_Left_AxisX,1.0f}
+			{InputDevice::D_Gamepad,GamepadKey::GPK_DPAD_Left,-1.0f},
+			{InputDevice::D_Gamepad,GamepadKey::GPK_DPAD_Right,1.0f}
 			});
 
 		inputSetting.AddAxisMapping("Vertical", {
 			{InputDevice::D_Keyboard,Keyboard::Up,-1.0f},
 			{InputDevice::D_Keyboard,Keyboard::Down,1.0f},
-			{InputDevice::D_Gamepad,GamepadKey::GPK_Left_AxisY,-1.0f}
+			{InputDevice::D_Gamepad,GamepadKey::GPK_DPAD_Up,-1.0f},
+			{InputDevice::D_Gamepad,GamepadKey::GPK_DPAD_Down,1.0f}
 			});
 
 		inputSetting.AddAxisMapping("MenuVertical", {
@@ -77,7 +79,12 @@ void BurgerTimeGame::Start(const SharedPtr<powe::Core>&,
 			});
 
 		inputSetting.AddAxisMapping("Select", {
-			{InputDevice::D_Keyboard,Keyboard::Enter,1.0f}
+			{InputDevice::D_Keyboard,Keyboard::Enter,1.0f},
+			{InputDevice::D_Gamepad,GamepadKey::GPK_A,1.0f}
+			});
+
+		inputSetting.AddAxisMapping("ShowDebug", {
+			{InputDevice::D_Keyboard,Keyboard::F8,1.0f}
 			});
 
 		inputSetting.AddActionMapping("Fire", {
@@ -87,6 +94,10 @@ void BurgerTimeGame::Start(const SharedPtr<powe::Core>&,
 
 
 	worldEntity->RegisterSystem(PipelineLayer::InputValidation, std::make_shared<InputSystem>());
+
+#ifdef _DEBUG
+	worldEntity->RegisterSystem(PipelineLayer::Update, std::make_shared<DebugControllerSystem>());
+#endif
 }
 
 void BurgerTimeGame::Run(const SharedPtr<powe::WorldEntity>& worldEntity,
@@ -96,12 +107,12 @@ void BurgerTimeGame::Run(const SharedPtr<powe::WorldEntity>& worldEntity,
 
 	const float deltaTime{ worldClock->GetDeltaTime() };
 
-	if(m_MainGameState)
+	if (m_MainGameState)
 	{
 		const auto& oldState{ m_MainGameState };
 		const auto newState{ m_MainGameState->HandleInput(*worldEntity, m_SceneDataID) };
 
-		if(oldState != newState)
+		if (oldState != newState)
 		{
 			oldState->Exit(*worldEntity, m_SceneDataID);
 			newState->Enter(*worldEntity, m_SceneDataID);

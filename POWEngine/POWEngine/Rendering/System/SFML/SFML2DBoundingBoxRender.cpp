@@ -2,28 +2,35 @@
 #include "SFML2DBoundingBoxRender.h"
 
 #include "POWEngine/Core/Components/Transform2D.h"
+#include "POWEngine/Rendering/Components/Debug/DebugRectangle.h"
 #include "POWEngine/Rendering/Components/Debug/SFML/SFMLDebugRectangleComponent.h"
 
 powe::SFML2DBoundingBoxRender::SFML2DBoundingBoxRender()
 {
-	DEFINE_SYSTEM_KEY(Transform2D, SFMLDebugRectangleComponent);
+	DEFINE_SYSTEM_KEY(Transform2D, DebugRectangle, SFMLDebugRectangleComponent);
 }
 
-void powe::SFML2DBoundingBoxRender::OnDraw(const SFML2DRenderer& renderer, GameObjectID )
+void powe::SFML2DBoundingBoxRender::OnDraw(const SFML2DRenderer& renderer, GameObjectID)
 {
-	const auto& [transform2D, sfmlDraw] =
-		GetComponentsView<Transform2D, SFMLDebugRectangleComponent>();
+	const auto& debugRect{ GetComponent<DebugRectangle>() };
 
-	const glm::vec2 position{ transform2D->GetWorldPosition() };
-	const glm::vec2 scale{ transform2D->GetWorldScale() };
-	const float rotation{ transform2D->GetWorldRotation() };
+	if (debugRect->GetShouldRender())
+	{
+		const auto& [transform2D, sfmlDraw] =
+			GetComponentsView<Transform2D, SFMLDebugRectangleComponent>();
 
-	sf::RenderStates renderStates{};
-	auto& sfTransform{ renderStates.transform };
+		const glm::vec2 position{ transform2D->GetWorldPosition() };
+		const glm::vec2 scale{ transform2D->GetWorldScale() };
+		const float rotation{ transform2D->GetWorldRotation() };
 
-	sfTransform.translate({ position.x,position.y });
-	sfTransform.rotate(sf::degrees(rotation));
-	sfTransform.scale({ scale.x,scale.y });
+		sf::RenderStates renderStates{};
+		auto& sfTransform{ renderStates.transform };
 
-	renderer.SubmitDrawSprite(&sfmlDraw->rectangle, renderStates, sfmlDraw->drawOrder);
+		sfTransform.translate({ position.x,position.y });
+		sfTransform.rotate(sf::degrees(rotation));
+		sfTransform.scale({ scale.x,scale.y });
+
+		renderer.SubmitDrawSprite(&sfmlDraw->rectangle, renderStates, sfmlDraw->drawOrder);
+	}
+
 }

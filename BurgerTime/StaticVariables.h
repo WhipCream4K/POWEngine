@@ -1,6 +1,7 @@
 #pragma once
 
 #include "POWEngine/Math/Math.h"
+#include <poweCustomtype.h>
 
 enum class PlayMode
 {
@@ -34,8 +35,14 @@ namespace burger
 		{650.0f,360.0f},
 		{650.0f,400.0f}
 	};
-
 }
+
+struct PlayerDescriptor
+{
+	glm::fvec2 spawnPos{};
+	int currentLevelIdx{};
+	uint8_t playerIndex{};
+};
 
 
 

@@ -15,11 +15,12 @@ powe::SFMLDebugRectangle::SFMLDebugRectangle(const SharedPtr<GameObject>& owner)
 	{
 		SFMLDebugRectangleComponent* debugRect = owner->AddComponent(SFMLDebugRectangleComponent{}, ComponentFlag::Sparse);
 		debugRect->rectangle.setFillColor(sf::Color{ 255,255,255,0 });
-		debugRect->rectangle.setOutlineThickness(0.5f);
+		debugRect->rectangle.setOutlineThickness(1.5f);
 		debugRect->rectangle.setOutlineColor({ 0,255,0,255 });
 		constexpr sf::Vector2f defaultSize{ 20.0f,20.0f };
 		debugRect->rectangle.setSize(defaultSize);
 		debugRect->rectangle.setOrigin({ defaultSize.x / 2.0f,defaultSize.y / 2.0f });
+		debugRect->drawOrder = 300;
 	}
 }
 
@@ -134,7 +135,7 @@ void powe::SFMLDebugRectangle::SetOutlineColor(const glm::uvec4& color)
 			const sf::Uint8 b{ uint8_t(color.z) };
 			const sf::Uint8 a{ uint8_t(color.w) };
 
-			sfmlRect->rectangle.setFillColor(sf::Color{ r,g,b,a });
+			sfmlRect->rectangle.setOutlineColor(sf::Color{ r,g,b,a });
 		}
 	}
 
