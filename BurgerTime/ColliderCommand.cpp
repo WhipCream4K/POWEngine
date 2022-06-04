@@ -5,24 +5,30 @@
 #include "POWEngine/Core/WorldEntity/WorldEntity.h"
 #include "POWEngine/Core/Components/Transform2D.h"
 #include "IngredientsComponent.h"
+#include "IngredientState.h"
 
-void DebugTriggerEnter::OnEnter(powe::WorldEntity&, powe::GameObjectID owner, powe::GameObjectID other)
+void DebugTriggerEnter::OnEnter(powe::WorldEntity&, Rect2DCollider* ownerCollider, Rect2DCollider* otherCollider,
+	powe::GameObjectID owner, powe::GameObjectID other)
 {
-	std::stringstream enter{"This "};
+	std::stringstream enter{ "This " };
 	enter << owner << " Hit : " << other;
 	POWLOGNORMAL(enter.str());
 }
 
-void OnStaticIngredientTrigger::OnEnter(powe::WorldEntity& worldEntity, powe::GameObjectID owner, powe::GameObjectID other)
+void OnStaticIngredientTrigger::OnEnter(powe::WorldEntity& worldEntity, Rect2DCollider* ownerCollider,
+	Rect2DCollider* otherCollider, powe::GameObjectID owner, powe::GameObjectID other)
 {
 	using namespace powe;
 
 	// If is player
 	if (worldEntity.GetComponent<PlayerTag>(other))
 	{
+
+#ifdef _DEBUG
 		std::stringstream enter{ "This " };
 		enter << owner << " Hit : " << other;
 		POWLOGNORMAL(enter.str());
+#endif
 
 		CanWalkOnTile* canWalkOnTile{ worldEntity.GetComponent<CanWalkOnTile>(other) };
 		if (canWalkOnTile)
@@ -30,27 +36,63 @@ void OnStaticIngredientTrigger::OnEnter(powe::WorldEntity& worldEntity, powe::Ga
 			const auto walkDir{ canWalkOnTile->movementDetails.currentMovementDir };
 			if (walkDir == MoveDir::Left || walkDir == MoveDir::Right)
 			{
-				// 1. Drop down a little bit pixel
-				Transform2D* transform2D = worldEntity.GetComponent<Transform2D>(owner);
-				if (transform2D)
-				{
-					auto oldPos{ transform2D->GetWorldPosition() };
-					oldPos.y += m_DropDownDistance;
-					transform2D->SetWorldPosition(oldPos);
-				}
+				StepHandler* stepHandler = worldEntity.GetComponent<StepHandler>(owner);
+				if (!stepHandler)
+					return;
+
+				IngredientsComponent* ingredientsComponent = worldEntity.GetComponent<IngredientsComponent>(stepHandler->stepHandlerID);
+				if (!ingredientsComponent)
+					return;
 
 				//2. Set a signal to parent that the player has hit a part of the ingredient
-				StepHandler* stepHandler = worldEntity.GetComponent<StepHandler>(owner);
-				if(stepHandler)
+				if (!stepHandler->hasAlreadySteppedOn)
 				{
-					IngredientsComponent* ingredientsComponent = worldEntity.GetComponent<IngredientsComponent>(stepHandler->stepHandlerID);
-					if(ingredientsComponent)
+					// 1. Drop down a little bit pixel
+					Transform2D* transform2D = worldEntity.GetComponent<Transform2D>(owner);
+					if (transform2D)
 					{
-						++ingredientsComponent->CurrentStepCount;
+						auto oldPos{ transform2D->GetWorldPosition() };
+						oldPos.y += ingredientsComponent->StepPushDistance;
+						transform2D->SetWorldPosition(oldPos);
+						ingredientsComponent->StepPushDistance -= ingredientsComponent->StepPushDecreaseOffset;
 					}
+
+					stepHandler->hasAlreadySteppedOn = true;
+					++ingredientsComponent->CurrentStepCount;
+
 				}
 			}
 
 		}
 	}
+
+	// Other Ingredients Hits
+	IngredientsComponent* ingredientsComponent = worldEntity.GetComponent<IngredientsComponent>(other);
+	if (ingredientsComponent)
+	{
+		StepHandler* stepHandler = worldEntity.GetComponent<StepHandler>(owner);
+		if (stepHandler)
+		{
+			ingredientsComponent = worldEntity.GetComponent<IngredientsComponent>(stepHandler->stepHandlerID);
+			ingredientsComponent->CurrentStepCount = ingredientsComponent->MaxStepCount;
+		}
+	}
+}
+
+void PlateTriggerEnter::OnEnter(powe::WorldEntity& worldEntity, Rect2DCollider* ownerCollider, Rect2DCollider* otherCollider,
+	powe::GameObjectID owner, powe::GameObjectID other)
+{
+	using namespace powe;
+	IngredientsComponent* ingredientsComponent = worldEntity.GetComponent<IngredientsComponent>(other);
+	if (!ingredientsComponent)
+		return;
+	// 1. Catch an ingredient falling
+	// 2. Move the collider up of its onw extent
+	// 3. Play sound?
+	// 4. if all ingredients has formed on this plate the notify
+	Transform2D* transform2D{ worldEntity.GetComponent<Transform2D>(other) };
+	if (!transform2D)
+		return;
+
+	
 }

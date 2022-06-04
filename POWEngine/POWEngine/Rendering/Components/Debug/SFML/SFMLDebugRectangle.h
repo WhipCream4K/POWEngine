@@ -22,6 +22,7 @@ namespace powe
 		void SetOrigin(const glm::fvec2& origin) override;
 		void SetOutlineColor(const glm::uvec4& color) override;
 		void SetOutlineThickness(float thickness) override;
+		void Destroy(powe::WorldEntity&, powe::GameObjectID) override;
 
 	private:
 

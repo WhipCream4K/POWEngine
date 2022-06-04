@@ -13,7 +13,7 @@ RectColliderDetectionSystem::RectColliderDetectionSystem()
 void RectColliderDetectionSystem::OnUpdate(float, powe::GameObjectID)
 {
 	using namespace powe;
-	ColliderResolver* colliderManager{ GetComponent<ColliderResolver>() };
+	const ColliderResolver* colliderManager{ GetComponent<ColliderResolver>() };
 
 	WorldEntity* worldEntity{ GetWorld() };
 

@@ -9,6 +9,7 @@ enum class TileType
 	None,
 	Platform,
 	Ladder,
+	LadderStart
 };
 
 struct TileData

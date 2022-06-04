@@ -50,7 +50,6 @@ namespace powe
 		template<typename ComponentType>
 		EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> GetComponent(GameObjectID id) const;
 
-		void RemoveComponentByID(GameObjectID id, ComponentTypeID componentID);
 
 		const SparseComponentManager& GetSparseComponentManager() const { return m_SparseComponentManager; }
 
@@ -102,6 +101,8 @@ namespace powe
 		//SharedPtr<Archetype> GetArchetypeFromPendingList(const std::string& key);
 		//void RemoveArchetype(const std::string& key);
 
+		void RemoveComponentByID(GameObjectID id, ComponentTypeID componentID);
+
 		SharedPtr<Archetype> GetArchetypeFromActiveList(const std::string& key) const;
 		const auto& GetComponentMap() const { return m_ComponentTraitsMap; }
 		bool GetPreArchetypeTrait(GameObjectID id, PreArchetypeTrait& outTrait) const;
@@ -132,7 +133,8 @@ namespace powe
 			const Archetype& archetype,
 			int index,
 			GameObjectID id,
-			const std::vector<ComponentTypeID>& components);
+			const std::vector<ComponentTypeID>& components,
+			bool callInternDestroy = true);
 
 
 	private:
@@ -240,7 +242,7 @@ namespace powe
 		}
 
 		// Create data for the pre-archetype container
-		const SharedPtr<RawByte[]> componentData{ SharedPtr<RawByte[]>{new RawByte[sizeof(ComponentType)]{}}};
+		const SharedPtr<RawByte[]> componentData{ SharedPtr<RawByte[]>{new RawByte[sizeof(ComponentType)]{}} };
 
 		// Initialize data
 		ComponentType* outPointer{ new (componentData.get())
@@ -385,17 +387,20 @@ namespace powe
 
 					return reinterpret_cast<ComponentType*>(realCompData);
 				}
+
+
 			}
-			else // if some how user ask for a component before the gameobject got registered to the pipeline
+
+			// if some how user ask for a component before the gameobject got registered to the pipeline
+
+			PreArchetypeTrait preArchetypeTrait{};
+			if (GetPreArchetypeTrait(id, preArchetypeTrait))
 			{
-				PreArchetypeTrait preArchetypeTrait{};
-				if (GetPreArchetypeTrait(id, preArchetypeTrait))
-				{
-					const auto findItr{ preArchetypeTrait.componentData.find(compID) };
-					if (findItr != preArchetypeTrait.componentData.end())
-						return reinterpret_cast<ComponentType*>(findItr->second.get());
-				}
+				const auto findItr{ preArchetypeTrait.componentData.find(compID) };
+				if (findItr != preArchetypeTrait.componentData.end())
+					return reinterpret_cast<ComponentType*>(findItr->second.get());
 			}
+
 		}
 
 		return nullptr;
@@ -405,7 +410,16 @@ namespace powe
 	void WorldEntity::RemoveComponentByType(GameObjectID id)
 	{
 		const ComponentTypeID componentID{ BaseComponent::GetId<Component>() };
-		RemoveComponentByID(id, componentID);
+
+		Component* data{ GetComponent<Component>(id) };
+		if(data)
+		{
+			const SharedPtr<BaseComponent> thisComponent{ GetComponentTrait(componentID) };
+			thisComponent->InternalDestroy(reinterpret_cast<RawByte*>(data),*this, id);
+
+			RemoveComponentByID(id, componentID);
+		}
+
 	}
 
 	template <typename ComponentType>
@@ -440,7 +454,6 @@ namespace powe
 				if (findItr != preArchetypeTrait.componentData.end())
 					return reinterpret_cast<ComponentType*>(findItr->second.get());
 			}
-
 		}
 
 		return nullptr;

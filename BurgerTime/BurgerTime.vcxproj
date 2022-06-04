@@ -207,6 +207,7 @@ xcopy /y "$(SolutionDir)3rdPartyLib\allDLLs\$(Platform)\$(Configuration)\*.dll" 
     <ClCompile Include="FallingSystem.cpp" />
     <ClCompile Include="GameStart.cpp" />
     <ClCompile Include="GameState.cpp" />
+    <ClCompile Include="InGameHUD.cpp" />
     <ClCompile Include="Ingredient.cpp" />
     <ClCompile Include="IngredientDynamic.cpp" />
     <ClCompile Include="IngredientsComponent.cpp" />
@@ -215,6 +216,7 @@ xcopy /y "$(SolutionDir)3rdPartyLib\allDLLs\$(Platform)\$(Configuration)\*.dll" 
     <ClCompile Include="IngredientSystem.cpp" />
     <ClCompile Include="MenuState.cpp" />
     <ClCompile Include="MovementBlocking.cpp" />
+    <ClCompile Include="Plate.cpp" />
     <ClCompile Include="PlayModeObserver.cpp" />
     <ClCompile Include="PlayModeSubject.cpp" />
     <ClCompile Include="main.cpp" />
@@ -258,6 +260,7 @@ xcopy /y "$(SolutionDir)3rdPartyLib\allDLLs\$(Platform)\$(Configuration)\*.dll" 
     <ClInclude Include="FallingSystem.h" />
     <ClInclude Include="GameStart.h" />
     <ClInclude Include="GameState.h" />
+    <ClInclude Include="InGameHUD.h" />
     <ClInclude Include="Ingredient.h" />
     <ClInclude Include="IngredientDynamic.h" />
     <ClInclude Include="IngredientsComponent.h" />
@@ -266,6 +269,7 @@ xcopy /y "$(SolutionDir)3rdPartyLib\allDLLs\$(Platform)\$(Configuration)\*.dll" 
     <ClInclude Include="IngredientSystem.h" />
     <ClInclude Include="MenuState.h" />
     <ClInclude Include="MovementBlocking.h" />
+    <ClInclude Include="Plate.h" />
     <ClInclude Include="PlayModeObserver.h" />
     <ClInclude Include="PlayModeSubject.h" />
     <ClInclude Include="MenuCommands.h" />
@@ -290,6 +294,7 @@ xcopy /y "$(SolutionDir)3rdPartyLib\allDLLs\$(Platform)\$(Configuration)\*.dll" 
     <ClInclude Include="Subject.h" />
     <ClInclude Include="TestCommand.h" />
     <ClInclude Include="TestScene.h" />
+    <ClInclude Include="utils.h" />
     <ClInclude Include="WalkableTiles.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

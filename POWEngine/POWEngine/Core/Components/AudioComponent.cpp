@@ -9,7 +9,7 @@ powe::AudioComponent::AudioComponent(const std::string& filePath, bool shouldPre
 	, m_UsedChannel()
 {
 	m_SoundID = ServiceLocator::GetSoundSystem().RegisterSoundEntity(filePath, shouldPreloaded);
-	m_hey = std::make_unique<int>(42);
+	//m_hey = std::make_unique<int>(42);
 }
 
 powe::AudioComponent::AudioComponent(const std::string& filePath, const SoundInfo& info, bool shouldPreloaded)
@@ -20,7 +20,8 @@ powe::AudioComponent::AudioComponent(const std::string& filePath, const SoundInf
 	m_SoundID = ServiceLocator::GetSoundSystem().RegisterSoundEntity(filePath, shouldPreloaded);
 }
 
-powe::AudioComponent::~AudioComponent()
+
+void powe::AudioComponent::OnDestroy(WorldEntity& , GameObjectID )
 {
 	ServiceLocator::GetSoundSystem().UnRegisterSoundEntity(m_SoundID);
 }

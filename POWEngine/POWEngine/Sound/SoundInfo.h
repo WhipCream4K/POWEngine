@@ -12,8 +12,8 @@ namespace powe
 		SoundInfo& operator=(SoundInfo&&) noexcept = default;
 		~SoundInfo() = default;
 
-		float volume{};
-		float pitch{};
+		float volume{1.0f};
+		float pitch{1.0f};
 		bool isLooped{};
 	};
 }

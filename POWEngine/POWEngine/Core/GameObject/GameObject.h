@@ -29,6 +29,9 @@ namespace powe
 			ComponentType&& component,
 			ComponentFlag flag = ComponentFlag::Default);
 
+		template<typename ComponentType>
+		void RemoveComponent() const;
+
 	private:
 
 		WorldEntity& m_World; // GameObject cannot exist without world entity
@@ -45,6 +48,12 @@ namespace powe
 	EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> GameObject::AddComponent(ComponentType&& component,ComponentFlag flag)
 	{
 		return m_World.AddComponentToGameObject(m_Id, std::move(component), flag);
+	}
+
+	template <typename ComponentType>
+	void GameObject::RemoveComponent() const
+	{
+		m_World.RemoveComponentByType<ComponentType>(m_Id);
 	}
 }
 

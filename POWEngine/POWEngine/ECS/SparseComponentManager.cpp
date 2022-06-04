@@ -15,7 +15,6 @@ void powe::SparseComponentManager::AddComponentToSparseSet(
 	if (m_GameObjectToHandle.contains(id) && m_GameObjectToHandle[id].contains(componentTypeId))
 		return;
 
-
 	const SharedPtr<BaseComponent> componentTrait{ m_WorldEntity.get().GetComponentTrait(componentTypeId) };
 	const SizeType componentSize{ componentTrait->GetSize() };
 	auto& sparseSet{ m_SparseComponentData[componentTypeId] };
@@ -54,15 +53,12 @@ void powe::SparseComponentManager::AddComponentToSparseSet(
 	{
 		sparseSet.GameObjectIDs.emplace_back(id);
 	}
-
-	//m_RegisteredGameObjects.insert(id);
-	//sparseSet.CurrentEmptyIndex++;
-	//m_SparseHandleMap.try_emplace(id, sparseSet.CurrentEmptyIndex);
 }
 
 void powe::SparseComponentManager::RemoveComponentFromGameObject(
 	GameObjectID id,
-	ComponentTypeID compID)
+	ComponentTypeID compID,
+	bool callInternDestroy)
 {
 	const auto findItr{ m_GameObjectToHandle.find(id) };
 	if(findItr != m_GameObjectToHandle.end() && findItr->second.contains(compID))
@@ -75,7 +71,10 @@ void powe::SparseComponentManager::RemoveComponentFromGameObject(
 		const SizeType componentSize{ thisComponent->GetSize() };
 
 		RawByte* sourceAddress{ &sparseSet.Data[int(handle * componentSize)] };
-		thisComponent->InternalDestroy(sourceAddress,m_WorldEntity.get(), id);
+
+		if(callInternDestroy)
+			thisComponent->InternalDestroy(sourceAddress,m_WorldEntity.get(), id);
+
 		thisComponent->DestroyData(sourceAddress);
 
 		// 1. Move data in sparse set up once block
@@ -107,6 +106,7 @@ void powe::SparseComponentManager::RemoveComponentFromGameObject(
 
 	}
 }
+
 
 void powe::SparseComponentManager::RemoveGameObjectFromSparse(const std::vector<GameObjectID>& removeGameObjectsID)
 {

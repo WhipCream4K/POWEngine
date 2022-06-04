@@ -14,6 +14,9 @@
 #include "POWEngine/Rendering/Components/Debug/DebugRectangle.h"
 #include "FallingSystem.h"
 #include "IngredientSystem.h"
+#include "POWEngine/Core/Components/AudioComponent.h"
+#include "ColliderResolver.h"
+#include "Plate.h"
 
 PlayScene::PlayScene(powe::GameObjectID sceneGameObject)
 	: m_SceneDataID(sceneGameObject)
@@ -35,6 +38,12 @@ void PlayScene::LoadScene(powe::WorldEntity& worldEntity)
 	constexpr  glm::fvec2 midScreen{ 640.0f,360.0f };
 	const LevelData levelData{ staticSceneData->GetLevelData(mainSceneData->currentLevel) };
 
+
+	const auto colliderResolver{ std::make_shared<GameObject>(worldEntity) };
+	AddGameObject(colliderResolver);
+	colliderResolver->AddComponent(ColliderResolver{});
+
+
 	// Initialize Main level
 	{
 		const auto level{ BurgerLevel::Create(worldEntity,midScreen,mainSceneData->currentLevel) };
@@ -45,7 +54,7 @@ void PlayScene::LoadScene(powe::WorldEntity& worldEntity)
 		//IngredientsDesc ingDesc{mainSceneData->currentLevel,m_SceneDataID,IngredientsType::Lettuce,tileData.position};
 		//const auto& subGameObject = IngredientsStatic::Create(worldEntity, ingDesc);
 
-		const LevelDesc levelDesc{ mainSceneData->currentLevel,m_SceneDataID };
+		const LevelDesc levelDesc{ mainSceneData->currentLevel,colliderResolver->GetID() };
 		const auto& subGameObjects= BurgerLevel::CreaetStaticIngredients(
 			worldEntity, shared_from_this(),levelDesc);
 
@@ -53,6 +62,16 @@ void PlayScene::LoadScene(powe::WorldEntity& worldEntity)
 		{
 			AddGameObject(gb);
 		}
+
+		const auto& plateInfos{ staticSceneData->GetIngredientSpawnInfo(mainSceneData->currentLevel) };
+
+		for (const auto& plateInfo : plateInfos)
+		{
+			const PlateDesc plateDesc{colliderResolver->GetID()};
+			const auto plate{ Plate::Create(worldEntity,plateDesc) };
+			AddGameObject(plate);
+		}
+
 	}
 
 	// Spawn main tile object
@@ -68,6 +87,7 @@ void PlayScene::LoadScene(powe::WorldEntity& worldEntity)
 		const glm::uvec4 ladder{ 255,105,180,255 };
 		const glm::uvec4 none{ 255,0,0,255 };
 		const glm::uvec4 platform{ 0,255,0,255 };
+		const glm::uvec4 ladderStart{255,255,255,255};
 
 		const glm::fvec2 insetBoxSize{ 4.0f,4.0f };
 
@@ -87,6 +107,7 @@ void PlayScene::LoadScene(powe::WorldEntity& worldEntity)
 			case TileType::None:		outlineColor = none; break;
 			case TileType::Platform:	outlineColor = platform; break;
 			case TileType::Ladder:		outlineColor = ladder;	break;
+			case TileType::LadderStart:	outlineColor = ladderStart;	break;
 			default:;
 			}
 
@@ -101,7 +122,7 @@ void PlayScene::LoadScene(powe::WorldEntity& worldEntity)
 	{
 		const PlayerDescriptor player1Desc{
 			levelData.playerSpawnPoints * burger::SpriteScale + midScreen,
-			mainSceneData->currentLevel,0,m_SceneDataID };
+			mainSceneData->currentLevel,0, colliderResolver->GetID()};
 
 		const auto player{ Player::Create(worldEntity,player1Desc) };
 		AddGameObject(player);
@@ -122,4 +143,15 @@ void PlayScene::LoadScene(powe::WorldEntity& worldEntity)
 	const auto ingredientSystem{ std::make_shared<IngredientSystem>() };
 	worldEntity.RegisterSystem(PipelineLayer::Update, ingredientSystem);
 	AddSystem(ingredientSystem);
+
+	//const auto audiotest{ std::make_shared<GameObject>(worldEntity) };
+	//AudioComponent* audioComponent = audiotest->AddComponent(AudioComponent{ "./Resources/Sound/Jump.wav" }, ComponentFlag::Sparse);
+
+	//SoundInfo info{};
+	//info.pitch = 1.0f;
+	//info.volume = 1.0f;
+	//audioComponent->Play(info);
+
+	//worldEntity.RemoveGameObject(audiotest->GetID());
+
 }

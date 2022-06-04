@@ -110,7 +110,10 @@ float powe::Transform2D::GetLocalRotation() const
 
 const glm::vec2& powe::Transform2D::GetLocalPosition() const
 {
-	return m_LocalPosition;
+	if (m_ParentNode.lock())
+		return m_LocalPosition;
+
+	return m_WorldPosition;
 }
 
 const glm::vec2& powe::Transform2D::GetLocalScale() const

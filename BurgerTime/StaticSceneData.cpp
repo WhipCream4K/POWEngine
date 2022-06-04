@@ -1,6 +1,6 @@
 #include "StaticSceneData.h"
 
-#include "POWEngine/JSON/json.hpp"
+//#include "POWEngine/JSON/json.hpp"
 #include "POWEngine/Logger/LoggerUtils.h"
 #include "StaticVariables.h"
 #include <iostream>
@@ -80,6 +80,7 @@ void StaticSceneData::Initialize()
 				}
 			}
 
+			ParsePlateSpawnInfo(item, levelIndex);
 		}
 	}
 
@@ -170,6 +171,11 @@ const std::vector<IngredientSpawn>& StaticSceneData::GetIngredientSpawnInfo(int 
 	return m_IngredientSpawnInfo.at(levelIdx);
 }
 
+const std::vector<PlateSpawn>& StaticSceneData::GetPlateSpawnInfo(int levelIdx) const
+{
+	return m_PlateSpawnInfo.at(levelIdx);
+}
+
 void StaticSceneData::ParseIngredientSpriteInfo()
 {
 	const std::string spriteFilePath{ "./Resources/Level/IngredientProperties.json" };
@@ -200,5 +206,22 @@ void StaticSceneData::ParseIngredientSpriteInfo()
 	std::string outdebug{ "File loaded" };
 	outdebug.append("-> " + spriteFilePath);
 	POWLOGNORMAL(outdebug);
+}
+
+void StaticSceneData::ParsePlateSpawnInfo(const nlohmann::basic_json<>& item,int levelIdx)
+{
+	const auto& plateSpawnPos{ item["PlateSpawnPos"] };
+
+	const glm::fvec2 spriteSize{ 32.0f,8.0f };
+
+	for (const auto& coor : plateSpawnPos)
+	{
+		PlateSpawn plate{};
+		plate.position.x = coor["x"];
+		plate.position.y = coor["y"];
+		plate.size = spriteSize;
+
+		m_PlateSpawnInfo[levelIdx].emplace_back(plate);
+	}
 }
 

@@ -112,5 +112,12 @@ void powe::SFMLSprite::SetRenderOrder(int order)
 			sfmlSprite->drawOrder = order;
 		}
 	}
+}
 
+void powe::SFMLSprite::Destroy(powe::WorldEntity& )
+{
+	if(const auto gameObject{m_Owner.lock()})
+	{
+		gameObject->RemoveComponent<SFMLSpriteComponent>();
+	}
 }

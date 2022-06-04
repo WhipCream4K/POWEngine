@@ -17,7 +17,6 @@ powe::SpriteComponent::SpriteComponent()
 
 powe::SpriteComponent::SpriteComponent(const SharedPtr<GameObject>& gameObject)
 	: m_SpriteImpl(std::make_unique<SpriteType>(gameObject))
-	, m_Owner(gameObject)
 {
 }
 
@@ -26,6 +25,11 @@ powe::SpriteComponent::SpriteComponent(SpriteComponent&&) noexcept = default;
 powe::SpriteComponent& powe::SpriteComponent::operator=(SpriteComponent&&) noexcept = default;
 
 powe::SpriteComponent::~SpriteComponent() = default;
+
+void powe::SpriteComponent::OnDestroy(WorldEntity& worldEntity, GameObjectID)
+{
+	m_SpriteImpl->Destroy(worldEntity);
+}
 
 void powe::SpriteComponent::SetTexture(const Texture& texture) const
 {

@@ -52,6 +52,14 @@ void powe::SFMLDebugRectangle::SetOutlineThickness(float thickness)
 	}
 }
 
+void powe::SFMLDebugRectangle::Destroy(powe::WorldEntity&, powe::GameObjectID)
+{
+	if (const auto gameObject{ m_Owner.lock() })
+	{
+		gameObject->RemoveComponent<SFMLDebugRectangleComponent>();
+	}
+}
+
 
 void powe::SFMLDebugRectangle::SetFillColor(const glm::uvec4& color)
 {

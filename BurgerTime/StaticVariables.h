@@ -81,9 +81,11 @@ public:
 	{
 		Player = (1 << 0),
 		Ingredients = (1 << 1),
-		Enemy = (1 << 2),
+		Dynamic = (1 << 2),
+		Static = (1 << 4),
+		Enemy = (1 << 3),
 
-		Count = 3
+		Count = 4
 	};
 
 	static uint32_t LayerToIndex(uint32_t layer)

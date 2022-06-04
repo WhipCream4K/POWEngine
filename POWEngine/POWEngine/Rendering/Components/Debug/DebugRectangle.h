@@ -21,6 +21,8 @@ namespace powe
 
 		~DebugRectangle() override;
 
+		void OnDestroy(WorldEntity&, GameObjectID) override;
+
 		void SetSize(const glm::fvec2& size) const;
 		const glm::fvec2& GetRectSize() const;
 		void SetFillColor(const glm::uvec4& color) const;

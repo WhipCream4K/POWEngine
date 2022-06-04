@@ -90,6 +90,8 @@ namespace powe
 
 		Component() = default;
 
+		
+
 	};
 
 	template <typename T>

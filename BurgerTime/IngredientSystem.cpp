@@ -22,7 +22,7 @@ void IngredientSystem::OnUpdate(float deltaTime, powe::GameObjectID id)
 		{
 			oldState->Exit(*GetWorld(), ingredientsComponent,id);
 			newState->Enter(*GetWorld(), ingredientsComponent,id);
-
+			
 			ingredientsComponent->CurrentState = newState;
 		}
 	}

@@ -21,6 +21,10 @@ SharedPtr<powe::GameObject> Ingredient::Create(powe::WorldEntity& worldEntity, c
 	ingredientsComponent->Type = desc.ingredientsType;
 	ingredientsComponent->StartCol = desc.startCol;
 	ingredientsComponent->StartRow = desc.startRow;
+	ingredientsComponent->Owner = gameObject;
+	ingredientsComponent->FallingSpeed = 100.0f;
+	ingredientsComponent->BouncingAccel = 100.0f;
+	ingredientsComponent->BounceApexTime = 0.2f;
 
 	return gameObject;
 

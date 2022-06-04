@@ -22,6 +22,8 @@ namespace powe
 		SpriteComponent& operator=(SpriteComponent&&) noexcept;
 		~SpriteComponent() override;
 
+		void OnDestroy(WorldEntity&, GameObjectID) override;
+
 	public:
 
 		void SetTexture(const Texture& texture) const;
@@ -40,7 +42,6 @@ namespace powe
 	private:
 
 		OwnedPtr<SpriteImpl> m_SpriteImpl;
-		WeakPtr<GameObject> m_Owner;
 	};
 
 	template <typename T>

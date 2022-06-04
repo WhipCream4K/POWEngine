@@ -19,6 +19,7 @@ namespace powe
 		virtual void SetOrigin(const glm::fvec2& pos) = 0;
 		virtual glm::fvec2 GetOrigin() const = 0;
 		virtual void SetRect(const glm::fvec4& rect) = 0;
+		virtual void Destroy(powe::WorldEntity&) = 0;
 		virtual ~SpriteImpl() override;
 	};
 }

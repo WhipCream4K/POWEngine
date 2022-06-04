@@ -16,6 +16,25 @@
                 "row": 9
             },
             "TileData": "Level1Tile.csv",
+            "NumberOnPlate" : 4,
+            "PlateSpawnPos" : [
+                {
+                    "x" : 32.0,
+                    "y" : 196.0
+                },
+                {
+                    "x" : 80.0,
+                    "y" : 196.0
+                },
+                {
+                    "x" : 128.0,
+                    "y" : 196.0
+                },
+                {
+                    "x" : 176.0,
+                    "y" : 196.0
+                }
+            ],
             "IngredientPos": {
                 "0": [
                     {
@@ -115,6 +134,25 @@
                 "row": 8
             },
             "TileData": "Level2Tile.csv",
+            "NumberOnPlate" : 4,
+            "PlateSpawnPos" : [
+                {
+                    "x" : 32.0,
+                    "y" : 147.0
+                },
+                {
+                    "x" : 80.0,
+                    "y" : 195.0
+                },
+                {
+                    "x" : 128.0,
+                    "y" : 195.0
+                },
+                {
+                    "x" : 176.0,
+                    "y" : 147.0
+                }
+            ],
             "IngredientPos": {
                 "0": [
                     {
@@ -216,6 +254,33 @@
                 "row": 10
             },
             "TileData": "Level3Tile.csv",
+            "NumberOnPlate" : 3,
+            "PlateSpawnPos" : [
+                {
+                    "x" : 32.0,
+                    "y" : 99.0
+                },
+                {
+                    "x" : 32.0,
+                    "y" : 195.0
+                },
+                {
+                    "x" : 80.0,
+                    "y" : 147.0
+                },
+                {
+                    "x" : 128.0,
+                    "y" : 147.0
+                },
+                {
+                    "x" : 176.0,
+                    "y" : 99.0
+                },
+                {
+                    "x" : 176.0,
+                    "y" : 195.0
+                }
+            ],
             "IngredientPos": {
                 "0": [
                     {

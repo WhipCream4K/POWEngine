@@ -77,7 +77,7 @@ SharedPtr<powe::GameObject> IngredientsStatic::CreateSubGameObject(
 		desc.colliderManager,
 		colliderSize * burger::SpriteScale,
 		OverlapLayer::Ingredients,
-		OverlapLayer::Player
+		OverlapLayer::Player | OverlapLayer::Dynamic
 		});
 
 	rect2DCollider->OnEnterCallback = std::make_shared<OnStaticIngredientTrigger>();

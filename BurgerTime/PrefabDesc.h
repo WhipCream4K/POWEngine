@@ -25,3 +25,10 @@ struct IngredientDynamicDesc
 	powe::GameObjectID colliderManager{};
 	glm::fvec2 position{};
 };
+
+struct PlateDesc
+{
+	powe::GameObjectID colliderManager{};
+	glm::fvec2 position{};
+	PlayMode playMode{};
+};

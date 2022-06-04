@@ -48,7 +48,7 @@ void BurgerTimeGame::Start(const SharedPtr<powe::Core>&,
 	const auto dynamicSceneData{ std::make_shared<GameObject>(*worldEntity) };
 	m_SceneDataID = dynamicSceneData->GetID();
 	dynamicSceneData->AddComponent(DynamicSceneData{ m_SceneDataID });
-	dynamicSceneData->AddComponent(ColliderResolver{});
+	//dynamicSceneData->AddComponent(ColliderResolver{});
 
 	//m_MenuScene = std::make_shared<TestScene>();
 	//m_MenuScene->LoadScene(*worldEntity);

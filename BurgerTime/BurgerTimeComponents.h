@@ -62,6 +62,7 @@ struct DynamicSceneData : powe::Component<DynamicSceneData>
 struct StepHandler : powe::Component<StepHandler>
 {
 	powe::GameObjectID stepHandlerID{};
+	bool hasAlreadySteppedOn{};
 };
 
 struct SceneReference : powe::Component<SceneReference>

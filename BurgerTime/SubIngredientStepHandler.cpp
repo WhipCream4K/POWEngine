@@ -38,8 +38,6 @@ void SubIngredientStepHandler::IncreaseStep()
 				}
 			}
 
-
-
 		}
 	}
 }

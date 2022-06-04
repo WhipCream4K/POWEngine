@@ -25,6 +25,7 @@ namespace powe
 		SFMLSpriteComponent* GetSfSprite() const;
 		int GetRenderOrder() const override;
 		void SetRenderOrder(int order) override;
+		void Destroy(powe::WorldEntity&) override;
 
 	private:
 

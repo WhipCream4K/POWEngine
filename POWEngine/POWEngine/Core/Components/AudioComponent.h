@@ -18,8 +18,9 @@ namespace powe
 		AudioComponent& operator=(const AudioComponent&) = default;
 		AudioComponent(AudioComponent&&) = default;
 		AudioComponent& operator=(AudioComponent&&) = default;
-		~AudioComponent() override;
+		~AudioComponent() override = default;
 
+		void OnDestroy(WorldEntity&, GameObjectID) override;
 
 		void Play();
 		void Play(const SoundInfo& info);
@@ -30,7 +31,7 @@ namespace powe
 
 		SoundInfo m_Info{};
 		SoundID m_SoundID{};
-		OwnedPtr<int> m_hey{};
+		//OwnedPtr<int> m_hey{};
 		ChannelID m_UsedChannel{};
 	};
 }

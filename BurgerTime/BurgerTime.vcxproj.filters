@@ -177,6 +177,12 @@
     <ClCompile Include="Ingredient.cpp">
       <Filter>Prefabs</Filter>
     </ClCompile>
+    <ClCompile Include="Plate.cpp">
+      <Filter>Prefabs</Filter>
+    </ClCompile>
+    <ClCompile Include="InGameHUD.cpp">
+      <Filter>Prefabs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BurgerTimeComponents.h">
@@ -315,6 +321,15 @@
       <Filter>Systems</Filter>
     </ClInclude>
     <ClInclude Include="Ingredient.h">
+      <Filter>Prefabs</Filter>
+    </ClInclude>
+    <ClInclude Include="utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Plate.h">
+      <Filter>Prefabs</Filter>
+    </ClInclude>
+    <ClInclude Include="InGameHUD.h">
       <Filter>Prefabs</Filter>
     </ClInclude>
   </ItemGroup>

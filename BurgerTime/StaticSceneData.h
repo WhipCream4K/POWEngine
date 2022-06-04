@@ -4,6 +4,7 @@
 #include "POWEngine/Singleton/ThreadSafeSingleton.h"
 #include "POWEngine/Math/Math.h"
 #include "StaticVariables.h"
+#include "POWEngine/JSON/json.hpp"
 
 struct LevelData
 {
@@ -18,6 +19,11 @@ struct IngredientSpawn
 	int col{};
 };
 
+struct PlateSpawn
+{
+	glm::fvec2 position{};
+	glm::fvec2 size{};
+};
 
 
 class StaticSceneData : public powe::ThreadSafeSingleton<StaticSceneData>
@@ -37,16 +43,21 @@ public:
 	const SpriteInfo& GetIngredientSpriteInfo(IngredientsType type) const;
 
 	const std::vector<IngredientSpawn>& GetIngredientSpawnInfo(int levelIdx) const;
+	const std::vector<PlateSpawn>& GetPlateSpawnInfo(int levelIdx) const;
+	
 
 private:
 
 	void ParseIngredientSpriteInfo();
+
+	void ParsePlateSpawnInfo(const nlohmann::basic_json<>& item,int levelIdx);
 
 	std::unordered_map<int, LevelData> m_LevelData;
 	std::unordered_map<int, std::vector<TileData>> m_LevelTiles;
 	std::unordered_map<int, glm::ivec2> m_PlayerStartTile;
 	std::unordered_map<IngredientsType, SpriteInfo> m_IngredientSpriteInfo;
 	std::unordered_map<int, std::vector<IngredientSpawn>> m_IngredientSpawnInfo;
+	std::unordered_map<int, std::vector<PlateSpawn>> m_PlateSpawnInfo{};
 
 	int m_MaxColTile{ 17 };
 	int m_MaxRowTile{ 13 };

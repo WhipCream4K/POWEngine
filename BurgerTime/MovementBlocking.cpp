@@ -5,6 +5,7 @@
 #include "POWEngine/Core/Components/Transform2D.h"
 #include "StaticVariables.h"
 #include "StaticSceneData.h"
+#include "utils.h"
 
 MovementBlocking::MovementBlocking(int currentLevelIdx)
 	: m_CurrentTileData()
@@ -136,9 +137,10 @@ void MovementBlocking::HandleVerticalMovement(int direction, powe::Transform2D* 
 	}
 
 	const TileData nextTileData{ m_CurrentTileData[(nextTileRow * m_MaxColTile) + currentCol] };
+	const TileData currentTileData{ m_CurrentTileData[canWalkOnTile->currentRow * m_MaxColTile + canWalkOnTile->currentCol] };
 
 	// Can't walk
-	if (nextTileData.tileType == TileType::None)
+	if (nextTileData.tileType == TileType::None || (nextTileData.tileType == TileType::Platform && currentTileData.tileType != TileType::Ladder) )
 	{
 
 		const TileData lastTileData{ m_CurrentTileData[(canWalkOnTile->currentRow * m_MaxColTile) + currentCol] };
@@ -175,28 +177,28 @@ void MovementBlocking::HandleVerticalMovement(int direction, powe::Transform2D* 
 }
 
 
-bool MovementBlocking::IsOutOfBound(int direction, float pos, float against) const
-{
-	if (direction > 0)
-	{
-		if (pos > against)
-			return true;
-	}
-	else
-	{
-		if (pos < against)
-			return true;
-	}
-
-	return false;
-}
-
-
-bool MovementBlocking::IsAligned(float posY, float againstY, float epsilon) const
-{
-	if (abs(posY - againstY) <= epsilon)
-		return true;
-
-	return false;
-}
+//bool MovementBlocking::IsOutOfBound(int direction, float pos, float against) const
+//{
+//	if (direction > 0)
+//	{
+//		if (pos > against)
+//			return true;
+//	}
+//	else
+//	{
+//		if (pos < against)
+//			return true;
+//	}
+//
+//	return false;
+//}
+//
+//
+//bool MovementBlocking::IsAligned(float posY, float againstY, float epsilon) const
+//{
+//	if (abs(posY - againstY) <= epsilon)
+//		return true;
+//
+//	return false;
+//}
 

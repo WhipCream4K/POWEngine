@@ -27,6 +27,11 @@ powe::DebugRectangle& powe::DebugRectangle::operator=(DebugRectangle&&) noexcept
 
 powe::DebugRectangle::~DebugRectangle() = default;
 
+void powe::DebugRectangle::OnDestroy(WorldEntity& worldEntity, GameObjectID gameObjectId)
+{
+	m_RectangleImpl->Destroy(worldEntity, gameObjectId);
+}
+
 void powe::DebugRectangle::SetSize(const glm::fvec2& size) const
 {
 	m_RectangleImpl->SetSize(size);

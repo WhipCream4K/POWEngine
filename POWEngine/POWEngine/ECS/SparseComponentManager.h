@@ -37,7 +37,8 @@ namespace powe
 
 		void RemoveComponentFromGameObject(
 			GameObjectID id,
-			ComponentTypeID compID
+			ComponentTypeID compID,
+			bool callInternDestroy = true
 		);
 
 		void RemoveGameObjectFromSparse(

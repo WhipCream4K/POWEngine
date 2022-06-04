@@ -37,8 +37,8 @@ private:
 		CanWalkOnTile* canWalkOnTile,
 		Rect2DCollider* collider) const;
 
-	bool IsOutOfBound(int direction,float pos,float against) const;
-	bool IsAligned(float posY, float againstY,float epsilon) const;
+	//bool IsOutOfBound(int direction,float pos,float against) const;
+	//bool IsAligned(float posY, float againstY,float epsilon) const;
 
 	std::vector<TileData> m_CurrentTileData{};
 	int m_MaxColTile{};
