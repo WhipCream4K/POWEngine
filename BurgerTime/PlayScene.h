@@ -10,7 +10,7 @@ namespace powe
 	class GameObject;
 }
 
-class PlayScene : public SceneFactory
+class PlayScene : public SceneFactory, public std::enable_shared_from_this<PlayScene>
 {
 public:
 

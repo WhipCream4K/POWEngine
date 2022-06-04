@@ -46,8 +46,8 @@ namespace powe
 	ComponentTypeID BaseComponent::GetId()
 	{
 		//static const ComponentTypeID counter{ m_ComponentIdCounter++ };
-		static const ComponentTypeID counter{ m_ComponentIdCounter.load() };
-		++m_ComponentIdCounter;
+		static const ComponentTypeID counter{ m_ComponentIdCounter++ };
+		//++m_ComponentIdCounter;
 		return counter;
 	}
 

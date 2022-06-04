@@ -29,5 +29,9 @@ class OnStaticIngredientTrigger : public ColliderCommand
 public:
 
 	void OnEnter(powe::WorldEntity&, powe::GameObjectID owner, powe::GameObjectID other) override;
+
+private:
+
+	float m_DropDownDistance{10.0f};
 };
 

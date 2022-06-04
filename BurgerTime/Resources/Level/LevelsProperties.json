@@ -1,74 +1,309 @@
 {
-    "0" : [
+    "0": [
         {
-            "Rect" : 
-                {
-                    "x" : 0.0,
-                    "y" : 0.0,
-                    "width" : 208.0,
-                    "height" : 208.0
-                }
-            ,
-            "PlayerSpawnPos" : {
-                "x" : 0.0,
-                "y" : 46.0
+            "Rect": {
+                "x": 0,
+                "y": 0,
+                "width": 208,
+                "height": 208
             },
-            "PlayerSpawnTile" : {
-                "col" : 8,
-                "row" : 9
+            "PlayerSpawnPos": {
+                "x": 0,
+                "y": 46
             },
-            "TileData" : "Level1Tile.csv",
-            "IngredientPos" : [
-                {
-                    "col" : 0,
-                    "row" : 0
-                },
-                {
-                    
-                }
-            ]
+            "PlayerSpawnTile": {
+                "col": 8,
+                "row": 9
+            },
+            "TileData": "Level1Tile.csv",
+            "IngredientPos": {
+                "0": [
+                    {
+                        "type": "TopBun",
+                        "col": 6
+                    },
+                    {
+                        "type": "TopBun",
+                        "col": 10
+                    },
+                    {
+                        "type": "TopBun",
+                        "col": 14
+                    }
+                ],
+                "2": [
+                    {
+                        "type": "TopBun",
+                        "col": 2
+                    },
+                    {
+                        "type": "Lettuce",
+                        "col": 10
+                    },
+                    {
+                        "type": "Lettuce",
+                        "col": 14
+                    }
+                ],
+                "4": [
+                    {
+                        "type": "Lettuce",
+                        "col": 2
+                    },
+                    {
+                        "type": "Patty",
+                        "col": 14
+                    }
+                ],
+                "5": [
+                    {
+                        "type": "Lettuce",
+                        "col": 6
+                    },
+                    {
+                        "type": "Patty",
+                        "col": 10
+                    }
+                ],
+                "6": [
+                    {
+                        "type": "BottomBun",
+                        "col": 14
+                    }
+                ],
+                "7": [
+                    {
+                        "type": "Patty",
+                        "col": 2
+                    },
+                    {
+                        "type": "Patty",
+                        "col": 6
+                    }
+                ],
+                "9": [
+                    {
+                        "type": "BottomBun",
+                        "col": 2
+                    },
+                    {
+                        "type": "BottomBun",
+                        "col": 6
+                    },
+                    {
+                        "type": "BottomBun",
+                        "col": 10
+                    }
+                ]
+            }
         }
     ],
-    "1" : [
+    "1": [
         {
-            "Rect" : 
-                {
-                    "x" : 216.0,
-                    "y" : 0.0,
-                    "width" : 208.0,
-                    "height" : 208.0
-                }
-            ,
-            "PlayerSpawnPos" : {
-                "x" : 0.0,
-                "y" : 30.0
+            "Rect": {
+                "x": 216,
+                "y": 0,
+                "width": 208,
+                "height": 208
             },
-            "PlayerSpawnTile" : {
-                "col" : 8,
-                "row" : 8
+            "PlayerSpawnPos": {
+                "x": 0,
+                "y": 30
             },
-            "TileData" : "Level2Tile.csv"
+            "PlayerSpawnTile": {
+                "col": 8,
+                "row": 8
+            },
+            "TileData": "Level2Tile.csv",
+            "IngredientPos": {
+                "0": [
+                    {
+                        "type": "TopBun",
+                        "col": 2
+                    },
+                    {
+                        "type": "TopBun",
+                        "col": 6
+                    },
+                    {
+                        "type": "TopBun",
+                        "col": 10
+                    },
+                    {
+                        "type": "TopBun",
+                        "col": 14
+                    }
+                ],
+                "1": [
+                    {
+                        "type": "Lettuce",
+                        "col": 2
+                    },
+                    {
+                        "type": "Cheese",
+                        "col": 6
+                    }
+                ],
+                "2": [
+                    {
+                        "type": "Cheese",
+                        "col": 2
+                    },
+                    {
+                        "type": "Lettuce",
+                        "col": 14
+                    }
+                ],
+                "3": [
+                    {
+                        "type": "Lettuce",
+                        "col": 6
+                    },
+                    {
+                        "type": "Cheese",
+                        "col": 14
+                    }
+                ],
+                "4": [
+                    {
+                        "type": "BottomBun",
+                        "col": 2
+                    },
+                    {
+                        "type": "BottomBun",
+                        "col": 14
+                    }
+                ],
+                "5": [
+                    {
+                        "type": "Cheese",
+                        "col": 10
+                    }
+                ],
+                "7": [
+                    {
+                        "type": "Lettuce",
+                        "col": 10
+                    }
+                ],
+                "8": [
+                    {
+                        "type": "BottomBun",
+                        "col": 6
+                    },
+                    {
+                        "type": "BottomBun",
+                        "col": 10
+                    }
+                ]
+            }
         }
     ],
-    "2" : [
+    "2": [
         {
-            "Rect" : 
-                {
-                    "x" : 432.0,
-                    "y" : 0.0,
-                    "width" : 208.0,
-                    "height" : 208.0
-                }
-            ,
-            "PlayerSpawnPos" : {
-                "x" : 0.0,
-                "y" : 78.0
+            "Rect": {
+                "x": 432,
+                "y": 0,
+                "width": 208,
+                "height": 208
             },
-            "PlayerSpawnTile" : {
-                "col" : 8,
-                "row" : 10
+            "PlayerSpawnPos": {
+                "x": 0,
+                "y": 78
             },
-            "TileData" : "Level3Tile.csv"
+            "PlayerSpawnTile": {
+                "col": 8,
+                "row": 10
+            },
+            "TileData": "Level3Tile.csv",
+            "IngredientPos": {
+                "0": [
+                    {
+                        "type": "TopBun",
+                        "col": 2
+                    },
+                    {
+                        "type": "TopBun",
+                        "col": 6
+                    },
+                    {
+                        "type": "TopBun",
+                        "col": 10
+                    },
+                    {
+                        "type": "TopBun",
+                        "col": 14
+                    }
+                ],
+                "1": [
+                    {
+                        "type": "Tomato",
+                        "col": 6
+                    },
+                    {
+                        "type": "Patty",
+                        "col": 10
+                    }
+                ],
+                "2": [
+                    {
+                        "type": "Patty",
+                        "col": 2
+                    },
+                    {
+                        "type": "Tomato",
+                        "col": 14
+                    }
+                ],
+                "3": [
+                    {
+                        "type": "BottomBun",
+                        "col": 2
+                    },
+                    {
+                        "type": "BottomBun",
+                        "col": 6
+                    },
+                    {
+                        "type": "BottomBun",
+                        "col": 10
+                    },
+                    {
+                        "type": "BottomBun",
+                        "col": 14
+                    }
+                ],
+                "7": [
+                    {
+                        "type": "TopBun",
+                        "col": 2
+                    },
+                    {
+                        "type": "TopBun",
+                        "col": 14
+                    }
+                ],
+                "8": [
+                    {
+                        "type": "Tomato",
+                        "col": 2
+                    },
+                    {
+                        "type": "Patty",
+                        "col": 14
+                    }
+                ],
+                "9": [
+                    {
+                        "type": "BottomBun",
+                        "col": 2
+                    },
+                    {
+                        "type": "BottomBun",
+                        "col": 14
+                    }
+                ]
+            }
         }
     ]
 }

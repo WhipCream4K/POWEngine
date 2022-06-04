@@ -606,8 +606,11 @@ void powe::WorldEntity::ClearEmptyArchetype()
 
 void powe::WorldEntity::AddGameObjectToRecordRemoveList(GameObjectID id)
 {
-	if (std::ranges::find(m_PendingDeleteGameObjectsFromRecord, id) == m_PendingDeleteGameObjectsFromRecord.end())
-		m_PendingDeleteGameObjectsFromRecord.emplace_back(id);
+	if(m_GameObjectRecords.contains(id))
+	{
+		if (std::ranges::find(m_PendingDeleteGameObjectsFromRecord, id) == m_PendingDeleteGameObjectsFromRecord.end())
+			m_PendingDeleteGameObjectsFromRecord.emplace_back(id);
+	}
 }
 
 void powe::WorldEntity::AddGameObjectToArchetypeRemoveList(const std::string& archetypeKey, GameObjectID id)
@@ -753,6 +756,11 @@ bool powe::WorldEntity::GetGameObjectRecords(GameObjectID id, GameObjectRecord& 
 	}
 
 	return false;
+}
+
+powe::GameObjectRecord& powe::WorldEntity::GetRefGameObjectRecord(GameObjectID id)
+{
+	return m_GameObjectRecords.at(id);
 }
 
 bool powe::WorldEntity::GetPreArchetypeTrait(GameObjectID id, PreArchetypeTrait& outTrait) const

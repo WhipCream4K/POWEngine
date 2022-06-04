@@ -89,10 +89,11 @@ void powe::SparseComponentManager::RemoveComponentFromGameObject(
 		}
 
 		// 2. Reassign SparseHandle of every GameObject in this sparse set up 1 index
-		if(handle < SparseHandle(sparseSet.GameObjectIDs.size()))
+		if(handle < sparseSet.CurrentEmptyIndex)
 		{
-			for (const GameObjectID gameObject : sparseSet.GameObjectIDs)
+			for (int i = int(handle + 1); i < int(sparseSet.GameObjectIDs.size()); ++i)
 			{
+				const GameObjectID gameObject{ sparseSet.GameObjectIDs[i] };
 				--m_GameObjectToHandle[gameObject].at(compID);
 			}
 		}
@@ -100,14 +101,19 @@ void powe::SparseComponentManager::RemoveComponentFromGameObject(
 		const auto removeItr{ std::ranges::find(sparseSet.GameObjectIDs,id) };
 		sparseSet.GameObjectIDs.erase(removeItr);
 
+		m_GameObjectToHandle[id].erase(compID);
+
 		--sparseSet.CurrentEmptyIndex;
 
 	}
 }
 
-void powe::SparseComponentManager::RemoveGameObjectFromSparse(const std::vector<GameObjectID>&)
+void powe::SparseComponentManager::RemoveGameObjectFromSparse(const std::vector<GameObjectID>& removeGameObjectsID)
 {
-
+	for (const auto& removeGameObjectsId : removeGameObjectsID)
+	{
+		removeGameObjectsId;
+	}
 }
 
 powe::SparseComponentManager::~SparseComponentManager()
@@ -117,7 +123,7 @@ powe::SparseComponentManager::~SparseComponentManager()
 		const SharedPtr<BaseComponent> thisComponent{ m_WorldEntity.get().GetComponentTrait(componentTypeID) };
 		const SizeType componentSize{ thisComponent->GetSize() };
 
-		for (SparseHandle i = 0; i < sparseSet.CurrentEmptyIndex; ++i)
+		for (SparseHandle i = 0; i < sparseSet.GameObjectIDs.size(); ++i)
 		{
 			thisComponent->DestroyData(&sparseSet.Data[int(i * componentSize)]);
 		}

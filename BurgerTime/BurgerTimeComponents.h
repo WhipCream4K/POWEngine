@@ -59,6 +59,11 @@ struct DynamicSceneData : powe::Component<DynamicSceneData>
 	SharedPtr<PlayModeObserver> playModeObserver{};
 };
 
+struct StepHandler : powe::Component<StepHandler>
+{
+	powe::GameObjectID stepHandlerID{};
+};
+
 struct SceneReference : powe::Component<SceneReference>
 {
 	powe::GameObjectID sceneID{};
@@ -122,4 +127,9 @@ struct CanWalkOnTile : powe::Component<CanWalkOnTile>
 	int currentLevel{};
 	int currentCol{};
 	int currentRow{};
+};
+
+struct StepSignaler
+{
+	
 };

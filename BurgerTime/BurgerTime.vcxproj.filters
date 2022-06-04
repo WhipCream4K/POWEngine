@@ -156,6 +156,27 @@
     <ClCompile Include="FallingSystem.cpp">
       <Filter>Systems</Filter>
     </ClCompile>
+    <ClCompile Include="SubIngredientComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="SubIngredientStepHandler.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="IngredientDynamic.cpp">
+      <Filter>Prefabs</Filter>
+    </ClCompile>
+    <ClCompile Include="IngredientsComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="IngredientState.cpp">
+      <Filter>States</Filter>
+    </ClCompile>
+    <ClCompile Include="IngredientSystem.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Ingredient.cpp">
+      <Filter>Prefabs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BurgerTimeComponents.h">
@@ -274,6 +295,27 @@
     </ClInclude>
     <ClInclude Include="FallingSystem.h">
       <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="SubIngredientComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="SubIngredientStepHandler.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="IngredientDynamic.h">
+      <Filter>Prefabs</Filter>
+    </ClInclude>
+    <ClInclude Include="IngredientsComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="IngredientState.h">
+      <Filter>States</Filter>
+    </ClInclude>
+    <ClInclude Include="IngredientSystem.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Ingredient.h">
+      <Filter>Prefabs</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -59,7 +59,7 @@ SharedPtr<powe::RawByte[]> powe::Archetype::CopyComponentData(const Archetype& o
 	return newComponentData;
 }
 
-void powe::Archetype::BuryBlock(const WorldEntity& world,int index) const
+void powe::Archetype::BuryBlock(WorldEntity& world,int index) const
 {
 	for (int i = index; i < int(GameObjectIds.size() - 1); ++i)
 	{
@@ -72,6 +72,9 @@ void powe::Archetype::BuryBlock(const WorldEntity& world,int index) const
 			const SharedPtr<BaseComponent> thisComponent{ world.GetComponentTrait(componentTypeId) };
 			thisComponent->MoveData(fromAddress + offset, toAddress + offset);
 		}
+
+		// A little bit unsafe
+		--world.GetRefGameObjectRecord(GameObjectIds[i + 1]).IndexInArchetype;
 	}
 }
 

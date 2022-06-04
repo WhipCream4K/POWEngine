@@ -45,6 +45,8 @@ namespace powe
 
 		void SetParent(const SharedPtr<GameObject>& gameObject,bool keepWorldPosition = true);
 		void UpdateData(DirtyFlag flag);
+
+		const std::vector<WeakPtr<GameObject>>& GetChildren() const { return m_ChildrenNode; }
 		
 	private:
 

@@ -50,8 +50,8 @@ void BurgerTimeGame::Start(const SharedPtr<powe::Core>&,
 	dynamicSceneData->AddComponent(DynamicSceneData{ m_SceneDataID });
 	dynamicSceneData->AddComponent(ColliderResolver{});
 
-	m_MenuScene = std::make_shared<TestScene>();
-	m_MenuScene->LoadScene(*worldEntity);
+	//m_MenuScene = std::make_shared<TestScene>();
+	//m_MenuScene->LoadScene(*worldEntity);
 
 	// Initialize Game State
 	{
@@ -98,10 +98,7 @@ void BurgerTimeGame::Start(const SharedPtr<powe::Core>&,
 
 	worldEntity->RegisterSystem(PipelineLayer::InputValidation, std::make_shared<InputSystem>());
 	worldEntity->RegisterSystem(PipelineLayer::PhysicsValidation, std::make_shared<RectColliderDetectionSystem>());
-
-#ifdef _DEBUG
 	worldEntity->RegisterSystem(PipelineLayer::Update, std::make_shared<DebugControllerSystem>());
-#endif
 }
 
 void BurgerTimeGame::Run(const SharedPtr<powe::WorldEntity>& worldEntity,
@@ -111,21 +108,21 @@ void BurgerTimeGame::Run(const SharedPtr<powe::WorldEntity>& worldEntity,
 	worldEntity;
 	worldClock;
 
-	//const float deltaTime{ worldClock->GetDeltaTime() };
+	const float deltaTime{ worldClock->GetDeltaTime() };
 
-	//if (m_MainGameState)
-	//{
-	//	const auto& oldState{ m_MainGameState };
-	//	const auto newState{ m_MainGameState->HandleInput(*worldEntity, m_SceneDataID) };
+	if (m_MainGameState)
+	{
+		const auto& oldState{ m_MainGameState };
+		const auto newState{ m_MainGameState->HandleInput(*worldEntity, m_SceneDataID) };
 
-	//	if (oldState != newState)
-	//	{
-	//		oldState->Exit(*worldEntity, m_SceneDataID);
-	//		newState->Enter(*worldEntity, m_SceneDataID);
-	//		m_MainGameState = newState;
-	//	}
+		if (oldState != newState)
+		{
+			oldState->Exit(*worldEntity, m_SceneDataID);
+			newState->Enter(*worldEntity, m_SceneDataID);
+			m_MainGameState = newState;
+		}
 
-	//	m_MainGameState->Update(*worldEntity, deltaTime, m_SceneDataID);
-	//}
+		m_MainGameState->Update(*worldEntity, deltaTime, m_SceneDataID);
+	}
 }
 

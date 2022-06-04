@@ -6,6 +6,7 @@
 #include "StaticSceneData.h"
 #include "StaticVariables.h"
 #include "AssetManager.h"
+#include "Ingredient.h"
 #include "POWEngine/Rendering/Components/Sprite/SpriteComponent.h"
 
 SharedPtr<powe::GameObject> BurgerLevel::Create(powe::WorldEntity& worldEntity, const glm::fvec2& position,int levelIdx)
@@ -28,5 +29,30 @@ SharedPtr<powe::GameObject> BurgerLevel::Create(powe::WorldEntity& worldEntity, 
 	spriteComp->SetRenderOrder(burger::RenderOrder::Background);
 
 	return levelObject;
+}
+
+std::vector<SharedPtr<powe::GameObject>> BurgerLevel::CreaetStaticIngredients(
+	powe::WorldEntity& worldEntity,
+	const SharedPtr<SceneFactory>& sceneRef,
+	const LevelDesc& levelDesc)
+{
+	using namespace powe;
+
+	std::vector<SharedPtr<GameObject>> outIngredients{};
+
+	const auto& staticSceneData{ Instance<StaticSceneData>() };
+
+	const auto& ingredientSpawnData{ staticSceneData->GetIngredientSpawnInfo(levelDesc.currentLevel) };
+
+	for (const auto& spawnData : ingredientSpawnData)
+	{
+		const TileData tileData{ staticSceneData->GetSingleTile(levelDesc.currentLevel,spawnData.col,spawnData.row) };
+		IngredientsDesc desc{levelDesc.colliderManager,spawnData.type,tileData.position,spawnData.col,spawnData.row};
+		auto subObject{ Ingredient::Create(worldEntity,sceneRef,desc) };
+
+		outIngredients.emplace_back(subObject);
+	}
+
+	return outIngredients;
 }
 

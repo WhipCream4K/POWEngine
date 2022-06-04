@@ -207,7 +207,12 @@ xcopy /y "$(SolutionDir)3rdPartyLib\allDLLs\$(Platform)\$(Configuration)\*.dll" 
     <ClCompile Include="FallingSystem.cpp" />
     <ClCompile Include="GameStart.cpp" />
     <ClCompile Include="GameState.cpp" />
+    <ClCompile Include="Ingredient.cpp" />
+    <ClCompile Include="IngredientDynamic.cpp" />
+    <ClCompile Include="IngredientsComponent.cpp" />
     <ClCompile Include="IngredientsStatic.cpp" />
+    <ClCompile Include="IngredientState.cpp" />
+    <ClCompile Include="IngredientSystem.cpp" />
     <ClCompile Include="MenuState.cpp" />
     <ClCompile Include="MovementBlocking.cpp" />
     <ClCompile Include="PlayModeObserver.cpp" />
@@ -227,6 +232,8 @@ xcopy /y "$(SolutionDir)3rdPartyLib\allDLLs\$(Platform)\$(Configuration)\*.dll" 
     <ClCompile Include="SceneFactory.cpp" />
     <ClCompile Include="StateController.cpp" />
     <ClCompile Include="StaticSceneData.cpp" />
+    <ClCompile Include="SubIngredientStepHandler.cpp" />
+    <ClCompile Include="SubIngredientComponent.cpp" />
     <ClCompile Include="Subject.cpp" />
     <ClCompile Include="TestCommand.cpp" />
     <ClCompile Include="TestScene.cpp" />
@@ -251,7 +258,12 @@ xcopy /y "$(SolutionDir)3rdPartyLib\allDLLs\$(Platform)\$(Configuration)\*.dll" 
     <ClInclude Include="FallingSystem.h" />
     <ClInclude Include="GameStart.h" />
     <ClInclude Include="GameState.h" />
+    <ClInclude Include="Ingredient.h" />
+    <ClInclude Include="IngredientDynamic.h" />
+    <ClInclude Include="IngredientsComponent.h" />
     <ClInclude Include="IngredientsStatic.h" />
+    <ClInclude Include="IngredientState.h" />
+    <ClInclude Include="IngredientSystem.h" />
     <ClInclude Include="MenuState.h" />
     <ClInclude Include="MovementBlocking.h" />
     <ClInclude Include="PlayModeObserver.h" />
@@ -273,6 +285,8 @@ xcopy /y "$(SolutionDir)3rdPartyLib\allDLLs\$(Platform)\$(Configuration)\*.dll" 
     <ClInclude Include="StateController.h" />
     <ClInclude Include="StaticSceneData.h" />
     <ClInclude Include="StaticVariables.h" />
+    <ClInclude Include="SubIngredientStepHandler.h" />
+    <ClInclude Include="SubIngredientComponent.h" />
     <ClInclude Include="Subject.h" />
     <ClInclude Include="TestCommand.h" />
     <ClInclude Include="TestScene.h" />

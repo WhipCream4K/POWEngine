@@ -47,11 +47,29 @@ enum class IngredientsType
 {
 	TopBun,
 	BottomBun,
-	Mayo,
+	Cheese,
 	Patty,
 	Tomato,
 	Lettuce
 };
+
+static inline IngredientsType StringToIngredients(const std::string& string)
+{
+	if (string == "TopBun")
+		return IngredientsType::TopBun;
+	if (string == "BottomBun")
+		return IngredientsType::BottomBun;
+	if (string == "Cheese")
+		return IngredientsType::Cheese;
+	if (string == "Patty")
+		return IngredientsType::Patty;
+	if (string == "Tomato")
+		return IngredientsType::Tomato;
+	if (string == "Lettuce")
+		return IngredientsType::Lettuce;
+
+	return IngredientsType::TopBun;
+}
 
 
 

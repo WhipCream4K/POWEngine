@@ -21,13 +21,12 @@ public:
 
 	static std::vector<SharedPtr<powe::GameObject>> Create(powe::WorldEntity&, const IngredientsDesc& desc);
 
-private:
 
 	static SharedPtr<powe::GameObject> CreateSubGameObject(
 		powe::WorldEntity& worldEntity,
 		const SharedPtr<powe::Texture>& texture,
 		const glm::fvec2& position,
 		const IngredientsDesc& desc,
-		const SpriteInfo& spriteInfo);
+		const glm::fvec4& spriteRect);
 };
 

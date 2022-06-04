@@ -21,7 +21,8 @@ void MenuScene::LoadScene(powe::WorldEntity& worldEntity)
 {
 	using namespace powe;
 
-	DynamicSceneData* dynamicSceneData{ worldEntity.FindUniqueComponent<DynamicSceneData>() };
+	powe::GameObjectID sceneDataID{};
+	DynamicSceneData* dynamicSceneData{ worldEntity.FindUniqueComponent<DynamicSceneData>(sceneDataID) };
 	if (!dynamicSceneData)
 		return;
 

@@ -35,7 +35,7 @@ namespace powe
 		RawByte* GetPointer(int pointerDiff) const;
 
 		SharedPtr<RawByte[]> CopyComponentData(const Archetype& other, const WorldEntity& world) const;
-		void BuryBlock(const WorldEntity& world,int index) const;
+		void BuryBlock(WorldEntity& world,int index) const;
 		void CleanUp(const WorldEntity& world) const;
 		void AllocateComponentData(SizeType newSize, const WorldEntity& world);
 

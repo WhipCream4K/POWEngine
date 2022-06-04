@@ -11,6 +11,15 @@ struct LevelData
 	glm::fvec2 playerSpawnPoints{};
 };
 
+struct IngredientSpawn
+{
+	IngredientsType type{};
+	int row{};
+	int col{};
+};
+
+
+
 class StaticSceneData : public powe::ThreadSafeSingleton<StaticSceneData>
 {
 	friend class powe::ThreadSafeSingleton<StaticSceneData>;
@@ -27,6 +36,8 @@ public:
 	int GetMaxRowTile() const { return m_MaxRowTile; }
 	const SpriteInfo& GetIngredientSpriteInfo(IngredientsType type) const;
 
+	const std::vector<IngredientSpawn>& GetIngredientSpawnInfo(int levelIdx) const;
+
 private:
 
 	void ParseIngredientSpriteInfo();
@@ -35,6 +46,8 @@ private:
 	std::unordered_map<int, std::vector<TileData>> m_LevelTiles;
 	std::unordered_map<int, glm::ivec2> m_PlayerStartTile;
 	std::unordered_map<IngredientsType, SpriteInfo> m_IngredientSpriteInfo;
+	std::unordered_map<int, std::vector<IngredientSpawn>> m_IngredientSpawnInfo;
+
 	int m_MaxColTile{ 17 };
 	int m_MaxRowTile{ 13 };
 };

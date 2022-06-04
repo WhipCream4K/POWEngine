@@ -47,7 +47,7 @@ void RectColliderDetectionSystem::OnUpdate(float, powe::GameObjectID)
 
 								if(!rect2D->IsEntering)
 								{
-									if (IsOverlap(thisColliderPos, thisColliderExtent, otherColliderPos, otherColliderExtent))
+									if (IsOverlap(thisColliderPos, thisColliderExtent * 0.5f, otherColliderPos, otherColliderExtent * 0.5f))
 									{
 										rect2D->IsEntering = true;
 										if (rect2D->OnEnterCallback)
@@ -59,7 +59,7 @@ void RectColliderDetectionSystem::OnUpdate(float, powe::GameObjectID)
 								}
 								else
 								{
-									if (!IsOverlap(thisColliderPos, thisColliderExtent, otherColliderPos, otherColliderExtent))
+									if (!IsOverlap(thisColliderPos, thisColliderExtent * 0.5f, otherColliderPos, otherColliderExtent * 0.5f))
 										rect2D->IsEntering = false;
 								}
 

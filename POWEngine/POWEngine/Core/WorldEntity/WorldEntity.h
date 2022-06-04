@@ -66,7 +66,7 @@ namespace powe
 		void ResolveEntities();
 
 		template<typename ComponentType>
-		EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> FindUniqueComponent() const;
+		EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> FindUniqueComponent(powe::GameObjectID& ownerID) const;
 
 		SharedPtr<Archetype> GetArchetypeByGameObject(GameObjectID id) const;
 		const std::unordered_map<std::string, SharedPtr<Archetype>> GetActiveArchetypes() const { return m_ArchetypesPool; }
@@ -74,6 +74,7 @@ namespace powe
 
 		static std::string CreateStringFromNumVector(const std::vector<ComponentTypeID>& numList);
 		bool GetGameObjectRecords(GameObjectID id, GameObjectRecord& outRecord) const;
+		GameObjectRecord& GetRefGameObjectRecord(GameObjectID id);
 
 #ifdef RUNTIME_TEST
 	public:
@@ -408,12 +409,13 @@ namespace powe
 	}
 
 	template <typename ComponentType>
-	EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> WorldEntity::FindUniqueComponent() const
+	EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> WorldEntity::FindUniqueComponent(powe::GameObjectID& ownerID) const
 	{
 		const ComponentTypeID componentTypeId{ BaseComponent::GetId<ComponentType>() };
 
 		for (const auto& [id, gbRecords] : m_GameObjectRecords)
 		{
+			ownerID = id;
 			if (const auto archetype = gbRecords.Archetype.lock())
 			{
 				RawByte* outData{};

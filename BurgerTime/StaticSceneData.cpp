@@ -62,6 +62,24 @@ void StaticSceneData::Initialize()
 			const auto& playerStartTile = item["PlayerSpawnTile"];
 			m_PlayerStartTile[levelIndex].x = playerStartTile["col"];
 			m_PlayerStartTile[levelIndex].y = playerStartTile["row"];
+
+			// Ingredient Spawn Tile
+			const auto& ingredientPos{ item["IngredientPos"] };
+
+			for (const auto& [row, spawnData] : ingredientPos.items())
+			{
+				IngredientSpawn ingSpawn{};
+				ingSpawn.row = std::stoi(row);
+
+				for (const auto& data : spawnData)
+				{
+					ingSpawn.type = StringToIngredients(data["type"]);
+					ingSpawn.col = data["col"];
+
+					m_IngredientSpawnInfo[levelIndex].emplace_back(ingSpawn);
+				}
+			}
+
 		}
 	}
 
@@ -125,7 +143,7 @@ TileData StaticSceneData::GetSingleTile(int levelIdx, int col, int row) const
 {
 	if (m_LevelTiles.contains(levelIdx))
 	{
-		assert(col > 17 && row > 13);
+		assert(col < 17 && row < 13);
 		return m_LevelTiles.at(levelIdx)[(row * m_MaxColTile) + col];
 	}
 
@@ -147,6 +165,11 @@ const SpriteInfo& StaticSceneData::GetIngredientSpriteInfo(IngredientsType type)
 	return m_IngredientSpriteInfo.at(type);
 }
 
+const std::vector<IngredientSpawn>& StaticSceneData::GetIngredientSpawnInfo(int levelIdx) const
+{
+	return m_IngredientSpawnInfo.at(levelIdx);
+}
+
 void StaticSceneData::ParseIngredientSpriteInfo()
 {
 	const std::string spriteFilePath{ "./Resources/Level/IngredientProperties.json" };
@@ -156,9 +179,9 @@ void StaticSceneData::ParseIngredientSpriteInfo()
 
 	ifstream >> json;
 
-	for (const auto& [key,value] : json.items())
+	for (const auto& [key, value] : json.items())
 	{
-		const IngredientsType type{ IngredientsType(std::stoi(key))};
+		const IngredientsType type{ IngredientsType(std::stoi(key)) };
 
 		for (const auto& item : value)
 		{
@@ -178,3 +201,4 @@ void StaticSceneData::ParseIngredientSpriteInfo()
 	outdebug.append("-> " + spriteFilePath);
 	POWLOGNORMAL(outdebug);
 }
+

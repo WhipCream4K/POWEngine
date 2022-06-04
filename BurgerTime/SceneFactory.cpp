@@ -25,6 +25,13 @@ void SceneFactory::AddGameObject(const SharedPtr<powe::GameObject>& gameObject)
 		m_GameObjects.emplace_back(gameObject);
 }
 
+void SceneFactory::RemoveGameObject(const SharedPtr<powe::GameObject>& gameObject)
+{
+	const auto findItr{ std::ranges::find(m_GameObjects,gameObject) };
+	if (findItr != m_GameObjects.end())
+		m_GameObjects.erase(findItr);
+}
+
 void SceneFactory::AddSystem(const SharedPtr<powe::SystemBase>& system)
 {
 	if (std::ranges::find(m_Systems, system) == m_Systems.end())

@@ -12,6 +12,8 @@
 #include "StaticSceneData.h"
 #include "POWEngine/Core/Components/Transform2D.h"
 #include "POWEngine/Rendering/Components/Debug/DebugRectangle.h"
+#include "FallingSystem.h"
+#include "IngredientSystem.h"
 
 PlayScene::PlayScene(powe::GameObjectID sceneGameObject)
 	: m_SceneDataID(sceneGameObject)
@@ -21,27 +23,41 @@ PlayScene::PlayScene(powe::GameObjectID sceneGameObject)
 void PlayScene::LoadScene(powe::WorldEntity& worldEntity)
 {
 	using namespace powe;
-	// Spawn level
-	//const auto sceneData{ m_SceneData.lock() };
-	//if (!sceneData)
-	//	return;
 
-	const DynamicSceneData* mainSceneData{ worldEntity.FindUniqueComponent<DynamicSceneData>() };
+	GameObjectID dynamicSceneOwner{};
+	const DynamicSceneData* mainSceneData{ worldEntity.FindUniqueComponent<DynamicSceneData>(dynamicSceneOwner) };
 	if (!mainSceneData)
 		return;
 
+	// Spawn level
 	const auto& staticSceneData{ Instance<StaticSceneData>() };
 
 	constexpr  glm::fvec2 midScreen{ 640.0f,360.0f };
 	const LevelData levelData{ staticSceneData->GetLevelData(mainSceneData->currentLevel) };
 
+	// Initialize Main level
+	{
+		const auto level{ BurgerLevel::Create(worldEntity,midScreen,mainSceneData->currentLevel) };
+		AddGameObject(level);
 
-	const auto level{ BurgerLevel::Create(worldEntity,midScreen,mainSceneData->currentLevel) };
-	AddGameObject(level);
+		// TESTING
+		//TileData tileData = staticSceneData->GetSingleTile(mainSceneData->currentLevel, 6, 5);
+		//IngredientsDesc ingDesc{mainSceneData->currentLevel,m_SceneDataID,IngredientsType::Lettuce,tileData.position};
+		//const auto& subGameObject = IngredientsStatic::Create(worldEntity, ingDesc);
+
+		const LevelDesc levelDesc{ mainSceneData->currentLevel,m_SceneDataID };
+		const auto& subGameObjects= BurgerLevel::CreaetStaticIngredients(
+			worldEntity, shared_from_this(),levelDesc);
+
+		for (const auto& gb : subGameObjects)
+		{
+			AddGameObject(gb);
+		}
+	}
 
 	// Spawn main tile object
-	const auto mainTileObject{ std::make_shared<GameObject>(worldEntity) };
-	AddGameObject(mainTileObject);
+	//const auto mainTileObject{ std::make_shared<GameObject>(worldEntity) };
+	//AddGameObject(mainTileObject);
 
 	const auto& tileInLevel{ staticSceneData->GetAllTileInLevel(mainSceneData->currentLevel) };
 
@@ -102,4 +118,8 @@ void PlayScene::LoadScene(powe::WorldEntity& worldEntity)
 	const auto movementBlocking{ std::make_shared<MovementBlocking>(mainSceneData->currentLevel) };
 	worldEntity.RegisterSystem(PipelineLayer::PostUpdate, movementBlocking);
 	AddSystem(movementBlocking);
+
+	const auto ingredientSystem{ std::make_shared<IngredientSystem>() };
+	worldEntity.RegisterSystem(PipelineLayer::Update, ingredientSystem);
+	AddSystem(ingredientSystem);
 }
