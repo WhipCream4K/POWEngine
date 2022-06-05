@@ -16,6 +16,7 @@ namespace powe
 }
 
 class TestScene;
+class DynamicSceneData;
 class BurgerTimeGame
 {
 public:
@@ -31,6 +32,8 @@ private:
 	SharedPtr<SceneFactory> m_MenuScene;
 
 	SharedPtr<GameState> m_MainGameState;
+
+	DynamicSceneData* m_SceneData{};
 
 	powe::GameObjectID m_SceneDataID{};
 	int m_Test{};

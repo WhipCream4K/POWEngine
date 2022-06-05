@@ -22,6 +22,7 @@
 #include "POWEngine/Rendering/Resources/Font/Font.h"
 #include "ColliderResolver.h"
 #include "RectColliderDetectionSystem.h"
+#include "AudioManager.h"
 
 void BurgerTimeGame::Start(const SharedPtr<powe::Core>&,
 	const SharedPtr<powe::WorldEntity>& worldEntity)
@@ -47,8 +48,14 @@ void BurgerTimeGame::Start(const SharedPtr<powe::Core>&,
 	// Initialize persistent GameObject
 	const auto dynamicSceneData{ std::make_shared<GameObject>(*worldEntity) };
 	m_SceneDataID = dynamicSceneData->GetID();
-	dynamicSceneData->AddComponent(DynamicSceneData{ m_SceneDataID });
-	//dynamicSceneData->AddComponent(ColliderResolver{});
+
+
+	// *** BIG NOTE *** //
+	// not recommend to save pointer
+	m_SceneData = dynamicSceneData->AddComponent(DynamicSceneData{ m_SceneDataID },ComponentFlag::Sparse);
+
+	const auto audioManager{ std::make_shared<GameObject>(*worldEntity) };
+	audioManager->AddComponent(AudioManager{});
 
 	//m_MenuScene = std::make_shared<TestScene>();
 	//m_MenuScene->LoadScene(*worldEntity);
@@ -91,7 +98,8 @@ void BurgerTimeGame::Start(const SharedPtr<powe::Core>&,
 			});
 
 		inputSetting.AddActionMapping("Fire", {
-			{InputDevice::D_Keyboard,Keyboard::Space}
+			{InputDevice::D_Keyboard,Keyboard::Z},
+			{InputDevice::D_Gamepad,GamepadKey::GPK_B}
 			});
 	}
 

@@ -1,10 +1,16 @@
 #pragma once
 
 #include <poweComponent.h>
-
 #include "PlayModeObserver.h"
 #include "PlayModeSubject.h"
 #include "StaticVariables.h"
+
+class SceneFactory;
+
+namespace powe
+{
+	class SystemBase;
+}
 
 struct AnimationComponent : powe::Component<AnimationComponent>
 {
@@ -16,6 +22,7 @@ struct AnimationComponent : powe::Component<AnimationComponent>
 	{
 	}
 
+	glm::fvec4 currentSpriteRect{};
 	float spritePerSec{};
 	float totalTime{};
 	int totalSprite{};
@@ -55,8 +62,11 @@ struct DynamicSceneData : powe::Component<DynamicSceneData>
 
 	int currentLevel{};
 	PlayMode currentPlayMode{ PlayMode::SinglePlayer };
-
 	SharedPtr<PlayModeObserver> playModeObserver{};
+
+	// Any system that stop any entities from moving
+	std::vector<SharedPtr<powe::SystemBase>> blockingSystem{};
+	WeakPtr<SceneFactory> currentScene{};
 };
 
 struct StepHandler : powe::Component<StepHandler>
@@ -68,6 +78,13 @@ struct StepHandler : powe::Component<StepHandler>
 struct SceneReference : powe::Component<SceneReference>
 {
 	powe::GameObjectID sceneID{};
+};
+
+struct PlateComponent : powe::Component<PlateComponent>
+{
+	glm::fvec2 realIngredientSize{};
+	int ingredientStackCount{};
+	int maxStackCount{};
 };
 
 enum class MoveDir
@@ -91,9 +108,10 @@ struct LimitPlayArea : powe::Component<LimitPlayArea>
 	glm::fvec4 rect{};
 };
 
+class OnPlayerThrowPepper;
 struct PlayerTag : powe::Component<PlayerTag>
 {
-
+	SharedPtr<OnPlayerThrowPepper> OnPlayerThrowPepper{};
 };
 
 struct DelayedMovement : powe::Component<DelayedMovement>
@@ -128,9 +146,4 @@ struct CanWalkOnTile : powe::Component<CanWalkOnTile>
 	int currentLevel{};
 	int currentCol{};
 	int currentRow{};
-};
-
-struct StepSignaler
-{
-	
 };

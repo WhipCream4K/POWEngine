@@ -2,7 +2,7 @@
 
 #include "POWEngine/Core/Components/Transform2D.h"
 #include "POWEngine/Core/WorldEntity/WorldEntity.h"
-
+#include "OnPlayerThrowPepper.h"
 #include "BurgerTimeComponents.h"
 
 void HorizontalMovement::Execute(
@@ -71,8 +71,23 @@ void DebugHorizontalMovement::Execute(powe::WorldEntity& worldEntity, float delt
 	transform2D->SetWorldPosition(horizontal);
 }
 
+void ThrowPepper::Execute(powe::WorldEntity& worldEntity, float, powe::GameObjectID id, InputEvent inputEvent)
+{
+	if(inputEvent == InputEvent::IE_Pressed)
+	{
+		PlayerTag* playerTag = worldEntity.GetComponent<PlayerTag>(id);
+		if(playerTag)
+		{
+			if(playerTag->OnPlayerThrowPepper)
+			{
+				playerTag->OnPlayerThrowPepper->SignalThrowPepper(worldEntity);
+			}
+		}
+	}
+}
+
 void DebugVerticalMovement::Execute(powe::WorldEntity& worldEntity, float deltaTime, powe::GameObjectID id,
-	float axisValue)
+									float axisValue)
 {
 	using namespace powe;
 

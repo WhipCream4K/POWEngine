@@ -183,6 +183,42 @@
     <ClCompile Include="InGameHUD.cpp">
       <Filter>Prefabs</Filter>
     </ClCompile>
+    <ClCompile Include="OnSquashEnemy.cpp">
+      <Filter>Observers</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioManager.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="OnPlayerThrowPepper.cpp">
+      <Filter>Observers</Filter>
+    </ClCompile>
+    <ClCompile Include="PepperThrowListener.cpp">
+      <Filter>Observers</Filter>
+    </ClCompile>
+    <ClCompile Include="PlaySoundOnThrowPepper.cpp">
+      <Filter>Observers</Filter>
+    </ClCompile>
+    <ClCompile Include="SquashEnemyListener.cpp">
+      <Filter>Observers</Filter>
+    </ClCompile>
+    <ClCompile Include="PlaySoundOnEnemySquash.cpp">
+      <Filter>Observers</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerAnimationSystem.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="OnIngredientServing.cpp">
+      <Filter>Observers</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundPlayer.cpp">
+      <Filter>Observers</Filter>
+    </ClCompile>
+    <ClCompile Include="WinConditionListener.cpp">
+      <Filter>Observers</Filter>
+    </ClCompile>
+    <ClCompile Include="IntervalState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BurgerTimeComponents.h">
@@ -331,6 +367,42 @@
     </ClInclude>
     <ClInclude Include="InGameHUD.h">
       <Filter>Prefabs</Filter>
+    </ClInclude>
+    <ClInclude Include="OnSquashEnemy.h">
+      <Filter>Observers</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioManager.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPlayerThrowPepper.h">
+      <Filter>Observers</Filter>
+    </ClInclude>
+    <ClInclude Include="PepperThrowListener.h">
+      <Filter>Observers</Filter>
+    </ClInclude>
+    <ClInclude Include="PlaySoundOnThrowPepper.h">
+      <Filter>Observers</Filter>
+    </ClInclude>
+    <ClInclude Include="PlaySoundOnEnemySquash.h">
+      <Filter>Observers</Filter>
+    </ClInclude>
+    <ClInclude Include="SquashEnemyListener.h">
+      <Filter>Observers</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerAnimationSystem.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="OnIngredientServing.h">
+      <Filter>Observers</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundPlayer.h">
+      <Filter>Observers</Filter>
+    </ClInclude>
+    <ClInclude Include="WinConditionListener.h">
+      <Filter>Observers</Filter>
+    </ClInclude>
+    <ClInclude Include="IntervalState.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

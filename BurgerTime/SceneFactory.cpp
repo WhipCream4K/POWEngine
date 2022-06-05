@@ -37,3 +37,10 @@ void SceneFactory::AddSystem(const SharedPtr<powe::SystemBase>& system)
 	if (std::ranges::find(m_Systems, system) == m_Systems.end())
 		m_Systems.emplace_back(system);
 }
+
+void SceneFactory::RemoveSystem(const SharedPtr<powe::SystemBase>& system)
+{
+	const auto findItr{ std::ranges::find(m_Systems,system) };
+	if (findItr != m_Systems.end())
+		m_Systems.erase(findItr);
+}

@@ -17,5 +17,6 @@ public:
 private:
 
 	SharedPtr<PlayScene> m_PlayScene;
+	SharedPtr<bool> m_IsFinishedPlaying;
 };
 

@@ -42,6 +42,7 @@ public:
 	int GetMaxRowTile() const { return m_MaxRowTile; }
 	const SpriteInfo& GetIngredientSpriteInfo(IngredientsType type) const;
 
+	int GetPlateServingPiecesCount(int levelIdx) const;
 	const std::vector<IngredientSpawn>& GetIngredientSpawnInfo(int levelIdx) const;
 	const std::vector<PlateSpawn>& GetPlateSpawnInfo(int levelIdx) const;
 	
@@ -58,6 +59,7 @@ private:
 	std::unordered_map<IngredientsType, SpriteInfo> m_IngredientSpriteInfo;
 	std::unordered_map<int, std::vector<IngredientSpawn>> m_IngredientSpawnInfo;
 	std::unordered_map<int, std::vector<PlateSpawn>> m_PlateSpawnInfo{};
+	std::unordered_map<int, int> m_PlateServingCount;
 
 	int m_MaxColTile{ 17 };
 	int m_MaxRowTile{ 13 };

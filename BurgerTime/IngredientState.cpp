@@ -14,11 +14,13 @@
 #include "Rect2DCollider.h"
 #include "utils.h"
 #include "POWEngine/Rendering/Components/Debug/DebugRectangle.h"
+#include "ColliderCommand.h"
 
 SharedPtr<IngredientState> IngredientState::Stationary{ std::make_shared<StationaryIngredient>() };
 SharedPtr<IngredientState> IngredientState::Falling{ std::make_shared<FallingIngredient>() };
 SharedPtr<IngredientState> IngredientState::Spawn{ std::make_shared<SpawnIngredient>() };
 SharedPtr<IngredientState> IngredientState::Bounce{ std::make_shared<Bouncing>() };
+SharedPtr<IngredientState> IngredientState::Stack{ std::make_shared<Stacking>() };
 
 SharedPtr<IngredientState> SpawnIngredient::Update(powe::WorldEntity&, float,
 	IngredientsComponent*, powe::GameObjectID)
@@ -100,7 +102,6 @@ SharedPtr<IngredientState> FallingIngredient::Update(powe::WorldEntity&, float d
 	{
 		Transform2D* transform2D = gb->GetComponent<Transform2D>();
 		auto oldPos{ transform2D->GetWorldPosition() };
-		//transform2D->SetWorldPosition(oldPos);
 
 		// Check if it travels to another platform yet
 		const auto& staticSceneData{ Instance<StaticSceneData>() };
@@ -122,6 +123,7 @@ SharedPtr<IngredientState> FallingIngredient::Update(powe::WorldEntity&, float d
 			{
 				// Stop falling
 				transform2D->SetWorldPosition(downTile.position);
+				ingredientsComponent->BounceStartPos = downTile.position;
 				++ingredientsComponent->StartRow;
 				return Bounce;
 			}
@@ -132,6 +134,11 @@ SharedPtr<IngredientState> FallingIngredient::Update(powe::WorldEntity&, float d
 		{
 			oldPos.y += ingredientsComponent->FallingSpeed * deltaTime;
 			transform2D->SetWorldPosition(oldPos);
+		}
+
+		if (ingredientsComponent->IsOnPlate)
+		{
+			return Bounce;
 		}
 
 	}
@@ -177,13 +184,16 @@ void FallingIngredient::Enter(powe::WorldEntity& worldEntity, IngredientsCompone
 
 		const glm::fvec2 colliderSize{ spriteInfo.rect.z,spriteInfo.rect.w };
 
-		gameObject->AddComponent(Rect2DCollider{
+		Rect2DCollider* rect2DCollider = gameObject->AddComponent(Rect2DCollider{
 			worldEntity,
 			gameObject->GetID(),
 			resolverID,
-			colliderSize,
-			OverlapLayer::Dynamic
+			colliderSize * burger::SpriteScale,
+			OverlapLayer::Dynamic,
+			OverlapLayer::Static | OverlapLayer::Enemy
 			});
+
+		rect2DCollider->OnEnterCallback = std::make_shared<OnFallingIngredientTrigger>();
 
 #ifdef _DEBUG
 
@@ -203,22 +213,22 @@ void FallingIngredient::Exit(powe::WorldEntity& worldEntity, IngredientsComponen
 
 	using namespace powe;
 
-		if(const auto gameObject = ingredientsComponent->Owner.lock())
-		{
-			gameObject->RemoveComponent<Rect2DCollider>();
+	if (const auto gameObject = ingredientsComponent->Owner.lock())
+	{
+		gameObject->RemoveComponent<Rect2DCollider>();
 
-	#ifdef _DEBUG
-	
-			gameObject->RemoveComponent<DebugRectangle>();
-	
-	#endif
-		}
+#ifdef _DEBUG
+		gameObject->RemoveComponent<DebugRectangle>();
+#endif
+	}
 }
 
 SharedPtr<IngredientState> Bouncing::Update(powe::WorldEntity& worldEntity, float deltaTime,
 	IngredientsComponent* ingredientsComponent, powe::GameObjectID gameObjectId)
 {
 	using namespace powe;
+
+
 
 	Transform2D* transform2D{ worldEntity.GetComponent<Transform2D>(gameObjectId) };
 	if (transform2D)
@@ -241,6 +251,10 @@ SharedPtr<IngredientState> Bouncing::Update(powe::WorldEntity& worldEntity, floa
 		if (oldPos.y > ingredientsComponent->BounceStartPos.y)
 		{
 			transform2D->SetWorldPosition(ingredientsComponent->BounceStartPos);
+
+			if (ingredientsComponent->IsOnPlate)
+				return Stack;
+
 			return Stationary;
 		}
 
@@ -250,16 +264,11 @@ SharedPtr<IngredientState> Bouncing::Update(powe::WorldEntity& worldEntity, floa
 	return Bounce;
 }
 
-void Bouncing::Enter(powe::WorldEntity& worldEntity, IngredientsComponent* ingredientsComponent,
-	powe::GameObjectID id)
+void Bouncing::Enter(powe::WorldEntity&, IngredientsComponent* ingredientsComponent,
+	powe::GameObjectID)
 {
 	using namespace powe;
-	ingredientsComponent->BouncingSpeed = ingredientsComponent->BouncingAccel;
-	Transform2D* transform2D = worldEntity.GetComponent<Transform2D>(id);
-	if (transform2D)
-	{
-		ingredientsComponent->BounceStartPos = transform2D->GetWorldPosition();
-	}
+	ingredientsComponent->BouncingSpeed = ingredientsComponent->BouncingStartVelocity;
 }
 
 void Bouncing::Exit(powe::WorldEntity&, IngredientsComponent* ingredientsComponent,
@@ -269,13 +278,30 @@ void Bouncing::Exit(powe::WorldEntity&, IngredientsComponent* ingredientsCompone
 
 	if (const auto gameObject = ingredientsComponent->Owner.lock())
 	{
-		gameObject->RemoveComponent<powe::SpriteComponent>();
-//		gameObject->RemoveComponent<Rect2DCollider>();
-//
-//#ifdef _DEBUG
-//
-//		gameObject->RemoveComponent<powe::DebugRectangle>();
-//
-//#endif
+		if(!ingredientsComponent->IsOnPlate) // contact with another ingredients, so just remove the main sprite and it will be fine
+		{
+			gameObject->RemoveComponent<powe::SpriteComponent>();
+		}
+	}
+}
+
+SharedPtr<IngredientState> Stacking::Update(powe::WorldEntity&, float,
+	IngredientsComponent*, powe::GameObjectID)
+{
+	return Stack;
+}
+
+void Stacking::Enter(powe::WorldEntity& , IngredientsComponent* ingredientsComponent,
+	powe::GameObjectID )
+{
+	if( const auto gameObject = ingredientsComponent->Owner.lock())
+	{
+		// When we stack on the plate we just remove IngredientComponent because we don't need to interact with it anymore
+
+		gameObject->RemoveComponent<Rect2DCollider>();
+		gameObject->RemoveComponent<IngredientsComponent>();
+#ifdef _DEBUG
+		gameObject->RemoveComponent<powe::DebugRectangle>();
+#endif
 	}
 }

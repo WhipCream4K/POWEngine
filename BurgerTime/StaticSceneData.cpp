@@ -166,6 +166,11 @@ const SpriteInfo& StaticSceneData::GetIngredientSpriteInfo(IngredientsType type)
 	return m_IngredientSpriteInfo.at(type);
 }
 
+int StaticSceneData::GetPlateServingPiecesCount(int levelIdx) const
+{
+	return m_PlateServingCount.at(levelIdx);
+}
+
 const std::vector<IngredientSpawn>& StaticSceneData::GetIngredientSpawnInfo(int levelIdx) const
 {
 	return m_IngredientSpawnInfo.at(levelIdx);
@@ -208,20 +213,32 @@ void StaticSceneData::ParseIngredientSpriteInfo()
 	POWLOGNORMAL(outdebug);
 }
 
-void StaticSceneData::ParsePlateSpawnInfo(const nlohmann::basic_json<>& item,int levelIdx)
+void StaticSceneData::ParsePlateSpawnInfo(const nlohmann::basic_json<>& item, int levelIdx)
 {
 	const auto& plateSpawnPos{ item["PlateSpawnPos"] };
 
-	const glm::fvec2 spriteSize{ 32.0f,8.0f };
+	const glm::fvec2 spriteSize{ 32.0f,2.0f };
+
+	// TODO: should have get the level position somewhere
+	const glm::fvec2 midScreen{ 640.0f,360.0f };
+	const glm::fvec2 levelSize{ 208.0f,208.0f };
+
+	const glm::fvec2 refPoint{ midScreen - ( (levelSize / 2.0f) * burger::SpriteScale) };
 
 	for (const auto& coor : plateSpawnPos)
 	{
 		PlateSpawn plate{};
 		plate.position.x = coor["x"];
 		plate.position.y = coor["y"];
+
 		plate.size = spriteSize;
+
+		plate.position = (plate.position * burger::SpriteScale) + refPoint;
 
 		m_PlateSpawnInfo[levelIdx].emplace_back(plate);
 	}
+
+	const int servingCount{ item["NumberOnPlate"] };
+	m_PlateServingCount[levelIdx] = servingCount;
 }
 

@@ -31,14 +31,14 @@ void RectColliderDetectionSystem::OnUpdate(float, powe::GameObjectID)
 
 				if (layer & rect2D->TargetLayer)
 				{
-					std::ranges::for_each(colliderManager->GetColliderLayer(i), [&thisCollider, worldEntity, &rect2D](const GameObjectID other)
+					std::ranges::for_each(colliderManager->GetColliderLayer(i), [&thisCollider, &worldEntity, &rect2D](const GameObjectID other)
 						{
 							if (thisCollider != other)
 							{
 								// DO simple rectangle overlap detection
 								Transform2D* thisColliderTransform{ worldEntity->GetComponent<Transform2D>(thisCollider) };
 								Transform2D* otherColliderTransform{ worldEntity->GetComponent<Transform2D>(other) };
-								const Rect2DCollider* otherColliderComp{ worldEntity->GetComponent<Rect2DCollider>(other) };
+								Rect2DCollider* otherColliderComp{ worldEntity->GetComponent<Rect2DCollider>(other) };
 
 								const auto& thisColliderPos{ thisColliderTransform->GetWorldPosition() };
 								const auto& thisColliderExtent{ rect2D->Size };
@@ -51,10 +51,12 @@ void RectColliderDetectionSystem::OnUpdate(float, powe::GameObjectID)
 									{
 										rect2D->IsEntering = true;
 										if (rect2D->OnEnterCallback)
-											rect2D->OnEnterCallback->OnEnter(*worldEntity, thisCollider, other);
+											rect2D->OnEnterCallback->OnEnter(*worldEntity, rect2D,otherColliderComp,thisCollider, other);
 
 										if (otherColliderComp->OnEnterCallback)
-											otherColliderComp->OnEnterCallback->OnEnter(*worldEntity, other, thisCollider);
+											otherColliderComp->OnEnterCallback->OnEnter(
+												*worldEntity, 
+												otherColliderComp,rect2D,other,thisCollider);
 									}
 								}
 								else

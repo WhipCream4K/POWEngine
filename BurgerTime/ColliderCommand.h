@@ -45,18 +45,18 @@ private:
 	float m_DecreaseOffset{2.0f};
 };
 
-class PlateTriggerEnter : public ColliderCommand
+//class PlateTriggerEnter : public ColliderCommand
+//{
+//public:
+//
+//	void OnEnter(powe::WorldEntity&, Rect2DCollider* ownerCollider, Rect2DCollider* otherCollider, powe::GameObjectID owner, powe::GameObjectID other) override;
+//	//void OnEnter(powe::WorldEntity&, powe::GameObjectID owner, powe::GameObjectID other) override;
+//};
+
+class OnFallingIngredientTrigger : public ColliderCommand
 {
 public:
 
 	void OnEnter(powe::WorldEntity&, Rect2DCollider* ownerCollider, Rect2DCollider* otherCollider, powe::GameObjectID owner, powe::GameObjectID other) override;
-	//void OnEnter(powe::WorldEntity&, powe::GameObjectID owner, powe::GameObjectID other) override;
 };
-
-//class OnFallingIngredientTrigger : public ColliderCommand
-//{
-//public:
-//
-//	void OnEnter(powe::WorldEntity&, powe::GameObjectID owner, powe::GameObjectID other) override;
-//};
 

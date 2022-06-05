@@ -3,7 +3,9 @@
 #include <powengine.h>
 
 #include "AssetManager.h"
+#include "AudioManager.h"
 #include "BurgerTimeComponents.h"
+#include "OnPlayerThrowPepper.h"
 #include "StaticVariables.h"
 #include "POWEngine/Core/Components/Transform2D.h"
 #include "POWEngine/Rendering/Components/Sprite/SpriteComponent.h"
@@ -12,6 +14,7 @@
 #include "PlayerCommands.h"
 #include "Rect2DCollider.h"
 #include "POWEngine/Rendering/Components/Debug/DebugRectangle.h"
+#include "PlaySoundOnThrowPepper.h"
 
 SharedPtr<powe::GameObject> Player::Create(powe::WorldEntity& worldEntity, const PlayerDescriptor& playerDescriptor)
 {
@@ -42,11 +45,11 @@ SharedPtr<powe::GameObject> Player::Create(powe::WorldEntity& worldEntity, const
 	canWalkOnTile->currentRow = playerStartTile.y;
 
 	const glm::fvec2 charSize{ 16.0f,16.0f };
-	//gameObject->AddComponent(CharacterSize{ charSize });
 
 	InputComponent* inputComp = gameObject->AddComponent(InputComponent{ playerDescriptor.playerIndex });
 	inputComp->AddAxisCommand("Horizontal", std::make_shared<HorizontalMovement>());
 	inputComp->AddAxisCommand("Vertical", std::make_shared<VerticalMovement>());
+	inputComp->AddActionCommand("Fire", std::make_shared<ThrowPepper>());
 
 	gameObject->AddComponent(Rect2DCollider{ worldEntity,
 	gameObject->GetID(),
@@ -54,7 +57,13 @@ SharedPtr<powe::GameObject> Player::Create(powe::WorldEntity& worldEntity, const
 	charSize,
 	OverlapLayer::Player });
 
-	gameObject->AddComponent(PlayerTag{}, ComponentFlag::Sparse);
+	PlayerTag* playerTag = gameObject->AddComponent(PlayerTag{}, ComponentFlag::Sparse);
+	playerTag->OnPlayerThrowPepper = std::make_shared<OnPlayerThrowPepper>();
+
+	// register audio listener
+	AudioManager* audioManager = worldEntity.FindUniqueComponent<AudioManager>();
+	if(audioManager)
+		playerTag->OnPlayerThrowPepper->Attach(audioManager->OnPepperThrow.get());
 
 #ifdef _DEBUG
 

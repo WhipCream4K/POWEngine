@@ -20,6 +20,7 @@ public:
 	static SharedPtr<IngredientState> Falling;
 	static SharedPtr<IngredientState> Spawn;
 	static SharedPtr<IngredientState> Bounce;
+	static SharedPtr<IngredientState> Stack;
 
 	virtual SharedPtr<IngredientState> Update(powe::WorldEntity&, float,IngredientsComponent*,powe::GameObjectID) { return {}; }
 	virtual void Enter(powe::WorldEntity&, IngredientsComponent*, powe::GameObjectID) {}
@@ -60,6 +61,12 @@ public:
 	SharedPtr<IngredientState> Update(powe::WorldEntity&, float, IngredientsComponent*, powe::GameObjectID) override;
 	void Enter(powe::WorldEntity&, IngredientsComponent*, powe::GameObjectID) override;
 	void Exit(powe::WorldEntity&, IngredientsComponent*, powe::GameObjectID) override;
+};
+
+class Stacking : public IngredientState
+{
+	SharedPtr<IngredientState> Update(powe::WorldEntity&, float, IngredientsComponent*, powe::GameObjectID) override;
+	void Enter(powe::WorldEntity&, IngredientsComponent*, powe::GameObjectID) override;
 };
 
 

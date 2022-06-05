@@ -30,5 +30,7 @@ struct PlateDesc
 {
 	powe::GameObjectID colliderManager{};
 	glm::fvec2 position{};
-	PlayMode playMode{};
+	glm::fvec2 size{};
+	int stackNeeded{};
+	int currentLevel{};
 };

@@ -6,6 +6,14 @@
 
 SharedPtr<GameState> PlayState::HandleInput(powe::WorldEntity&, powe::GameObjectID)
 {
+	if(m_IsFinishedPlaying)
+	{
+		// Play the sound for a while
+		// remove system that handling the input and movement
+		// waits
+		// if the sound is finished then go to interval change to next level and come back again
+	}
+
 	return GameState::PlayState;
 }
 

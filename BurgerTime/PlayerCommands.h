@@ -23,6 +23,13 @@ public:
 	void Execute(powe::WorldEntity& worldEntity, float deltaTime, powe::GameObjectID id, float axisValue) override;
 };
 
+class ThrowPepper : public powe::ActionCommand
+{
+public:
+
+	void Execute(powe::WorldEntity& worldEntity, float deltaTime, powe::GameObjectID id, InputEvent inputEvent) override;
+};
+
 class DebugVerticalMovement : public powe::AxisCommand
 {
 public:

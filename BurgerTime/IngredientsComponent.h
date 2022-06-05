@@ -26,9 +26,10 @@ public:
 
 	glm::fvec2 BounceStartPos{};
 	float BouncingSpeed{};
-	float BouncingAccel{};
+	float BouncingStartVelocity{};
 	float BounceApexTime{};
 	float BounceTimeCounter{};
+	bool IsOnPlate{};
 	bool IsBouncing{};
 
 	float FallingSpeed{};

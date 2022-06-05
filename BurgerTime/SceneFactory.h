@@ -22,6 +22,7 @@ public:
 	void AddGameObject(const SharedPtr<powe::GameObject>& gameObject);
 	void RemoveGameObject(const SharedPtr<powe::GameObject>& gameObject);
 	void AddSystem(const SharedPtr<powe::SystemBase>& system);
+	void RemoveSystem(const SharedPtr<powe::SystemBase>& system);
 
 
 private:

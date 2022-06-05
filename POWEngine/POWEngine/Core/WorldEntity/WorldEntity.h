@@ -67,6 +67,9 @@ namespace powe
 		template<typename ComponentType>
 		EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> FindUniqueComponent(powe::GameObjectID& ownerID) const;
 
+		template<typename ComponentType>
+		EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> FindUniqueComponent() const;
+
 		SharedPtr<Archetype> GetArchetypeByGameObject(GameObjectID id) const;
 		const std::unordered_map<std::string, SharedPtr<Archetype>> GetActiveArchetypes() const { return m_ArchetypesPool; }
 		SharedPtr<BaseComponent> GetComponentTrait(ComponentTypeID id) const;
@@ -430,6 +433,42 @@ namespace powe
 		for (const auto& [id, gbRecords] : m_GameObjectRecords)
 		{
 			ownerID = id;
+			if (const auto archetype = gbRecords.Archetype.lock())
+			{
+				RawByte* outData{};
+				const auto findItr{ archetype->ComponentOffsets.find(componentTypeId) };
+				if (findItr == archetype->ComponentOffsets.end())
+					continue;
+
+				if (IsThisComponentSparse(findItr->second))
+					outData = m_SparseComponentManager.GetComponentData<ComponentType>(id, componentTypeId);
+				else
+					outData = &archetype->ComponentData[gbRecords.IndexInArchetype * archetype->SizeOfComponentsBlock + findItr->second];
+
+				return reinterpret_cast<ComponentType*>(outData);
+
+			}
+
+			// if there's no archetype then go for pre archetype
+			PreArchetypeTrait preArchetypeTrait{};
+			if (GetPreArchetypeTrait(id, preArchetypeTrait))
+			{
+				const auto findItr{ preArchetypeTrait.componentData.find(componentTypeId) };
+				if (findItr != preArchetypeTrait.componentData.end())
+					return reinterpret_cast<ComponentType*>(findItr->second.get());
+			}
+		}
+
+		return nullptr;
+	}
+
+	template <typename ComponentType>
+	EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> WorldEntity::FindUniqueComponent() const
+	{
+		const ComponentTypeID componentTypeId{ BaseComponent::GetId<ComponentType>() };
+
+		for (const auto& [id, gbRecords] : m_GameObjectRecords)
+		{
 			if (const auto archetype = gbRecords.Archetype.lock())
 			{
 				RawByte* outData{};

@@ -197,6 +197,11 @@ xcopy /y "$(SolutionDir)3rdPartyLib\allDLLs\$(Platform)\$(Configuration)\*.dll" 
   <ItemGroup>
     <ClCompile Include="AnimationSystem.cpp" />
     <ClCompile Include="AssetManager.cpp" />
+    <ClCompile Include="IntervalState.cpp" />
+    <ClCompile Include="OnIngredientServing.cpp" />
+    <ClCompile Include="OnPlayerThrowPepper.cpp" />
+    <ClCompile Include="OnSquashEnemy.cpp" />
+    <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="BurgerLevel.cpp" />
     <ClCompile Include="BurgerParser.cpp" />
     <ClCompile Include="BurgerTimeGame.cpp" />
@@ -216,7 +221,9 @@ xcopy /y "$(SolutionDir)3rdPartyLib\allDLLs\$(Platform)\$(Configuration)\*.dll" 
     <ClCompile Include="IngredientSystem.cpp" />
     <ClCompile Include="MenuState.cpp" />
     <ClCompile Include="MovementBlocking.cpp" />
+    <ClCompile Include="PepperThrowListener.cpp" />
     <ClCompile Include="Plate.cpp" />
+    <ClCompile Include="PlayerAnimationSystem.cpp" />
     <ClCompile Include="PlayModeObserver.cpp" />
     <ClCompile Include="PlayModeSubject.cpp" />
     <ClCompile Include="main.cpp" />
@@ -228,10 +235,14 @@ xcopy /y "$(SolutionDir)3rdPartyLib\allDLLs\$(Platform)\$(Configuration)\*.dll" 
     <ClCompile Include="PlayerInputSystem.cpp" />
     <ClCompile Include="PlayerManager.cpp" />
     <ClCompile Include="PlayScene.cpp" />
+    <ClCompile Include="PlaySoundOnEnemySquash.cpp" />
+    <ClCompile Include="PlaySoundOnThrowPepper.cpp" />
     <ClCompile Include="PlayState.cpp" />
     <ClCompile Include="Rect2DCollider.cpp" />
     <ClCompile Include="RectColliderDetectionSystem.cpp" />
     <ClCompile Include="SceneFactory.cpp" />
+    <ClCompile Include="SoundPlayer.cpp" />
+    <ClCompile Include="SquashEnemyListener.cpp" />
     <ClCompile Include="StateController.cpp" />
     <ClCompile Include="StaticSceneData.cpp" />
     <ClCompile Include="SubIngredientStepHandler.cpp" />
@@ -240,6 +251,7 @@ xcopy /y "$(SolutionDir)3rdPartyLib\allDLLs\$(Platform)\$(Configuration)\*.dll" 
     <ClCompile Include="TestCommand.cpp" />
     <ClCompile Include="TestScene.cpp" />
     <ClCompile Include="WalkableTiles.cpp" />
+    <ClCompile Include="WinConditionListener.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\POWEngine\POWEngine.vcxproj">
@@ -249,6 +261,11 @@ xcopy /y "$(SolutionDir)3rdPartyLib\allDLLs\$(Platform)\$(Configuration)\*.dll" 
   <ItemGroup>
     <ClInclude Include="AnimationSystem.h" />
     <ClInclude Include="AssetManager.h" />
+    <ClInclude Include="IntervalState.h" />
+    <ClInclude Include="OnIngredientServing.h" />
+    <ClInclude Include="OnPlayerThrowPepper.h" />
+    <ClInclude Include="OnSquashEnemy.h" />
+    <ClInclude Include="AudioManager.h" />
     <ClInclude Include="BurgerLevel.h" />
     <ClInclude Include="BurgerParser.h" />
     <ClInclude Include="BurgerTimeComponents.h" />
@@ -269,7 +286,9 @@ xcopy /y "$(SolutionDir)3rdPartyLib\allDLLs\$(Platform)\$(Configuration)\*.dll" 
     <ClInclude Include="IngredientSystem.h" />
     <ClInclude Include="MenuState.h" />
     <ClInclude Include="MovementBlocking.h" />
+    <ClInclude Include="PepperThrowListener.h" />
     <ClInclude Include="Plate.h" />
+    <ClInclude Include="PlayerAnimationSystem.h" />
     <ClInclude Include="PlayModeObserver.h" />
     <ClInclude Include="PlayModeSubject.h" />
     <ClInclude Include="MenuCommands.h" />
@@ -280,12 +299,16 @@ xcopy /y "$(SolutionDir)3rdPartyLib\allDLLs\$(Platform)\$(Configuration)\*.dll" 
     <ClInclude Include="PlayerInputSystem.h" />
     <ClInclude Include="PlayerManager.h" />
     <ClInclude Include="PlayScene.h" />
+    <ClInclude Include="PlaySoundOnEnemySquash.h" />
+    <ClInclude Include="PlaySoundOnThrowPepper.h" />
     <ClInclude Include="PlayState.h" />
     <ClInclude Include="PrefabDesc.h" />
     <ClInclude Include="Rect2DCollider.h" />
     <ClInclude Include="RectColliderDetectionSystem.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SceneFactory.h" />
+    <ClInclude Include="SoundPlayer.h" />
+    <ClInclude Include="SquashEnemyListener.h" />
     <ClInclude Include="StateController.h" />
     <ClInclude Include="StaticSceneData.h" />
     <ClInclude Include="StaticVariables.h" />
@@ -296,6 +319,7 @@ xcopy /y "$(SolutionDir)3rdPartyLib\allDLLs\$(Platform)\$(Configuration)\*.dll" 
     <ClInclude Include="TestScene.h" />
     <ClInclude Include="utils.h" />
     <ClInclude Include="WalkableTiles.h" />
+    <ClInclude Include="WinConditionListener.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -5,30 +5,33 @@
 #include "POWEngine/Rendering/Components/Debug/DebugRectangle.h"
 #include "Rect2DCollider.h"
 #include "ColliderCommand.h"
+#include "BurgerTimeComponents.h"
+#include "StaticSceneData.h"
 
 SharedPtr<powe::GameObject> Plate::Create(powe::WorldEntity& worldEntity, const PlateDesc& desc)
 {
 	using namespace powe;
 	SharedPtr<GameObject> gameObject{ std::make_shared<GameObject>(worldEntity) };
 
-	gameObject->AddComponent(Transform2D{ gameObject },ComponentFlag::Sparse);
+	const auto& staticSceneData{ Instance<StaticSceneData>() };
 
-	const glm::fvec2 size{};
+	Transform2D* transform2D = gameObject->AddComponent(Transform2D{ gameObject }, ComponentFlag::Sparse);
+	transform2D->SetWorldPosition(desc.position);
 
-	Rect2DCollider* rect2DCollider = gameObject->AddComponent(Rect2DCollider{
-		worldEntity,gameObject->GetID(),desc.colliderManager,size,OverlapLayer::Static },ComponentFlag::Sparse);
+	const glm::fvec2 size{ desc.size * burger::SpriteScale};
 
-	rect2DCollider->OnEnterCallback = std::make_shared<PlateTriggerEnter>();
-	
+	gameObject->AddComponent(Rect2DCollider{
+		worldEntity,gameObject->GetID(),desc.colliderManager,size,OverlapLayer::Static });
+
 
 #ifdef _DEBUG
-
-	gameObject->AddComponent(DebugRectangle{ gameObject,size },ComponentFlag::Sparse);
-
+	gameObject->AddComponent(DebugRectangle{ gameObject,size }, ComponentFlag::Sparse);
 #endif
 
-	
-
+	const int maxServingNeeded{ staticSceneData->GetPlateServingPiecesCount(desc.currentLevel) };
+	PlateComponent* plateComponent = gameObject->AddComponent(PlateComponent{});
+	plateComponent->maxStackCount = maxServingNeeded;
+	plateComponent->realIngredientSize = size;
 
 	return gameObject;
 }

@@ -53,6 +53,12 @@ enum class IngredientsType
 	Lettuce
 };
 
+
+enum class EnemyType
+{
+	HotDog
+};
+
 static inline IngredientsType StringToIngredients(const std::string& string)
 {
 	if (string == "TopBun")
@@ -85,7 +91,7 @@ public:
 		Static = (1 << 4),
 		Enemy = (1 << 3),
 
-		Count = 4
+		Count = 5
 	};
 
 	static uint32_t LayerToIndex(uint32_t layer)
