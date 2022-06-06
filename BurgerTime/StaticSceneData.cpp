@@ -81,6 +81,7 @@ void StaticSceneData::Initialize()
 			}
 
 			ParsePlateSpawnInfo(item, levelIndex);
+			ParseEnemySpawnableTile(item, levelIndex);
 		}
 	}
 
@@ -181,6 +182,11 @@ const std::vector<PlateSpawn>& StaticSceneData::GetPlateSpawnInfo(int levelIdx) 
 	return m_PlateSpawnInfo.at(levelIdx);
 }
 
+const std::vector<glm::ivec2> StaticSceneData::GetEnemySpawnableTile(int levelIdx) const
+{
+	return m_EnemySpawnableTiles.at(levelIdx);
+}
+
 void StaticSceneData::ParseIngredientSpriteInfo()
 {
 	const std::string spriteFilePath{ "./Resources/Level/IngredientProperties.json" };
@@ -240,5 +246,19 @@ void StaticSceneData::ParsePlateSpawnInfo(const nlohmann::basic_json<>& item, in
 
 	const int servingCount{ item["NumberOnPlate"] };
 	m_PlateServingCount[levelIdx] = servingCount;
+}
+
+void StaticSceneData::ParseEnemySpawnableTile(const nlohmann::basic_json<>& item, int levelIdx)
+{
+	const auto& enemySpawnTile{ item["EnemySpawnTile"] };
+
+	for (const auto& tile : enemySpawnTile)
+	{
+		glm::ivec2 temp{};
+		temp.x = tile["col"];
+		temp.y = tile["row"];
+
+		m_EnemySpawnableTiles[levelIdx].emplace_back(temp);
+	}
 }
 

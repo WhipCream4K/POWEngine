@@ -11,14 +11,7 @@ Rect2DCollider::Rect2DCollider(powe::WorldEntity&, powe::GameObjectID ,
 	, OnLayer(layer)
 	, TargetLayer(targetLayer)
 {
-	//if (owner)
-	//{
-	//	ColliderResolver* colliderResolver = worldEntity.GetComponent<ColliderResolver>(colliderManagerObject);
-	//	if (colliderResolver)
-	//	{
-	//		colliderResolver->AddCollider(owner, layer);
-	//	}
-	//}
+
 }
 
 Rect2DCollider::Rect2DCollider(const SharedPtr<powe::GameObject>& ,
@@ -32,15 +25,6 @@ Rect2DCollider::Rect2DCollider(const SharedPtr<powe::GameObject>& ,
 {
 	colliderManagerObject;
 
-	//if (owner)
-	//{
-	//	ColliderResolver* colliderResolver = colliderManagerObject->GetComponent<ColliderResolver>();
-	//	if (colliderResolver)
-	//	{
-	//		ColliderManager = colliderManagerObject->GetID();
-	//		colliderResolver->AddCollider(owner->GetID(), layer);
-	//	}
-	//}
 }
 
 void Rect2DCollider::OnCreate(powe::WorldEntity& worldEntity, powe::GameObjectID gameObjectId)
@@ -51,13 +35,3 @@ void Rect2DCollider::OnCreate(powe::WorldEntity& worldEntity, powe::GameObjectID
 		colliderResolver->AddCollider(gameObjectId, OnLayer);
 	}
 }
-//
-//
-//void Rect2DCollider::OnDestroy(powe::WorldEntity& worldEntity, powe::GameObjectID gameObjectId)
-//{
-//	// unsafe when the resolver already is in the process of destroying
-//	//if (ColliderResolver* colliderResolver = worldEntity.GetComponent<ColliderResolver>(ColliderManager))
-//	//{
-//	//	colliderResolver->RemoveCollider(gameObjectId);
-//	//}
-//}

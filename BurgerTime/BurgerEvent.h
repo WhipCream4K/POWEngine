@@ -8,4 +8,5 @@ enum class BurgerEvent
 	IngredientDropToPlatform,
 	StepOnIngredients,
 	PlateFull,
+	PlayerDead,
 };

@@ -8,6 +8,7 @@
 #include "POWEngine/Rendering/Components/Sprite/SpriteComponent.h"
 #include "POWEngine/Rendering/Resources/Texture/Texture.h"
 #include "BurgerTimeComponents.h"
+#include "HUDDisplay.h"
 #include "PepperNumberDisplay.h"
 #include "ScoreListener.h"
 
@@ -66,6 +67,7 @@ SharedPtr<powe::GameObject> InGameHUD::CreateDisplayManager(powe::WorldEntity& w
 
 	displayManager->ScoreListener = std::make_shared<ScoreListener>(gameObject->GetID());
 	displayManager->PepperNumberDisplay = std::make_shared<PepperNumberDisplay>(gameObject->GetID());
+	displayManager->LivesDisplay = std::make_shared<HUDDisplay>(gameObject->GetID());
 
 	if (desc.playMode == PlayMode::Coop)
 	{

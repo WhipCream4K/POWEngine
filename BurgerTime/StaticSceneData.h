@@ -45,6 +45,7 @@ public:
 	int GetPlateServingPiecesCount(int levelIdx) const;
 	const std::vector<IngredientSpawn>& GetIngredientSpawnInfo(int levelIdx) const;
 	const std::vector<PlateSpawn>& GetPlateSpawnInfo(int levelIdx) const;
+	const std::vector<glm::ivec2> GetEnemySpawnableTile(int levelIdx) const;
 	
 
 private:
@@ -52,6 +53,7 @@ private:
 	void ParseIngredientSpriteInfo();
 
 	void ParsePlateSpawnInfo(const nlohmann::basic_json<>& item,int levelIdx);
+	void ParseEnemySpawnableTile(const nlohmann::basic_json<>& item,int levelIdx);
 
 	std::unordered_map<int, LevelData> m_LevelData;
 	std::unordered_map<int, std::vector<TileData>> m_LevelTiles;
@@ -60,6 +62,7 @@ private:
 	std::unordered_map<int, std::vector<IngredientSpawn>> m_IngredientSpawnInfo;
 	std::unordered_map<int, std::vector<PlateSpawn>> m_PlateSpawnInfo{};
 	std::unordered_map<int, int> m_PlateServingCount;
+	std::unordered_map<int, std::vector<glm::ivec2>> m_EnemySpawnableTiles;
 
 	int m_MaxColTile{ 17 };
 	int m_MaxRowTile{ 13 };

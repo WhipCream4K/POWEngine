@@ -41,3 +41,16 @@ struct IngameHUDDesc
 	int startPepper{};
 	int startLives{};
 };
+
+struct EnemyDesc
+{
+	powe::GameObjectID colliderManager{};
+	EnemyType type{};
+	glm::fvec2 position{};
+};
+
+struct PepperDesc
+{
+	powe::GameObjectID colliderManager{};
+	glm::fvec2 position{};
+};

@@ -198,9 +198,6 @@
     <ClCompile Include="OnIngredientServing.cpp">
       <Filter>Observers</Filter>
     </ClCompile>
-    <ClCompile Include="SoundPlayer.cpp">
-      <Filter>Observers</Filter>
-    </ClCompile>
     <ClCompile Include="WinConditionListener.cpp">
       <Filter>Observers</Filter>
     </ClCompile>
@@ -210,22 +207,46 @@
     <ClCompile Include="ChangeLevel.cpp">
       <Filter>States</Filter>
     </ClCompile>
-    <ClCompile Include="OnIngredientStepped.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="OnIngredientDropToPlatform.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Observers</Filter>
     </ClCompile>
-    <ClCompile Include="ScoreListener.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ScorableEvent.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="OnIngredientStepped.cpp">
+      <Filter>Observers</Filter>
     </ClCompile>
     <ClCompile Include="PepperNumberDisplay.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Observers</Filter>
     </ClCompile>
     <ClCompile Include="PlaySoundOnEvent.cpp">
+      <Filter>Observers</Filter>
+    </ClCompile>
+    <ClCompile Include="ScorableEvent.cpp">
+      <Filter>Observers</Filter>
+    </ClCompile>
+    <ClCompile Include="ScoreListener.cpp">
+      <Filter>Observers</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="HotDog.cpp">
+      <Filter>Prefabs</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemySpawnSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyWalkPatternSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerRespawnSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OnPlayerDead.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HUDDisplay.cpp">
+      <Filter>Observers</Filter>
+    </ClCompile>
+    <ClCompile Include="Pepper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -392,9 +413,6 @@
     <ClInclude Include="OnIngredientServing.h">
       <Filter>Observers</Filter>
     </ClInclude>
-    <ClInclude Include="SoundPlayer.h">
-      <Filter>Observers</Filter>
-    </ClInclude>
     <ClInclude Include="WinConditionListener.h">
       <Filter>Observers</Filter>
     </ClInclude>
@@ -404,26 +422,50 @@
     <ClInclude Include="ChangeLevel.h">
       <Filter>States</Filter>
     </ClInclude>
-    <ClInclude Include="OnIngredientStepped.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="OnIngredientDropToPlatform.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ScoreListener.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ScorableEvent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PepperNumberDisplay.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="BurgerEvent.h">
       <Filter>Observers</Filter>
     </ClInclude>
+    <ClInclude Include="OnIngredientDropToPlatform.h">
+      <Filter>Observers</Filter>
+    </ClInclude>
+    <ClInclude Include="OnIngredientStepped.h">
+      <Filter>Observers</Filter>
+    </ClInclude>
+    <ClInclude Include="PepperNumberDisplay.h">
+      <Filter>Observers</Filter>
+    </ClInclude>
     <ClInclude Include="PlaySoundOnEvent.h">
-      <Filter>Header Files</Filter>
+      <Filter>Observers</Filter>
+    </ClInclude>
+    <ClInclude Include="ScorableEvent.h">
+      <Filter>Observers</Filter>
+    </ClInclude>
+    <ClInclude Include="ScoreListener.h">
+      <Filter>Observers</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="HotDog.h">
+      <Filter>Prefabs</Filter>
+    </ClInclude>
+    <ClInclude Include="Pepper.h">
+      <Filter>Prefabs</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerRespawnSystem.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyWalkPatternSystem.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemySpawnSystem.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="OnPlayerDead.h">
+      <Filter>Observers</Filter>
+    </ClInclude>
+    <ClInclude Include="HUDDisplay.h">
+      <Filter>Observers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

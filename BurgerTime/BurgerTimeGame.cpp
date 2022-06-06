@@ -119,6 +119,10 @@ void BurgerTimeGame::Start(const SharedPtr<powe::Core>&,
 			{InputDevice::D_Keyboard,Keyboard::F7}
 			});
 
+		inputSetting.AddActionMapping("ForceDead", {
+	{InputDevice::D_Keyboard,Keyboard::F5}
+			});
+
 	}
 
 

@@ -19,7 +19,7 @@ MovementBlocking::MovementBlocking(int currentLevelIdx)
 	m_MaxRowTile = staticSceneData->GetMaxRowTile();
 }
 
-void MovementBlocking::OnUpdate(float, powe::GameObjectID)
+void MovementBlocking::OnUpdate(float, powe::GameObjectID id)
 {
 	using namespace powe;
 
@@ -40,7 +40,9 @@ void MovementBlocking::OnUpdate(float, powe::GameObjectID)
 			HandleVerticalMovement(vertical, transform2D, canWalkOnTile, extent);
 		}
 
-		canWalkOnTile->movementDetails.currentMovementDir = MoveDir::None;
+		PlayerTag* playerTag = GetWorld()->GetComponent<PlayerTag>(id);
+		if (playerTag)
+			canWalkOnTile->movementDetails.currentMovementDir = MoveDir::None;
 	}
 
 }
@@ -105,7 +107,7 @@ void MovementBlocking::HandleHorizontalMovement(int direction, powe::Transform2D
 	else
 	{
 		// modify so the horizontal pos is the same as the ground
-		constexpr float offset{2.0f};
+		constexpr float offset{ 2.0f };
 		canWalkOnTile->movementDetails.futurePos.y = nextTileData.position.y - (offset * burger::SpriteScale.x);
 		transform2D->SetWorldPosition(canWalkOnTile->movementDetails.futurePos);
 	}
@@ -119,7 +121,7 @@ void MovementBlocking::HandleVerticalMovement(int direction, powe::Transform2D* 
 
 	const auto& oldPos{ transform2D->GetWorldPosition() };
 
-	if (nextTileRow < 0 || nextTileRow >= m_MaxRowTile )
+	if (nextTileRow < 0 || nextTileRow >= m_MaxRowTile)
 	{
 		const TileData lastTileData{ m_CurrentTileData[(canWalkOnTile->currentRow * m_MaxColTile) + currentCol] };
 
@@ -140,7 +142,7 @@ void MovementBlocking::HandleVerticalMovement(int direction, powe::Transform2D* 
 	const TileData currentTileData{ m_CurrentTileData[canWalkOnTile->currentRow * m_MaxColTile + canWalkOnTile->currentCol] };
 
 	// Can't walk
-	if (nextTileData.tileType == TileType::None || (nextTileData.tileType == TileType::Platform && currentTileData.tileType != TileType::Ladder) )
+	if (nextTileData.tileType == TileType::None || (nextTileData.tileType == TileType::Platform && currentTileData.tileType != TileType::Ladder))
 	{
 
 		const TileData lastTileData{ m_CurrentTileData[(canWalkOnTile->currentRow * m_MaxColTile) + currentCol] };

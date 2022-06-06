@@ -7,6 +7,7 @@
 #include <ranges>
 
 #include "AudioManager.h"
+#include "OnPlayerDead.h"
 #include "POWEngine/Sound/SoundInfo.h"
 
 
@@ -26,7 +27,17 @@ SharedPtr<GameState> PlayState::HandleInput(powe::WorldEntity& worldEntity, Dyna
 		return ChangingLevel;
 	}
 
-	if(worldEntity.GetInputSettings().GetInputAction("SkipToMenu",InputEvent::IE_Pressed))
+	if (worldEntity.GetInputSettings().GetInputAction("ForceDead", InputEvent::IE_Pressed))
+	{
+		PlayerTag* playerTag = worldEntity.FindUniqueComponent<PlayerTag>();
+		if (playerTag)
+		{
+			playerTag->isDead = true;
+			playerTag->OnPlayerDead->SignalDead(worldEntity, playerTag->playerIndex);
+		}
+	}
+
+	if (worldEntity.GetInputSettings().GetInputAction("SkipToMenu", InputEvent::IE_Pressed))
 	{
 		return MenuState;
 	}
@@ -57,7 +68,7 @@ void PlayState::Enter(powe::WorldEntity& worldEntity, DynamicSceneData* dynamicS
 	const int plateCountThisLevel{ staticSceneData->GetPlateServingPiecesCount(dynamicSceneData->currentLevel) };
 
 	if (!dynamicSceneData->OnGameWin)
-		dynamicSceneData->OnGameWin = std::make_shared<WinConditionListener>(sceneID,audioManagerObject,plateCountThisLevel);
+		dynamicSceneData->OnGameWin = std::make_shared<WinConditionListener>(sceneID, audioManagerObject, plateCountThisLevel);
 	else
 	{
 		dynamicSceneData->OnGameWin->Reset();
@@ -144,9 +155,9 @@ void PlayState::Update(powe::WorldEntity& worldEntity, float deltaTime, DynamicS
 	}
 }
 
-void PlayState::EnableInput(powe::WorldEntity& worldEntity,DynamicSceneData* sceneData) const
+void PlayState::EnableInput(powe::WorldEntity& worldEntity, DynamicSceneData* sceneData) const
 {
-	for (const auto& [layer,systems] : sceneData->blockingSystem)
+	for (const auto& [layer, systems] : sceneData->blockingSystem)
 	{
 		for (const auto& systemBase : systems)
 		{

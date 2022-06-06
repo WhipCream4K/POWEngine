@@ -40,6 +40,9 @@ void RectColliderDetectionSystem::OnUpdate(float, powe::GameObjectID)
 								Transform2D* otherColliderTransform{ worldEntity->GetComponent<Transform2D>(other) };
 								Rect2DCollider* otherColliderComp{ worldEntity->GetComponent<Rect2DCollider>(other) };
 
+								if (!thisColliderTransform && !otherColliderTransform && !otherColliderComp)
+									return;
+
 								const auto& thisColliderPos{ thisColliderTransform->GetWorldPosition() };
 								const auto& thisColliderExtent{ rect2D->Size };
 								const auto& otherColliderPos{ otherColliderTransform->GetWorldPosition() };

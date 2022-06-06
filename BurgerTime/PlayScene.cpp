@@ -19,6 +19,10 @@
 #include "ColliderResolver.h"
 #include "OnPlayerThrowPepper.h"
 #include "Plate.h"
+#include "PlayerRespawnSystem.h"
+#include "POWEngine/Core/WorldEntity/PipelineLayer.h"
+#include "EnemyWalkPatternSystem.h"
+#include "EnemySpawnSystem.h"
 
 PlayScene::PlayScene(powe::GameObjectID sceneGameObject)
 	: m_SceneDataID(sceneGameObject)
@@ -30,7 +34,7 @@ void PlayScene::LoadScene(powe::WorldEntity& worldEntity)
 	using namespace powe;
 
 	GameObjectID dynamicSceneOwner{};
-	const DynamicSceneData* mainSceneData{ worldEntity.FindUniqueComponent<DynamicSceneData>(dynamicSceneOwner) };
+	DynamicSceneData* mainSceneData{ worldEntity.FindUniqueComponent<DynamicSceneData>(dynamicSceneOwner) };
 	if (!mainSceneData)
 		return;
 
@@ -168,14 +172,14 @@ void PlayScene::LoadScene(powe::WorldEntity& worldEntity)
 	worldEntity.RegisterSystem(PipelineLayer::Update, ingredientSystem);
 	AddSystem(ingredientSystem);
 
+	const auto playerRespawn{ std::make_shared<PlayerRespawnSystem>(mainSceneData->currentLevel) };
+	worldEntity.RegisterSystem(PipelineLayer::Update, playerRespawn);
+	AddSystem(playerRespawn);
+
 }
 
 SharedPtr<powe::GameObject> PlayScene::SpawnPlayer(powe::WorldEntity& worldEntity, const PlayerDescriptor& desc)
 {
-	//const PlayerDescriptor player1Desc{
-	//levelData.playerSpawnPoints * burger::SpriteScale + midScreen,
-	//mainSceneData->currentLevel,0, colliderResolver->GetID() };
-
 	const auto player{ Player::Create(worldEntity,desc) };
 	return player;
 }

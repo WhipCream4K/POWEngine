@@ -8,6 +8,7 @@
 #include "IngredientState.h"
 #include "OnIngredientServing.h"
 #include "OnIngredientStepped.h"
+#include "OnPlayerDead.h"
 #include "Rect2DCollider.h"
 
 void DebugTriggerEnter::OnEnter(powe::WorldEntity&, Rect2DCollider* , Rect2DCollider*,
@@ -125,4 +126,29 @@ void OnFallingIngredientTrigger::OnEnter(powe::WorldEntity& worldEntity, Rect2DC
 	}
 
 	// TODO: Hit Enemy
+}
+
+void EnemyTrigger::OnEnter(powe::WorldEntity& worldEntity, Rect2DCollider* , Rect2DCollider* ,
+	powe::GameObjectID owner, powe::GameObjectID other)
+{
+	EnemyTag* enemyTag{ worldEntity.GetComponent<EnemyTag>(other) };
+	if(enemyTag)
+	{
+		PlayerTag* playerTag{ worldEntity.GetComponent<PlayerTag>(owner) };
+		if(playerTag)
+		{
+			playerTag->isDead = true;
+			playerTag->OnPlayerDead->SignalDead(worldEntity, playerTag->playerIndex);
+		}
+	}
+}
+
+void PepperTrigger::OnEnter(powe::WorldEntity& worldEntity, Rect2DCollider* , Rect2DCollider* ,
+	powe::GameObjectID , powe::GameObjectID other)
+{
+	EnemyTag* enemyTag{ worldEntity.GetComponent<EnemyTag>(other) };
+	if (enemyTag)
+	{
+		enemyTag->isStunned = true;
+	}
 }

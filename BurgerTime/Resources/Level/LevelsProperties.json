@@ -17,6 +17,24 @@
             },
             "TileData": "Level1Tile.csv",
             "NumberOnPlate" : 4,
+            "EnemySpawnTile" : [
+                {
+                    "col" : 0,
+                    "row" : 9
+                },
+                {
+                    "col" : 16,
+                    "row" : 9
+                },
+                {
+                    "col" : 0,
+                    "row" : 0
+                },
+                {
+                    "col" : 16,
+                    "row" : 0
+                }
+            ],
             "PlateSpawnPos" : [
                 {
                     "x" : 32.0,
@@ -135,6 +153,24 @@
             },
             "TileData": "Level2Tile.csv",
             "NumberOnPlate" : 4,
+            "EnemySpawnTile" : [
+                {
+                    "col" : 0,
+                    "row" : 0
+                },
+                {
+                    "col" : 16,
+                    "row" : 0
+                },
+                {
+                    "col" : 0,
+                    "row" : 4
+                },
+                {
+                    "col" : 16,
+                    "row" : 4
+                }
+            ],
             "PlateSpawnPos" : [
                 {
                     "x" : 32.0,
@@ -255,6 +291,24 @@
             },
             "TileData": "Level3Tile.csv",
             "NumberOnPlate" : 3,
+            "EnemySpawnTile" : [
+                {
+                    "col" : 0,
+                    "row" : 0
+                },
+                {
+                    "col" : 16,
+                    "row" : 0
+                },
+                {
+                    "col" : 0,
+                    "row" : 3
+                },
+                {
+                    "col" : 16,
+                    "row" : 3
+                }
+            ],
             "PlateSpawnPos" : [
                 {
                     "x" : 32.0,

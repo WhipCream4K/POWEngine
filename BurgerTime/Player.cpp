@@ -4,7 +4,10 @@
 
 #include "AssetManager.h"
 #include "AudioManager.h"
+#include "AudioManager.h"
 #include "BurgerTimeComponents.h"
+#include "ColliderCommand.h"
+#include "OnPlayerDead.h"
 #include "OnPlayerThrowPepper.h"
 #include "StaticVariables.h"
 #include "POWEngine/Core/Components/Transform2D.h"
@@ -15,6 +18,7 @@
 #include "Rect2DCollider.h"
 #include "POWEngine/Rendering/Components/Debug/DebugRectangle.h"
 #include "PlaySoundOnEvent.h"
+#include "HUDDisplay.h"
 
 SharedPtr<powe::GameObject> Player::Create(powe::WorldEntity& worldEntity, const PlayerDescriptor& playerDescriptor)
 {
@@ -54,20 +58,33 @@ SharedPtr<powe::GameObject> Player::Create(powe::WorldEntity& worldEntity, const
 	inputComp->AddAxisCommand("Vertical", std::make_shared<VerticalMovement>());
 	inputComp->AddActionCommand("Fire", std::make_shared<ThrowPepper>());
 
-	gameObject->AddComponent(Rect2DCollider{ worldEntity,
+	Rect2DCollider* rect2DCollider = gameObject->AddComponent(Rect2DCollider{ worldEntity,
 	gameObject->GetID(),
 	playerDescriptor.colliderManager,
 	charSize,
 	OverlapLayer::Player });
 
+	rect2DCollider->OnEnterCallback = std::make_shared<EnemyTrigger>();
+
 	PlayerTag* playerTag = gameObject->AddComponent(PlayerTag{}, ComponentFlag::Sparse);
 	playerTag->OnPlayerThrowPepper = std::make_shared<OnPlayerThrowPepper>();
+	playerTag->OnPlayerDead = std::make_shared<OnPlayerDead>();
 	playerTag->playerIndex = playerDescriptor.playerIndex;
 
 	// register audio listener
 	AudioManager* audioManager = worldEntity.FindUniqueComponent<AudioManager>();
 	if(audioManager)
+	{
 		playerTag->OnPlayerThrowPepper->Attach(audioManager->OnEventHappened.get());
+		playerTag->OnPlayerDead->Attach(audioManager->OnEventHappened.get());
+	}
+
+	DisplayManager* displayManager{ worldEntity.FindUniqueComponent<DisplayManager>() };
+	if(displayManager)
+	{
+		playerTag->OnPlayerDead->Attach(displayManager->LivesDisplay.get());
+	}
+
 
 #ifdef _DEBUG
 

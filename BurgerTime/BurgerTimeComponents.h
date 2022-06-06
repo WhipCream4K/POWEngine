@@ -142,10 +142,14 @@ struct LimitPlayArea : powe::Component<LimitPlayArea>
 };
 
 class OnPlayerThrowPepper;
+class OnPlayerDead;
 struct PlayerTag : powe::Component<PlayerTag>
 {
 	SharedPtr<OnPlayerThrowPepper> OnPlayerThrowPepper{};
+	SharedPtr<OnPlayerDead> OnPlayerDead{};
 	int playerIndex{};
+	float respawnCounter{};
+	bool isDead{};
 };
 
 struct DelayedMovement : powe::Component<DelayedMovement>
@@ -189,6 +193,7 @@ struct ScoreComponent : powe::Component<ScoreComponent>
 };
 
 class PepperNumberDisplay;
+class HUDDisplay;
 struct DisplayManager : powe::Component<DisplayManager>
 {
 	SharedPtr<powe::GameObject> score[int(PlayMode::Count)]{};
@@ -199,8 +204,16 @@ struct DisplayManager : powe::Component<DisplayManager>
 
 	SharedPtr<ScoreListener> ScoreListener{};
 	SharedPtr<PepperNumberDisplay> PepperNumberDisplay{};
+	SharedPtr<HUDDisplay> LivesDisplay{};
 
 	int CurrentScore[int(PlayMode::Count)]{};
 	int CurrentPepper[int(PlayMode::Count)]{};
 	int CurrentLives[int(PlayMode::Count)]{};
+};
+
+struct EnemyTag : powe::Component<EnemyTag>
+{
+	EnemyType enemyType{};
+	float stunnedRecoverCounter{};
+	bool isStunned{};
 };
