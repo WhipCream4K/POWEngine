@@ -108,9 +108,6 @@
     <ClInclude Include="POWEngine\Core\GameObject\GameObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Core\Components\ChildComponentTraits.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="POWEngine\Core\Components\Transform2D.h">
       <Filter>Header Files</Filter>
     </ClInclude>

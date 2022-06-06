@@ -99,10 +99,6 @@ namespace powe
 
 	private:
 
-		//SharedPtr<Archetype> CreateArchetypeWithTypes(const std::vector<ComponentTypeID>& typeID);
-		//SharedPtr<Archetype> UpdatePendingArchetypeKey(const std::string& targetKey, const std::string& newKey);
-		//SharedPtr<Archetype> GetArchetypeFromPendingList(const std::string& key);
-		//void RemoveArchetype(const std::string& key);
 
 		void RemoveComponentByID(GameObjectID id, ComponentTypeID componentID);
 
@@ -230,9 +226,6 @@ namespace powe
 				// return null because we don't support multiple instances of the same component
 				return nullptr;
 			}
-
-			// we need to remove this gameobject from its own archetype as well
-			//AddGameObjectToArchetypeRemoveList(oldArchetypeKey, id);
 		}
 
 		PreArchetypeTrait preArchetypeTrait{};
@@ -395,7 +388,6 @@ namespace powe
 			}
 
 			// if some how user ask for a component before the gameobject got registered to the pipeline
-
 			PreArchetypeTrait preArchetypeTrait{};
 			if (GetPreArchetypeTrait(id, preArchetypeTrait))
 			{
@@ -476,7 +468,7 @@ namespace powe
 				if (findItr == archetype->ComponentOffsets.end())
 					continue;
 
-				if (IsThisComponentSparse(findItr->second))
+				if (IsThisComponentSparse(findItr->first))
 					outData = m_SparseComponentManager.GetComponentData<ComponentType>(id, componentTypeId);
 				else
 					outData = &archetype->ComponentData[gbRecords.IndexInArchetype * archetype->SizeOfComponentsBlock + findItr->second];
@@ -538,42 +530,6 @@ namespace powe
 
 		return outComponentPointer;
 	}
-
-	//template <typename ComponentType>
-	//ComponentType* WorldEntity::AllocateComponentData(const SharedPtr<Archetype>& targetArchetype,
-	//	int indexInOldArchetype, ComponentType&& component)
-	//{
-	//	const size_t newComponentSize{ sizeof(ComponentType) };
-	//	ComponentType* outPointer{};
-
-	//	SharedPtr<RawByte[]> targetComponentData{ targetArchetype->ComponentData };
-	//	const SizeType oldComponentsDataTotalSize{ targetArchetype->SizeOfComponentsBlock * SizeType(targetArchetype->GameObjectIds.size()) };
-
-	//	if(oldComponentsDataTotalSize + newComponentSize > targetArchetype->TotalAllocatedData || !targetArchetype->ComponentData)
-	//	{
-	//		const SizeType newSize{ oldComponentsDataTotalSize + (targetArchetype->SizeOfComponentsBlock) * 3 };
-
-	//		targetComponentData = SharedPtr<RawByte[]>{ new RawByte[newSize]{} };
-
-	//		//if(targetArchetype->ComponentData)
-	//		//{
-	//		//	std::copy_n(targetArchetype->ComponentData.get(),
-	//		//		oldComponentsDataTotalSize,
-	//		//		targetComponentData.get());
-	//		//}
-
-	//		targetArchetype->TotalAllocatedData = newSize;
-	//		//targetArchetype->ComponentData = targetComponentData;
-	//	}
-
-	//	if(targetArchetype->ComponentData)
-	//	{
-	//		for (const auto& componentID : targetArchetype->Types)
-	//		{
-	//			
-	//		}			
-	//	}
-	//}
 }
 
 

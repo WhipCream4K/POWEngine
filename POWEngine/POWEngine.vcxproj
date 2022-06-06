@@ -215,7 +215,6 @@
     <ClInclude Include="POWEngine\Sound\FMOD\FMOD2DSound.h" />
     <ClInclude Include="POWEngine\Sound\FMOD\FMODUtils.h" />
     <ClInclude Include="POWEngine\Sound\NullSoundSystem.h" />
-    <ClInclude Include="POWEngine\Core\Components\ChildComponentTraits.h" />
     <ClInclude Include="POWEngine\ECS\ECSUtils.h" />
     <ClInclude Include="POWEngine\Core\GameObject\GameObject.h" />
     <ClInclude Include="POWEngine\LockFree\LFStack.h" />

@@ -86,7 +86,7 @@ void PlayScene::LoadScene(powe::WorldEntity& worldEntity)
 
 	const auto& tileInLevel{ staticSceneData->GetAllTileInLevel(mainSceneData->currentLevel) };
 
-	const bool shouldDebug{ true };
+	const bool shouldDebug{ false };
 
 	if (shouldDebug)
 	{

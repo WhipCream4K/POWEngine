@@ -32,7 +32,8 @@ void PlayerRespawnSystem::OnUpdate(float deltaTime, powe::GameObjectID)
 
 			// Set player to spawn point
 			Transform2D* transform2D = GetComponent<Transform2D>();
-			transform2D->SetWorldPosition(m_MainPlayerSpawnPos);
+			const glm::fvec2 midScreen{ 640.0f,360.0f };
+			transform2D->SetWorldPosition(m_MainPlayerSpawnPos * burger::SpriteScale + midScreen);
 		}
 	}
 }

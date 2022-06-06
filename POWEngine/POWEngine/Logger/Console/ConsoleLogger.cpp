@@ -18,27 +18,6 @@ void powe::ConsoleLogger::AddMessage(const std::string& msg)
 	m_TaskWait.notify_one();
 }
 
-//void powe::ConsoleLogger::AddInfoMessage(const std::string& msg)
-//{
-//	std::string log{ GreenText };
-//	log.append(LogInfo ResetText " " + msg);
-//	AddMessage(log);
-//}
-//
-//void powe::ConsoleLogger::AddWarningMessage(const std::string& msg, const std::string& where)
-//{
-//	std::string log{ YellowText };
-//	log.append(LogWarning ResetText " " + msg + " " + where);
-//	AddMessage(log);
-//}
-//
-//void powe::ConsoleLogger::AddErrorMessage(const std::string& msg, const std::string& where)
-//{
-//	std::string log{ RedText };
-//	log.append(LogError ResetText " " + msg + " " + where);
-//	AddMessage(log);	
-//}
-
 void powe::ConsoleLogger::LogErrorMessage(const std::string& msg, const std::string& fromWhere, bool  )
 {
 	std::string log{ RedText };

@@ -131,7 +131,6 @@ void BurgerTimeGame::Start(const SharedPtr<powe::Core>&,
 
 	worldEntity->RegisterSystem(PipelineLayer::InputValidation, inputSystem);
 	worldEntity->RegisterSystem(PipelineLayer::PhysicsValidation, std::make_shared<RectColliderDetectionSystem>());
-	worldEntity->RegisterSystem(PipelineLayer::Update, std::make_shared<DebugControllerSystem>());
 	worldEntity->RegisterSystem(PipelineLayer::Update, std::make_shared<GameStateSystem>());
 }
 

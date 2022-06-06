@@ -29,7 +29,10 @@ void AudioManager::OnCreate(powe::WorldEntity&, powe::GameObjectID id)
 			break;
 
 		case BasicSound::GameStart:			filePath = "./Resources/Sound/GameStart.mp3";	break;
-		case BasicSound::GameEnd:			filePath = "./Resources/Sound/GameOver.mp3";	break;
+		case BasicSound::GameEnd:			filePath = "./Resources/Sound/GameOver.mp3";
+			info.volume = 0.4f;
+
+			break;
 		case BasicSound::GameWin:			filePath = "./Resources/Sound/Win.wav";			break;
 
 		case BasicSound::ThrowPepper:		filePath = "./Resources/Sound/PepperThrow_NoHit2.wav";
@@ -76,6 +79,7 @@ void AudioManager::PlaySound(BurgerEvent type)
 	case BurgerEvent::IngredientDropToPlatform:	soundType = BasicSound::IngredientSlam;		break;
 	case BurgerEvent::StepOnIngredients:		soundType = BasicSound::IngredientStep;		break;
 	case BurgerEvent::PlateFull: break;
+	case BurgerEvent::PlayerDead:				soundType = BasicSound::GameEnd;	break;
 	default:;
 	}
 

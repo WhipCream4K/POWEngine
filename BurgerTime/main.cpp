@@ -25,13 +25,12 @@ int main()
 	const SharedPtr<powe::WorldEntity> worldEntity{std::make_shared<powe::WorldEntity>()};
 
 	const SharedPtr<BurgerTimeGame> burgerTimeScene{ std::make_shared<BurgerTimeGame>() };
-	//const SharedPtr<powe::WorldClock> worldClock{ engineCore->GetWorldClock() };
 
 	engineCore->RegisterRendererType(std::make_unique<powe::SFML2DRenderer>());
 
 	engineCore->GetRenderer()->RegisterSystem(std::make_shared<powe::SFML2DRenderSystem>());
 	engineCore->GetRenderer()->RegisterSystem(std::make_shared<powe::SFMLTextRender>());
-	engineCore->GetRenderer()->RegisterSystem(std::make_shared<powe::SFML2DBoundingBoxRender>());
+	//engineCore->GetRenderer()->RegisterSystem(std::make_shared<powe::SFML2DBoundingBoxRender>());
 
 	burgerTimeScene->Start(engineCore,worldEntity);
 
