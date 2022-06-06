@@ -8,6 +8,7 @@
 #include <queue>
 #include "POWEngine/LockFree/LFQueue.h"
 #include "AudioClip.h"
+#include "POWEngine/Logger/LoggerUtils.h"
 #include "Channel.h"
 
 class powe::FMOD2DSound::FMODSoundImpl
@@ -42,7 +43,7 @@ public:
 	ChannelID PlayImmediate(const std::string& filePath, const SoundInfo& soundInfo);
 	void Stop(SoundID id);
 	bool IsPlaying(SoundID id);
-	void Update();
+	//void Update();
 
 
 private:
@@ -137,7 +138,7 @@ void powe::FMOD2DSound::FMODSoundImpl::UnRegisterSoundEntity(SoundID id)
 		clip = m_AudioClip[id];
 	}
 
-	if(clip)
+	if (clip)
 	{
 		m_PathCheck.erase(clip->GetFilePath());
 
@@ -229,6 +230,9 @@ void powe::FMOD2DSound::FMODSoundImpl::Stop(SoundID id)
 	{
 		std::scoped_lock lock{ m_ChannelMutex };
 		targetChannel = m_ActiveChannels[id];
+		const auto findItr{ m_ActiveChannels.find(id) };
+		if (findItr != m_ActiveChannels.end())
+			targetChannel = findItr->second;
 	}
 
 	if (targetChannel)
@@ -241,32 +245,35 @@ bool powe::FMOD2DSound::FMODSoundImpl::IsPlaying(SoundID id)
 
 	{
 		std::scoped_lock lock{ m_ChannelMutex };
-		targetChannel = m_ActiveChannels[id];
+		const auto findItr{ m_ActiveChannels.find(id) };
+		if (findItr != m_ActiveChannels.end())
+			targetChannel = findItr->second;
 	}
 
 	if (targetChannel)
 		return targetChannel->IsPlaying();
 
+
 	return false;
 }
 
-void powe::FMOD2DSound::FMODSoundImpl::Update()
-{
-	while(!m_IsThreadExit)
-	{
-		std::this_thread::sleep_for(std::chrono::milliseconds(17));
-
-		{
-			std::scoped_lock lock{ m_ChannelMutex };
-
-			std::erase_if(m_ActiveChannels, [](const auto& item)
-				{
-					const auto& [key, value] = item;
-					return !value->IsPlaying();
-				});
-		}
-	}
-}
+//void powe::FMOD2DSound::FMODSoundImpl::Update()
+//{
+//	while (!m_IsThreadExit)
+//	{
+//		std::this_thread::sleep_for(std::chrono::milliseconds(17));
+//
+//		{
+//			std::scoped_lock lock{ m_ChannelMutex };
+//
+//			std::erase_if(m_ActiveChannels, [](const auto& item)
+//				{
+//					const auto& [key, value] = item;
+//					return !value || !value->IsPlaying();
+//				});
+//		}
+//	}
+//}
 
 
 void powe::FMOD2DSound::FMODSoundImpl::RunMainPlaySound()
@@ -286,12 +293,20 @@ void powe::FMOD2DSound::FMODSoundImpl::RunMainPlaySound()
 		const SoundQueue element{ m_SoundQueue.Front() };
 		m_SoundQueue.Pop();
 
-		if(element.aChannel && element.aClip)
+		if (element.aChannel && element.aClip)
 		{
-			if (!element.aClip->IsLoaded())
-				element.aClip->LoadStream(m_FMODSystem);
+			try
+			{
+				if (!element.aClip->IsLoaded())
+					element.aClip->LoadStream(m_FMODSystem);
 
-			element.aChannel->Play(m_FMODSystem, element.aClip->GetSound());
+				element.aChannel->Play(m_FMODSystem, element.aClip->GetSound());
+
+			}
+			catch (const std::exception& e)
+			{
+				POWLOGERROR(e.what());
+			}
 		}
 	}
 }
@@ -300,17 +315,27 @@ void powe::FMOD2DSound::FMODSoundImpl::RunChannelChecking()
 {
 	while (!m_IsThreadExit)
 	{
-		std::this_thread::sleep_for(std::chrono::milliseconds(100));
+		std::this_thread::sleep_for(std::chrono::milliseconds(400));
 
+		size_t eraseCount{};
 		{
 			std::scoped_lock lock{ m_ChannelMutex };
 
-			std::erase_if(m_ActiveChannels, [](const auto& item)
+			eraseCount = std::erase_if(m_ActiveChannels, [](const auto& item)
 				{
 					const auto& [key, value] = item;
-					return !value->IsPlaying();
+					return !value || !value->IsPlaying();
 				});
+
 		}
+
+		if (eraseCount > 0)
+		{
+			std::string name{};
+			name.append("FMOD -> " + std::to_string(eraseCount) + " channels were deleted");
+			POWLOGNORMAL(name);
+		}
+
 	}
 }
 
@@ -331,7 +356,6 @@ void powe::FMOD2DSound::UnRegisterSoundEntity(SoundID id)
 	m_FmodSoundImpl->UnRegisterSoundEntity(id);
 }
 
-
 bool powe::FMOD2DSound::IsPlaying(SoundID id) const
 {
 	return m_FmodSoundImpl->IsPlaying(id);
@@ -349,7 +373,7 @@ powe::ChannelID powe::FMOD2DSound::PlayImmediate(const std::string& filePath, co
 
 void powe::FMOD2DSound::Update()
 {
-	m_FmodSoundImpl->Update();
+	//m_FmodSoundImpl->Update();
 }
 
 void powe::FMOD2DSound::Stop(SoundID id)

@@ -24,8 +24,9 @@ void ColliderResolver::AddCollider(powe::GameObjectID owner, uint32_t layer)
 
 void ColliderResolver::RemoveCollider(powe::GameObjectID owner)
 {
-	const auto removeItr{ std::ranges::remove(m_Colliders,owner) };
-	m_Colliders.erase(removeItr.begin(),m_Colliders.end());
+	const auto findItrCol{ std::ranges::find(m_Colliders,owner) };
+	if(findItrCol != m_Colliders.end())
+		m_Colliders.erase(findItrCol);
 
 	for (auto& collider : m_ColliderLayer)
 	{

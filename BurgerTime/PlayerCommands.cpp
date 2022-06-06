@@ -47,7 +47,7 @@ void VerticalMovement::Execute(
 		return;
 
 	glm::fvec2 currentPos{ transform2D->GetWorldPosition() };
-	currentPos.y += axisValue * deltaTime * playerSpeed->speed;
+	currentPos.y += axisValue * deltaTime * playerSpeed->climbSpeed;
 
 	canWalkOnTile->movementDetails.currentMovementDir = axisValue > 0.0f ? MoveDir::Down : MoveDir::Up;
 	canWalkOnTile->movementDetails.futurePos = currentPos;
@@ -80,7 +80,7 @@ void ThrowPepper::Execute(powe::WorldEntity& worldEntity, float, powe::GameObjec
 		{
 			if(playerTag->OnPlayerThrowPepper)
 			{
-				playerTag->OnPlayerThrowPepper->SignalThrowPepper(worldEntity);
+				playerTag->OnPlayerThrowPepper->SignalThrowPepper(worldEntity,playerTag->playerIndex);
 			}
 		}
 	}

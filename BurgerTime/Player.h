@@ -10,6 +10,7 @@ struct PlayerDescriptor
 	int currentLevelIdx{};
 	uint8_t playerIndex{};
 	powe::GameObjectID colliderManager{};
+	glm::uvec4 tint{255,255,255,255};
 };
 
 namespace powe

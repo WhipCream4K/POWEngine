@@ -8,7 +8,10 @@
 #include "POWEngine/Rendering/Components/Debug/DebugRectangle.h"
 #include "BurgerTimeComponents.h"
 #include "AssetManager.h"
+#include "AudioManager.h"
 #include "ColliderCommand.h"
+#include "OnIngredientStepped.h"
+#include "PlaySoundOnEvent.h"
 #include "StaticSceneData.h"
 
 std::vector<SharedPtr<powe::GameObject>> IngredientsStatic::Create(powe::WorldEntity& worldEntity, const IngredientsDesc& desc)
@@ -84,6 +87,13 @@ SharedPtr<powe::GameObject> IngredientsStatic::CreateSubGameObject(
 
 	StepHandler* stepHandler = sub1->AddComponent(StepHandler{});
 	stepHandler->stepHandlerID = desc.stepHandler;
+	stepHandler->OnIngredientStepped = std::make_shared<OnIngredientStepped>();
+
+	const AudioManager* audioManager = worldEntity.FindUniqueComponent<AudioManager>();
+	if(audioManager)
+	{
+		stepHandler->OnIngredientStepped->Attach(audioManager->OnEventHappened.get());
+	}
 
 #ifdef _DEBUG
 

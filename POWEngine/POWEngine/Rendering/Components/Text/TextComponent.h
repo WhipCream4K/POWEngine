@@ -23,6 +23,7 @@ namespace powe
 		int GetTextSize() const;
 		void SetTextSize(int ptSize) const;
 		void SetText(const std::string& text) const;
+		void SetFillColor(const glm::uvec4& color) const;
 
 	private:
 

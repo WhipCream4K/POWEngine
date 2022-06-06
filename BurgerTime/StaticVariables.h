@@ -17,6 +17,8 @@ namespace burger
 	constexpr const char* MainLevelSprite{ "BurgerTime_MainLevelSprite" };
 	constexpr const char* MenuPointer{ "BurgerTime_MenuPointer" };
 	constexpr const char* MainFont{ "BurgerTime_MainFont" };
+	constexpr const char* HealthSprite{ "BurgerTime_Health" };
+
 	constexpr glm::fvec2 SpriteScale{ 2.5f,2.5f };
 
 	class RenderOrder
@@ -27,7 +29,8 @@ namespace burger
 			Background,
 			PickUps,
 			Player,
-			Enemy
+			Enemy,
+			UI
 		};
 	};
 

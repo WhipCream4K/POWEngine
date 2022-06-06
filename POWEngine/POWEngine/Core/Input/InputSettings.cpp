@@ -48,7 +48,7 @@ float powe::InputSettings::GetInputAxis(const std::string& axisName, uint8_t pla
 	return 0.0f;
 }
 
-bool powe::InputSettings::GetInputAction(const std::string& actionName, InputEvent targetEvent, uint8_t playerIndex)
+bool powe::InputSettings::GetInputAction(const std::string& actionName, InputEvent targetEvent, uint8_t playerIndex) const
 {
 	assert(playerIndex < MAXPLAYER && "Player index isn't not in range of max player");
 	const auto findItr{ m_ActionKeyMappings.find(actionName) };
@@ -61,7 +61,8 @@ bool powe::InputSettings::GetInputAction(const std::string& actionName, InputEve
 				const auto& keyState = m_MainKeyPool[playerIndex].at(actionKey);
 				const InputEvent thisFrameEvent = InputEvent((keyState.inputLastFrame << 0) | (keyState.inputThisFrame << 1));
 
-				return thisFrameEvent == targetEvent;
+				if (thisFrameEvent == targetEvent)
+					return true;
 			}
 		}
 	}
@@ -118,6 +119,11 @@ void powe::InputSettings::AddAxisMapping(const std::string& name, const std::vec
 bool powe::InputSettings::IsKeyBoardPressed(KeyType key)
 {
 	return sf::Keyboard::isKeyPressed(sf::Keyboard::Key(key));
+}
+
+void powe::InputSettings::SetAssignFirstControllerToNextPlayer(bool state)
+{
+	m_AssignFirstControllerToNextIndex = state;
 }
 
 InputEvent powe::InputSettings::InterpretInputState(bool isKeyPressed, const InputEvent& savedInputState)
@@ -196,15 +202,21 @@ void powe::InputSettings::ProcessHWData(const HardwareBus& hardwareBus)
 	{
 		const GamepadData gData{ std::get<GamepadData>(hardwareBus.hData) };
 
+		const uint8_t shouldAssignFirstControllerToNextIdx{ uint8_t(m_AssignFirstControllerToNextIndex) };
+
 		// Gamepad Buttons Data
 		for (int i = 0; i < GamepadKey::ButtonCount; ++i)
 		{
 			const Key gamepadKey{ InputDevice::D_Gamepad,KeyType(i) };
 
-			if (!m_MainKeyPool[gData.playerIndex].contains(gamepadKey))
+			const uint8_t playerIndex{ uint8_t(gData.playerIndex + shouldAssignFirstControllerToNextIdx) };
+
+			//if (!m_MainKeyPool[gData.playerIndex].contains(gamepadKey))
+			if (!m_MainKeyPool[playerIndex].contains(gamepadKey))
 				continue;
 
-			KeyData kData{ gamepadKey,gData.playerIndex,0.0f,false };
+			//KeyData kData{ gamepadKey,gData.playerIndex,0.0f,false };
+			KeyData kData{ gamepadKey,playerIndex,0.0f,false };
 			if (i == GamepadKey::GPK_Left_Shoulder)
 				kData.axisValue = gData.LShoulder;
 
@@ -223,11 +235,14 @@ void powe::InputSettings::ProcessHWData(const HardwareBus& hardwareBus)
 		for (int i = int(GamepadKey::GPK_Right_AxisX); i < int(GamepadKey::GPK_Count); ++i)
 		{
 			const Key gamepadKey{ InputDevice::D_Gamepad, KeyType(i) };
+			const uint8_t playerIndex{ uint8_t(gData.playerIndex + shouldAssignFirstControllerToNextIdx) };
 
-			if (!m_MainKeyPool[gData.playerIndex].contains(gamepadKey))
+			//if (!m_MainKeyPool[gData.playerIndex].contains(gamepadKey))
+			if (!m_MainKeyPool[playerIndex].contains(gamepadKey))
 				continue;
 
-			KeyData kData{ gamepadKey,gData.playerIndex,gData.thumbAxisData[GamepadKey::GetThumbIndexDataFromKeyCode(i)] };
+			//KeyData kData{ gamepadKey,gData.playerIndex,gData.thumbAxisData[GamepadKey::GetThumbIndexDataFromKeyCode(i)] };
+			KeyData kData{ gamepadKey,playerIndex,gData.thumbAxisData[GamepadKey::GetThumbIndexDataFromKeyCode(i)] };
 			kData.isDown = bool(kData.axisValue);
 
 			const InputEvent thisFrameEvent = EvaluateMainKeyPool(kData);

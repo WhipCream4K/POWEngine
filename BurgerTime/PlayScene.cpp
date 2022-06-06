@@ -117,20 +117,42 @@ void PlayScene::LoadScene(powe::WorldEntity& worldEntity)
 		}
 	}
 
-	// Spawn player(s)
-	switch (mainSceneData->currentPlayMode)
+	if (mainSceneData->currentPlayMode == PlayMode::Coop)
 	{
-	case PlayMode::SinglePlayer:
-	{
+		glm::fvec2 player1Pos{ (levelData.playerSpawnPoints) * burger::SpriteScale + midScreen };
+		player1Pos.x -= 30.0f * burger::SpriteScale.x;
+
 		const PlayerDescriptor player1Desc{
-			levelData.playerSpawnPoints * burger::SpriteScale + midScreen,
-			mainSceneData->currentLevel,0, colliderResolver->GetID() };
+			player1Pos,
+			mainSceneData->currentLevel,0,
+			colliderResolver->GetID() };
 
 		const auto player{ Player::Create(worldEntity,player1Desc) };
 		AddGameObject(player);
+
+		glm::fvec2 player2Pos{ levelData.playerSpawnPoints * burger::SpriteScale + midScreen };
+		player2Pos.x += 30.0f * burger::SpriteScale.x;
+
+		const PlayerDescriptor player2Desc{
+			player2Pos,
+				mainSceneData->currentLevel,
+			1,
+			colliderResolver->GetID(),{0,255,255,255} };
+
+		const auto player2{ Player::Create(worldEntity,player2Desc) };
+		AddGameObject(player2);
 	}
-	break;
-	default:;
+	else
+	{
+		glm::fvec2 player1Pos{ levelData.playerSpawnPoints * burger::SpriteScale + midScreen };
+
+		const PlayerDescriptor player1Desc{
+			player1Pos,
+			mainSceneData->currentLevel,0,
+			colliderResolver->GetID() };
+
+		const auto player{ Player::Create(worldEntity,player1Desc) };
+		AddGameObject(player);
 	}
 
 	// Register System
@@ -146,4 +168,14 @@ void PlayScene::LoadScene(powe::WorldEntity& worldEntity)
 	worldEntity.RegisterSystem(PipelineLayer::Update, ingredientSystem);
 	AddSystem(ingredientSystem);
 
+}
+
+SharedPtr<powe::GameObject> PlayScene::SpawnPlayer(powe::WorldEntity& worldEntity, const PlayerDescriptor& desc)
+{
+	//const PlayerDescriptor player1Desc{
+	//levelData.playerSpawnPoints * burger::SpriteScale + midScreen,
+	//mainSceneData->currentLevel,0, colliderResolver->GetID() };
+
+	const auto player{ Player::Create(worldEntity,desc) };
+	return player;
 }

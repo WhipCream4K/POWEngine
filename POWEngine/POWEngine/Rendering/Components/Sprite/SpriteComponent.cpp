@@ -51,6 +51,11 @@ void powe::SpriteComponent::SetOrigin(const glm::fvec2& pos) const
 	m_SpriteImpl->SetOrigin(pos);
 }
 
+void powe::SpriteComponent::SetTint(const glm::uvec4& color) const
+{
+	m_SpriteImpl->SetTint(color);
+}
+
 void powe::SpriteComponent::SetRenderOrder(int order) const
 {
 	m_SpriteImpl->SetRenderOrder(order);

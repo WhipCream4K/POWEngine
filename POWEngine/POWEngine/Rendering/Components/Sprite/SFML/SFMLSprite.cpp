@@ -16,7 +16,7 @@ powe::SFMLSprite::SFMLSprite()
 powe::SFMLSprite::SFMLSprite(const SharedPtr<GameObject>& owner)
 	: m_Owner(owner)
 {
-	if(owner)
+	if (owner)
 	{
 		owner->AddComponent(SFMLSpriteComponent{}, ComponentFlag::Sparse);
 	}
@@ -37,7 +37,7 @@ void powe::SFMLSprite::SetOrigin(float x, float y)
 
 void powe::SFMLSprite::SetTexture(const Texture& texture)
 {
-	if(const auto gameObject{m_Owner.lock()})
+	if (const auto gameObject{ m_Owner.lock() })
 	{
 		if (SFMLSpriteComponent * sfmlSprite{ gameObject->GetComponent<SFMLSpriteComponent>() })
 		{
@@ -47,8 +47,8 @@ void powe::SFMLSprite::SetTexture(const Texture& texture)
 				sfmlSprite->sprite.setTexture(sfTexture, false);
 
 				const sf::Vector2u textureSize{ sfTexture.getSize() };
-				sfmlSprite->sprite.setOrigin({float(textureSize.x) / 2.0f,float(textureSize.y) / 2.0f});
-			}  
+				sfmlSprite->sprite.setOrigin({ float(textureSize.x) / 2.0f,float(textureSize.y) / 2.0f });
+			}
 		}
 	}
 }
@@ -103,6 +103,23 @@ int powe::SFMLSprite::GetRenderOrder() const
 	return 0;
 }
 
+void powe::SFMLSprite::SetTint(const glm::uvec4& color)
+{
+	if (const auto gameObject{ m_Owner.lock() })
+	{
+		if (SFMLSpriteComponent * sfmlSprite{ gameObject->GetComponent<SFMLSpriteComponent>() })
+		{
+
+			const sf::Uint8 r{ uint8_t(color.x) };
+			const sf::Uint8 g{ uint8_t(color.y) };
+			const sf::Uint8 b{ uint8_t(color.z) };
+			const sf::Uint8 a{ uint8_t(color.w) };
+
+			return sfmlSprite->sprite.setColor(sf::Color{ r,g,b,a });
+		}
+	}
+}
+
 void powe::SFMLSprite::SetRenderOrder(int order)
 {
 	if (const auto gameObject{ m_Owner.lock() })
@@ -114,9 +131,9 @@ void powe::SFMLSprite::SetRenderOrder(int order)
 	}
 }
 
-void powe::SFMLSprite::Destroy(powe::WorldEntity& )
+void powe::SFMLSprite::Destroy(powe::WorldEntity&)
 {
-	if(const auto gameObject{m_Owner.lock()})
+	if (const auto gameObject{ m_Owner.lock() })
 	{
 		gameObject->RemoveComponent<SFMLSpriteComponent>();
 	}

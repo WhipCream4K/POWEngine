@@ -14,7 +14,7 @@
 #include "PlayerCommands.h"
 #include "Rect2DCollider.h"
 #include "POWEngine/Rendering/Components/Debug/DebugRectangle.h"
-#include "PlaySoundOnThrowPepper.h"
+#include "PlaySoundOnEvent.h"
 
 SharedPtr<powe::GameObject> Player::Create(powe::WorldEntity& worldEntity, const PlayerDescriptor& playerDescriptor)
 {
@@ -31,11 +31,14 @@ SharedPtr<powe::GameObject> Player::Create(powe::WorldEntity& worldEntity, const
 	spriteComponent->SetTexture(*Instance<AssetManager>()->GetAsset<Texture>(burger::MainObjectSprite));
 	spriteComponent->SetRect({ 0.0f,0.0f,16.0f,16.0f });
 	spriteComponent->SetRenderOrder(burger::RenderOrder::Player);
+	spriteComponent->SetTint(playerDescriptor.tint);	
 
 	gameObject->AddComponent(AnimationComponent{ 3,0.5f });
 
-	const float speed{ 80.0f };
-	gameObject->AddComponent(Speed{ speed });
+	//const float speed{ 95.0f };
+	Speed* speedComp = gameObject->AddComponent(Speed{});
+	speedComp->speed = 90.0f;
+	speedComp->climbSpeed = 75.0f;
 
 	CanWalkOnTile* canWalkOnTile{ gameObject->AddComponent(CanWalkOnTile{playerDescriptor.currentLevelIdx}) };
 
@@ -59,11 +62,12 @@ SharedPtr<powe::GameObject> Player::Create(powe::WorldEntity& worldEntity, const
 
 	PlayerTag* playerTag = gameObject->AddComponent(PlayerTag{}, ComponentFlag::Sparse);
 	playerTag->OnPlayerThrowPepper = std::make_shared<OnPlayerThrowPepper>();
+	playerTag->playerIndex = playerDescriptor.playerIndex;
 
 	// register audio listener
 	AudioManager* audioManager = worldEntity.FindUniqueComponent<AudioManager>();
 	if(audioManager)
-		playerTag->OnPlayerThrowPepper->Attach(audioManager->OnPepperThrow.get());
+		playerTag->OnPlayerThrowPepper->Attach(audioManager->OnEventHappened.get());
 
 #ifdef _DEBUG
 

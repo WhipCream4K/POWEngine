@@ -20,4 +20,9 @@ powe::SFMLTexture::SFMLTexture(const std::string& filePath)
 	}
 }
 
+void powe::SFMLTexture::SetRepeated(bool isRepeated)
+{
+	m_Texture.setRepeated(isRepeated);
+}
+
 #endif

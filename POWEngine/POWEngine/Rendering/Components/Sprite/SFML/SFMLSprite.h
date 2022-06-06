@@ -24,6 +24,7 @@ namespace powe
 		void SetRect(const glm::fvec4& rect) override;
 		SFMLSpriteComponent* GetSfSprite() const;
 		int GetRenderOrder() const override;
+		void SetTint(const glm::uvec4&) override;
 		void SetRenderOrder(int order) override;
 		void Destroy(powe::WorldEntity&) override;
 

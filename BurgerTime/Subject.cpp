@@ -3,13 +3,28 @@
 #include "Observer.h"
 #include <algorithm>
 
-void Subject::Notify(powe::WorldEntity& worldEntity)
+void Subject::Notify(powe::WorldEntity& worldEntity, BurgerEvent type)
 {
 	for (auto it = m_Observers.begin(); it != m_Observers.end();)
 	{
 		if (const auto observer{ *it })
 		{
-			observer->OnReceiveMessage(worldEntity, this);
+			observer->OnReceiveMessage(worldEntity, type);
+			++it;
+		}
+		else
+			it = m_Observers.erase(it);
+	}
+}
+
+
+void Subject::NotifyFromPlayer(powe::WorldEntity& worldEntity, BurgerEvent type, int playerIndex)
+{
+	for (auto it = m_Observers.begin(); it != m_Observers.end();)
+	{
+		if (const auto observer{ *it })
+		{
+			observer->OnReceiveMessageByPlayer(worldEntity, type, playerIndex);
 			++it;
 		}
 		else

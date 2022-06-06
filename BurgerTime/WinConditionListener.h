@@ -10,11 +10,16 @@ class WinConditionListener : public Observer
 public:
 
 	WinConditionListener() = default;
-	WinConditionListener(int maxServing);
-	void OnReceiveMessage(powe::WorldEntity&, Subject*) override;
+	WinConditionListener(powe::GameObjectID owner,powe::GameObjectID audioManager,int maxServing);
+	void OnReceiveMessage(powe::WorldEntity&, BurgerEvent) override;
+	//void OnReceiveMessage(powe::WorldEntity&, Subject*) override;
+	void SetMaxServingCount(int servingCount);
+	void Reset();
 
 private:
 
+	powe::GameObjectID m_Owner{};
+	powe::GameObjectID m_AudioManager{};
 	int m_ServeCount{};
 	int m_MaxServingCount{};
 };

@@ -42,7 +42,7 @@ namespace powe
 		void ParseHWMessages(const HardwareMessages& hwMessages);
 
 		[[nodiscard]] float GetInputAxis(const std::string& axisName, uint8_t playerIndex = 0) const;
-		bool GetInputAction(const std::string& actionName, InputEvent targetEvent, uint8_t playerIndex = 0);
+		bool GetInputAction(const std::string& actionName, InputEvent targetEvent, uint8_t playerIndex = 0) const;
 
 		const std::unordered_map<std::string, ActionMap>& GetActionMap() const { return m_ActionKeyMappings; }
 		const std::unordered_map<std::string, AxisMap>& GetAxisMap() const { return m_AxisKeyMappings; }
@@ -54,6 +54,8 @@ namespace powe
 
 		const KeyPool& GetCurrentKeyState(uint8_t playerIndex) const { return m_MainKeyPool[playerIndex]; }
 		const SysKeyType GetThisFrameSysKey() const { return m_CurrentFrameSystemKey; }
+
+		void SetAssignFirstControllerToNextPlayer(bool state);
 
 	private:
 
@@ -81,6 +83,7 @@ namespace powe
 		std::array<KeyPool, MAXPLAYER> m_MainKeyPool;
 
 		bool m_ShouldRevalidateMouseValue{};
+		bool m_AssignFirstControllerToNextIndex{};
 	};
 }
 

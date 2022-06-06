@@ -2,6 +2,8 @@
 
 #include <poweCustomtype.h>
 
+#include "BurgerEvent.h"
+
 namespace powe
 {
 	class WorldEntity;
@@ -12,8 +14,9 @@ class Subject
 {
 public:
 
-	void Notify(powe::WorldEntity&);
-
+	void Notify(powe::WorldEntity&,BurgerEvent type);
+	void NotifyFromPlayer(powe::WorldEntity&,BurgerEvent type,int playerIndex);
+	
 	void Attach(Observer* observer);
 	void Remove(Observer* observer);
 

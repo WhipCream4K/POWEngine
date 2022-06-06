@@ -276,6 +276,7 @@
     <ClInclude Include="POWEngine\Rendering\Components\Debug\DebugRectangle.h" />
     <ClInclude Include="POWEngine\Rendering\Components\Debug\SFML\SFMLDebugRectangle.h" />
     <ClInclude Include="POWEngine\Rendering\Components\Debug\RectangleImpl.h" />
+    <ClInclude Include="POWEngine\Random\Random.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="POWEngine\Rendering\2D\Draw2DObject.cpp" />
@@ -343,6 +344,7 @@
     <ClCompile Include="POWEngine\Rendering\System\SFML\SFML2DBoundingBoxRender.cpp" />
     <ClCompile Include="POWEngine\Rendering\Components\Debug\SFML\SFMLDebugRectangle.cpp" />
     <ClCompile Include="POWEngine\Rendering\Components\Debug\RectangleImpl.cpp" />
+    <ClCompile Include="POWEngine\Random\Random.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

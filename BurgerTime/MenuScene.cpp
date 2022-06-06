@@ -55,7 +55,6 @@ void MenuScene::LoadScene(powe::WorldEntity& worldEntity)
 	textComp->SetText("SinglePlayer");
 
 
-
 	//TextComponent* textComp;
 	const auto banner2{ std::make_shared<GameObject>(worldEntity) };
 	AddGameObject(banner2);

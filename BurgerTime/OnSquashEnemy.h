@@ -8,11 +8,7 @@ class OnSquashEnemy : public Subject
 {
 public:
 
-	void SignalSquashEnemy(powe::WorldEntity&,EnemyType enemy);
-	EnemyType GetSquashEnemy() const { return m_SquashEnemy; }
+	void SignalSquashEnemy(powe::WorldEntity&,EnemyType enemy,int playerIndex = 0);
 
-private:
-
-	EnemyType m_SquashEnemy{};
 };
 

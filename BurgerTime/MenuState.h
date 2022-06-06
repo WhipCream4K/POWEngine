@@ -8,12 +8,12 @@ class MenuState : public GameState
 {
 public:
 
-	SharedPtr<GameState> HandleInput(powe::WorldEntity&, powe::GameObjectID) override;
-	void Enter(powe::WorldEntity&, powe::GameObjectID) override;
-	void Exit(powe::WorldEntity&, powe::GameObjectID) override;
+	SharedPtr<GameState> HandleInput(powe::WorldEntity&, DynamicSceneData*, powe::GameObjectID) override;
+	void Enter(powe::WorldEntity&, DynamicSceneData*, powe::GameObjectID) override;
+	void Exit(powe::WorldEntity&, DynamicSceneData*, powe::GameObjectID) override;
 
 private:
 
-	SharedPtr<MenuScene> m_MenuScene;
+	//SharedPtr<MenuScene> m_MenuScene;
 };
 

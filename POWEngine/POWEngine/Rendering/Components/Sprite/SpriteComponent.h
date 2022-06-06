@@ -30,6 +30,7 @@ namespace powe
 		void SetRect(const glm::fvec4& rect) const;
 		void SetOrigin(float x, float y) const;
 		void SetOrigin(const glm::fvec2& pos) const;
+		void SetTint(const glm::uvec4& color) const;
 
 		void SetRenderOrder(int order) const;
 		int GetRenderOrder() const;

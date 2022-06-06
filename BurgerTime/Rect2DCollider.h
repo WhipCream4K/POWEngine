@@ -31,7 +31,7 @@ public:
 		uint32_t layer, uint32_t targetLayer = 0);
 
 	void OnCreate(powe::WorldEntity&, powe::GameObjectID) override;
-	void OnDestroy(powe::WorldEntity&, powe::GameObjectID) override;
+	//void OnDestroy(powe::WorldEntity&, powe::GameObjectID) override;
 
 	SharedPtr<ColliderCommand> OnEnterCallback{};
 	powe::GameObjectID ColliderManager{};

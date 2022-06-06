@@ -1,6 +1,7 @@
 #include "OnPlayerThrowPepper.h"
 
-void OnPlayerThrowPepper::SignalThrowPepper(powe::WorldEntity& worldEntity)
+
+void OnPlayerThrowPepper::SignalThrowPepper(powe::WorldEntity& worldEntity, int playerIndex)
 {
-	Notify(worldEntity);
+	NotifyFromPlayer(worldEntity, BurgerEvent::ThrowPepper,playerIndex);
 }

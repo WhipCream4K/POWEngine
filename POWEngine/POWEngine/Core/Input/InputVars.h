@@ -2,7 +2,7 @@
 
 namespace powe
 {
-	constexpr int MAXPLAYER{ 4 };
+	constexpr int MAXPLAYER{ 5 };
 
 	namespace gamepad
 	{

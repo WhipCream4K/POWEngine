@@ -20,6 +20,8 @@ namespace powe
 		template<typename T>
 		T* GetTypeInstance() const;
 
+		void SetRepeated(bool isRepeated) const;
+
 	private:
 
 		OwnedPtr<TextureImpl> m_TextureImpl;

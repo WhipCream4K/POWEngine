@@ -44,3 +44,8 @@ void powe::TextComponent::SetText(const std::string& text) const
 {
 	m_TextImpl->SetText(text);
 }
+
+void powe::TextComponent::SetFillColor(const glm::uvec4& color) const
+{
+	m_TextImpl->SetFillColor(color);
+}

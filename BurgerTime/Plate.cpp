@@ -7,6 +7,7 @@
 #include "ColliderCommand.h"
 #include "BurgerTimeComponents.h"
 #include "StaticSceneData.h"
+#include "OnIngredientServing.h"
 
 SharedPtr<powe::GameObject> Plate::Create(powe::WorldEntity& worldEntity, const PlateDesc& desc)
 {
@@ -32,6 +33,13 @@ SharedPtr<powe::GameObject> Plate::Create(powe::WorldEntity& worldEntity, const 
 	PlateComponent* plateComponent = gameObject->AddComponent(PlateComponent{});
 	plateComponent->maxStackCount = maxServingNeeded;
 	plateComponent->realIngredientSize = size;
+	plateComponent->OnServing = std::make_shared<OnIngredientServing>();
+
+	DynamicSceneData* dynamicSceneData = worldEntity.FindUniqueComponent<DynamicSceneData>();
+	if(dynamicSceneData)
+	{
+		plateComponent->OnServing->Attach(dynamicSceneData->OnGameWin.get());
+	}
 
 	return gameObject;
 }

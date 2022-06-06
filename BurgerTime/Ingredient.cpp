@@ -1,10 +1,16 @@
 #include "Ingredient.h"
 
+#include "AudioManager.h"
+#include "BurgerTimeComponents.h"
 #include "POWEngine/Core/GameObject/GameObject.h"
 #include "POWEngine/Core/Components/Transform2D.h"
 
 #include "IngredientsComponent.h"
 #include "IngredientState.h"
+//#include "OnIngredientDropToPlatform.h"
+#include "PlaySoundOnEvent.h"
+#include "ScorableEvent.h"
+#include "ScoreListener.h"
 
 SharedPtr<powe::GameObject> Ingredient::Create(powe::WorldEntity& worldEntity, const SharedPtr<SceneFactory>& refScene, const IngredientsDesc& desc)
 {
@@ -25,6 +31,19 @@ SharedPtr<powe::GameObject> Ingredient::Create(powe::WorldEntity& worldEntity, c
 	ingredientsComponent->FallingSpeed = 100.0f;
 	ingredientsComponent->BouncingStartVelocity = 100.0f;
 	ingredientsComponent->BounceApexTime = 0.2f;
+	ingredientsComponent->OnIngredientDropToPlatform = std::make_shared<ScorableEvent>();
+
+	AudioManager* audioManager = worldEntity.FindUniqueComponent<AudioManager>();
+	if(audioManager)
+	{
+		ingredientsComponent->OnIngredientDropToPlatform->Attach(audioManager->OnEventHappened.get());
+	}
+
+	DisplayManager* displayManager = worldEntity.FindUniqueComponent<DisplayManager>();
+	if(displayManager)
+	{
+		ingredientsComponent->OnIngredientDropToPlatform->Attach(displayManager->ScoreListener.get());
+	}
 
 	return gameObject;
 

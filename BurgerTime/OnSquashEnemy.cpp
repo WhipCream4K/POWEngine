@@ -1,8 +1,14 @@
 #include "OnSquashEnemy.h"
 
 
-void OnSquashEnemy::SignalSquashEnemy(powe::WorldEntity& worldEntity, EnemyType enemy)
+void OnSquashEnemy::SignalSquashEnemy(powe::WorldEntity& worldEntity, EnemyType enemy, int playerIndex)
 {
-	m_SquashEnemy = enemy;
-	Notify(worldEntity);
+	BurgerEvent type{};
+	switch (enemy)
+	{
+	case EnemyType::HotDog: type = BurgerEvent::HotDogDead; break;
+	default: ;
+	}
+
+	NotifyFromPlayer(worldEntity, type, playerIndex);
 }

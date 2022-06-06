@@ -9,7 +9,7 @@ class PlayModeObserver : public Observer
 public:
 
 	PlayModeObserver(powe::GameObjectID owner);
-	void OnReceiveMessage(powe::WorldEntity&, Subject*) override;
+	void OnReceiveMessage(powe::WorldEntity&, BurgerEvent) override;
 	~PlayModeObserver() override = default;
 
 private:

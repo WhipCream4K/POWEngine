@@ -15,6 +15,7 @@
 #include "utils.h"
 #include "POWEngine/Rendering/Components/Debug/DebugRectangle.h"
 #include "ColliderCommand.h"
+#include "OnIngredientDropToPlatform.h"
 
 SharedPtr<IngredientState> IngredientState::Stationary{ std::make_shared<StationaryIngredient>() };
 SharedPtr<IngredientState> IngredientState::Falling{ std::make_shared<FallingIngredient>() };
@@ -215,7 +216,15 @@ void FallingIngredient::Exit(powe::WorldEntity& worldEntity, IngredientsComponen
 
 	if (const auto gameObject = ingredientsComponent->Owner.lock())
 	{
-		gameObject->RemoveComponent<Rect2DCollider>();
+		ColliderResolver* colliderResolver = worldEntity.FindUniqueComponent<ColliderResolver>();
+		if(colliderResolver)
+		{
+			colliderResolver->RemoveCollider(gameObjectId);
+			gameObject->RemoveComponent<Rect2DCollider>();
+		}
+
+		ingredientsComponent->OnIngredientDropToPlatform->SignalScore(worldEntity, ScorableEvent::DropOnPlatform, {},
+			ingredientsComponent->LastPlayerStepIndex);
 
 #ifdef _DEBUG
 		gameObject->RemoveComponent<DebugRectangle>();
@@ -227,8 +236,6 @@ SharedPtr<IngredientState> Bouncing::Update(powe::WorldEntity& worldEntity, floa
 	IngredientsComponent* ingredientsComponent, powe::GameObjectID gameObjectId)
 {
 	using namespace powe;
-
-
 
 	Transform2D* transform2D{ worldEntity.GetComponent<Transform2D>(gameObjectId) };
 	if (transform2D)
@@ -291,14 +298,19 @@ SharedPtr<IngredientState> Stacking::Update(powe::WorldEntity&, float,
 	return Stack;
 }
 
-void Stacking::Enter(powe::WorldEntity& , IngredientsComponent* ingredientsComponent,
-	powe::GameObjectID )
+void Stacking::Enter(powe::WorldEntity& worldEntity, IngredientsComponent* ingredientsComponent,
+	powe::GameObjectID gameObjectId)
 {
 	if( const auto gameObject = ingredientsComponent->Owner.lock())
 	{
 		// When we stack on the plate we just remove IngredientComponent because we don't need to interact with it anymore
+		ColliderResolver* colliderResolver = worldEntity.FindUniqueComponent<ColliderResolver>();
+		if (colliderResolver)
+		{
+			colliderResolver->RemoveCollider(gameObjectId);
+			gameObject->RemoveComponent<Rect2DCollider>();
+		}
 
-		gameObject->RemoveComponent<Rect2DCollider>();
 		gameObject->RemoveComponent<IngredientsComponent>();
 #ifdef _DEBUG
 		gameObject->RemoveComponent<powe::DebugRectangle>();

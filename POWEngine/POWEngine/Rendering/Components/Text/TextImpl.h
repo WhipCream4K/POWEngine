@@ -16,6 +16,7 @@ namespace powe
 		virtual int GetTextSize() const = 0;
 		virtual void SetTextSize(int ptSize) = 0;
 		virtual void SetText(const std::string&) = 0;
+		virtual void SetFillColor(const glm::uvec4& color) = 0;
 		virtual ~TextImpl() = default;
 	};
 }

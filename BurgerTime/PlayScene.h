@@ -4,6 +4,8 @@
 #include "poweCustomtype.h"
 #include "SceneFactory.h"
 
+struct PlayerDescriptor;
+
 namespace powe
 {
 	class WorldEntity;
@@ -19,6 +21,8 @@ public:
 	void LoadScene(powe::WorldEntity&) override;
 
 private:
+
+	SharedPtr<powe::GameObject> SpawnPlayer(powe::WorldEntity&,const PlayerDescriptor& desc);
 
 	WeakPtr<powe::GameObject> m_SceneData{};
 	powe::GameObjectID m_SceneDataID;

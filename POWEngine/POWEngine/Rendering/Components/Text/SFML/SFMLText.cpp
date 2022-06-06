@@ -94,3 +94,20 @@ void powe::SFMLText::SetRenderOrder(int order)
 		sfText->renderOrder = order;
 	}
 }
+
+void powe::SFMLText::SetFillColor(const glm::uvec4& color)
+{
+	if (const auto gameObject{ m_Owner.lock() })
+	{
+		SFMLTextComponent* sfText{ gameObject->GetComponent<SFMLTextComponent>() };
+		if (!sfText)
+			return;
+
+		const sf::Uint8 r{ uint8_t(color.x) };
+		const sf::Uint8 g{ uint8_t(color.y) };
+		const sf::Uint8 b{ uint8_t(color.z) };
+		const sf::Uint8 a{ uint8_t(color.w) };
+
+		sfText->text.setFillColor(sf::Color{ r,g,b,a });
+	}
+}

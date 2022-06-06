@@ -7,7 +7,7 @@ class OnPlayerThrowPepper : public Subject
 public:
 
 	OnPlayerThrowPepper() = default;
-	void SignalThrowPepper(powe::WorldEntity&);
+	void SignalThrowPepper(powe::WorldEntity&,int playerIndex);
 	
 };
 

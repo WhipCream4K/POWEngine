@@ -4,6 +4,7 @@
 #include <poweComponent.h>
 
 #include "StaticVariables.h"
+#include "ScorableEvent.h"
 
 namespace powe
 {
@@ -12,6 +13,7 @@ namespace powe
 
 class SceneFactory;
 class IngredientState;
+class OnIngredientDropToPlatform;
 class IngredientsComponent : public powe::Component<IngredientsComponent>
 {
 public:
@@ -19,10 +21,14 @@ public:
 	IngredientsComponent() = default;
 
 	SharedPtr<IngredientState> CurrentState{};
+	//SharedPtr<OnIngredientDropToPlatform> OnIngredientFinishedDrop{};
+	SharedPtr<ScorableEvent> OnIngredientDropToPlatform{};
 	WeakPtr<SceneFactory> SceneRef;
 	std::vector<WeakPtr<powe::GameObject>> StepColliders;
 	WeakPtr<powe::GameObject> Owner{};
 	IngredientsType Type{};
+
+	int LastPlayerStepIndex{};
 
 	glm::fvec2 BounceStartPos{};
 	float BouncingSpeed{};
@@ -33,6 +39,7 @@ public:
 	bool IsBouncing{};
 
 	float FallingSpeed{};
+	//int FallPassEnemiesCount{};
 
 	int LevelIdx{};
 

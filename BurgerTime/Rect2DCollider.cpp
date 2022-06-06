@@ -51,12 +51,13 @@ void Rect2DCollider::OnCreate(powe::WorldEntity& worldEntity, powe::GameObjectID
 		colliderResolver->AddCollider(gameObjectId, OnLayer);
 	}
 }
-
-
-void Rect2DCollider::OnDestroy(powe::WorldEntity& worldEntity, powe::GameObjectID gameObjectId)
-{
-	if (ColliderResolver* colliderResolver = worldEntity.GetComponent<ColliderResolver>(ColliderManager))
-	{
-		colliderResolver->RemoveCollider(gameObjectId);
-	}
-}
+//
+//
+//void Rect2DCollider::OnDestroy(powe::WorldEntity& worldEntity, powe::GameObjectID gameObjectId)
+//{
+//	// unsafe when the resolver already is in the process of destroying
+//	//if (ColliderResolver* colliderResolver = worldEntity.GetComponent<ColliderResolver>(ColliderManager))
+//	//{
+//	//	colliderResolver->RemoveCollider(gameObjectId);
+//	//}
+//}

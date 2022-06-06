@@ -12,3 +12,8 @@ powe::Texture::Texture(const std::string& filePath)
 }
 
 powe::Texture::~Texture() = default;
+
+void powe::Texture::SetRepeated(bool isRepeated) const
+{
+	m_TextureImpl->SetRepeated(isRepeated);
+}

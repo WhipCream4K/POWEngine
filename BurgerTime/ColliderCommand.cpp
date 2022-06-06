@@ -6,6 +6,8 @@
 #include "POWEngine/Core/Components/Transform2D.h"
 #include "IngredientsComponent.h"
 #include "IngredientState.h"
+#include "OnIngredientServing.h"
+#include "OnIngredientStepped.h"
 #include "Rect2DCollider.h"
 
 void DebugTriggerEnter::OnEnter(powe::WorldEntity&, Rect2DCollider* , Rect2DCollider*,
@@ -22,7 +24,9 @@ void OnStaticIngredientTrigger::OnEnter(powe::WorldEntity& worldEntity, Rect2DCo
 	using namespace powe;
 
 	// If is player
-	if (worldEntity.GetComponent<PlayerTag>(other))
+	PlayerTag* playerTag = worldEntity.GetComponent<PlayerTag>(other);
+
+	if(playerTag)
 	{
 
 #ifdef _DEBUG
@@ -59,7 +63,15 @@ void OnStaticIngredientTrigger::OnEnter(powe::WorldEntity& worldEntity, Rect2DCo
 					}
 
 					stepHandler->hasAlreadySteppedOn = true;
+
 					++ingredientsComponent->CurrentStepCount;
+
+					stepHandler->OnIngredientStepped->SignalStep(worldEntity);
+
+					if (ingredientsComponent->CurrentStepCount >= ingredientsComponent->MaxStepCount)
+					{
+						ingredientsComponent->LastPlayerStepIndex = playerTag->playerIndex;
+					}
 
 				}
 			}
@@ -68,36 +80,18 @@ void OnStaticIngredientTrigger::OnEnter(powe::WorldEntity& worldEntity, Rect2DCo
 	}
 
 	// Other Ingredients Hits
-	IngredientsComponent* ingredientsComponent = worldEntity.GetComponent<IngredientsComponent>(other);
-	if (ingredientsComponent)
+	IngredientsComponent* otherIngredients = worldEntity.GetComponent<IngredientsComponent>(other);
+	if (otherIngredients)
 	{
 		StepHandler* stepHandler = worldEntity.GetComponent<StepHandler>(owner);
 		if (stepHandler)
 		{
-			ingredientsComponent = worldEntity.GetComponent<IngredientsComponent>(stepHandler->stepHandlerID);
-			ingredientsComponent->CurrentStepCount = ingredientsComponent->MaxStepCount;
+			otherIngredients = worldEntity.GetComponent<IngredientsComponent>(stepHandler->stepHandlerID);
+			otherIngredients->CurrentStepCount = otherIngredients->MaxStepCount;
 		}
 	}
 }
 
-//void PlateTriggerEnter::OnEnter(powe::WorldEntity& worldEntity, Rect2DCollider* ownerCollider, Rect2DCollider* otherCollider,
-//	powe::GameObjectID owner, powe::GameObjectID other)
-//{
-//	using namespace powe;
-//	IngredientsComponent* ingredientsComponent = worldEntity.GetComponent<IngredientsComponent>(other);
-//	if (!ingredientsComponent)
-//		return;
-//
-//	// 1. Catch an ingredient falling
-//	// 2. Move the collider up of its onw extent
-//	// 3. Play sound?
-//	// 4. if all ingredients has formed on this plate the notify
-//	Transform2D* transform2D{ worldEntity.GetComponent<Transform2D>(other) };
-//	if (!transform2D)
-//		return;
-//
-//
-//}
 
 void OnFallingIngredientTrigger::OnEnter(powe::WorldEntity& worldEntity, Rect2DCollider*,
 	Rect2DCollider* otherCollider, powe::GameObjectID owner, powe::GameObjectID other)
@@ -114,7 +108,7 @@ void OnFallingIngredientTrigger::OnEnter(powe::WorldEntity& worldEntity, Rect2DC
 		++plateComponent->ingredientStackCount;
 		if (plateComponent->ingredientStackCount >= plateComponent->maxStackCount)
 		{
-			// Do notify scene maybe
+			plateComponent->OnServing->SignalServing(worldEntity);
 		}
 
 		Transform2D* colliderTransform{ worldEntity.GetComponent<Transform2D>(other) };
@@ -129,4 +123,6 @@ void OnFallingIngredientTrigger::OnEnter(powe::WorldEntity& worldEntity, Rect2DC
 			colliderTransform->SetWorldPosition(oldPos);
 		}
 	}
+
+	// TODO: Hit Enemy
 }

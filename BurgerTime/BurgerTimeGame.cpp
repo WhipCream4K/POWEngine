@@ -23,9 +23,11 @@
 #include "ColliderResolver.h"
 #include "RectColliderDetectionSystem.h"
 #include "AudioManager.h"
+#include "MenuState.h"
+#include "GameStateSystem.h"
 
 void BurgerTimeGame::Start(const SharedPtr<powe::Core>&,
-	const SharedPtr<powe::WorldEntity>& worldEntity)
+						   const SharedPtr<powe::WorldEntity>& worldEntity)
 {
 	using namespace powe;
 
@@ -43,17 +45,22 @@ void BurgerTimeGame::Start(const SharedPtr<powe::Core>&,
 	assetManager->RegisterAsset(burger::MenuPointer,
 		std::make_shared<powe::Texture>("./Resources/Sprites/Pointer.png"));
 
+	const auto healthTexture{ std::make_shared<Texture>("./Resources/Sprites/HealthLogo.png") };
+	healthTexture->SetRepeated(true);
+
+	assetManager->RegisterAsset(burger::HealthSprite,healthTexture);
+
 	Instance<StaticSceneData>()->Initialize();
 
 	// Initialize persistent GameObject
 	const auto dynamicSceneData{ std::make_shared<GameObject>(*worldEntity) };
 	m_SceneDataID = dynamicSceneData->GetID();
 
-
-	// *** BIG NOTE *** //
-	// not recommend to save pointer
-	m_SceneData = dynamicSceneData->AddComponent(DynamicSceneData{ m_SceneDataID },ComponentFlag::Sparse);
-
+	DynamicSceneData* dynamicScene = dynamicSceneData->AddComponent(DynamicSceneData{ m_SceneDataID });
+	dynamicScene->currentGameState = GameState::GameStart;
+	dynamicScene->timeBeforeGameStart = 3.5f;
+	dynamicScene->maxLevel = 3;
+	
 	const auto audioManager{ std::make_shared<GameObject>(*worldEntity) };
 	audioManager->AddComponent(AudioManager{});
 
@@ -62,7 +69,7 @@ void BurgerTimeGame::Start(const SharedPtr<powe::Core>&,
 
 	// Initialize Game State
 	{
-		m_MainGameState = GameState::GameStart;
+		//m_MainGameState = GameState::GameStart;
 	}
 
 	// Initialize Main input data
@@ -85,12 +92,14 @@ void BurgerTimeGame::Start(const SharedPtr<powe::Core>&,
 
 		inputSetting.AddAxisMapping("MenuVertical", {
 			{InputDevice::D_Keyboard,Keyboard::Up,-1.0f},
-			{InputDevice::D_Keyboard,Keyboard::Down,1.0f}
+			{InputDevice::D_Keyboard,Keyboard::Down,1.0f},
+			{InputDevice::D_Gamepad,GamepadKey::GPK_DPAD_Up,-1.0f},
+			{InputDevice::D_Gamepad,GamepadKey::GPK_DPAD_Down,1.0f},
 			});
 
-		inputSetting.AddAxisMapping("Select", {
-			{InputDevice::D_Keyboard,Keyboard::Enter,1.0f},
-			{InputDevice::D_Gamepad,GamepadKey::GPK_A,1.0f}
+		inputSetting.AddActionMapping("Select", {
+			{InputDevice::D_Keyboard,Keyboard::Enter},
+			{InputDevice::D_Gamepad,GamepadKey::GPK_A}
 			});
 
 		inputSetting.AddActionMapping("ShowDebug", {
@@ -101,36 +110,28 @@ void BurgerTimeGame::Start(const SharedPtr<powe::Core>&,
 			{InputDevice::D_Keyboard,Keyboard::Z},
 			{InputDevice::D_Gamepad,GamepadKey::GPK_B}
 			});
+
+		inputSetting.AddActionMapping("SkipToMenu", {
+			{InputDevice::D_Keyboard,Keyboard::F7}
+			});
+
 	}
 
 
-	worldEntity->RegisterSystem(PipelineLayer::InputValidation, std::make_shared<InputSystem>());
+	SharedPtr<InputSystem> inputSystem{ std::make_shared<InputSystem>() };
+	dynamicScene->blockingSystem[PipelineLayer::InputValidation].emplace_back(inputSystem);
+
+	worldEntity->RegisterSystem(PipelineLayer::InputValidation, inputSystem);
 	worldEntity->RegisterSystem(PipelineLayer::PhysicsValidation, std::make_shared<RectColliderDetectionSystem>());
 	worldEntity->RegisterSystem(PipelineLayer::Update, std::make_shared<DebugControllerSystem>());
+	worldEntity->RegisterSystem(PipelineLayer::Update, std::make_shared<GameStateSystem>());
 }
 
-void BurgerTimeGame::Run(const SharedPtr<powe::WorldEntity>& worldEntity,
-	const SharedPtr<powe::WorldClock>& worldClock)
+void BurgerTimeGame::Run(const SharedPtr<powe::WorldEntity>& ,
+	const SharedPtr<powe::WorldClock>& )
 {
 	using namespace powe;
-	worldEntity;
-	worldClock;
 
-	const float deltaTime{ worldClock->GetDeltaTime() };
-
-	if (m_MainGameState)
-	{
-		const auto& oldState{ m_MainGameState };
-		const auto newState{ m_MainGameState->HandleInput(*worldEntity, m_SceneDataID) };
-
-		if (oldState != newState)
-		{
-			oldState->Exit(*worldEntity, m_SceneDataID);
-			newState->Enter(*worldEntity, m_SceneDataID);
-			m_MainGameState = newState;
-		}
-
-		m_MainGameState->Update(*worldEntity, deltaTime, m_SceneDataID);
-	}
+	// was going to do the scene changes here but later decide to put it in system instead...
 }
 

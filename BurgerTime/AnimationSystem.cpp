@@ -26,7 +26,6 @@ void AnimationSystem::OnUpdate(float deltaTime, powe::GameObjectID)
 		animation->totalTime = 0.0f;
 		animation->currentSprite = (animation->currentSprite + 1) % animation->totalSprite;
 		sprite->SetRect({ float(animation->currentSprite) *
-			animation->currentSpriteRect.x,animation->currentSpriteRect.y,
-			animation->currentSpriteRect.z,animation->currentSpriteRect.w });
+			16.0f ,0.0f,16.0f,16.0f});
 	}
 }

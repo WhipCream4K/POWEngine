@@ -3,12 +3,17 @@
 #include <poweComponent.h>
 #include "PlayModeObserver.h"
 #include "PlayModeSubject.h"
+#include "WinConditionListener.h"
 #include "StaticVariables.h"
+#include "POWEngine/Core/WorldEntity/PipelineLayer.h"
 
+class ScoreListener;
+class OnIngredientStepped;
 class SceneFactory;
 
 namespace powe
 {
+	class GameObject;
 	class SystemBase;
 }
 
@@ -39,6 +44,7 @@ struct Speed : powe::Component<Speed>
 	}
 
 	float speed{};
+	float climbSpeed{};
 };
 
 struct MenuData : powe::Component<MenuData>
@@ -51,6 +57,17 @@ struct MenuData : powe::Component<MenuData>
 	SharedPtr<PlayModeSubject> playModeSubject{};
 };
 
+enum class IntervalPlayState
+{
+	Maploaded,
+	LevelWin,
+	ShouldChangeLevel,
+	Playing
+};
+
+class GameState;
+class SceneFactory;
+class WinConditionListener;
 struct DynamicSceneData : powe::Component<DynamicSceneData>
 {
 	DynamicSceneData() = default;
@@ -61,16 +78,30 @@ struct DynamicSceneData : powe::Component<DynamicSceneData>
 	}
 
 	int currentLevel{};
+	int maxLevel{};
+
+	float timeBeforeGameStart{};
+	float gameStartTimeCounter{};
+
 	PlayMode currentPlayMode{ PlayMode::SinglePlayer };
 	SharedPtr<PlayModeObserver> playModeObserver{};
+	SharedPtr<WinConditionListener> OnGameWin{};
+	SharedPtr<GameState> currentGameState{};
+	SharedPtr<powe::GameObject> DisplayManager{};
 
 	// Any system that stop any entities from moving
-	std::vector<SharedPtr<powe::SystemBase>> blockingSystem{};
-	WeakPtr<SceneFactory> currentScene{};
+	std::unordered_map<PipelineLayer,std::vector<SharedPtr<powe::SystemBase>>> blockingSystem{};
+
+	SharedPtr<SceneFactory> currentScene{};
+	IntervalPlayState intervalPlayState{};
+
+	//bool shouldStartEndLevel{};
+	//bool shouldChangeLevel{};
 };
 
 struct StepHandler : powe::Component<StepHandler>
 {
+	SharedPtr<OnIngredientStepped> OnIngredientStepped{};
 	powe::GameObjectID stepHandlerID{};
 	bool hasAlreadySteppedOn{};
 };
@@ -80,9 +111,11 @@ struct SceneReference : powe::Component<SceneReference>
 	powe::GameObjectID sceneID{};
 };
 
+class OnIngredientServing;
 struct PlateComponent : powe::Component<PlateComponent>
 {
 	glm::fvec2 realIngredientSize{};
+	SharedPtr<OnIngredientServing> OnServing{};
 	int ingredientStackCount{};
 	int maxStackCount{};
 };
@@ -112,6 +145,7 @@ class OnPlayerThrowPepper;
 struct PlayerTag : powe::Component<PlayerTag>
 {
 	SharedPtr<OnPlayerThrowPepper> OnPlayerThrowPepper{};
+	int playerIndex{};
 };
 
 struct DelayedMovement : powe::Component<DelayedMovement>
@@ -146,4 +180,27 @@ struct CanWalkOnTile : powe::Component<CanWalkOnTile>
 	int currentLevel{};
 	int currentCol{};
 	int currentRow{};
+};
+
+struct ScoreComponent : powe::Component<ScoreComponent>
+{ 
+	SharedPtr<powe::GameObject> owner{};
+	int currentScore{};
+};
+
+class PepperNumberDisplay;
+struct DisplayManager : powe::Component<DisplayManager>
+{
+	SharedPtr<powe::GameObject> score[int(PlayMode::Count)]{};
+	SharedPtr<powe::GameObject> banner[int(PlayMode::Count)]{};
+	SharedPtr<powe::GameObject> healthDisplay[int(PlayMode::Count)]{};
+	SharedPtr<powe::GameObject> pepperText[int(PlayMode::Count)]{};
+	SharedPtr<powe::GameObject> pepperNumber[int(PlayMode::Count)]{};
+
+	SharedPtr<ScoreListener> ScoreListener{};
+	SharedPtr<PepperNumberDisplay> PepperNumberDisplay{};
+
+	int CurrentScore[int(PlayMode::Count)]{};
+	int CurrentPepper[int(PlayMode::Count)]{};
+	int CurrentLives[int(PlayMode::Count)]{};
 };

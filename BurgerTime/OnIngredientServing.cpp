@@ -4,5 +4,5 @@
 
 void OnIngredientServing::SignalServing(powe::WorldEntity& worldEntity)
 {
-	Notify(worldEntity);
+	Notify(worldEntity,BurgerEvent::PlateFull);
 }

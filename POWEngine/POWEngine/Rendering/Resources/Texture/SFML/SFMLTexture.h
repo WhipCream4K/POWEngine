@@ -19,7 +19,7 @@ namespace powe
 		SFMLTexture& operator=(const SFMLTexture&) = delete;
 		SFMLTexture(SFMLTexture&&) = delete;
 		SFMLTexture& operator=(SFMLTexture&&) = delete;
-
+		void SetRepeated(bool isRepeated) override;
 		sf::Texture& GetSFTexture() { return m_Texture; }
 
 	private:

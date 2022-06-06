@@ -34,3 +34,10 @@ struct PlateDesc
 	int stackNeeded{};
 	int currentLevel{};
 };
+
+struct IngameHUDDesc
+{
+	PlayMode playMode{};
+	int startPepper{};
+	int startLives{};
+};

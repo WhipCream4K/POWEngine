@@ -9,13 +9,11 @@ PlayModeObserver::PlayModeObserver(powe::GameObjectID owner)
 {
 }
 
-void PlayModeObserver::OnReceiveMessage(powe::WorldEntity& worldEntity, Subject* subject)
+void PlayModeObserver::OnReceiveMessage(powe::WorldEntity& worldEntity, BurgerEvent)
 {
-	if (const auto playModeSubject{ dynamic_cast<PlayModeSubject*>(subject) })
+	if (DynamicSceneData * data{ worldEntity.GetComponent<DynamicSceneData>(m_Owner) })
 	{
-		if (DynamicSceneData * data{ worldEntity.GetComponent<DynamicSceneData>(m_Owner) })
-		{
-			data->currentPlayMode = playModeSubject->PlayMode;
-		}
+		int mode = int(data->currentPlayMode) + 1 % int(PlayMode::Count);
+		data->currentPlayMode = PlayMode(mode);
 	}
 }

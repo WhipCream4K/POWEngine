@@ -18,6 +18,7 @@ namespace powe
 		void SetText(const std::string&) override;
 		int GetRenderOrder() const override;
 		void SetRenderOrder(int order) override;
+		void SetFillColor(const glm::uvec4& color) override;
 
 	private:
 
