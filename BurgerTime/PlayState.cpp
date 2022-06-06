@@ -21,7 +21,7 @@ SharedPtr<GameState> PlayState::HandleInput(powe::WorldEntity& worldEntity, Dyna
 		return ChangingLevel;
 	}
 
-	if (worldEntity.GetInputSettings().GetInputAction("Select", InputEvent::IE_Pressed))
+	if (worldEntity.GetInputSettings().GetInputAction("SkipStage", InputEvent::IE_Pressed))
 	{
 		return ChangingLevel;
 	}

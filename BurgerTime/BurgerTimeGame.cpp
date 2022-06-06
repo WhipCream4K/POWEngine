@@ -106,6 +106,10 @@ void BurgerTimeGame::Start(const SharedPtr<powe::Core>&,
 			{InputDevice::D_Keyboard,Keyboard::F8}
 			});
 
+		inputSetting.AddActionMapping("SkipStage", {
+	{InputDevice::D_Keyboard,Keyboard::F6}
+			});
+
 		inputSetting.AddActionMapping("Fire", {
 			{InputDevice::D_Keyboard,Keyboard::Z},
 			{InputDevice::D_Gamepad,GamepadKey::GPK_B}

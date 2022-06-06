@@ -61,9 +61,6 @@ SharedPtr<powe::GameObject> InGameHUD::CreateDisplayManager(powe::WorldEntity& w
 {
 	using namespace powe;
 
-	//const glm::fvec2 midScreen{ 640.0f,360.0f };
-	//const glm::fvec2 levelRect{ 208.0f,208.0f };
-
 	auto gameObject{ std::make_shared<GameObject>(worldEntity) };
 	DisplayManager* displayManager = gameObject->AddComponent(DisplayManager{});
 
@@ -79,50 +76,6 @@ SharedPtr<powe::GameObject> InGameHUD::CreateDisplayManager(powe::WorldEntity& w
 	{
 		CreateHUDElements(worldEntity, gameObject->GetID(), displayManager, desc, -1); // player 1
 	}
-
-	//glm::fvec2 banner1Pos{ midScreen - ((levelRect / 2.0f)) * burger::SpriteScale };
-	//const float offset{ 30.0f * burger::SpriteScale.y };
-	//banner1Pos.y -= offset;
-
-	//// 1 Up banner
-	//const auto banner1Up{ CreateTextDisplay(worldEntity,banner1Pos,30,"1Up",{255,0,0,255}) };
-	//displayManager->banner[0] = banner1Up;
-
-	//// Score
-	//glm::fvec2 score1Pos{ banner1Pos };
-	//score1Pos.y += 30.0f;
-	//const auto score1{ CreateTextDisplay(worldEntity,score1Pos,30,"0",{255,255,255,255}) };
-	//displayManager->score[0] = score1;
-	//displayManager->CurrentScore[0] = 0;
-
-
-	//// Health Pos
-	//// Player 1 to the left of the screen
-	//glm::fvec2 health1Pos{ midScreen };
-	//health1Pos.x -= ((levelRect.x / 2.0f) + 30.0f) * burger::SpriteScale.x;
-	//health1Pos.y -= (levelRect.y / 2.0f - 30.0f) * burger::SpriteScale.y;
-	//const auto healthDisplay{ CreateHealthDisplay(worldEntity, health1Pos) };
-	//displayManager->healthDisplay[0] = healthDisplay;
-	//displayManager->CurrentLives[0] = desc.startLives;
-
-	//// Pepper display
-	//glm::fvec2 pepperTextPos{ health1Pos };
-	//pepperTextPos.y -= 30.0f * burger::SpriteScale.y;
-	//pepperTextPos.x -= 50.0f * burger::SpriteScale.x;
-	//	
-	//const auto pepperText{ CreateTextDisplay(worldEntity,pepperTextPos,20,"Pepper",{0,255,0,255}) };
-	//displayManager->pepperText[0] = pepperText;
-
-	//glm::fvec2 pepperNumPos{ pepperTextPos };
-	//pepperNumPos.x += 60.0f;
-	//const auto pepNum{ CreateTextDisplay(worldEntity,pepperNumPos,20,std::to_string(desc.startPepper),{255,255,255,255}) };
-	//displayManager->pepperNumber[0] = pepNum;
-
-	//displayManager->CurrentPepper[0] = desc.startPepper;
-
-	//// Observers
-
-
 
 
 	return gameObject;
@@ -155,10 +108,6 @@ std::vector<SharedPtr<powe::GameObject>> InGameHUD::CreateSubObject(powe::WorldE
 	textComponent->SetFont(mainFont);
 	textComponent->SetFillColor({ 255,0,0,255 });
 
-	//ScoreComponent* scoreComponent = playerBanner->AddComponent(ScoreComponent{});
-	//scoreComponent->owner = playerBanner;
-	//scoreComponent->currentScore = 0;
-
 	const auto playerScoreDisplay{ std::make_shared<GameObject>(worldEntity) };
 	outGameObject.emplace_back(playerScoreDisplay);
 
@@ -169,9 +118,6 @@ std::vector<SharedPtr<powe::GameObject>> InGameHUD::CreateSubObject(powe::WorldE
 	textComponent = playerScoreDisplay->AddComponent(TextComponent{ 30,playerScoreDisplay }, ComponentFlag::Sparse);
 	textComponent->SetText("0");
 	textComponent->SetFont(mainFont);
-
-
-
 
 	return outGameObject;
 }
@@ -228,11 +174,14 @@ void InGameHUD::CreateHUDElements(powe::WorldEntity& worldEntity, powe::GameObje
 	const int playerIdx{ textDir < 0 ? 0 : 1 };
 
 	glm::fvec2 banner1Pos{ midScreen - ((levelRect / 2.0f)) * burger::SpriteScale };
+	banner1Pos.x = midScreen.x + (levelRect.x / 2.0f * float(textDir)) * burger::SpriteScale.x;
 	const float offset{ 30.0f * burger::SpriteScale.y };
-	banner1Pos.y += offset * float(textDir);
+	banner1Pos.y -= offset;
 
 	// 1 Up banner
-	const auto banner1Up{ CreateTextDisplay(worldEntity,banner1Pos,30,"1Up",{255,0,0,255}) };
+	const std::string bannerText{ textDir < 0 ? "1Up" : "2Up" };
+	const glm::uvec4 bannerColor{ textDir < 0 ? glm::uvec4{255,0,0,255} : glm::uvec4{0,0,255,255} };
+	const auto banner1Up{ CreateTextDisplay(worldEntity,banner1Pos,30,bannerText,bannerColor) };
 	displayManager->banner[playerIdx] = banner1Up;
 
 	// Score
@@ -246,22 +195,25 @@ void InGameHUD::CreateHUDElements(powe::WorldEntity& worldEntity, powe::GameObje
 	// Health Pos
 	// Player 1 to the left of the screen
 	glm::fvec2 health1Pos{ midScreen };
-	health1Pos.x -= ((levelRect.x / 2.0f) + (30.0f * float(textDir))) * burger::SpriteScale.x;
+	health1Pos.x += ((levelRect.x / 2.0f) * burger::SpriteScale.x * float(textDir));
+	health1Pos.x += float(textDir) * 30.0f * burger::SpriteScale.x;
 	health1Pos.y -= (levelRect.y / 2.0f - 30.0f) * burger::SpriteScale.y;
 	const auto healthDisplay{ CreateHealthDisplay(worldEntity, health1Pos) };
 	displayManager->healthDisplay[playerIdx] = healthDisplay;
 	displayManager->CurrentLives[playerIdx] = desc.startLives;
 
 	// Pepper display
-	glm::fvec2 pepperTextPos{ health1Pos };
+	glm::fvec2 pepperTextPos{ midScreen };
+	pepperTextPos.x += ((levelRect.x / 2.0f) * burger::SpriteScale.x * float(textDir));
+	pepperTextPos.x += (60.0f * float(textDir)) * burger::SpriteScale.x;
+	pepperTextPos.y = health1Pos.y;
 	pepperTextPos.y -= 30.0f * burger::SpriteScale.y;
-	pepperTextPos.x += (50.0f * float(textDir)) * burger::SpriteScale.x;
 
 	const auto pepperText{ CreateTextDisplay(worldEntity,pepperTextPos,20,"Pepper",{0,255,0,255}) };
 	displayManager->pepperText[playerIdx] = pepperText;
 
 	glm::fvec2 pepperNumPos{ pepperTextPos };
-	pepperNumPos.x += 60.0f * float(textDir);
+	pepperNumPos.x += 35.0f * burger::SpriteScale.x * float(textDir) * -1.0f;
 	const auto pepNum{ CreateTextDisplay(worldEntity,pepperNumPos,20,std::to_string(desc.startPepper),{255,255,255,255}) };
 	displayManager->pepperNumber[playerIdx] = pepNum;
 

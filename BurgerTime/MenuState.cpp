@@ -65,7 +65,7 @@ void MenuState::Exit(powe::WorldEntity& worldEntity, DynamicSceneData* dynamicSc
 
 	if(!dynamicSceneData->DisplayManager)
 	{
-		IngameHUDDesc desc{dynamicSceneData->currentPlayMode};
+		IngameHUDDesc desc{dynamicSceneData->currentPlayMode,5,3};
 		const auto display = InGameHUD::CreateDisplayManager(worldEntity, desc);
 		dynamicSceneData->DisplayManager = display;
 	}
