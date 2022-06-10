@@ -1,0 +1,12 @@
+Keyboard
+
+Arrows  -> Walk
+z       -> Throw pepper
+Enter   -> Select
+
+
+Gamepad
+
+Dpad    -> Walk
+B       -> Throw pepper
+A       -> Select
