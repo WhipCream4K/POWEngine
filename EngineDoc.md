@@ -214,6 +214,18 @@ So, in a lot of scenarios using ```Array of structrues``` will sometimes yield a
 
 ![Imgur](https://imgur.com/pwDM4OE.png)
 
+Sparse set is a way to store component data in a contigous array and using a handle to map the location (offset) of the data [More on sparse set](https://www.david-colson.com/2020/02/09/making-a-simple-ecs.html)
+
+```
+	enum class ComponentFlag : ComponentTypeID
+	{
+		Default,
+		Sparse = (1u << 31u),
+
+		Count = Sparse
+	};
+```
+
 ```
 const ComponentTypeID componentId{ BaseComponent::GetId<ComponentType>() | ComponentTypeI(componentFlag) }; 
 ```
@@ -227,7 +239,7 @@ When you add a component it will determine the flag of the component then depend
 
 ![Note 16 Aug BE 2564 (1)](https://imgur.com/PhGvbIX.png)
 
-Every component that registered in sparse area will effectively not in a cache line during updates hence less cache misses.
+Every component that registered in sparse set will not be in the current component data array thus getting rid of the in-active component completely.
 
 Thanks to [Andrew Kelley](https://media.handmade-seattle.com/practical-data-oriented-design/) on his talk on [A Practical Guide to Applying Data-Oriented Design](https://media.handmade-seattle.com/practical-data-oriented-design/) and [David Colson](https://www.david-colson.com/about.html) on his [How to make a simple entity-component-system in C++](https://www.david-colson.com/2020/02/09/making-a-simple-ecs.html) that give me insight on the idea of how to optimize cache misses and the idea of using sparse set.
 
