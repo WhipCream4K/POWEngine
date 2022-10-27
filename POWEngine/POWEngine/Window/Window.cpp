@@ -58,6 +58,11 @@ const glm::uvec2& powe::Window::GetRelativeMousePos() const
 	return m_WindowImpl->GetRelativeMousePos();
 }
 
+void powe::Window::SetVSync(bool vsync) const
+{
+	m_WindowImpl->SetVSync(vsync);
+}
+
 void powe::Window::Display() const
 {
 	m_WindowImpl->Display();

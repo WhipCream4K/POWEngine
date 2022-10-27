@@ -108,9 +108,9 @@ void powe::SparseComponentManager::RemoveComponentFromGameObject(
 }
 
 
-void powe::SparseComponentManager::RemoveGameObjectFromSparse(const std::vector<GameObjectID>& removeGameObjectsID)
+void powe::SparseComponentManager::RemoveGameObjectFromSparse(const std::vector<GameObjectID>& gameObjects)
 {
-	for (const auto& removeGameObjectsId : removeGameObjectsID)
+	for (const auto& removeGameObjectsId : gameObjects)
 	{
 		removeGameObjectsId;
 	}

@@ -23,6 +23,7 @@ namespace powe
 		[[nodiscard]] uint32_t GetWidth() const { return m_Width; }
 		[[nodiscard]] const glm::uvec2& GetRelativeMousePos() const;
 
+		void SetVSync(bool vsync) const;
 		void Display() const;
 		void ClearWindow() const;
 		void SetClearColor(const glm::uvec4& color) const;

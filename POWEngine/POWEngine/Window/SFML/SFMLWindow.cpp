@@ -354,6 +354,11 @@ void powe::SFMLWindow::Display()
 	m_WndHandle.display();
 }
 
+void powe::SFMLWindow::SetVSync(bool VSync)
+{
+	m_WndHandle.setVerticalSyncEnabled(VSync);
+}
+
 const glm::uvec4& powe::SFMLWindow::GetClearColor() const
 {
 	return m_ClearColor;

@@ -4,8 +4,8 @@
 #include "Input/InputManager.h"
 #include "POWEngine/Window/Window.h"
 #include "POWEngine/Core/Clock/WorldClock.h"
-#include "POWEngine/Rendering/RenderAPI.h"
-#include "POWEngine/Rendering/Renderer.h"
+#include "POWEngine/Renderer/RenderAPI.h"
+#include "POWEngine/Renderer/Renderer.h"
 #include "WorldEntity/WorldEntity.h"
 #include "POWEngine/Core/Input/InputStruct.h"
 
@@ -23,8 +23,7 @@ bool powe::Core::TranslateWindowInputs(const SharedPtr<Window>& window, const Sh
 
 	bool isEarlyExit{};
 	bool ignoreInputs{};
-
-
+	
 	const HardwareMessages& hwMessages{ window->PollHardwareMessages(isEarlyExit,ignoreInputs) };
 
 	if (!ignoreInputs)
@@ -38,7 +37,7 @@ bool powe::Core::TranslateWindowInputs(const SharedPtr<Window>& window, const Sh
 bool powe::Core::TranslateWindowInputs(const Window& window, const SharedPtr<WorldEntity>& worldEntt) const
 {
 	m_WorldClock->Start();
-
+	
 	bool isEarlyExit{};
 	bool ignoreInputs{};
 
@@ -55,7 +54,7 @@ bool powe::Core::TranslateWindowInputs(const Window& window, const SharedPtr<Wor
 bool powe::Core::TranslateWindowInputs(const Window& window, WorldEntity& worldEntt) const
 {
 	m_WorldClock->Start();
-
+	
 	bool isEarlyExit{};
 	bool ignoreInputs{};
 
