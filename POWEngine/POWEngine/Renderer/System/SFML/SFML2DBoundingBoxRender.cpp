@@ -27,7 +27,8 @@ void powe::SFML2DBoundingBoxRender::OnDraw(const SFML2DRenderer& renderer, GameO
 		auto& sfTransform{ renderStates.transform };
 
 		sfTransform.translate({ position.x,position.y });
-		sfTransform.rotate(sf::degrees(rotation));
+		sfTransform.rotate(glm::degrees(rotation));
+
 		//sfTransform.scale({ scale.x,scale.y });
 
 		renderer.SubmitDrawSprite(&sfmlDraw->rectangle, renderStates, sfmlDraw->drawOrder);

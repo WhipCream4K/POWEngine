@@ -24,7 +24,7 @@ void powe::SFML2DRenderSystem::OnDraw(const SFML2DRenderer& renderer, GameObject
 	auto& sfTransform{ renderStates.transform };
 
 	sfTransform.translate({ position.x,position.y });
-	sfTransform.rotate(sf::degrees(rotation));
+	sfTransform.rotate(glm::degrees(rotation));
 	sfTransform.scale({ scale.x,scale.y });
 
 	renderer.SubmitDrawSprite(&sfmlDraw->sprite, renderStates, sfmlDraw->drawOrder);

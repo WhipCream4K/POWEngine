@@ -15,15 +15,15 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ParticlePerformance.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ParticleTest.cpp">
+    <ClCompile Include="ParticleApp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ParticleTest.h">
+    <ClInclude Include="ParticleApp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -101,7 +101,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)PCH;$(SolutionDir)3rdPartyLib\SFML\include;$(SolutionDir)3rdPartyLib\fmod\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)PCH;$(SolutionDir)3rdPartyLib\SFML\include;$(SolutionDir)3rdPartyLib\fmod\include;$(ProjectDir);$(SolutionDir)3rdPartyLib\imgui;$(SolutionDir)3rdPartyLib\imgui-sfml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -110,8 +110,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)3rdPartyLib\SFML\lib\$(Platform);$(SolutionDir)3rdPartyLib\fmod\lib\$(Platform);$(SolutionDir)3rdPartyLib\SFML\lib\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-system-d.lib;sfml-window-d.lib;sfml-graphics-d.lib;%(AdditionalDependencies);freetype.lib;opengl32.lib;winmm.lib;gdi32.lib;fmod_vc.lib;xinput.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rdPartyLib\fmod\lib\$(Platform);$(SolutionDir)3rdPartyLib\SFML\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdPartyLib\SFML\build_$(Platform)\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-system-d.lib;sfml-window-d.lib;sfml-graphics-d.lib;%(AdditionalDependencies);opengl32.lib;winmm.lib;gdi32.lib;fmod_vc.lib;xinput.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -125,7 +125,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)PCH;$(SolutionDir)3rdPartyLib\SFML\include;$(SolutionDir)3rdPartyLib\fmod\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)PCH;$(SolutionDir)3rdPartyLib\SFML\include;$(SolutionDir)3rdPartyLib\fmod\include;$(ProjectDir);$(SolutionDir)3rdPartyLib\imgui;$(SolutionDir)3rdPartyLib\imgui-sfml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -136,8 +136,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)3rdPartyLib\SFML\lib\$(Platform);$(SolutionDir)3rdPartyLib\fmod\lib\$(Platform);$(SolutionDir)3rdPartyLib\SFML\lib\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-system.lib;sfml-window.lib;sfml-graphics.lib;%(AdditionalDependencies);freetype.lib;opengl32.lib;winmm.lib;gdi32.lib;fmod_vc.lib;xinput.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rdPartyLib\fmod\lib\$(Platform);$(SolutionDir)3rdPartyLib\SFML\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdPartyLib\SFML\build_$(Platform)\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-system.lib;sfml-window.lib;sfml-graphics.lib;%(AdditionalDependencies);opengl32.lib;winmm.lib;gdi32.lib;fmod_vc.lib;xinput.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -149,7 +149,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)PCH;$(SolutionDir)3rdPartyLib\SFML\include;$(SolutionDir)3rdPartyLib\fmod\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)PCH;$(SolutionDir)3rdPartyLib\SFML\include;$(SolutionDir)3rdPartyLib\fmod\include;$(ProjectDir);$(SolutionDir)3rdPartyLib\imgui;$(SolutionDir)3rdPartyLib\imgui-sfml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -158,8 +158,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)3rdPartyLib\SFML\lib\$(Platform);$(SolutionDir)3rdPartyLib\fmod\lib\$(Platform);$(SolutionDir)3rdPartyLib\SFML\lib\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-system-d.lib;sfml-window-d.lib;sfml-graphics-d.lib;%(AdditionalDependencies);freetype.lib;opengl32.lib;winmm.lib;gdi32.lib;fmod_vc.lib;xinput.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rdPartyLib\fmod\lib\$(Platform);$(SolutionDir)3rdPartyLib\SFML\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdPartyLib\SFML\build_$(Platform)\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-system-d.lib;sfml-window-d.lib;sfml-graphics-d.lib;%(AdditionalDependencies);opengl32.lib;winmm.lib;gdi32.lib;fmod_vc.lib;xinput.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -173,7 +173,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)PCH;$(SolutionDir)3rdPartyLib\SFML\include;$(SolutionDir)3rdPartyLib\fmod\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)PCH;$(SolutionDir)3rdPartyLib\SFML\include;$(SolutionDir)3rdPartyLib\fmod\include;$(ProjectDir);$(SolutionDir)3rdPartyLib\imgui;$(SolutionDir)3rdPartyLib\imgui-sfml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -184,8 +184,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)3rdPartyLib\SFML\lib\$(Platform);$(SolutionDir)3rdPartyLib\fmod\lib\$(Platform);$(SolutionDir)3rdPartyLib\SFML\lib\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-system.lib;sfml-window.lib;sfml-graphics.lib;%(AdditionalDependencies);freetype.lib;opengl32.lib;winmm.lib;gdi32.lib;fmod_vc.lib;xinput.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rdPartyLib\fmod\lib\$(Platform);$(SolutionDir)3rdPartyLib\SFML\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdPartyLib\SFML\build_$(Platform)\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-system.lib;sfml-window.lib;sfml-graphics.lib;%(AdditionalDependencies);opengl32.lib;winmm.lib;gdi32.lib;fmod_vc.lib;xinput.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -350,11 +350,6 @@
     <ClCompile Include="POWEngine\Renderer\Components\Debug\SFML\SFMLDebugRectangle.cpp" />
     <ClCompile Include="POWEngine\Renderer\Components\Debug\RectangleImpl.cpp" />
     <ClCompile Include="POWEngine\Random\Random.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\IMGUI\IMGUI.vcxproj">
-      <Project>{b841a80b-f336-461e-9d53-56d405ec7096}</Project>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
