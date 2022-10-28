@@ -138,42 +138,6 @@
     <ClInclude Include="POWEngine\Sound\SoundInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Rendering\Renderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="POWEngine\Rendering\SFML\SFML2DRenderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="POWEngine\Rendering\RendererImpl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="POWEngine\Rendering\Components\Sprite\SpriteComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="POWEngine\Rendering\Resources\Texture\Texture.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="POWEngine\Rendering\Components\Sprite\SFML\SFMLSprite.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="POWEngine\Rendering\Resources\Texture\TextureImpl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="POWEngine\Rendering\Resources\Texture\SFML\SFMLTexture.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="POWEngine\Rendering\Components\Sprite\SpriteImpl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="POWEngine\Rendering\NullRenderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="POWEngine\Rendering\System\RenderSystemBase.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="POWEngine\Rendering\RenderAPI.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\powengine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -204,12 +168,6 @@
     <ClInclude Include="POWEngine\ECS\SystemUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Rendering\Components\Sprite\SFML\SFMLSpriteComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="POWEngine\Rendering\System\SFML\SFML2DRenderSystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="POWEngine\Singleton\ThreadSafeSingleton.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -231,48 +189,6 @@
     <ClInclude Include="POWEngine\Core\Input\EventType.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Rendering\Components\Text\TextComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="POWEngine\Rendering\Components\Text\SFML\SFMLText.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="POWEngine\Rendering\Components\Text\TextImpl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="POWEngine\Rendering\Resources\Font\Font.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="POWEngine\Rendering\Resources\Font\SFML\SFMLFont.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="POWEngine\Rendering\Resources\Font\FontImpl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="POWEngine\Rendering\2D\Draw2DObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="POWEngine\Rendering\System\SFML\SFMLTextRender.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="POWEngine\Rendering\Components\Text\SFML\SFMLTextComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="POWEngine\Rendering\System\SFML\SFML2DBoundingBoxRender.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="POWEngine\Rendering\Components\Debug\DebugRectangle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="POWEngine\Rendering\Components\Debug\SFML\SFMLDebugRectangle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="POWEngine\Rendering\Components\Debug\RectangleImpl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="POWEngine\Rendering\Components\Debug\SFML\SFMLDebugRectangleComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="POWEngine\JSON\JSONParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -280,6 +196,96 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="POWEngine\Random\Random.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Application\Application.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Application\EngineProps.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Renderer\2D\Render2DProps.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Renderer\Components\Debug\SFML\SFMLDebugRectangleComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Renderer\Components\Text\SFML\SFMLTextComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Renderer\Resources\Font\FontImpl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Renderer\Resources\Font\Font.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Renderer\Components\Sprite\SFML\SFMLSpriteComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Renderer\NullRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Renderer\Components\Sprite\SFML\SFMLSprite.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Renderer\Renderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Renderer\RendererImpl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Renderer\SFML\SFML2DRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Renderer\Components\Sprite\SpriteComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Renderer\Resources\Texture\Texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Renderer\Resources\Texture\TextureImpl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Renderer\Resources\Texture\SFML\SFMLTexture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Renderer\Components\Sprite\SpriteImpl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Renderer\System\RenderSystemBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Renderer\RenderAPI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Renderer\System\SFML\SFML2DRenderSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Renderer\Components\Text\TextComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Renderer\Components\Text\SFML\SFMLText.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Renderer\Components\Text\TextImpl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Renderer\Resources\Font\SFML\SFMLFont.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Renderer\System\SFML\SFMLTextRender.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Renderer\System\SFML\SFML2DBoundingBoxRender.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Renderer\Components\Debug\DebugRectangle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Renderer\Components\Debug\SFML\SFMLDebugRectangle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Renderer\Components\Debug\RectangleImpl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -368,42 +374,6 @@
     <ClCompile Include="POWEngine\Logger\Logger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="POWEngine\Rendering\Renderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Rendering\SFML\SFML2DRenderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Rendering\RendererImpl.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Rendering\Components\Sprite\SpriteComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Rendering\Resources\Texture\Texture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Rendering\Resources\Texture\TextureImpl.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Rendering\Resources\Texture\SFML\SFMLTexture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Rendering\Components\Sprite\SpriteImpl.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Rendering\Components\Sprite\SFML\SFMLSprite.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Rendering\NullRenderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Rendering\System\RenderSystemBase.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Rendering\RenderAPI.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="POWEngine\Sound\FMOD\Channel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -411,9 +381,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="POWEngine\Core\Components\AudioComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Rendering\System\SFML\SFML2DRenderSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="POWEngine\Singleton\ThreadSafeSingleton.cpp">
@@ -428,43 +395,88 @@
     <ClCompile Include="POWEngine\Core\Input\InputSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="POWEngine\Rendering\Components\Text\TextComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Rendering\Components\Text\SFML\SFMLText.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Rendering\Components\Text\TextImpl.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Rendering\Resources\Font\Font.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Rendering\Resources\Font\SFML\SFMLFont.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Rendering\Resources\Font\FontImpl.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Rendering\2D\Draw2DObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Rendering\System\SFML\SFMLTextRender.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Rendering\System\SFML\SFML2DBoundingBoxRender.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Rendering\Components\Debug\DebugRectangle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Rendering\Components\Debug\SFML\SFMLDebugRectangle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Rendering\Components\Debug\RectangleImpl.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="POWEngine\Random\Random.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="POWEngine\Application\Application.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="POWEngine\Application\EngineProps.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="POWEngine\Renderer\2D\Render2DProps.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="POWEngine\Renderer\Components\Debug\DebugRectangle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="POWEngine\Renderer\Resources\Font\FontImpl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="POWEngine\Renderer\Resources\Font\Font.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="POWEngine\Renderer\NullRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="POWEngine\Renderer\Components\Sprite\SFML\SFMLSprite.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="POWEngine\Renderer\Renderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="POWEngine\Renderer\RendererImpl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="POWEngine\Renderer\SFML\SFML2DRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="POWEngine\Renderer\Components\Sprite\SpriteComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="POWEngine\Renderer\Resources\Texture\Texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="POWEngine\Renderer\Resources\Texture\TextureImpl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="POWEngine\Renderer\Resources\Texture\SFML\SFMLTexture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="POWEngine\Renderer\Components\Sprite\SpriteImpl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="POWEngine\Renderer\System\RenderSystemBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="POWEngine\Renderer\RenderAPI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="POWEngine\Renderer\System\SFML\SFML2DRenderSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="POWEngine\Renderer\Components\Text\TextComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="POWEngine\Renderer\Components\Text\SFML\SFMLText.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="POWEngine\Renderer\Components\Text\TextImpl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="POWEngine\Renderer\Resources\Font\SFML\SFMLFont.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="POWEngine\Renderer\System\SFML\SFMLTextRender.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="POWEngine\Renderer\System\SFML\SFML2DBoundingBoxRender.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="POWEngine\Renderer\Components\Debug\SFML\SFMLDebugRectangle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="POWEngine\Renderer\Components\Debug\RectangleImpl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

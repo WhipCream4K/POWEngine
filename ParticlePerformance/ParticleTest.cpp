@@ -1,5 +1,4 @@
 #include "ParticleTest.h"
-
 #include "POWEngine/Renderer/SFML/SFML2DRenderer.h"
 
 using namespace powe;

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup>
+    <Lib>
+      <AdditionalDependencies>sfml-system-d.lib;sfml-window-d.lib;sfml-graphics-d.lib;%(AdditionalDependencies);freetype.lib;opengl32.lib;winmm.lib;gdi32.lib;fmod_vc.lib;xinput.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rdPartyLib\SFML\lib\$(Platform);$(SolutionDir)3rdPartyLib\fmod\lib\$(Platform);$(SolutionDir)3rdPartyLib\SFML\lib\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir)PCH;$(SolutionDir)3rdPartyLib\SFML\include;$(SolutionDir)3rdPartyLib\fmod\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup />
+</Project>
