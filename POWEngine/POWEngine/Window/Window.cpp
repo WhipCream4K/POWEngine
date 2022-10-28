@@ -85,4 +85,9 @@ const glm::uvec4& powe::Window::GetClearColor() const
 
 powe::Window::~Window() = default;
 
+void powe::Window::UpdateContext(float deltaTime) const
+{
+	m_WindowImpl->UpdateWindowContext(deltaTime);
+}
+
 

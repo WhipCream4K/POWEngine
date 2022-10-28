@@ -1,4 +1,7 @@
 #include "ParticleTest.h"
+
+#include "EngineStatsComponent.h"
+#include "EngineStatsSystem.h"
 #include "POWEngine/Renderer/SFML/SFML2DRenderer.h"
 
 using namespace powe;
@@ -13,7 +16,10 @@ void ParticleTest::OnEngineSetUp(EngineProps& engineProps)
     engineProps.renderer->RegisterRenderAPI(std::make_unique<SFML2DRenderer>());
 }
 
-void ParticleTest::OnWorldInitialize()
+void ParticleTest::OnWorldInitialize(powe::WorldEntity& worldEntity)
 {
-    
+    const SharedPtr<GameObject> statsComponent{std::make_shared<GameObject>(worldEntity)};
+    statsComponent->AddComponent(EngineStatsComponent{});
+
+    worldEntity.RegisterSystem(PipelineLayer::PostUpdate,std::make_shared<EngineStatsSystem>());
 }

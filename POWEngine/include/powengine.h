@@ -13,6 +13,6 @@
 
 
 #if USE_SFML_RENDERER
-#include "POWEngine/Rendering/SFML/SFML2DRenderer.h"
+#include "POWEngine/Renderer/SFML/SFML2DRenderer.h"
 #endif
 

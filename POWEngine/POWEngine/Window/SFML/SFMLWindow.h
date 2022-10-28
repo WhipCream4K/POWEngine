@@ -27,13 +27,23 @@ namespace powe
 		void Display() override;
 		void SetVSync(bool VSync) override;
 		const glm::uvec4& GetClearColor() const override;
-
+		void UpdateWindowContext(float deltaTime) override;
+		
 		sf::RenderWindow& GetRenderWindow() { return m_WndHandle; }
 
 		~SFMLWindow() override;
 
 	private:
 
+		// Built-in SFML debug context
+		void InitializeDebugContext();
+		void ProcessInputDebugContext(sf::Event& ev) const;
+		void UpdateDebugContext(float deltaTime);
+		void DisplayDebugContext();
+		void CloseDebugContext() const;
+		
+	private:
+		
 		//WindowMessages m_WndMessages;
 		HardwareMessages m_HWMessages;
 		sf::RenderWindow m_WndHandle;

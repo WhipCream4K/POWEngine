@@ -7,20 +7,67 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a0526621-cec3-43af-86da-9e56bd3a7bca" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/ParticlePerformance/EngineStatsComponent.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ParticlePerformance/EngineStatsComponent.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ParticlePerformance/EngineStatsSystem.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ParticlePerformance/EngineStatsSystem.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.POW/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.POW/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/IMGUI/IMGUI.vcxproj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/IMGUI/IMGUI.vcxproj.filters" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/IMGUI/imconfig-SFML.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/IMGUI/imconfig.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/IMGUI/imgui-SFML.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/IMGUI/imgui-SFML.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/IMGUI/imgui-SFML_export.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/IMGUI/imgui.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/IMGUI/imgui.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/IMGUI/imgui_demo.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/IMGUI/imgui_draw.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/IMGUI/imgui_internal.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/IMGUI/imgui_tables.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/IMGUI/imgui_widgets.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/IMGUI/imstb_rectpack.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/IMGUI/imstb_textedit.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/IMGUI/imstb_truetype.h" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/POW.sln" beforeDir="false" afterPath="$PROJECT_DIR$/POW.sln" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/POWEngine/PCH/pch.h" beforeDir="false" afterPath="$PROJECT_DIR$/POWEngine/PCH/pch.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/POWEngine/POWEngine.vcxproj" beforeDir="false" afterPath="$PROJECT_DIR$/POWEngine/POWEngine.vcxproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/POWEngine/POWEngine.vcxproj.filters" beforeDir="false" afterPath="$PROJECT_DIR$/POWEngine/POWEngine.vcxproj.filters" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/POWEngine/POWEngine/Application/Application.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/POWEngine/POWEngine/Application/Application.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/POWEngine/POWEngine/Application/Application.h" beforeDir="false" afterPath="$PROJECT_DIR$/POWEngine/POWEngine/Application/Application.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/POWEngine/POWEngine/Core/Core.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/POWEngine/POWEngine/Core/Core.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/POWEngine/POWEngine/Logger/Console/ConsoleLogger.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/POWEngine/POWEngine/Logger/Console/ConsoleLogger.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/POWEngine/POWEngine/Renderer/SFML/SFML2DRenderer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/POWEngine/POWEngine/Renderer/SFML/SFML2DRenderer.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/POWEngine/POWEngine/Window/SFML/SFMLWindow.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/POWEngine/POWEngine/Window/SFML/SFMLWindow.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/POWEngine/POWEngine/Window/SFML/SFMLWindow.h" beforeDir="false" afterPath="$PROJECT_DIR$/POWEngine/POWEngine/Window/SFML/SFMLWindow.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/POWEngine/POWEngine/Window/Window.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/POWEngine/POWEngine/Window/Window.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/POWEngine/POWEngine/Window/Window.h" beforeDir="false" afterPath="$PROJECT_DIR$/POWEngine/POWEngine/Window/Window.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/POWEngine/POWEngine/Window/WindowImpl.h" beforeDir="false" afterPath="$PROJECT_DIR$/POWEngine/POWEngine/Window/WindowImpl.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/POWEngine/include/powengine.h" beforeDir="false" afterPath="$PROJECT_DIR$/POWEngine/include/powengine.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ParticlePerformance/ParticlePerformance.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/ParticlePerformance/ParticlePerformance.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ParticlePerformance/ParticlePerformance.vcxproj" beforeDir="false" afterPath="$PROJECT_DIR$/ParticlePerformance/ParticlePerformance.vcxproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ParticlePerformance/ParticlePerformance.vcxproj.filters" beforeDir="false" afterPath="$PROJECT_DIR$/ParticlePerformance/ParticlePerformance.vcxproj.filters" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ParticlePerformance/ParticleTest.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/ParticlePerformance/ParticleTest.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ParticlePerformance/ParticleTest.h" beforeDir="false" afterPath="$PROJECT_DIR$/ParticlePerformance/ParticleTest.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://C:/Program Files (x86)/Windows Kits/10/Include/10.0.19041.0/um/winnt.h" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/3rdPartyLib/ImGUI/imconfig.h" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/3rdPartyLib/ImGUI/imgui.h" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/3rdPartyLib/SFML/include/SFML/System/Time.hpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/3rdPartyLib/SFML/include/SFML/Window/Event.hpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/3rdPartyLib/SFML/include/SFML/Window/Window.hpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/POWEngine/POWEngine/ImGUI/imgui.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/POWEngine/POWEngine/ImGUI/imgui.h" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/POWEngine/POWEngine/ImGUI/imgui_demo.cpp" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -30,16 +77,16 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "reference.settingsdialog.IDE.editor.colors.General",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.IDE.editor.colors.C++&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="C++ Project.ParticlePerformance">
     <configuration name="BurgerTime" type="CppProject" factoryName="C++ Project">
       <configuration_1>
@@ -193,6 +240,14 @@
       <workItem from="1666842636979" duration="55000" />
       <workItem from="1666843218615" duration="13228000" />
       <workItem from="1666860626052" duration="21044000" />
+      <workItem from="1666928456303" duration="1003000" />
+      <workItem from="1666930037095" duration="523000" />
+      <workItem from="1666930650209" duration="147000" />
+      <workItem from="1666930817220" duration="89000" />
+      <workItem from="1666930928460" duration="7635000" />
+      <workItem from="1666939457340" duration="39000" />
+      <workItem from="1666940938661" duration="156000" />
+      <workItem from="1666941166352" duration="3801000" />
     </task>
     <task id="LOCAL-00001" summary="- folder rename&#10;- add Application class for better encapsulation">
       <created>1666868050154</created>
