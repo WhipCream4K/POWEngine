@@ -21,14 +21,13 @@ namespace powe
 		virtual void SetClearColor(const glm::uvec4&) = 0;
 		virtual const glm::uvec4& GetClearColor() const = 0;
 		virtual void SetVSync(bool) = 0;
-		virtual void UpdateWindowContext(float deltaTime) = 0;
 		[[nodiscard]] virtual const glm::uvec2& GetRelativeMousePos() const = 0;
 
 		virtual ~WindowImpl();
 
 	protected:
 
-		
+
 		//glm::uvec2 m_MousePosLastPoll;
 	};
 }

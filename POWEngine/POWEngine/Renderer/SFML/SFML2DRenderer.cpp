@@ -14,7 +14,7 @@ public:
 
 	void DrawBufferOnWindow(const Window& window)
 	{
-		SFMLWindow* sfmlWindow{ window.GetWindowContext<SFMLWindow>() };
+		SFMLWindow* sfmlWindow{ window.GetWindowInstance<SFMLWindow>() };
 		sf::RenderWindow& renderWindow{ sfmlWindow->GetRenderWindow() };
 
 		// sort the render order

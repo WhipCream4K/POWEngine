@@ -6,5 +6,5 @@ class ParticleTest : public powe::Application
 {
 public:
     void OnEngineSetUp(powe::EngineProps& engineProps) override;
-    void OnWorldInitialize(powe::WorldEntity& worldEntity) override;
+    void OnWorldInitialize() override;
 };

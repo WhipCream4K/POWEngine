@@ -101,7 +101,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)PCH;$(SolutionDir)3rdPartyLib\SFML\include;$(SolutionDir)3rdPartyLib\fmod\include;$(ProjectDir);$(SolutionDir)3rdPartyLib\ImGUI;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)PCH;$(SolutionDir)3rdPartyLib\SFML\include;$(SolutionDir)3rdPartyLib\fmod\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -125,7 +125,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)PCH;$(SolutionDir)3rdPartyLib\SFML\include;$(SolutionDir)3rdPartyLib\fmod\include;$(ProjectDir);$(SolutionDir)3rdPartyLib\ImGUI;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)PCH;$(SolutionDir)3rdPartyLib\SFML\include;$(SolutionDir)3rdPartyLib\fmod\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -149,7 +149,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)PCH;$(SolutionDir)3rdPartyLib\SFML\include;$(SolutionDir)3rdPartyLib\fmod\include;$(ProjectDir);$(SolutionDir)3rdPartyLib\ImGUI;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)PCH;$(SolutionDir)3rdPartyLib\SFML\include;$(SolutionDir)3rdPartyLib\fmod\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -173,7 +173,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)PCH;$(SolutionDir)3rdPartyLib\SFML\include;$(SolutionDir)3rdPartyLib\fmod\include;$(ProjectDir);$(SolutionDir)3rdPartyLib\ImGUI;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)PCH;$(SolutionDir)3rdPartyLib\SFML\include;$(SolutionDir)3rdPartyLib\fmod\include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -191,14 +191,6 @@
   <ItemGroup>
     <ClInclude Include="POWEngine\Application\Application.h" />
     <ClInclude Include="POWEngine\Application\EngineProps.h" />
-    <ClInclude Include="POWEngine\ImGUI\imconfig.h" />
-    <ClInclude Include="POWEngine\ImGUI\imgui-SFML.h" />
-    <ClInclude Include="POWEngine\ImGUI\imgui-SFML_export.h" />
-    <ClInclude Include="POWEngine\ImGUI\imgui.h" />
-    <ClInclude Include="POWEngine\ImGUI\imgui_internal.h" />
-    <ClInclude Include="POWEngine\ImGUI\imstb_rectpack.h" />
-    <ClInclude Include="POWEngine\ImGUI\imstb_textedit.h" />
-    <ClInclude Include="POWEngine\ImGUI\imstb_truetype.h" />
     <ClInclude Include="POWEngine\JSON\json.hpp" />
     <ClInclude Include="POWEngine\JSON\JSONParser.h" />
     <ClInclude Include="POWEngine\Renderer\2D\Render2DProps.h" />
@@ -292,13 +284,6 @@
   <ItemGroup>
     <ClCompile Include="POWEngine\Application\Application.cpp" />
     <ClCompile Include="POWEngine\Application\EngineProps.cpp" />
-    <ClCompile Include="POWEngine\ImGUI\imgui-SFML.cpp" />
-    <ClCompile Include="POWEngine\ImGUI\imgui.cpp" />
-    <ClCompile Include="POWEngine\ImGUI\ImGUIBuild.cpp" />
-    <ClCompile Include="POWEngine\ImGUI\imgui_demo.cpp" />
-    <ClCompile Include="POWEngine\ImGUI\imgui_draw.cpp" />
-    <ClCompile Include="POWEngine\ImGUI\imgui_tables.cpp" />
-    <ClCompile Include="POWEngine\ImGUI\imgui_widgets.cpp" />
     <ClCompile Include="POWEngine\Renderer\2D\Render2DProps.cpp" />
     <ClCompile Include="POWEngine\Renderer\Components\Debug\DebugRectangle.cpp" />
     <ClCompile Include="POWEngine\Renderer\Resources\Font\FontImpl.cpp" />
@@ -365,6 +350,11 @@
     <ClCompile Include="POWEngine\Renderer\Components\Debug\SFML\SFMLDebugRectangle.cpp" />
     <ClCompile Include="POWEngine\Renderer\Components\Debug\RectangleImpl.cpp" />
     <ClCompile Include="POWEngine\Random\Random.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IMGUI\IMGUI.vcxproj">
+      <Project>{b841a80b-f336-461e-9d53-56d405ec7096}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

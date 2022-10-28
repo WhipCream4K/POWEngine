@@ -25,7 +25,7 @@ void powe::Application::Run()
     m_MainWindow->SetVSync(engineProps.winProps.startWithVSync);
 
     m_WorldEntity = std::make_unique<WorldEntity>();
-    OnWorldInitialize(*m_WorldEntity);
+    OnWorldInitialize();
 
     m_EngineCore->StartWorldClock();
     

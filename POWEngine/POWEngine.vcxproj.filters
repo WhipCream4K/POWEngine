@@ -288,30 +288,6 @@
     <ClInclude Include="POWEngine\Renderer\Components\Debug\RectangleImpl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\ImGUI\imconfig.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="POWEngine\ImGUI\imgui.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="POWEngine\ImGUI\imgui-SFML.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="POWEngine\ImGUI\imgui-SFML_export.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="POWEngine\ImGUI\imstb_rectpack.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="POWEngine\ImGUI\imstb_textedit.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="POWEngine\ImGUI\imstb_truetype.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="POWEngine\ImGUI\imgui_internal.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PCH\pch.cpp">
@@ -501,27 +477,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="POWEngine\Renderer\Components\Debug\RectangleImpl.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\ImGUI\ImGUIBuild.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\ImGUI\imgui.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\ImGUI\imgui_demo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\ImGUI\imgui_draw.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\ImGUI\imgui_tables.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\ImGUI\imgui_widgets.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\ImGUI\imgui-SFML.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

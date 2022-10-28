@@ -11,8 +11,6 @@
 #define USE_SFML_WINDOW 1
 #define USE_SFML_RENDERER 1
 #define RELEASE_WITH_LOGINFO 1
-#define USE_DEBUG_GUI 1
-#define USE_IMGUI_DEBUG 1
 
 // add headers that you want to pre-compile here
 

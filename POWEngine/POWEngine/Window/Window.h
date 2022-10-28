@@ -10,7 +10,6 @@ namespace powe
 	class WindowImpl;
 	class Window final
 	{
-		friend class Core;
 	public:
 
 		Window(uint32_t width, uint32_t height, const std::string& title,const OtherWindowParams& others = {});
@@ -31,14 +30,12 @@ namespace powe
 		[[nodiscard]] const glm::uvec4& GetClearColor() const;
 
 		template<typename T>
-		T* GetWindowContext() const;
+		T* GetWindowInstance() const;
 
 		~Window();
 
 	protected:
 
-		void UpdateContext(float deltaTime) const;
-		
 		OwnedPtr<WindowImpl> m_WindowImpl;
 
 		//glm::uvec4 m_ClearColor{};
@@ -48,7 +45,7 @@ namespace powe
 	};
 
 	template <typename T>
-	T* Window::GetWindowContext() const
+	T* Window::GetWindowInstance() const
 	{
 		return static_cast<T*>(m_WindowImpl.get());
 	}

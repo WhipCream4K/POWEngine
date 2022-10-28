@@ -126,12 +126,7 @@ void powe::ConsoleLogger::Run()
     }
 
     std::cout << LogInfo " Message Thread exit successfully\n";
-
-#ifdef _WIN32
-    const HANDLE consoleHandle{GetStdHandle(STD_OUTPUT_HANDLE)};
-    SetConsoleTextAttribute(consoleHandle, WHITE_TEXT_BLACK_BG);
-#endif
-    
+    // std::cout << GreenText LogInfo ResetText " Message Thread exit successfully\n";
 }
 
 //void powe::ConsoleLogger::DisplayConsoleMessage(const std::string& msg)

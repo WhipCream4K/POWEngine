@@ -26,7 +26,7 @@ namespace powe
         const SharedPtr<Window>& GetMainWindow() const {return m_MainWindow;}
 
         virtual void OnEngineSetUp(EngineProps&) {}
-        virtual void OnWorldInitialize(WorldEntity&) {}
+        virtual void OnWorldInitialize() {}
     
     private:
 
