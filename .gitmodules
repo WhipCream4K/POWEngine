@@ -1,0 +1,10 @@
+[submodule "3rdPartyLib/SFML"]
+	path = 3rdPartyLib/SFML
+	url = https://github.com/SFML/SFML.git
+	branch = 2.6.x
+[submodule "3rdPartyLib/imgui-sfml"]
+	path = 3rdPartyLib/imgui-sfml
+	url = https://github.com/eliasdaler/imgui-sfml.git
+[submodule "3rdPartyLib/imgui"]
+	path = 3rdPartyLib/imgui
+	url = https://github.com/ocornut/imgui.git
