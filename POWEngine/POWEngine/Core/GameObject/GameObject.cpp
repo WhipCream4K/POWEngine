@@ -25,6 +25,11 @@ powe::GameObject::GameObject(WorldEntity& world)
 	world.RegisterGameObject(m_Id);
 }
 
+powe::GameObject::~GameObject()
+{
+	// m_World.RemoveGameObject(m_Id);
+}
+
 //void powe::GameObject::SetParent(const SharedPtr<GameObject>& )
 //{
 //	//if(gameObject)

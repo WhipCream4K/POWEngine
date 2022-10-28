@@ -27,6 +27,8 @@ namespace powe
 
 		float m_DeltaTime;
 		float m_TotalElapsedTime;
+		float m_FrameTimeStamp;
+		int m_FrameCounter;
 	};
 }
 

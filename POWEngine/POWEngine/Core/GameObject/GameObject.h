@@ -15,7 +15,9 @@ namespace powe
 		GameObject& operator=(const GameObject&) = delete;
 		GameObject(GameObject&&) noexcept = delete;
 		GameObject& operator=(GameObject&&) noexcept = delete;
-		~GameObject() = default;
+
+		// TODO: Decide how long would gameobject still be alive after lose pointer reference
+		~GameObject(); 
 
 	public:
 

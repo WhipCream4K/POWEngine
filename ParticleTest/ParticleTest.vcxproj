@@ -92,7 +92,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)POWEngine;$(SolutionDir)POWEngine\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)POWEngine;$(SolutionDir)POWEngine\include;$(SolutionDir)3rdPartyLib\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
@@ -113,7 +113,7 @@ xcopy /y $(SolutionDir)3rdPartyLib\fmod\lib\$(Platform) $(OutDir)</Command>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)POWEngine;$(SolutionDir)POWEngine\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)POWEngine;$(SolutionDir)POWEngine\include;$(SolutionDir)3rdPartyLib\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
@@ -134,7 +134,7 @@ xcopy /y $(SolutionDir)3rdPartyLib\fmod\lib\$(Platform) $(OutDir)</Command>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)POWEngine;$(SolutionDir)POWEngine\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)POWEngine;$(SolutionDir)POWEngine\include;$(SolutionDir)3rdPartyLib\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
@@ -155,7 +155,7 @@ xcopy /y $(SolutionDir)3rdPartyLib\fmod\lib\$(Platform) $(OutDir)</Command>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)POWEngine;$(SolutionDir)POWEngine\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)POWEngine;$(SolutionDir)POWEngine\include;$(SolutionDir)3rdPartyLib\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
@@ -171,6 +171,8 @@ xcopy /y $(SolutionDir)3rdPartyLib\fmod\lib\$(Platform) $(OutDir)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="EngineStatsComponent.cpp" />
+    <ClCompile Include="EngineStatsTrackSystem.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ParticleApp.cpp" />
   </ItemGroup>
@@ -180,6 +182,8 @@ xcopy /y $(SolutionDir)3rdPartyLib\fmod\lib\$(Platform) $(OutDir)</Command>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="EngineStatsComponent.h" />
+    <ClInclude Include="EngineStatsTrackSystem.h" />
     <ClInclude Include="ParticleApp.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

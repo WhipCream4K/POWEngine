@@ -51,10 +51,13 @@ const powe::HardwareMessages& powe::SFMLWindow::PollHardwareMessages(bool& shoul
 
 	uint8_t messageCnt{};
 
+
 	if (m_WndHandle.isOpen())
 	{
-		sf::Event sfmlEvent{};
+		ImGui::NewFrame();
 
+		sf::Event sfmlEvent{};
+		
 		while (m_WndHandle.pollEvent(sfmlEvent))
 		{
 			if (messageCnt > MinimumWindowEventCnt)
@@ -198,8 +201,9 @@ void powe::SFMLWindow::PollHardwareMessages(
 
 	if (m_WndHandle.isOpen())
 	{
+		// ImGui::NewFrame();
+		
 		sf::Event sfmlEvent{};
-
 		while (m_WndHandle.pollEvent(sfmlEvent))
 		{
 			if (messageCnt > MinimumWindowEventCnt)

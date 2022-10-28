@@ -35,6 +35,13 @@ powe::GameObjectID powe::WorldEntity::GetNewEntityID()
 	return m_GameObjectCounter++;
 }
 
+powe::GameObjectID powe::WorldEntity::CreateNewEntity()
+{
+	const GameObjectID newID {GetNewEntityID()};
+	RegisterGameObject(newID);
+	return newID;
+}
+
 void powe::WorldEntity::RemoveComponentByID(GameObjectID id, ComponentTypeID componentID)
 {
 	GameObjectRecord gbRecords{};

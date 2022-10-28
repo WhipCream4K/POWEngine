@@ -28,10 +28,11 @@ bool powe::Core::TranslateWindowInputs(const SharedPtr<Window>& window, const Sh
 	//const HardwareMessages& hwMessages{ window.PollHardwareMessages(isEarlyExit,ignoreInputs) };
 	window->PollHardwareMessages(hwMessages, isEarlyExit, ignoreInputs);
 
+	const float deltaTime{ m_WorldClock->GetDeltaTime() };
+	window->UpdateWindowContext(deltaTime);
+	
 	if (!ignoreInputs)
 	{
-		const float deltaTime{ m_WorldClock->GetDeltaTime() };
-		window->UpdateWindowContext(deltaTime);
 		m_InputManager->PollHardWareMessages(hwMessages, deltaTime);
 		worldEntt->GetInputSettings().ParseHWMessages(hwMessages);
 	}
@@ -47,17 +48,17 @@ bool powe::Core::TranslateWindowInputs(const Window& window, WorldEntity& worldE
 	bool ignoreInputs{};
 
 	HardwareMessages hwMessages{};
-	//const HardwareMessages& hwMessages{ window.PollHardwareMessages(isEarlyExit,ignoreInputs) };
 	window.PollHardwareMessages(hwMessages, isEarlyExit, ignoreInputs);
-
+	
+	const float deltaTime{ m_WorldClock->GetDeltaTime() };
+	window.UpdateWindowContext(deltaTime);
+	
 	if (!ignoreInputs)
 	{
-		const float deltaTime{ m_WorldClock->GetDeltaTime() };
-		window.UpdateWindowContext(deltaTime);
 		m_InputManager->PollHardWareMessages(hwMessages, deltaTime);
 		worldEntt.GetInputSettings().ParseHWMessages(hwMessages);
 	}
-
+	
 	return isEarlyExit;
 }
 
@@ -86,6 +87,8 @@ void powe::Core::Draw(const SharedPtr<Window>& window, const SharedPtr<WorldEnti
 	m_MainRenderer->UpdateSystem(*worldEntt,worldEntt->GetActiveArchetypes());
 	m_MainRenderer->Draw(*window);
 	window->Display();
+
+	m_WorldClock->End();
 }
 
 void powe::Core::Draw(const Window& window, const WorldEntity& worldEntt) const

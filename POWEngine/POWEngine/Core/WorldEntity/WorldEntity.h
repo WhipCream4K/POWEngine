@@ -41,6 +41,8 @@ namespace powe
 
 		GameObjectID GetNewEntityID();
 
+		GameObjectID CreateNewEntity();
+
 		template<typename ComponentType>
 		EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> AddComponentToGameObject(
 			GameObjectID id,
