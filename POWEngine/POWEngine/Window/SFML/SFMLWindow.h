@@ -26,11 +26,20 @@ namespace powe
 		void SetClearColor(const glm::uvec4&) override;
 		void Display() override;
 		void SetVSync(bool VSync) override;
+		void UpdateWindowContext(float deltaTime) override;
 		const glm::uvec4& GetClearColor() const override;
 
 		sf::RenderWindow& GetRenderWindow() { return m_WndHandle; }
 
 		~SFMLWindow() override;
+
+	private:
+
+		// built-in sfml imgui
+		void ParseHWMessageToDebugWindow(sf::Event& ev);
+		void UpdateDebugWindowContext(float deltaTime);
+		void InitDebugWindowContext();
+		void RenderDebugWindowContext();
 
 	private:
 

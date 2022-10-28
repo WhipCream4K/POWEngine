@@ -22,12 +22,6 @@ namespace powe
 			const SharedPtr<Window>& window,
 			const SharedPtr<WorldEntity>& worldEntt) const;
 
-		//bool TranslateWindowInputs(const Window& window);
-
-		bool TranslateWindowInputs(
-			const Window& window,
-			const SharedPtr<WorldEntity>& worldEntt) const;
-
 		bool TranslateWindowInputs(
 			const Window& window,
 			WorldEntity& worldEntt

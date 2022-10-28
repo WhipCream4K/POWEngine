@@ -1,9 +1,13 @@
 
 #include "pch.h"
 #include "SFMLWindow.h"
-#include "POWEngine/Window/WindowEvents.h"
 #include "POWEngine/Core/Input/Key.h"
 #include "POWEngine/Core/Input/ListsOfKeys.h"
+
+#ifdef USE_IMGUI
+#include <imgui-SFML.h>
+#include <imgui.h>
+#endif
 
 #if USE_SFML_WINDOW
 
@@ -22,6 +26,8 @@ powe::SFMLWindow::SFMLWindow(uint32_t width, uint32_t height, const std::string&
 	const auto mousePos = sf::Mouse::getPosition(m_WndHandle);
 	m_MousePosLastPoll.x = mousePos.x;
 	m_MousePosLastPoll.y = mousePos.y;
+
+	InitDebugWindowContext();
 }
 
 powe::SFMLWindow::SFMLWindow(uint32_t width, uint32_t height, const std::string& title)
@@ -35,6 +41,8 @@ powe::SFMLWindow::SFMLWindow(uint32_t width, uint32_t height, const std::string&
 	const auto mousePos = sf::Mouse::getPosition(m_WndHandle);
 	m_MousePosLastPoll.x = mousePos.x;
 	m_MousePosLastPoll.y = mousePos.y;
+
+	InitDebugWindowContext();
 }
 
 const powe::HardwareMessages& powe::SFMLWindow::PollHardwareMessages(bool& shouldEarlyExit, bool& shouldIgnoreInputs)
@@ -169,12 +177,12 @@ const powe::HardwareMessages& powe::SFMLWindow::PollHardwareMessages(bool& shoul
 
 				break;
 			}
-			// TODO: Implement gamepad using XInput
 
 			default: break;
 			}
 		}
 
+		ParseHWMessageToDebugWindow(sfmlEvent);
 		m_HWMessages.totalMessages = messageCnt;
 	}
 
@@ -309,12 +317,12 @@ void powe::SFMLWindow::PollHardwareMessages(
 
 				break;
 			}
-			// TODO: Implement gamepad using XInput
 
 			default: break;
 			}
 		}
-
+		
+		ParseHWMessageToDebugWindow(sfmlEvent);
 		hardwareMessages.totalMessages = messageCnt;
 	}
 }
@@ -351,12 +359,18 @@ void powe::SFMLWindow::SetClearColor(const glm::uvec4& color)
 
 void powe::SFMLWindow::Display()
 {
+	RenderDebugWindowContext();
 	m_WndHandle.display();
 }
 
 void powe::SFMLWindow::SetVSync(bool VSync)
 {
 	m_WndHandle.setVerticalSyncEnabled(VSync);
+}
+
+void powe::SFMLWindow::UpdateWindowContext(float deltaTime)
+{
+	UpdateDebugWindowContext(deltaTime);
 }
 
 const glm::uvec4& powe::SFMLWindow::GetClearColor() const
@@ -367,6 +381,35 @@ const glm::uvec4& powe::SFMLWindow::GetClearColor() const
 powe::SFMLWindow::~SFMLWindow()
 {
 	m_WndHandle.close();
+}
+
+void powe::SFMLWindow::ParseHWMessageToDebugWindow(sf::Event& ev)
+{
+#ifdef USE_IMGUI
+	ImGui::SFML::ProcessEvent(m_WndHandle,ev);
+#endif
+}
+
+void powe::SFMLWindow::UpdateDebugWindowContext(float deltaTime)
+{
+#ifdef USE_IMGUI
+	ImGui::SFML::Update(m_WndHandle,sf::seconds(deltaTime));
+#endif
+}
+
+void powe::SFMLWindow::InitDebugWindowContext()
+{
+#ifdef USE_IMGUI
+	ImGui::SFML::Init(m_WndHandle);
+#endif
+}
+
+void powe::SFMLWindow::RenderDebugWindowContext()
+{
+#ifdef USE_IMGUI
+	ImGui::ShowDemoWindow();
+	ImGui::SFML::Render(m_WndHandle);
+#endif
 }
 
 

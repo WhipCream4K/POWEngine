@@ -18,6 +18,7 @@ namespace powe
 		void PollHardwareMessages(HardwareMessages& hwMessages,bool& shouldEarlyExit, bool& shouldIgnoreInputs) const;
 		void Resize(uint32_t width, uint32_t height);
 		void SetTitle(const std::string& newTitle);
+		void UpdateWindowContext(float deltaTime) const;
 
 		[[nodiscard]] uint32_t GetHeight() const { return m_Height; }
 		[[nodiscard]] uint32_t GetWidth() const { return m_Width; }

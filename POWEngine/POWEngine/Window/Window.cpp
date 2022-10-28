@@ -53,6 +53,11 @@ void powe::Window::SetTitle(const std::string& newTitle)
 	m_WindowImpl->SetTitle(newTitle);
 }
 
+void powe::Window::UpdateWindowContext(float deltaTime) const
+{
+	m_WindowImpl->UpdateWindowContext(deltaTime);
+}
+
 const glm::uvec2& powe::Window::GetRelativeMousePos() const
 {
 	return m_WindowImpl->GetRelativeMousePos();

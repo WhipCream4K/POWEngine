@@ -5,7 +5,7 @@
   <PropertyGroup />
   <ItemDefinitionGroup>
     <Lib>
-      <AdditionalDependencies>sfml-system-d.lib;sfml-window-d.lib;sfml-graphics-d.lib;%(AdditionalDependencies);freetype.lib;opengl32.lib;winmm.lib;gdi32.lib;fmod_vc.lib;xinput.lib</AdditionalDependencies>
+      <AdditionalDependencies>sfml-system-d.lib;sfml-window-d.lib;sfml-graphics-d.lib;%(AdditionalDependencies);opengl32.lib;winmm.lib;gdi32.lib;fmod_vc.lib;xinput.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)3rdPartyLib\SFML\lib\$(Platform);$(SolutionDir)3rdPartyLib\fmod\lib\$(Platform);$(SolutionDir)3rdPartyLib\SFML\lib\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
     <ClCompile>

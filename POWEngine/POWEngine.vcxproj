@@ -110,8 +110,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)3rdPartyLib\fmod\lib\$(Platform);$(SolutionDir)3rdPartyLib\SFML\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdPartyLib\SFML\build_$(Platform)\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-system-d.lib;sfml-window-d.lib;sfml-graphics-d.lib;%(AdditionalDependencies);opengl32.lib;winmm.lib;gdi32.lib;fmod_vc.lib;xinput.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rdPartyLib\fmod\lib\$(Platform);$(SolutionDir)3rdPartyLib\SFML\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdPartyLib\SFML\build_$(Platform)\lib\$(Configuration);$(SolutionDir)3rdPartyLib\imgui-sfml\build_$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-system-d.lib;sfml-window-d.lib;sfml-graphics-d.lib;%(AdditionalDependencies);opengl32.lib;winmm.lib;gdi32.lib;fmod_vc.lib;xinput.lib;ImGui-SFML.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -136,8 +136,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)3rdPartyLib\fmod\lib\$(Platform);$(SolutionDir)3rdPartyLib\SFML\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdPartyLib\SFML\build_$(Platform)\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-system.lib;sfml-window.lib;sfml-graphics.lib;%(AdditionalDependencies);opengl32.lib;winmm.lib;gdi32.lib;fmod_vc.lib;xinput.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rdPartyLib\fmod\lib\$(Platform);$(SolutionDir)3rdPartyLib\SFML\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdPartyLib\SFML\build_$(Platform)\lib\$(Configuration);$(SolutionDir)3rdPartyLib\imgui-sfml\build_$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-system.lib;sfml-window.lib;sfml-graphics.lib;%(AdditionalDependencies);opengl32.lib;winmm.lib;gdi32.lib;fmod_vc.lib;xinput.lib;ImGui-SFML.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -158,8 +158,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)3rdPartyLib\fmod\lib\$(Platform);$(SolutionDir)3rdPartyLib\SFML\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdPartyLib\SFML\build_$(Platform)\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-system-d.lib;sfml-window-d.lib;sfml-graphics-d.lib;%(AdditionalDependencies);opengl32.lib;winmm.lib;gdi32.lib;fmod_vc.lib;xinput.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rdPartyLib\fmod\lib\$(Platform);$(SolutionDir)3rdPartyLib\SFML\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdPartyLib\SFML\build_$(Platform)\lib\$(Configuration);$(SolutionDir)3rdPartyLib\imgui-sfml\build_$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-system-d.lib;sfml-window-d.lib;sfml-graphics-d.lib;%(AdditionalDependencies);opengl32.lib;winmm.lib;gdi32.lib;fmod_vc.lib;xinput.lib;ImGui-SFML.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -184,8 +184,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)3rdPartyLib\fmod\lib\$(Platform);$(SolutionDir)3rdPartyLib\SFML\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdPartyLib\SFML\build_$(Platform)\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-system.lib;sfml-window.lib;sfml-graphics.lib;%(AdditionalDependencies);opengl32.lib;winmm.lib;gdi32.lib;fmod_vc.lib;xinput.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rdPartyLib\fmod\lib\$(Platform);$(SolutionDir)3rdPartyLib\SFML\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdPartyLib\SFML\build_$(Platform)\lib\$(Configuration);$(SolutionDir)3rdPartyLib\imgui-sfml\build_$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-system.lib;sfml-window.lib;sfml-graphics.lib;%(AdditionalDependencies);opengl32.lib;winmm.lib;gdi32.lib;fmod_vc.lib;xinput.lib;ImGui-SFML.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
