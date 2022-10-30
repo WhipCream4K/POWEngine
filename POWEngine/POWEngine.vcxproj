@@ -191,6 +191,7 @@
   <ItemGroup>
     <ClInclude Include="POWEngine\Application\Application.h" />
     <ClInclude Include="POWEngine\Application\EngineProps.h" />
+    <ClInclude Include="POWEngine\ECS\SystemKeys.h" />
     <ClInclude Include="POWEngine\JSON\json.hpp" />
     <ClInclude Include="POWEngine\JSON\JSONParser.h" />
     <ClInclude Include="POWEngine\Renderer\2D\Render2DProps.h" />
@@ -287,6 +288,7 @@
     <ClCompile Include="POWEngine\Application\Application.cpp" />
     <ClCompile Include="POWEngine\Application\EngineProps.cpp" />
     <ClCompile Include="POWEngine\ECS\ECSUtils.cpp" />
+    <ClCompile Include="POWEngine\ECS\SystemKeys.cpp" />
     <ClCompile Include="POWEngine\Renderer\2D\Render2DProps.cpp" />
     <ClCompile Include="POWEngine\Renderer\Components\Debug\DebugRectangle.cpp" />
     <ClCompile Include="POWEngine\Renderer\Components\Debug\Shape2D.cpp" />

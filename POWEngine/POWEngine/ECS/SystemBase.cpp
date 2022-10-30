@@ -7,19 +7,10 @@
 
 powe::SystemBase::SystemBase()
 	: m_World()
-	, m_Keys()
 	, m_CurrentArchetype()
 	, m_UpdateCountPerArchetype()
 {
 }
-
-//powe::SystemBase::SystemBase(WorldEntity* worldEntity)
-//	: m_World(worldEntity)
-//	, m_Keys()
-//	, m_CurrentArchetype()
-//	, m_UpdateCountPerArchetype()
-//{
-//}
 
 void powe::SystemBase::InternalUpdate(const Archetype& archetype, float deltaTime)
 {

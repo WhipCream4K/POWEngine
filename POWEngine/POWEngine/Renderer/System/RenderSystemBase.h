@@ -1,35 +1,27 @@
 #pragma once
 
-#include "POWEngine/ECS/SystemBase.h"
+#include "POWEngine/Core/WorldEntity/WorldEntity.h"
+#include "POWEngine/ECS/ECSUtils.h"
+#include "POWEngine/ECS/SystemKeys.h"
 #include "POWEngine/Logger/LoggerUtils.h"
+
 
 namespace powe
 {
 	class Renderer;
 	class RenderAPI;
-	class RenderSystemBase
+	class RenderSystemBase : public SystemKeys
 	{
+		
 	public:
-
-		virtual void InternalDraw(const WorldEntity& worldEntity,const Archetype&,const RenderAPI&) = 0;
-
-	public:
-
-		const std::unordered_set<ComponentTypeID>& GetKeys() const { return m_Keys; }
-
-	public:
-
 		RenderSystemBase() = default;
+		RenderSystemBase(const RenderSystemBase&) = delete;
+		RenderSystemBase& operator=(const RenderSystemBase&) = delete;
+		RenderSystemBase(RenderSystemBase&&) = delete;
+		RenderSystemBase& operator=(RenderSystemBase&&) = delete;
 		virtual ~RenderSystemBase() = default;
-
-	protected:
-
-		template<typename ...Args>
-		void InternMakeKeys();
-
-	private:
-
-		std::unordered_set<powe::ComponentTypeID> m_Keys;
+		
+		virtual void InternalDraw(const WorldEntity& worldEntity,const Archetype&,const RenderAPI&) = 0;
 	};
 
 	template<bool U>
@@ -47,14 +39,16 @@ namespace powe
 	class RenderSystem : public RenderSystemBase , public IfBase<std::is_base_of_v<RenderAPI,T>>
 	{
 	public:
+		
+		RenderSystem() = default;
+		RenderSystem(const RenderSystem&) = delete;
+		RenderSystem& operator=(const RenderSystem&) = delete;
+		RenderSystem(RenderSystem&&) = delete;
+		RenderSystem& operator=(RenderSystem&&) = delete;
+		virtual ~RenderSystem() override = default;
 
 		void InternalDraw(const WorldEntity& worldEntity, const Archetype&, const RenderAPI&) final;
 		virtual void OnDraw(const T& renderer,GameObjectID id) = 0;
-
-	public:
-
-		RenderSystem() = default;
-		virtual ~RenderSystem() override = default;
 
 	protected:
 
@@ -80,12 +74,6 @@ namespace powe
 		const WorldEntity* m_CurrentWorld{};
 		uint32_t m_UpdateCountPerArchetype{};
 	};
-
-	template <typename ... Args>
-	void RenderSystemBase::InternMakeKeys()
-	{
-		m_Keys = { BaseComponent::GetId<Args>()... };
-	}
 
 	template <typename T>
 	void RenderSystem<T>::InternalDraw(const WorldEntity& worldEntity, const Archetype& archetype, const RenderAPI& renderer)
@@ -166,13 +154,7 @@ namespace powe
 
 		throw std::out_of_range(typeid(U).name());
 	}
-
-
-// #pragma region MACRO
-//
-// #define DEFINE_SYSTEM_KEY(...) InternMakeKeys<__VA_ARGS__>()
-//
-// #pragma endregion
+	
 }
 
 

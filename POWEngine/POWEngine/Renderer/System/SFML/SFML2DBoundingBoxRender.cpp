@@ -7,7 +7,8 @@
 
 powe::SFML2DBoundingBoxRender::SFML2DBoundingBoxRender()
 {
-	DEFINE_SYSTEM_KEY(Transform2D, DebugRectangle, SFMLDebugRectangleComponent);
+	// DEFINE_SYSTEM_KEY(Transform2D, DebugRectangle, SFMLDebugRectangleComponent);
+	DefineSystemKeys<Transform2D,DebugRectangle,SFMLDebugRectangleComponent>();
 }
 
 
