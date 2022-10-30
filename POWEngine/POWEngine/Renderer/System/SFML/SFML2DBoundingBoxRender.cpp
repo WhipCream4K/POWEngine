@@ -2,8 +2,8 @@
 #include "SFML2DBoundingBoxRender.h"
 
 #include "POWEngine/Core/Components/Transform2D.h"
-#include "POWEngine/Renderer/Components/Debug/DebugRectangle.h"
-#include "POWEngine/Renderer/Components/Debug/SFML/SFMLDebugRectangleComponent.h"
+#include "POWEngine/Renderer/Components/Debug2D/DebugRectangle.h"
+#include "POWEngine/Renderer/Components/Debug2D/SFML/SFMLDebugRectangleComponent.h"
 
 powe::SFML2DBoundingBoxRender::SFML2DBoundingBoxRender()
 {

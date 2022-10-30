@@ -1,16 +1,11 @@
 #pragma once
 
 #include "ECSTypes.h"
-//#include <string>
-//#include "POWEngine/Core/Components/BaseComponent.h"
+#include "POWEngine/Utils/MacroDef.h"
 
 namespace powe
 {
-    //static inline std::string ComponentIDToString(ComponentTypeID id)
-    //{
-    //	return std::to_string(id & ~(1u << SparseBitPos));
-    //}
-
+    
     static constexpr inline bool IsThisComponentSparse(ComponentTypeID id)
     {
         return id & int(ComponentFlag::Sparse);
@@ -40,6 +35,7 @@ namespace powe
         }
 
         return true;
+        
         //for (const auto& id : compIds)
         //{
         //	// this checks also take into account the hierarchy of the components
@@ -56,11 +52,6 @@ namespace powe
         return id & ~SizeType(ComponentFlag::Count);
     }
 
-    //template <typename ...Args, typename = std::enable_if_t<(std::is_base_of_v<Component<Args>,Args> && ...)>>
-    //std::unordered_set<ComponentTypeID> MakeSystemKeys()
-    //{
-    //    return {BaseComponent::GetId<Args>()...};
-    //}
-
+#define DERIVED_COMPONENT(classname) InternDerivedComponent(classname)
     
 }

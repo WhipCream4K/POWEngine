@@ -24,7 +24,10 @@
     <ClCompile Include="EngineStatsComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="EngineStatsGUISystem.cpp">
+    <ClCompile Include="BoundAreaSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineStatsTrackSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -35,7 +38,10 @@
     <ClInclude Include="EngineStatsComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EngineStatsGUISystem.h">
+    <ClInclude Include="BoundAreaSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineStatsTrackSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

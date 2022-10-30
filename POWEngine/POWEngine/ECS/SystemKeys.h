@@ -11,7 +11,7 @@ namespace powe
 
         [[nodiscard]] const std::unordered_set<ComponentTypeID>& GetKeys() const {return m_Keys;}
         
-        template <typename ...Args, typename = std::enable_if_t<(std::is_base_of_v<Component<Args>, Args> && ...)>>
+        template <typename ...Args, typename = std::enable_if_t<(std::is_base_of_v<BaseComponent, Args> && ...)>>
         void DefineSystemKeys();
     
     private:

@@ -33,7 +33,6 @@ namespace powe
 
 	protected:
 
-		int some{};
 		explicit BaseComponent() = default;
 
 	private:
@@ -80,7 +79,6 @@ namespace powe
 		void MoveData(RawByte* source, RawByte* destination) const override;
 		void InternalCreate(RawByte* source, WorldEntity&, GameObjectID) final;
 		void InternalDestroy(RawByte* source, WorldEntity&, GameObjectID) final;
-		//void InternalMove(RawByte*, WorldEntity&, GameObjectID) final;
 		[[nodiscard]] SizeType GetSize() const override;
 
 	protected:
@@ -90,11 +88,7 @@ namespace powe
 		virtual void OnMove(WorldEntity&,GameObjectID) {}
 
 	protected:
-
 		Component() = default;
-
-		
-
 	};
 
 	template <typename T>

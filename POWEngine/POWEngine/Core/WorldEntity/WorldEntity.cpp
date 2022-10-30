@@ -301,7 +301,8 @@ void powe::WorldEntity::InternalRemoveComponentFromGameObject()
 
         // 3. Destroy the component and move over all the data after this gameobject
         {
-            DestroyAllComponentDataInGameObject(*oldArchetype, gbRecords.IndexInArchetype, gameObjectID, componentIDs);
+            DestroyAllComponentDataInGameObject(*oldArchetype,
+                gbRecords.IndexInArchetype, gameObjectID, componentIDs,false);
 
             oldArchetype->BuryBlock(*this, gbRecords.IndexInArchetype);
         }

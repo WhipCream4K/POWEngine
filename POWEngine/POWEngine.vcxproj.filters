@@ -204,7 +204,7 @@
     <ClInclude Include="POWEngine\Renderer\2D\Render2DProps.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Renderer\Components\Debug\SFML\SFMLDebugRectangleComponent.h">
+    <ClInclude Include="POWEngine\Renderer\Components\Debug2D\SFML\SFMLDebugRectangleComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="POWEngine\Renderer\Components\Text\SFML\SFMLTextComponent.h">
@@ -276,19 +276,19 @@
     <ClInclude Include="POWEngine\Renderer\System\SFML\SFML2DBoundingBoxRender.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Renderer\Components\Debug\DebugRectangle.h">
+    <ClInclude Include="POWEngine\Renderer\Components\Debug2D\DebugRectangle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Renderer\Components\Debug\SFML\SFMLDebugRectangle.h">
+    <ClInclude Include="POWEngine\Renderer\Components\Debug2D\SFML\SFMLDebugRectangle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Renderer\Components\Debug\RectangleImpl.h">
+    <ClInclude Include="POWEngine\Renderer\Components\Debug2D\RectangleImpl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="POWEngine\ECS\SystemKeys.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Renderer\Components\Debug\Shape2D.h">
+    <ClInclude Include="POWEngine\Renderer\Components\Debug2D\Shape2D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="POWEngine\Renderer\System\SFML\SFML2DShapeRenderSystem.h">
@@ -416,7 +416,7 @@
     <ClCompile Include="POWEngine\Renderer\2D\Render2DProps.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="POWEngine\Renderer\Components\Debug\DebugRectangle.cpp">
+    <ClCompile Include="POWEngine\Renderer\Components\Debug2D\DebugRectangle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="POWEngine\Renderer\Resources\Font\FontImpl.cpp">
@@ -482,10 +482,10 @@
     <ClCompile Include="POWEngine\Renderer\System\SFML\SFML2DBoundingBoxRender.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="POWEngine\Renderer\Components\Debug\SFML\SFMLDebugRectangle.cpp">
+    <ClCompile Include="POWEngine\Renderer\Components\Debug2D\SFML\SFMLDebugRectangle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="POWEngine\Renderer\Components\Debug\RectangleImpl.cpp">
+    <ClCompile Include="POWEngine\Renderer\Components\Debug2D\RectangleImpl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="POWEngine\ECS\ECSUtils.cpp">
@@ -494,7 +494,7 @@
     <ClCompile Include="POWEngine\ECS\SystemKeys.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="POWEngine\Renderer\Components\Debug\Shape2D.cpp">
+    <ClCompile Include="POWEngine\Renderer\Components\Debug2D\Shape2D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="POWEngine\Renderer\System\SFML\SFML2DShapeRenderSystem.cpp">

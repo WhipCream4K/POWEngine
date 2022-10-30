@@ -9,6 +9,7 @@ powe::Transform2D::Transform2D()
 	, m_Owner()
 	, m_WorldScales(1.0f, 1.0f)
 	, m_LocalScales(1.0f, 1.0f)
+	, m_ChildrenNode()
 {
 }
 

@@ -201,7 +201,6 @@ void powe::SFMLWindow::PollHardwareMessages(
 
 	if (m_WndHandle.isOpen())
 	{
-		
 		sf::Event sfmlEvent{};
 		while (m_WndHandle.pollEvent(sfmlEvent))
 		{

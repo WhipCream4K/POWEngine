@@ -196,8 +196,9 @@
     <ClInclude Include="POWEngine\JSON\json.hpp" />
     <ClInclude Include="POWEngine\JSON\JSONParser.h" />
     <ClInclude Include="POWEngine\Renderer\2D\Render2DProps.h" />
-    <ClInclude Include="POWEngine\Renderer\Components\Debug\SFML\SFMLDebugRectangleComponent.h" />
-    <ClInclude Include="POWEngine\Renderer\Components\Debug\Shape2D.h" />
+    <ClInclude Include="POWEngine\Renderer\Components\Debug2D\SFML\SFML2DShapeComponent.h" />
+    <ClInclude Include="POWEngine\Renderer\Components\Debug2D\SFML\SFMLDebugRectangleComponent.h" />
+    <ClInclude Include="POWEngine\Renderer\Components\Debug2D\IShape2D.h" />
     <ClInclude Include="POWEngine\Renderer\Components\Text\SFML\SFMLTextComponent.h" />
     <ClInclude Include="POWEngine\Renderer\Resources\Font\FontImpl.h" />
     <ClInclude Include="POWEngine\Renderer\Resources\Font\Font.h" />
@@ -244,6 +245,7 @@
     <ClInclude Include="POWEngine\Services\ServiceIndicator.h" />
     <ClInclude Include="POWEngine\Sound\SoundInfo.h" />
     <ClInclude Include="POWEngine\Sound\SoundTypes.h" />
+    <ClInclude Include="POWEngine\Utils\MacroDef.h" />
     <ClInclude Include="POWEngine\Window\SFML\SFMLWindow.h" />
     <ClInclude Include="POWEngine\Window\Window.h" />
     <ClInclude Include="POWEngine\Window\WindowContext.h" />
@@ -279,9 +281,9 @@
     <ClInclude Include="POWEngine\Renderer\Resources\Font\SFML\SFMLFont.h" />
     <ClInclude Include="POWEngine\Renderer\System\SFML\SFMLTextRender.h" />
     <ClInclude Include="POWEngine\Renderer\System\SFML\SFML2DBoundingBoxRender.h" />
-    <ClInclude Include="POWEngine\Renderer\Components\Debug\DebugRectangle.h" />
-    <ClInclude Include="POWEngine\Renderer\Components\Debug\SFML\SFMLDebugRectangle.h" />
-    <ClInclude Include="POWEngine\Renderer\Components\Debug\RectangleImpl.h" />
+    <ClInclude Include="POWEngine\Renderer\Components\Debug2D\DebugRectangle.h" />
+    <ClInclude Include="POWEngine\Renderer\Components\Debug2D\SFML\SFMLDebugRectangle.h" />
+    <ClInclude Include="POWEngine\Renderer\Components\Debug2D\RectangleImpl.h" />
     <ClInclude Include="POWEngine\Random\Random.h" />
   </ItemGroup>
   <ItemGroup>
@@ -290,8 +292,9 @@
     <ClCompile Include="POWEngine\ECS\ECSUtils.cpp" />
     <ClCompile Include="POWEngine\ECS\SystemKeys.cpp" />
     <ClCompile Include="POWEngine\Renderer\2D\Render2DProps.cpp" />
-    <ClCompile Include="POWEngine\Renderer\Components\Debug\DebugRectangle.cpp" />
-    <ClCompile Include="POWEngine\Renderer\Components\Debug\Shape2D.cpp" />
+    <ClCompile Include="POWEngine\Renderer\Components\Debug2D\DebugRectangle.cpp" />
+    <ClCompile Include="POWEngine\Renderer\Components\Debug2D\SFML\SFML2DShapeComponent.cpp" />
+    <ClCompile Include="POWEngine\Renderer\Components\Debug2D\IShape2D.cpp" />
     <ClCompile Include="POWEngine\Renderer\Resources\Font\FontImpl.cpp" />
     <ClCompile Include="POWEngine\Renderer\Resources\Font\Font.cpp" />
     <ClCompile Include="POWEngine\Core\Input\InputSystem.cpp" />
@@ -354,8 +357,8 @@
     <ClCompile Include="POWEngine\Renderer\Resources\Font\SFML\SFMLFont.cpp" />
     <ClCompile Include="POWEngine\Renderer\System\SFML\SFMLTextRender.cpp" />
     <ClCompile Include="POWEngine\Renderer\System\SFML\SFML2DBoundingBoxRender.cpp" />
-    <ClCompile Include="POWEngine\Renderer\Components\Debug\SFML\SFMLDebugRectangle.cpp" />
-    <ClCompile Include="POWEngine\Renderer\Components\Debug\RectangleImpl.cpp" />
+    <ClCompile Include="POWEngine\Renderer\Components\Debug2D\SFML\SFMLDebugRectangle.cpp" />
+    <ClCompile Include="POWEngine\Renderer\Components\Debug2D\RectangleImpl.cpp" />
     <ClCompile Include="POWEngine\Random\Random.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
