@@ -39,9 +39,6 @@ namespace powe
 		virtual void OnCreate(GameObjectID) {}
 		virtual void OnDestroy(GameObjectID) {}
 
-		template<typename ...Args>
-		void InternMakeKeys();
-
 		// Specialize GetComponent from iteration
 		template<typename ComponentType>
 		EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> GetComponent() const;
@@ -49,6 +46,14 @@ namespace powe
 		// Specialize GetComponent from iteration
 		template<typename ...Args>
 		std::tuple<std::add_pointer_t<Args>...> GetComponentsView() const;
+
+		template<typename ...Args>
+		void InternMakeKeys();
+
+	protected:
+
+		template<typename ...Args>
+		void _MakeKeys();
 
 	private:
 
@@ -81,6 +86,12 @@ namespace powe
 	std::tuple<std::add_pointer_t<Args>...> SystemBase::GetComponentsView() const
 	{
 		return std::make_tuple(GetComponent<Args>(*m_CurrentArchetype)...);
+	}
+
+	template <typename ... Args>
+	void SystemBase::_MakeKeys()
+	{
+		m_Keys = MakeSystemKeys<Args...>();
 	}
 
 	template <typename T>
@@ -135,6 +146,7 @@ namespace powe
 #define DEFINE_SYSTEM_KEY(...) InternMakeKeys<__VA_ARGS__>()
 
 #pragma endregion
+	
 }
 
 

@@ -201,7 +201,6 @@ void powe::SFMLWindow::PollHardwareMessages(
 
 	if (m_WndHandle.isOpen())
 	{
-		// ImGui::NewFrame();
 		
 		sf::Event sfmlEvent{};
 		while (m_WndHandle.pollEvent(sfmlEvent))
@@ -387,7 +386,7 @@ powe::SFMLWindow::~SFMLWindow()
 	m_WndHandle.close();
 }
 
-void powe::SFMLWindow::ParseHWMessageToDebugWindow(sf::Event& ev)
+void powe::SFMLWindow::ParseHWMessageToDebugWindow(sf::Event& ev) const
 {
 #ifdef USE_IMGUI
 	ImGui::SFML::ProcessEvent(m_WndHandle,ev);

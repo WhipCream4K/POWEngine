@@ -171,6 +171,7 @@ xcopy /y $(SolutionDir)3rdPartyLib\fmod\lib\$(Platform) $(OutDir)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BoundAreaSystem.cpp" />
     <ClCompile Include="EngineStatsComponent.cpp" />
     <ClCompile Include="EngineStatsTrackSystem.cpp" />
     <ClCompile Include="main.cpp" />
@@ -182,6 +183,7 @@ xcopy /y $(SolutionDir)3rdPartyLib\fmod\lib\$(Platform) $(OutDir)</Command>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BoundAreaSystem.h" />
     <ClInclude Include="EngineStatsComponent.h" />
     <ClInclude Include="EngineStatsTrackSystem.h" />
     <ClInclude Include="ParticleApp.h" />

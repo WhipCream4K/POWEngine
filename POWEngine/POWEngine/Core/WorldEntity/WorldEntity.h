@@ -49,6 +49,13 @@ namespace powe
 			ComponentType&& component,
 			ComponentFlag componentFlag = ComponentFlag::Default);
 
+		template<typename ComponentType,typename BaseClass>
+		EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> AddComponentToGameObjectDerived(
+			GameObjectID id,
+			ComponentType&& component,
+			ComponentFlag componentFlag = ComponentFlag::Default);
+		
+
 		template<typename ComponentType>
 		EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> GetComponent(GameObjectID id) const;
 
@@ -209,7 +216,7 @@ namespace powe
 		ComponentType&& component, ComponentFlag componentFlag)
 	{
 		const ComponentTypeID componentId{ BaseComponent::GetId<ComponentType>() | ComponentTypeID(componentFlag) };
-
+		
 		// 0. Register component automatically
 		if (!m_ComponentTraitsMap.contains(componentId))
 			RegisterComponent<ComponentType>();
@@ -350,6 +357,18 @@ namespace powe
 
 #pragma endregion
 
+	}
+
+	template <typename ComponentType, typename BaseClass>
+	EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> WorldEntity::AddComponentToGameObjectDerived(
+		GameObjectID id, ComponentType&& component, ComponentFlag componentFlag)
+	{
+		const ComponentTypeID componentId{ BaseComponent::GetId<ComponentType>() | ComponentTypeID(componentFlag) };
+
+		if constexpr (std::is_base_of_v<BaseClass,ComponentType>)
+		{
+			
+		}
 	}
 
 	template <typename ComponentType>

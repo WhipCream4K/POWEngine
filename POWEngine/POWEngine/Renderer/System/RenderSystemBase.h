@@ -32,8 +32,16 @@ namespace powe
 		std::unordered_set<powe::ComponentTypeID> m_Keys;
 	};
 
-	template<bool U,typename = std::enable_if_t<U,void>>
+	template<bool U>
 	class IfBase{};
+
+	template<>
+	class IfBase<false> final
+	{};
+
+	template<>
+	class IfBase<true>
+	{};
 
 	template<typename T>
 	class RenderSystem : public RenderSystemBase , public IfBase<std::is_base_of_v<RenderAPI,T>>
@@ -160,11 +168,11 @@ namespace powe
 	}
 
 
-#pragma region MACRO
-
-#define DEFINE_SYSTEM_KEY(...) InternMakeKeys<__VA_ARGS__>()
-
-#pragma endregion
+// #pragma region MACRO
+//
+// #define DEFINE_SYSTEM_KEY(...) InternMakeKeys<__VA_ARGS__>()
+//
+// #pragma endregion
 }
 
 

@@ -8,7 +8,7 @@
 
 EngineStatsTrackSystem::EngineStatsTrackSystem()
 {
-    DEFINE_SYSTEM_KEY(EngineStatsComponent);
+    DEFINE_SYSTEM_KEY(int,std::string);
 }
 
 void EngineStatsTrackSystem::OnUpdate(float deltaTime, powe::GameObjectID)
@@ -17,7 +17,6 @@ void EngineStatsTrackSystem::OnUpdate(float deltaTime, powe::GameObjectID)
     
     ++engineStats->fpsCounter;
     engineStats->fpsTimeStamp += deltaTime;
-
     
     if(engineStats->fpsTimeStamp > 1.0f)
     {
@@ -25,15 +24,10 @@ void EngineStatsTrackSystem::OnUpdate(float deltaTime, powe::GameObjectID)
         engineStats->fps = engineStats->fpsCounter;
         engineStats->fpsCounter = 0;
     }
-
-    int fps{engineStats->fps};
     
     ImGui::Begin("EngineStats");
-    ImGui::DragInt("FPS",&fps);
+    ImGui::DragInt("FPS",&engineStats->fps);
     ImGui::DragFloat("DeltaTime",&deltaTime);
     ImGui::End();
-    
-    // ImGui::Begin("New_Window");
-    // ImGui::End()
 }
 

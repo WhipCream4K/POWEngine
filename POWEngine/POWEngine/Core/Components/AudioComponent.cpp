@@ -20,7 +20,6 @@ powe::AudioComponent::AudioComponent(const std::string& filePath, const SoundInf
 	m_SoundID = ServiceLocator::GetSoundSystem().RegisterSoundEntity(filePath, shouldPreloaded);
 }
 
-
 void powe::AudioComponent::OnDestroy(WorldEntity& , GameObjectID )
 {
 	ServiceLocator::GetSoundSystem().UnRegisterSoundEntity(m_SoundID);

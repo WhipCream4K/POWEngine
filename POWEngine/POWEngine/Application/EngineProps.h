@@ -1,6 +1,6 @@
 #pragma once
 
-
+#include "POWEngine/Math/Math.h"
 
 namespace powe
 {
@@ -9,6 +9,7 @@ namespace powe
         uint32_t width{};
         uint32_t height{};
         std::string windowName{};
+        glm::uvec4 clearColor{};
 
         bool startWithVSync{};
     };

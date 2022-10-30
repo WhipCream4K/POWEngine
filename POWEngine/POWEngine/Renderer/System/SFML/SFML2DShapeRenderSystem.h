@@ -1,0 +1,20 @@
+﻿#pragma once
+
+#include "POWEngine/Renderer/SFML/SFML2DRenderer.h"
+#include "POWEngine/Renderer/System/RenderSystemBase.h"
+
+namespace powe
+{
+    class SFML2DShapeRenderSystem : public powe::RenderSystem<int>
+    {
+    public:
+
+        SFML2DShapeRenderSystem();
+
+        void OnDraw(const int& renderer, GameObjectID id) override;
+        // void OnDraw(const powe::SFML2DRenderer& renderer, powe::GameObjectID id) override;
+    private:
+        
+    };
+}
+

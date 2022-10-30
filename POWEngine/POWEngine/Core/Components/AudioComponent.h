@@ -20,6 +20,7 @@ namespace powe
 		AudioComponent& operator=(AudioComponent&&) = default;
 		~AudioComponent() override = default;
 
+		void OnCreate(WorldEntity&, GameObjectID) override;
 		void OnDestroy(WorldEntity&, GameObjectID) override;
 
 		void Play();

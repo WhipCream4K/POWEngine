@@ -195,6 +195,7 @@
     <ClInclude Include="POWEngine\JSON\JSONParser.h" />
     <ClInclude Include="POWEngine\Renderer\2D\Render2DProps.h" />
     <ClInclude Include="POWEngine\Renderer\Components\Debug\SFML\SFMLDebugRectangleComponent.h" />
+    <ClInclude Include="POWEngine\Renderer\Components\Debug\Shape2D.h" />
     <ClInclude Include="POWEngine\Renderer\Components\Text\SFML\SFMLTextComponent.h" />
     <ClInclude Include="POWEngine\Renderer\Resources\Font\FontImpl.h" />
     <ClInclude Include="POWEngine\Renderer\Resources\Font\Font.h" />
@@ -206,6 +207,7 @@
     <ClInclude Include="POWEngine\Core\Input\InputMapping.h" />
     <ClInclude Include="POWEngine\Core\Input\InputVars.h" />
     <ClInclude Include="POWEngine\Renderer\Components\Sprite\SFML\SFMLSpriteComponent.h" />
+    <ClInclude Include="POWEngine\Renderer\System\SFML\SFML2DShapeRenderSystem.h" />
     <ClInclude Include="POWEngine\Singleton\InstanceUtils.h" />
     <ClInclude Include="POWEngine\Sound\FMOD\AudioClip.h" />
     <ClInclude Include="POWEngine\Sound\FMOD\Channel.h" />
@@ -284,14 +286,17 @@
   <ItemGroup>
     <ClCompile Include="POWEngine\Application\Application.cpp" />
     <ClCompile Include="POWEngine\Application\EngineProps.cpp" />
+    <ClCompile Include="POWEngine\ECS\ECSUtils.cpp" />
     <ClCompile Include="POWEngine\Renderer\2D\Render2DProps.cpp" />
     <ClCompile Include="POWEngine\Renderer\Components\Debug\DebugRectangle.cpp" />
+    <ClCompile Include="POWEngine\Renderer\Components\Debug\Shape2D.cpp" />
     <ClCompile Include="POWEngine\Renderer\Resources\Font\FontImpl.cpp" />
     <ClCompile Include="POWEngine\Renderer\Resources\Font\Font.cpp" />
     <ClCompile Include="POWEngine\Core\Input\InputSystem.cpp" />
     <ClCompile Include="POWEngine\Core\Components\InputComponent.cpp" />
     <ClCompile Include="POWEngine\Core\Components\AudioComponent.cpp" />
     <ClCompile Include="POWEngine\Core\Input\InputMapping.cpp" />
+    <ClCompile Include="POWEngine\Renderer\System\SFML\SFML2DShapeRenderSystem.cpp" />
     <ClCompile Include="POWEngine\Sound\FMOD\AudioClip.cpp" />
     <ClCompile Include="POWEngine\Sound\FMOD\Channel.cpp" />
     <ClCompile Include="POWEngine\Renderer\NullRenderer.cpp" />

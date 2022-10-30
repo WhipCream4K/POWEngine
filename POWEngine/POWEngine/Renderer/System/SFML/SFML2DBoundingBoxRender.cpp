@@ -10,10 +10,10 @@ powe::SFML2DBoundingBoxRender::SFML2DBoundingBoxRender()
 	DEFINE_SYSTEM_KEY(Transform2D, DebugRectangle, SFMLDebugRectangleComponent);
 }
 
+
 void powe::SFML2DBoundingBoxRender::OnDraw(const SFML2DRenderer& renderer, GameObjectID)
 {
 	const auto& debugRect{ GetComponent<DebugRectangle>() };
-
 	if (debugRect->GetShouldRender())
 	{
 		const auto& [transform2D, sfmlDraw] =

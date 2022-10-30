@@ -25,7 +25,6 @@ bool powe::Core::TranslateWindowInputs(const SharedPtr<Window>& window, const Sh
 	bool ignoreInputs{};
 
 	HardwareMessages hwMessages{};
-	//const HardwareMessages& hwMessages{ window.PollHardwareMessages(isEarlyExit,ignoreInputs) };
 	window->PollHardwareMessages(hwMessages, isEarlyExit, ignoreInputs);
 
 	const float deltaTime{ m_WorldClock->GetDeltaTime() };

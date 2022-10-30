@@ -23,6 +23,7 @@ void powe::Application::Run()
         engineProps.winProps.windowName);
 
     m_MainWindow->SetVSync(engineProps.winProps.startWithVSync);
+    m_MainWindow->SetClearColor(engineProps.winProps.clearColor);
 
     m_WorldEntity = std::make_unique<WorldEntity>();
     OnWorldInitialize(*m_WorldEntity);
