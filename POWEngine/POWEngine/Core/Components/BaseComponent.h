@@ -1,5 +1,4 @@
 #pragma once
-#include "POWEngine/Core/WorldEntity/WorldEntity.h"
 #include "POWEngine/ECS/ECSTypes.h"
 
 namespace powe
@@ -27,8 +26,8 @@ namespace powe
 			
 		virtual void DestroyData(RawByte* address) = 0;
 		virtual void MoveData(RawByte* source, RawByte* destination) const = 0;
-		virtual void InternalCreate(RawByte* , WorldEntity&, GameObjectID) = 0;
-		virtual void InternalDestroy(RawByte* , WorldEntity&, GameObjectID) = 0;
+		virtual void InternalCreate(RawByte* , WorldEntity&, GameObjectID) {}
+		virtual void InternalDestroy(RawByte*, WorldEntity&, GameObjectID) {}
 
 		[[nodiscard]] virtual SizeType GetSize() const = 0;
 
@@ -81,7 +80,7 @@ namespace powe
 		void MoveData(RawByte* source, RawByte* destination) const override;
 		void InternalCreate(RawByte* source, WorldEntity&, GameObjectID) final;
 		void InternalDestroy(RawByte* source, WorldEntity&, GameObjectID) final;
-		void InternalMove(RawByte*, WorldEntity&, GameObjectID) final;
+		//void InternalMove(RawByte*, WorldEntity&, GameObjectID) final;
 		[[nodiscard]] SizeType GetSize() const override;
 
 	protected:
@@ -107,7 +106,7 @@ namespace powe
 	template <typename T>
 	void Component<T>::MoveData(RawByte* source, RawByte* destination) const
 	{
-		T* target {new (destination) T{ std::move(*reinterpret_cast<T*>(source)) }};
+		new (destination) T{ std::move(*reinterpret_cast<T*>(source)) };
 		reinterpret_cast<T*>(source)->~T(); // Invalidate the old memory
 	}
 
@@ -123,11 +122,11 @@ namespace powe
 		reinterpret_cast<T*>(source)->OnDestroy(worldEntity, gameObjectId);
 	}
 
-	template <typename T>
-	void Component<T>::InternalMove(RawByte* source, WorldEntity& worldEntity, GameObjectID gameObject)
-	{
-		reinterpret_cast<T*>(source)->OnMove(worldEntity,gameObject);
-	}
+	//template <typename T>
+	//void Component<T>::InternalMove(RawByte* source, WorldEntity& worldEntity, GameObjectID gameObject)
+	//{
+	//	reinterpret_cast<T*>(source)->OnMove(worldEntity,gameObject);
+	//}
 
 	template <typename T>
 	SizeType Component<T>::GetSize() const

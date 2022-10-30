@@ -7,29 +7,14 @@ namespace powe
 {
 	class Renderer;
 	class RenderAPI;
-	class RenderSystemBase
+	class RenderSystemBase : public SystemKeys
 	{
 	public:
 
 		virtual void InternalDraw(const WorldEntity& worldEntity,const Archetype&,const RenderAPI&) = 0;
 
-	public:
-
-		const std::unordered_set<ComponentTypeID>& GetKeys() const { return m_Keys; }
-
-	public:
-
 		RenderSystemBase() = default;
 		virtual ~RenderSystemBase() = default;
-
-	protected:
-
-		template<typename ...Args>
-		void InternMakeKeys();
-
-	private:
-
-		std::unordered_set<powe::ComponentTypeID> m_Keys;
 	};
 
 	template<bool U>
@@ -80,12 +65,6 @@ namespace powe
 		const WorldEntity* m_CurrentWorld{};
 		uint32_t m_UpdateCountPerArchetype{};
 	};
-
-	template <typename ... Args>
-	void RenderSystemBase::InternMakeKeys()
-	{
-		m_Keys = { BaseComponent::GetId<Args>()... };
-	}
 
 	template <typename T>
 	void RenderSystem<T>::InternalDraw(const WorldEntity& worldEntity, const Archetype& archetype, const RenderAPI& renderer)
@@ -167,12 +146,6 @@ namespace powe
 		throw std::out_of_range(typeid(U).name());
 	}
 
-
-// #pragma region MACRO
-//
-// #define DEFINE_SYSTEM_KEY(...) InternMakeKeys<__VA_ARGS__>()
-//
-// #pragma endregion
 }
 
 

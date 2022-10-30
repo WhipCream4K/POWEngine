@@ -1,14 +1,14 @@
 ﻿#include "EngineStatsTrackSystem.h"
 
 #include "EngineStatsComponent.h"
-#include "POWEngine/Renderer/RenderAPI.h"
 
 #include <imgui.h>
 
 
 EngineStatsTrackSystem::EngineStatsTrackSystem()
 {
-    DEFINE_SYSTEM_KEY(int,std::string);
+    //DEFINE_SYSTEM_KEY(int,std::string);
+    DefineSystemKeys<EngineStatsComponent>();
 }
 
 void EngineStatsTrackSystem::OnUpdate(float deltaTime, powe::GameObjectID)

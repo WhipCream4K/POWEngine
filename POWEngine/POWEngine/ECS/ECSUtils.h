@@ -1,8 +1,8 @@
 #pragma once
 
 #include "ECSTypes.h"
-#include <string>
-#include "POWEngine/Core/Components/BaseComponent.h"
+//#include <string>
+//#include "POWEngine/Core/Components/BaseComponent.h"
 
 namespace powe
 {
@@ -56,11 +56,11 @@ namespace powe
         return id & ~SizeType(ComponentFlag::Count);
     }
 
-    template <typename ...Args, typename = std::enable_if_t<(std::is_base_of_v<Component<Args>,Args> && ...)>>
-    std::unordered_set<ComponentTypeID> MakeSystemKeys()
-    {
-        return {BaseComponent::GetId<Args>()...};
-    }
+    //template <typename ...Args, typename = std::enable_if_t<(std::is_base_of_v<Component<Args>,Args> && ...)>>
+    //std::unordered_set<ComponentTypeID> MakeSystemKeys()
+    //{
+    //    return {BaseComponent::GetId<Args>()...};
+    //}
 
     
 }

@@ -6,8 +6,8 @@
 
 powe::SFMLTextRender::SFMLTextRender()
 {
-	using namespace powe;
-	DEFINE_SYSTEM_KEY(Transform2D, SFMLTextComponent);
+	//DEFINE_SYSTEM_KEY(Transform2D, SFMLTextComponent);
+	DefineSystemKeys<Transform2D, SFMLTextComponent>();
 }
 
 void powe::SFMLTextRender::OnDraw(const SFML2DRenderer& renderer, GameObjectID)
