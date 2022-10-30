@@ -34,6 +34,7 @@ namespace powe
 
 	protected:
 
+		int some{};
 		explicit BaseComponent() = default;
 
 	private:

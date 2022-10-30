@@ -6,8 +6,7 @@
 
 powe::InputSystem::InputSystem()
 {
-	// DEFINE_SYSTEM_KEY(InputComponent);
-	DefineSystemKeys<InputComponent>();
+	DEFINE_SYSTEM_KEY(InputComponent);
 }
 
 void powe::InputSystem::OnUpdate(float deltaTime, powe::GameObjectID id)

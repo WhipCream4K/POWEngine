@@ -8,8 +8,7 @@
 
 EngineStatsTrackSystem::EngineStatsTrackSystem()
 {
-    // DEFINE_SYSTEM_KEY(int,std::string);
-    DefineSystemKeys<EngineStatsComponent>();
+    DEFINE_SYSTEM_KEY(int,std::string);
 }
 
 void EngineStatsTrackSystem::OnUpdate(float deltaTime, powe::GameObjectID)

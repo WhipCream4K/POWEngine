@@ -8,8 +8,7 @@
 
 powe::SFML2DRenderSystem::SFML2DRenderSystem()
 {
-	// DEFINE_SYSTEM_KEY(Transform2D,SFMLSpriteComponent);
-	DefineSystemKeys<Transform2D,SFMLSpriteComponent>();
+	DEFINE_SYSTEM_KEY(Transform2D,SFMLSpriteComponent);
 }
 
 void powe::SFML2DRenderSystem::OnDraw(const SFML2DRenderer& renderer, GameObjectID)
