@@ -50,13 +50,8 @@ namespace powe
 		//++m_ComponentIdCounter;
 		return counter;
 	}
-
-	//template <typename T>
-	//SharedPtr<T> BaseComponent::Create()
-	//{
-	//	return SharedPtr<T>(new T());
-	//}
-
+	
+	
 	/**
 	 * \brief Every component should inherit from this and make sure that the component is moveable
 	 * \tparam T Struct of components, prefer POD over object class
@@ -116,12 +111,6 @@ namespace powe
 		reinterpret_cast<T*>(source)->OnDestroy(worldEntity, gameObjectId);
 	}
 
-	//template <typename T>
-	//void Component<T>::InternalMove(RawByte* source, WorldEntity& worldEntity, GameObjectID gameObject)
-	//{
-	//	reinterpret_cast<T*>(source)->OnMove(worldEntity,gameObject);
-	//}
-
 	template <typename T>
 	SizeType Component<T>::GetSize() const
 	{
@@ -159,7 +148,12 @@ namespace powe
 		explicit SparseComponent() = default;
 	};
 
-
+	template<typename T>
+	SharedPtr<BaseComponent> MakeSharedComponent()
+	{
+		struct test : T{};
+		return std::make_shared<test>();
+	}
 }
 
 

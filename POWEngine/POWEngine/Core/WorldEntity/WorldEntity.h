@@ -48,12 +48,6 @@ namespace powe
 			GameObjectID id,
 			ComponentType&& component,
 			ComponentFlag componentFlag = ComponentFlag::Default);
-
-		template<typename ComponentType,typename BaseClass>
-		EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> AddComponentToGameObjectDerived(
-			GameObjectID id,
-			ComponentType&& component,
-			ComponentFlag componentFlag = ComponentFlag::Default);
 		
 
 		template<typename ComponentType>
@@ -86,6 +80,14 @@ namespace powe
 		static std::string CreateStringFromNumVector(const std::vector<ComponentTypeID>& numList);
 		bool GetGameObjectRecords(GameObjectID id, GameObjectRecord& outRecord) const;
 		GameObjectRecord& GetRefGameObjectRecord(GameObjectID id);
+
+		/**
+		 * \brief Create an archetype of the given component type and allocate the enough memory for the given entity
+		 * \tparam Args component type
+		 * \param occupiedEntity amount of entity to be occupied
+		 */
+		template<typename ...Args, typename = EnableIf<(std::is_base_of_v<BaseComponent,Args> && ...)>>
+		void CreateCustomArchetype(uint32_t occupiedEntity);
 
 #ifdef RUNTIME_TEST
 	public:
@@ -208,7 +210,7 @@ namespace powe
 	{
 		//const size_t typeId{ BaseComponent::GetI GetId() };
 		const ComponentTypeID componentID{ BaseComponent::GetId<ComponentType>() };
-		m_ComponentTraitsMap.try_emplace(componentID, std::make_shared<ComponentType>());
+		m_ComponentTraitsMap.try_emplace(componentID, MakeSharedComponent<ComponentType>());
 	}
 
 	template <typename ComponentType>
@@ -358,18 +360,7 @@ namespace powe
 #pragma endregion
 
 	}
-
-	template <typename ComponentType, typename BaseClass>
-	EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> WorldEntity::AddComponentToGameObjectDerived(
-		GameObjectID id, ComponentType&& component, ComponentFlag componentFlag)
-	{
-		const ComponentTypeID componentId{ BaseComponent::GetId<ComponentType>() | ComponentTypeID(componentFlag) };
-
-		if constexpr (std::is_base_of_v<BaseClass,ComponentType>)
-		{
-			
-		}
-	}
+	
 
 	template <typename ComponentType>
 	EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> WorldEntity::GetComponent(GameObjectID id) const
@@ -509,6 +500,12 @@ namespace powe
 		}
 
 		return nullptr;
+	}
+
+	template <typename ... Args, typename>
+	void WorldEntity::CreateCustomArchetype(uint32_t )
+	{
+		std::vector<ComponentTypeID> types{};
 	}
 
 	template <typename ComponentType>

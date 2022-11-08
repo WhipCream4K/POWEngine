@@ -6,10 +6,10 @@
 
 powe::Transform2D::Transform2D()
 	: m_ParentNode()
+	, m_ChildrenNode()
 	, m_Owner()
 	, m_WorldScales(1.0f, 1.0f)
 	, m_LocalScales(1.0f, 1.0f)
-	, m_ChildrenNode()
 {
 }
 
@@ -19,7 +19,6 @@ powe::Transform2D::Transform2D(const SharedPtr<GameObject>& owner)
 	, m_LocalScales(1.0f, 1.0f)
 {
 }
-
 
 
 void powe::Transform2D::OnDestroy(WorldEntity&, GameObjectID)
@@ -77,7 +76,7 @@ void powe::Transform2D::SetLocalRotation(float zRotation)
 	SetDirtyFlag(DirtyFlag::Rotation);
 }
 
-const glm::vec2& powe::Transform2D::GetWorldPosition()
+const glm::vec2& powe::Transform2D::GetPosition()
 {
 	if (IsDirty(DirtyFlag::Position))
 		UpdateData(DirtyFlag::Position);
@@ -85,7 +84,7 @@ const glm::vec2& powe::Transform2D::GetWorldPosition()
 	return m_WorldPosition;
 }
 
-const glm::vec2& powe::Transform2D::GetWorldScale()
+const glm::vec2& powe::Transform2D::GetScale()
 {
 	if (IsDirty(DirtyFlag::Scale))
 		UpdateData(DirtyFlag::Scale);
@@ -93,7 +92,7 @@ const glm::vec2& powe::Transform2D::GetWorldScale()
 	return m_WorldScales;
 }
 
-float powe::Transform2D::GetWorldRotation()
+float powe::Transform2D::GetRotation()
 {
 	if (IsDirty(DirtyFlag::Rotation))
 		UpdateData(DirtyFlag::Rotation);
@@ -136,7 +135,7 @@ void powe::Transform2D::SetParent(const SharedPtr<GameObject>& gameObject, bool 
 
 		if (keepWorldPosition)
 		{
-			SetLocalPosition(GetLocalPosition() - parentTransform->GetWorldPosition());
+			SetLocalPosition(GetLocalPosition() - parentTransform->GetPosition());
 			//SetLocalRotation(parentTransform->GetWorldRotation() + GetLocalRotation());
 			//SetLocalScale(parentTransform->GetWorldScale() + GetLocalScale());
 		}
@@ -179,7 +178,7 @@ void powe::Transform2D::UpdateData(DirtyFlag flag)
 	case DirtyFlag::Position:
 
 		if (parentTransform)
-			m_WorldPosition = parentTransform->GetWorldPosition() + m_LocalPosition;
+			m_WorldPosition = parentTransform->GetPosition() + m_LocalPosition;
 		else
 			m_WorldPosition = m_LocalPosition;
 
@@ -188,7 +187,7 @@ void powe::Transform2D::UpdateData(DirtyFlag flag)
 	case DirtyFlag::Rotation:
 
 		if (parentTransform)
-			m_WorldZRotation = parentTransform->GetWorldRotation() + m_LocalZRotation;
+			m_WorldZRotation = parentTransform->GetRotation() + m_LocalZRotation;
 		else
 			m_WorldZRotation = m_LocalZRotation;
 
@@ -196,7 +195,7 @@ void powe::Transform2D::UpdateData(DirtyFlag flag)
 	case DirtyFlag::Scale:
 
 		if (parentTransform)
-			m_WorldScales = parentTransform->GetWorldScale() * m_LocalScales;
+			m_WorldScales = parentTransform->GetScale() * m_LocalScales;
 		else
 			m_WorldScales = m_LocalScales;
 

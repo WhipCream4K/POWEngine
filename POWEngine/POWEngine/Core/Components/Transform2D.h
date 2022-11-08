@@ -17,7 +17,6 @@ namespace powe
 	{
 	public:
 
-		Transform2D();
 		explicit Transform2D(const SharedPtr<GameObject>& owner);
 		Transform2D(const Transform2D&) = default;
 		Transform2D& operator=(const Transform2D&) = default;
@@ -35,9 +34,9 @@ namespace powe
 		void SetLocalScale(const glm::vec2& scales);
 		void SetLocalRotation(float zRotation);
 
-		const glm::vec2& GetWorldPosition();
-		const glm::vec2& GetWorldScale();
-		float GetWorldRotation();
+		const glm::vec2& GetPosition();
+		const glm::vec2& GetScale();
+		float GetRotation();
 
 		float GetLocalRotation() const;
 		const glm::vec2& GetLocalPosition() const;
@@ -47,6 +46,10 @@ namespace powe
 		void UpdateData(DirtyFlag flag);
 
 		const std::vector<WeakPtr<GameObject>>& GetChildren() const { return m_ChildrenNode; }
+
+	protected:
+
+		Transform2D();
 		
 	private:
 
@@ -59,11 +62,7 @@ namespace powe
 		WeakPtr<GameObject> m_ParentNode{};
 		//GameObject* m_ParentNode{};
 		std::vector<WeakPtr<GameObject>> m_ChildrenNode{};
-		//std::vector<GameObject*> m_ChildrenNode;
-		//std::vector<GameObjectID> m_ChildrenNode;
-		//SharedPtr<std::vector<GameObject*>> m_ChildrenNode;
 		WeakPtr<GameObject> m_Owner{};
-		//GameObject* m_Owner{};
 
 		glm::vec2 m_WorldPosition{};
 		glm::vec2 m_WorldScales{};

@@ -199,6 +199,8 @@
     <ClInclude Include="POWEngine\Renderer\Components\Debug2D\SFML\SFML2DShapeComponent.h" />
     <ClInclude Include="POWEngine\Renderer\Components\Debug2D\SFML\SFMLDebugRectangleComponent.h" />
     <ClInclude Include="POWEngine\Renderer\Components\Debug2D\IShape2D.h" />
+    <ClInclude Include="POWEngine\Renderer\Components\SFML\ISFMLDrawable.h" />
+    <ClInclude Include="POWEngine\Renderer\Components\SFML\SFMLDrawComponent.h" />
     <ClInclude Include="POWEngine\Renderer\Components\Text\SFML\SFMLTextComponent.h" />
     <ClInclude Include="POWEngine\Renderer\Resources\Font\FontImpl.h" />
     <ClInclude Include="POWEngine\Renderer\Resources\Font\Font.h" />
@@ -211,6 +213,7 @@
     <ClInclude Include="POWEngine\Core\Input\InputVars.h" />
     <ClInclude Include="POWEngine\Renderer\Components\Sprite\SFML\SFMLSpriteComponent.h" />
     <ClInclude Include="POWEngine\Renderer\System\SFML\SFML2DShapeRenderSystem.h" />
+    <ClInclude Include="POWEngine\Renderer\System\SFML\SFMLDefaultRenderSystem.h" />
     <ClInclude Include="POWEngine\Singleton\InstanceUtils.h" />
     <ClInclude Include="POWEngine\Sound\FMOD\AudioClip.h" />
     <ClInclude Include="POWEngine\Sound\FMOD\Channel.h" />
@@ -246,6 +249,7 @@
     <ClInclude Include="POWEngine\Sound\SoundInfo.h" />
     <ClInclude Include="POWEngine\Sound\SoundTypes.h" />
     <ClInclude Include="POWEngine\Utils\MacroDef.h" />
+    <ClInclude Include="POWEngine\Utils\Utils.h" />
     <ClInclude Include="POWEngine\Window\SFML\SFMLWindow.h" />
     <ClInclude Include="POWEngine\Window\Window.h" />
     <ClInclude Include="POWEngine\Window\WindowContext.h" />
@@ -295,6 +299,8 @@
     <ClCompile Include="POWEngine\Renderer\Components\Debug2D\DebugRectangle.cpp" />
     <ClCompile Include="POWEngine\Renderer\Components\Debug2D\SFML\SFML2DShapeComponent.cpp" />
     <ClCompile Include="POWEngine\Renderer\Components\Debug2D\IShape2D.cpp" />
+    <ClCompile Include="POWEngine\Renderer\Components\SFML\ISFMLDrawable.cpp" />
+    <ClCompile Include="POWEngine\Renderer\Components\SFML\SFMLDrawComponent.cpp" />
     <ClCompile Include="POWEngine\Renderer\Resources\Font\FontImpl.cpp" />
     <ClCompile Include="POWEngine\Renderer\Resources\Font\Font.cpp" />
     <ClCompile Include="POWEngine\Core\Input\InputSystem.cpp" />
@@ -302,6 +308,7 @@
     <ClCompile Include="POWEngine\Core\Components\AudioComponent.cpp" />
     <ClCompile Include="POWEngine\Core\Input\InputMapping.cpp" />
     <ClCompile Include="POWEngine\Renderer\System\SFML\SFML2DShapeRenderSystem.cpp" />
+    <ClCompile Include="POWEngine\Renderer\System\SFML\SFMLDefaultRenderSystem.cpp" />
     <ClCompile Include="POWEngine\Sound\FMOD\AudioClip.cpp" />
     <ClCompile Include="POWEngine\Sound\FMOD\Channel.cpp" />
     <ClCompile Include="POWEngine\Renderer\NullRenderer.cpp" />

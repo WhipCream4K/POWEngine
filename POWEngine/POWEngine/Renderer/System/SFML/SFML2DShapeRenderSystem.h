@@ -10,9 +10,7 @@ namespace powe
     public:
 
         SFML2DShapeRenderSystem();
-
-        //void OnDraw(const int& renderer, GameObjectID id) override;
-         void OnDraw(const powe::SFML2DRenderer& renderer, powe::GameObjectID id) override;
+         // void OnDraw(const powe::SFML2DRenderer& renderer, powe::GameObjectID id) override;
     private:
         
     };

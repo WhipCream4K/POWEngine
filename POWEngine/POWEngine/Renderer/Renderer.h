@@ -1,6 +1,9 @@
 #pragma once
+#include <SFML/OpenGL.hpp>
+
 #include "POWEngine/Window/WindowContext.h"
 #include "POWEngine/Core/CustomTypes.h"
+#include "POWEngine/Core/WorldEntity/WorldEntity.h"
 
 namespace powe
 {
@@ -32,6 +35,12 @@ namespace powe
 		void UpdateSystem(
 			const WorldEntity& worldEntity,
 			const std::unordered_map<std::string, SharedPtr<Archetype>>& archetypePool) const;
+
+		void UpdateSystem(
+			const WorldEntity& worldEntity,
+			const Window& renderWindow,
+			const std::unordered_map<std::string,SharedPtr<Archetype>>& archetypePool
+			) const;
 
 		void RegisterRenderAPI(OwnedPtr<RenderAPI>&& renderInst);
 

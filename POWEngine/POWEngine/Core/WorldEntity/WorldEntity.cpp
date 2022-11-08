@@ -335,7 +335,7 @@ void powe::WorldEntity::ClearArchetype()
 
 void powe::WorldEntity::ClearEmptyArchetype()
 {
-    for (auto it = m_ArchetypesPool.begin(); it != m_ArchetypesPool.end();)
+    for (auto it = m_ArchetypesPool.begin() ; it != m_ArchetypesPool.end();)
     {
         if (it->second->GameObjectIds.empty())
         {

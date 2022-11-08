@@ -10,6 +10,8 @@ public:
 
 	template<typename T>
 	static T RandInt(T from, T to);
+
+	static float RandFloat(float from,float to);
 };
 
 template <typename T>

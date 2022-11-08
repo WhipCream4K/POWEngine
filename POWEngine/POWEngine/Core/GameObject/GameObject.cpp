@@ -27,24 +27,5 @@ powe::GameObject::GameObject(WorldEntity& world)
 
 powe::GameObject::~GameObject()
 {
-	// m_World.RemoveGameObject(m_Id);
+	m_World.RemoveGameObject(m_Id);
 }
-
-//void powe::GameObject::SetParent(const SharedPtr<GameObject>& )
-//{
-//	//if(gameObject)
-//	//{
-//	//	if(const auto parent{m_ParentNode.lock()})
-//	//	{
-//	//		parent->SetParent(nullptr);
-//	//	}
-//	//	else
-//	//	{
-//	//		
-//	//	}
-//	//}
-//	//else
-//	//{
-//	//	
-//	//}
-//}

@@ -2,18 +2,26 @@
 
 #include "POWEngine/ECS/SystemBase.h"
 #include "POWEngine/Logger/LoggerUtils.h"
+// #include "POWEngine/Window/Window.h"
 
 namespace powe
 {
     class Renderer;
     class RenderAPI;
+    class Window;
 
     class RenderSystemBase : public SystemKeys
     {
     public:
-        virtual void InternalDraw(const WorldEntity& worldEntity, const Archetype&, const RenderAPI&) = 0;
+        
+        virtual void InternalDraw(const WorldEntity& worldEntity,
+            const Window& renderWindow,const Archetype&, const RenderAPI&) = 0;
 
         RenderSystemBase() = default;
+        RenderSystemBase(const RenderSystemBase&) = delete;
+        RenderSystemBase& operator=(const RenderSystemBase&) = delete;
+        RenderSystemBase(RenderSystemBase&&) = delete;
+        RenderSystemBase& operator=(RenderSystemBase&&) = delete;
         virtual ~RenderSystemBase() = default;
     };
 
@@ -36,14 +44,19 @@ namespace powe
     class RenderSystem : public RenderSystemBase, public IfBase<std::is_base_of_v<RenderAPI, T>>
     {
     public:
-        void InternalDraw(const WorldEntity& worldEntity, const Archetype&, const RenderAPI&) final;
-        virtual void OnDraw(const T& renderer, GameObjectID id) = 0;
+        
+        void InternalDraw(const WorldEntity& worldEntity,
+            const Window& renderWindow,
+            const Archetype&, const RenderAPI&) final;
+        
+        virtual void OnDraw(const T& renderer,const Window& renderWindow, GameObjectID id) = 0;
 
     public:
         RenderSystem() = default;
         virtual ~RenderSystem() override = default;
 
     protected:
+        
         const WorldEntity* GetWorld() const { return m_CurrentWorld; }
 
         // Specialize GetComponent from iteration
@@ -72,8 +85,10 @@ namespace powe
     };
 
     template <typename T>
-    void RenderSystem<T>::InternalDraw(const WorldEntity& worldEntity, const Archetype& archetype,
-                                       const RenderAPI& renderer)
+    void RenderSystem<T>::InternalDraw(const WorldEntity& worldEntity,
+        const Window& renderWindow,
+        const Archetype& archetype,
+        const RenderAPI& renderer)
     {
         m_CurrentArchetype = &archetype;
         m_UpdateCountPerArchetype = 0;
@@ -83,7 +98,7 @@ namespace powe
         {
             for (const GameObjectID gameObjectID : archetype.GameObjectIds)
             {
-                OnDraw(static_cast<const T&>(renderer), gameObjectID);
+                OnDraw(static_cast<const T&>(renderer),renderWindow, gameObjectID);
                 ++m_UpdateCountPerArchetype;
             }
         }

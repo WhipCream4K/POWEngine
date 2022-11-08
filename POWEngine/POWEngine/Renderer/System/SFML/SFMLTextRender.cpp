@@ -10,21 +10,21 @@ powe::SFMLTextRender::SFMLTextRender()
 	DefineSystemKeys<Transform2D, SFMLTextComponent>();
 }
 
-void powe::SFMLTextRender::OnDraw(const SFML2DRenderer& renderer, GameObjectID)
-{
-	const auto& [transform2D ,textComp] =
-		GetComponentsView<Transform2D, SFMLTextComponent>();
-
-	const glm::vec2 position{ transform2D->GetWorldPosition() };
-	const glm::vec2 scale{ transform2D->GetWorldScale() };
-	const float rotation{ transform2D->GetWorldRotation() };
-
-	sf::RenderStates renderStates{};
-	auto& sfTransform{ renderStates.transform };
-
-	sfTransform.translate({ position.x,position.y });
-	sfTransform.rotate(glm::degrees(rotation));
-	sfTransform.scale({ scale.x,scale.y });
-
-	renderer.SubmitDrawSprite(&textComp->text, renderStates, textComp->renderOrder);
-}
+// void powe::SFMLTextRender::OnDraw(const SFML2DRenderer& renderer, GameObjectID)
+// {
+// 	const auto& [transform2D ,textComp] =
+// 		GetComponentsView<Transform2D, SFMLTextComponent>();
+//
+// 	const glm::vec2 position{ transform2D->GetPosition() };
+// 	const glm::vec2 scale{ transform2D->GetScale() };
+// 	const float rotation{ transform2D->GetRotation() };
+//
+// 	sf::RenderStates renderStates{};
+// 	auto& sfTransform{ renderStates.transform };
+//
+// 	sfTransform.translate({ position.x,position.y });
+// 	sfTransform.rotate(glm::degrees(rotation));
+// 	sfTransform.scale({ scale.x,scale.y });
+//
+// 	renderer.SubmitDrawSprite(&textComp->text, renderStates, textComp->renderOrder);
+// }

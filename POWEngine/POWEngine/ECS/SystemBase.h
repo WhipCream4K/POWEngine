@@ -44,6 +44,9 @@ namespace powe
         // Specialize GetComponent from iteration
         template <typename ...Args>
         std::tuple<std::add_pointer_t<Args>...> GetComponentsView() const;
+
+        template<typename T>
+        T* GetComponentByID(ComponentTypeID id) const;
     
 
     private:
@@ -52,6 +55,8 @@ namespace powe
         template <typename T>
         T* GetComponent(const Archetype& archetype) const;
 
+        template<typename T>
+        T* InternGetComponentByID(const Archetype& archetype,ComponentTypeID id) const;
 
         WorldEntity* m_World;
         
@@ -74,6 +79,12 @@ namespace powe
     }
 
     template <typename T>
+    T* SystemBase::GetComponentByID(ComponentTypeID id) const
+    {
+        return InternGetComponentByID<T>(*m_CurrentArchetype,id);
+    }
+
+    template <typename T>
     T* SystemBase::GetComponent(const Archetype& archetype) const
     {
         //try
@@ -84,16 +95,16 @@ namespace powe
 
         if (findItr != archetype.ComponentOffsets.end())
         {
-            RawByte* dataAddress{
-                &archetype.ComponentData[
-                    m_UpdateCountPerArchetype * archetype.SizeOfComponentsBlock
-                    + findItr->second // offsets
-                ]
-            };
-
             // check the key if it's a sparse component or not
             if (!IsThisComponentSparse(findItr->first))
             {
+                RawByte* dataAddress{
+                    &archetype.ComponentData[
+                        m_UpdateCountPerArchetype * archetype.SizeOfComponentsBlock
+                        + findItr->second // offsets
+                    ]
+                };
+                
                 return reinterpret_cast<T*>(dataAddress);
             }
 
@@ -124,5 +135,38 @@ namespace powe
         //}
     }
 
+    template <typename T>
+    T* SystemBase::InternGetComponentByID(const Archetype& archetype, ComponentTypeID id) const
+    {
+        const auto findItr = archetype.ComponentOffsets.find(id);
 
+        if (findItr != archetype.ComponentOffsets.end())
+        {
+            // check the key if it's a sparse component or not
+            if (!IsThisComponentSparse(findItr->first))
+            {
+                RawByte* dataAddress{
+                    &archetype.ComponentData[
+                        m_UpdateCountPerArchetype * archetype.SizeOfComponentsBlock
+                        + findItr->second // offsets
+                    ]
+                };
+                
+                return reinterpret_cast<T*>(dataAddress);
+            }
+
+            // if it is Sparse component
+            // get the data from sparse section
+            auto& sparseManager{m_World->GetSparseComponentManager()};
+            
+            RawByte* realCompData{
+                sparseManager.GetComponentData<T>(
+                    archetype.GameObjectIds[m_UpdateCountPerArchetype], id)
+            };
+            
+            return reinterpret_cast<T*>(realCompData);
+        }
+
+        throw std::out_of_range(typeid(T).name());
+    }
 }

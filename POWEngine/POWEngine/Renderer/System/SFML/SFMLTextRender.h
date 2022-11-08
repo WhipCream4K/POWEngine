@@ -10,7 +10,7 @@ namespace powe
 	public:
 
 		SFMLTextRender();
-		void OnDraw(const SFML2DRenderer& renderer, GameObjectID id) override;
+		// void OnDraw(const SFML2DRenderer& renderer, GameObjectID id) override;
 	};
 }
 

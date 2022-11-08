@@ -28,7 +28,7 @@ public:
 			//POWLOGERROR(std::to_string(m_SF2DDrawEntities.size()));
 			renderWindow.draw(*drawEntt.sfDraw, drawEntt.sfRenderStates);
 		}
-
+		
 		m_SF2DDrawEntities.clear();
 	}
 

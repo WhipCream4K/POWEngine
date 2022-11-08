@@ -92,7 +92,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)POWEngine;$(SolutionDir)POWEngine\include;$(SolutionDir)3rdPartyLib\imgui;$(SolutionDir)3rdPartyLib\SFML\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)POWEngine;$(SolutionDir)POWEngine\include;$(SolutionDir)3rdPartyLib\imgui;$(SolutionDir)3rdPartyLib\SFML\include;$(SolutionDir)3rdPartyLib\imgui-sfml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
@@ -113,7 +113,7 @@ xcopy /y $(SolutionDir)3rdPartyLib\fmod\lib\$(Platform) $(OutDir)</Command>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)POWEngine;$(SolutionDir)POWEngine\include;$(SolutionDir)3rdPartyLib\imgui;$(SolutionDir)3rdPartyLib\SFML\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)POWEngine;$(SolutionDir)POWEngine\include;$(SolutionDir)3rdPartyLib\imgui;$(SolutionDir)3rdPartyLib\SFML\include;$(SolutionDir)3rdPartyLib\imgui-sfml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
@@ -134,7 +134,7 @@ xcopy /y $(SolutionDir)3rdPartyLib\fmod\lib\$(Platform) $(OutDir)</Command>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)POWEngine;$(SolutionDir)POWEngine\include;$(SolutionDir)3rdPartyLib\imgui;$(SolutionDir)3rdPartyLib\SFML\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)POWEngine;$(SolutionDir)POWEngine\include;$(SolutionDir)3rdPartyLib\imgui;$(SolutionDir)3rdPartyLib\SFML\include;$(SolutionDir)3rdPartyLib\imgui-sfml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
@@ -155,7 +155,7 @@ xcopy /y $(SolutionDir)3rdPartyLib\fmod\lib\$(Platform) $(OutDir)</Command>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)POWEngine;$(SolutionDir)POWEngine\include;$(SolutionDir)3rdPartyLib\imgui;$(SolutionDir)3rdPartyLib\SFML\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)POWEngine;$(SolutionDir)POWEngine\include;$(SolutionDir)3rdPartyLib\imgui;$(SolutionDir)3rdPartyLib\SFML\include;$(SolutionDir)3rdPartyLib\imgui-sfml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
@@ -172,10 +172,15 @@ xcopy /y $(SolutionDir)3rdPartyLib\fmod\lib\$(Platform) $(OutDir)</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BoundAreaSystem.cpp" />
+    <ClCompile Include="DebugSteeringSystem.cpp" />
     <ClCompile Include="EngineStatsComponent.cpp" />
     <ClCompile Include="EngineStatsTrackSystem.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ParticleApp.cpp" />
+    <ClCompile Include="SceneFactory.cpp" />
+    <ClCompile Include="TestScene.cpp" />
+    <ClCompile Include="UserComponents.cpp" />
+    <ClCompile Include="WanderingSteeringSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\POWEngine\POWEngine.vcxproj">
@@ -184,9 +189,14 @@ xcopy /y $(SolutionDir)3rdPartyLib\fmod\lib\$(Platform) $(OutDir)</Command>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BoundAreaSystem.h" />
+    <ClInclude Include="DebugSteeringSystem.h" />
     <ClInclude Include="EngineStatsComponent.h" />
     <ClInclude Include="EngineStatsTrackSystem.h" />
     <ClInclude Include="ParticleApp.h" />
+    <ClInclude Include="SceneFactory.h" />
+    <ClInclude Include="TestScene.h" />
+    <ClInclude Include="UserComponents.h" />
+    <ClInclude Include="WanderingSteeringSystem.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
