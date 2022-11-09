@@ -33,7 +33,8 @@ void powe::SFMLDefaultRenderSystem::OnDraw(const SFML2DRenderer& renderer, const
     sfTransform.rotate(glm::degrees(rotation));
     sfTransform.scale({ scale.x,scale.y });
  
-    SFMLDrawComponent* derivedDraw{GetComponentByID<SFMLDrawComponent>(sfmlDraw->derivedTypeID)};
+    SFMLDrawComponent* derivedDraw{reinterpret_cast<SFMLDrawComponent*>(
+        GetComponentAddress(sfmlDraw->derivedTypeID,sfmlDraw->derivedSize))};
     
     renderer.SubmitDrawSprite(derivedDraw->GetDrawable(), renderStates, sfmlDraw->drawOrder);
 }

@@ -66,17 +66,22 @@ namespace powe
         template <typename U>
         U* GetComponentByID(ComponentTypeID id) const;
 
+        RawByte* GetComponentAddress(ComponentTypeID id,SizeType size) const;
+
         // Specialize GetComponent from iteration
         template <typename ...Args>
         std::tuple<std::add_pointer_t<Args>...> GetComponentsView() const;
 
 
     private:
+        
         template <typename U>
         U* GetComponent(const Archetype& archetype) const;
 
         template <typename U>
         U* GetComponentFromID(const Archetype& archetype, ComponentTypeID id) const;
+
+        RawByte* GetComponentAddress(const Archetype& archetype,ComponentTypeID id,SizeType size) const;
 
     private:
         const Archetype* m_CurrentArchetype{};
@@ -137,6 +142,12 @@ namespace powe
     U* RenderSystem<T>::GetComponentByID(ComponentTypeID id) const
     {
         return GetComponentFromID<U>(*m_CurrentArchetype,id);
+    }
+
+    template <typename T>
+    RawByte* RenderSystem<T>::GetComponentAddress(ComponentTypeID id, SizeType size) const
+    {
+        return GetComponentAddress(*m_CurrentArchetype,id,size);
     }
 
     template <typename T>
@@ -215,6 +226,43 @@ namespace powe
         }
 
         throw std::out_of_range(typeid(U).name());
+    }
+
+    template <typename T>
+    RawByte* RenderSystem<T>::GetComponentAddress(const Archetype& archetype, ComponentTypeID id, SizeType size) const
+    {
+        const auto findItr = archetype.ComponentOffsets.find(id);
+
+        if (findItr != archetype.ComponentOffsets.end())
+        {
+            // check the key if it's a sparse component or not
+            if (!IsThisComponentSparse(findItr->first))
+            {
+                RawByte* dataAddress{
+                    &archetype.ComponentData[
+                        m_UpdateCountPerArchetype * archetype.SizeOfComponentsBlock
+                        + findItr->second // offsets
+                    ]
+                };
+                return dataAddress;
+            }
+
+            // if it is Sparse component
+            // get the data from sparse section
+            auto& sparseManager{m_CurrentWorld->GetSparseComponentManager()};
+
+            // RawByte* realCompData{
+            //     sparseManager.GetComponentData<U>(
+            //         archetype.GameObjectIds[m_UpdateCountPerArchetype], id)
+            // };
+            
+            RawByte* realCompData{sparseManager.GetComponentData(
+                archetype.GameObjectIds[m_UpdateCountPerArchetype],id,size)};
+
+            return realCompData;
+        }
+
+        throw std::out_of_range("Can't find this component type via GetComponentAddress()");
     }
 }
 

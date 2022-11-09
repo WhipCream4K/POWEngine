@@ -15,6 +15,7 @@ namespace powe
         }
         int drawOrder{};
         ComponentTypeID derivedTypeID{};
+        SizeType derivedSize{};
     };
 }
 
