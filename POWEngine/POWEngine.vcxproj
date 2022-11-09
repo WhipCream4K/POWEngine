@@ -110,7 +110,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)3rdPartyLib\fmod\lib\$(Platform);$(SolutionDir)3rdPartyLib\SFML\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdPartyLib\SFML\build_$(Platform)\lib\$(Configuration);$(SolutionDir)3rdPartyLib\imgui-sfml\build_$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rdPartyLib\fmod\lib\$(Platform);$(SolutionDir)3rdPartyLib\SFML\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdPartyLib\SFML\build_$(Platform)\lib\$(Configuration);$(SolutionDir)3rdPartyLib\imgui-sfml\build_$(Platform)\$(Configuration);$(SolutionDir)3rdPartyLib\imgui\build_$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-system-d.lib;sfml-window-d.lib;sfml-graphics-d.lib;%(AdditionalDependencies);opengl32.lib;winmm.lib;gdi32.lib;fmod_vc.lib;xinput.lib;ImGui-SFML.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
@@ -136,7 +136,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)3rdPartyLib\fmod\lib\$(Platform);$(SolutionDir)3rdPartyLib\SFML\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdPartyLib\SFML\build_$(Platform)\lib\$(Configuration);$(SolutionDir)3rdPartyLib\imgui-sfml\build_$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rdPartyLib\fmod\lib\$(Platform);$(SolutionDir)3rdPartyLib\SFML\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdPartyLib\SFML\build_$(Platform)\lib\$(Configuration);$(SolutionDir)3rdPartyLib\imgui-sfml\build_$(Platform)\$(Configuration);$(SolutionDir)3rdPartyLib\imgui\build_$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-system.lib;sfml-window.lib;sfml-graphics.lib;%(AdditionalDependencies);opengl32.lib;winmm.lib;gdi32.lib;fmod_vc.lib;xinput.lib;ImGui-SFML.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
@@ -158,7 +158,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)3rdPartyLib\fmod\lib\$(Platform);$(SolutionDir)3rdPartyLib\SFML\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdPartyLib\SFML\build_$(Platform)\lib\$(Configuration);$(SolutionDir)3rdPartyLib\imgui-sfml\build_$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rdPartyLib\fmod\lib\$(Platform);$(SolutionDir)3rdPartyLib\SFML\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdPartyLib\SFML\build_$(Platform)\lib\$(Configuration);$(SolutionDir)3rdPartyLib\imgui-sfml\build_$(Platform)\$(Configuration);$(SolutionDir)3rdPartyLib\imgui\build_$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-system-d.lib;sfml-window-d.lib;sfml-graphics-d.lib;%(AdditionalDependencies);opengl32.lib;winmm.lib;gdi32.lib;fmod_vc.lib;xinput.lib;ImGui-SFML.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
@@ -184,7 +184,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)3rdPartyLib\fmod\lib\$(Platform);$(SolutionDir)3rdPartyLib\SFML\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdPartyLib\SFML\build_$(Platform)\lib\$(Configuration);$(SolutionDir)3rdPartyLib\imgui-sfml\build_$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rdPartyLib\fmod\lib\$(Platform);$(SolutionDir)3rdPartyLib\SFML\lib\$(Platform)\$(Configuration);$(SolutionDir)3rdPartyLib\SFML\build_$(Platform)\lib\$(Configuration);$(SolutionDir)3rdPartyLib\imgui-sfml\build_$(Platform)\$(Configuration);$(SolutionDir)3rdPartyLib\imgui\build_$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-system.lib;sfml-window.lib;sfml-graphics.lib;%(AdditionalDependencies);opengl32.lib;winmm.lib;gdi32.lib;fmod_vc.lib;xinput.lib;ImGui-SFML.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>

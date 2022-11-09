@@ -9,3 +9,8 @@ struct SteeringComponent : powe::Component<SteeringComponent>
     float angularVelocity{};
     float maxVelocity{};
 };
+
+struct DebugSteeringComponent : powe::Component<DebugSteeringComponent>
+{
+    glm::fvec4 boundArea{};
+};

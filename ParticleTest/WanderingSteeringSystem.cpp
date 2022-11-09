@@ -1,7 +1,6 @@
 ﻿#include "WanderingSteeringSystem.h"
 
 #include <imgui.h>
-#include <imgui-SFML.h>
 
 #include "UserComponents.h"
 #include "POWEngine/Core/Components/Transform2D.h"

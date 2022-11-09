@@ -25,7 +25,7 @@ void powe::SparseComponentManager::AddComponentToSparseSet(
 	// if the data is depleted we move the whole block to a new allocated one
 	if ((sparseSet.CurrentEmptyIndex + 1) * componentSize >= sparseSet.TotalAllocateData)
 	{
-		const SizeType newSize{ (((sparseSet.CurrentEmptyIndex + 1) * 2) * componentSize )};
+		const SizeType newSize{ ((sparseSet.CurrentEmptyIndex + 2) * 8 * componentSize )};
 
 		const SharedPtr<RawByte[]> newAddress{ SharedPtr<RawByte[]>(new RawByte[newSize]{}) };
 		// move all the data over to a new one

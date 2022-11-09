@@ -288,13 +288,31 @@
     <ClInclude Include="POWEngine\ECS\SystemKeys.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Renderer\Components\Debug2D\Shape2D.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="POWEngine\Renderer\System\SFML\SFML2DShapeRenderSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="POWEngine\Core\Components\BaseComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Renderer\Components\Debug2D\SFML\SFML2DShapeComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Renderer\Components\Debug2D\IShape2D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Renderer\Components\SFML\ISFMLDrawable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Renderer\Components\SFML\SFMLDrawComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Renderer\System\SFML\SFMLDefaultRenderSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Utils\MacroDef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="POWEngine\Utils\Utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -494,10 +512,22 @@
     <ClCompile Include="POWEngine\ECS\SystemKeys.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="POWEngine\Renderer\Components\Debug2D\Shape2D.cpp">
+    <ClCompile Include="POWEngine\Renderer\System\SFML\SFML2DShapeRenderSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="POWEngine\Renderer\System\SFML\SFML2DShapeRenderSystem.cpp">
+    <ClCompile Include="POWEngine\Renderer\Components\Debug2D\SFML\SFML2DShapeComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="POWEngine\Renderer\Components\Debug2D\IShape2D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="POWEngine\Renderer\Components\SFML\ISFMLDrawable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="POWEngine\Renderer\Components\SFML\SFMLDrawComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="POWEngine\Renderer\System\SFML\SFMLDefaultRenderSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

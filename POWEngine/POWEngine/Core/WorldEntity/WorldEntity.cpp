@@ -552,14 +552,16 @@ void powe::WorldEntity::InternalAddGameObjectToPipeline()
             m_ArchetypesPool.try_emplace(archetypeKeyString, targetArchetype);
         }
 
+        const SizeType objectCnt{SizeType(targetArchetype->GameObjectIds.size())};
+        
         const SizeType futureSize{
-            SizeType(targetArchetype->GameObjectIds.size() + 1)
+            (objectCnt + 1)
             * targetArchetype->SizeOfComponentsBlock
         };
 
         if (futureSize >= targetArchetype->TotalAllocatedData)
         {
-            targetArchetype->AllocateComponentData(futureSize * 3, *this);
+            targetArchetype->AllocateComponentData((objectCnt + 2) * 8 * targetArchetype->SizeOfComponentsBlock, *this);
         }
 
 

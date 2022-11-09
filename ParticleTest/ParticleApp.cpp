@@ -26,12 +26,8 @@ void ParticleApp::OnEngineSetUp(powe::EngineProps& engineProps)
 
 void ParticleApp::OnWorldInitialize(powe::WorldEntity& world)
 {
-	
 	m_TestScene = std::make_shared<TestScene>(world);
 
-	world.RegisterSystem(PipelineLayer::PostUpdate,std::make_shared<BoundAreaSystem>(
-		glm::fvec4{0.0f,0.0f,640.0f,480.0f}));
 
-	world.RegisterSystem(PipelineLayer::Update,std::make_shared<WanderingSteeringSystem>());
 	// world.RegisterSystem(PipelineLayer::Update,std::make_shared<SeekTestSystem>());
 }
