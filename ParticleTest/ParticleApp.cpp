@@ -4,7 +4,6 @@
 #include "BoundAreaSystem.h"
 #include "EngineStatsComponent.h"
 #include "EngineStatsTrackSystem.h"
-#include "SeekTestSystem.h"
 #include "POWEngine/Core/Components/Transform2D.h"
 #include "POWEngine/Renderer/SFML/SFML2DRenderer.h"
 #include "POWEngine/Renderer/System/SFML/SFML2DShapeRenderSystem.h"
