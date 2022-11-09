@@ -2,5 +2,5 @@
 
 #define GLM_FORCE_SILENT_WARNINGS
 
-#include "glm/glm.hpp"
-#include "glm/gtx/norm.hpp"
+#include "glm/glm/glm.hpp"
+#include "glm/glm/gtx/norm.hpp"
