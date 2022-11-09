@@ -16,7 +16,7 @@ namespace powe
 	struct MousePos;
 	struct KeyState;
 	struct HardwareMessages;
-	struct HardwareBus;
+	struct HardwareData;
 	struct KeyData
 	{
 		Key key{};
@@ -55,12 +55,14 @@ namespace powe
 		const KeyPool& GetCurrentKeyState(uint8_t playerIndex) const { return m_MainKeyPool[playerIndex]; }
 		const SysKeyType GetThisFrameSysKey() const { return m_CurrentFrameSystemKey; }
 
+		const glm::fvec2& GetMouseEngineAxisData() const {return m_MouseAxisData;}
+
 		void SetAssignFirstControllerToNextPlayer(bool state);
 
 	private:
 
 		static InputEvent InterpretInputState(bool isKeyPressed, const InputEvent& savedInputState);
-		void ProcessHWData(const HardwareBus& hardwareBus);
+		void ProcessHWData(const HardwareMessages& hardwareMessages,int id);
 
 		void AddKeyToMainKeyPool(const Key& key);
 		void UpdateMainKeyPool();
@@ -82,6 +84,8 @@ namespace powe
 		//KeyPool m_MainKeyPool;
 		std::array<KeyPool, MAXPLAYER> m_MainKeyPool;
 
+		glm::fvec2 m_MouseAxisData{};
+		
 		bool m_ShouldRevalidateMouseValue{};
 		bool m_AssignFirstControllerToNextIndex{};
 	};

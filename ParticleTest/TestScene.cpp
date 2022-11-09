@@ -3,6 +3,7 @@
 #include <imgui-SFML.h>
 #include <imgui.h>
 
+#include "AgentOptionsUpdate.h"
 #include "BoundAreaSystem.h"
 #include "DebugSteeringSystem.h"
 #include "powengine.h"
@@ -35,31 +36,13 @@ TestScene::TestScene(powe::WorldEntity& world)
         SFML2DCircle* circleShape{wanderObject->AddComponent(
         SFML2DCircle{world,wanderObject->GetID()},ComponentFlag::Sparse)};
     
-        circleShape->SetSize({5.0f,5.0f});
+        circleShape->SetSize({1.5f,1.5f});
 
-        SteeringComponent* steering = wanderObject->AddComponent(SteeringComponent{});
+        VelocityComponent* steering = wanderObject->AddComponent(VelocityComponent{});
         steering->maxVelocity = Random::RandFloat(50.0f,200.0f);
 
         AddGameObject(wanderObject);
     }
-
-    // Initialize bound area
-    // const SharedPtr<GameObject> boundArea{std::make_shared<GameObject>(world)};
-    // boundArea->AddComponent(Transform2D{boundArea});
-    //
-    // SFML2DRectangle* rectangle{boundArea->AddComponent(
-    //     SFML2DRectangle{world,boundArea->GetID()},
-    //     ComponentFlag::Sparse
-    //     )};
-    //
-    // rectangle->SetFillColor({0,0,0,0});
-    // rectangle->SetOutColor({0,255,0,255});
-    // rectangle->SetSize({640.0,480.0f});
-    // rectangle->SetOutlineThickness(1.5f);
-    // rectangle->drawOrder = -1;
-    //
-    //
-    // AddGameObject(boundArea);
 
     // Initialize Debug options
     const SharedPtr<GameObject> debugOpt{std::make_shared<GameObject>(world)};
@@ -90,5 +73,6 @@ TestScene::TestScene(powe::WorldEntity& world)
     world.RegisterSystem(PipelineLayer::Update,std::make_shared<WanderingSteeringSystem>());
 
     world.RegisterSystem(PipelineLayer::InputValidation,std::make_shared<DebugSteeringSystem>());
+    world.RegisterSystem(PipelineLayer::InputValidation,std::make_shared<AgentOptionsUpdate>(debugOpt));
     
 }

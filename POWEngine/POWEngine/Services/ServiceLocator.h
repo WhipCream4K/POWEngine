@@ -46,6 +46,8 @@ namespace powe
 		static SharedPtr<Logger> m_Logger;
 		static NullLogger m_NullLogger;
 		// -------------------
+
+		
 	};
 }
 

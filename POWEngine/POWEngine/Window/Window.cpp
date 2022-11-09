@@ -27,10 +27,10 @@ powe::Window::Window(uint32_t width, uint32_t height, const std::string& title, 
 	}
 }
 
-const powe::HardwareMessages& powe::Window::PollHardwareMessages(bool& shouldEarlyExit, bool& shouldIgnoreInputs) const
-{
-	return m_WindowImpl->PollHardwareMessages(shouldEarlyExit, shouldIgnoreInputs);
-}
+// const powe::HardwareMessages& powe::Window::PollHardwareMessages(bool& shouldEarlyExit, bool& shouldIgnoreInputs) const
+// {
+// 	return m_WindowImpl->PollHardwareMessages(shouldEarlyExit, shouldIgnoreInputs);
+// }
 
 void powe::Window::PollHardwareMessages(HardwareMessages& hwMessages, bool& shouldEarlyExit,
 	bool& shouldIgnoreInputs) const
@@ -56,11 +56,6 @@ void powe::Window::SetTitle(const std::string& newTitle)
 void powe::Window::UpdateWindowContext(float deltaTime) const
 {
 	m_WindowImpl->UpdateWindowContext(deltaTime);
-}
-
-const glm::uvec2& powe::Window::GetRelativeMousePos() const
-{
-	return m_WindowImpl->GetRelativeMousePos();
 }
 
 void powe::Window::SetVSync(bool vsync) const

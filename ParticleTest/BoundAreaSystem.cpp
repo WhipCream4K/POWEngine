@@ -30,7 +30,7 @@ void BoundAreaSystem::OnCreate(powe::GameObjectID)
 void BoundAreaSystem::OnUpdate(float, powe::GameObjectID)
 {
     Transform2D* transform{GetComponent<Transform2D>()};
-
+    
     auto position{transform->GetPosition()};
     
     // bound horizontal
@@ -47,7 +47,7 @@ void BoundAreaSystem::OnUpdate(float, powe::GameObjectID)
     {
         position.x = left;
     }
-
+    
     if(position.y < down  - 2.0f)
     {
         position.y = up;

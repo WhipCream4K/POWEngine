@@ -14,7 +14,7 @@ namespace powe
 
 		Window(uint32_t width, uint32_t height, const std::string& title,const OtherWindowParams& others = {});
 
-		const HardwareMessages& PollHardwareMessages(bool& shouldEarlyExit, bool& shouldIgnoreInputs) const;
+		// const HardwareMessages& PollHardwareMessages(bool& shouldEarlyExit, bool& shouldIgnoreInputs) const;
 		void PollHardwareMessages(HardwareMessages& hwMessages,bool& shouldEarlyExit, bool& shouldIgnoreInputs) const;
 		void Resize(uint32_t width, uint32_t height);
 		void SetTitle(const std::string& newTitle);
@@ -22,7 +22,7 @@ namespace powe
 
 		[[nodiscard]] uint32_t GetHeight() const { return m_Height; }
 		[[nodiscard]] uint32_t GetWidth() const { return m_Width; }
-		[[nodiscard]] const glm::uvec2& GetRelativeMousePos() const;
+		// [[nodiscard]] const glm::uvec2& GetRelativeMousePos() const;
 
 		void SetVSync(bool vsync) const;
 		void Display() const;

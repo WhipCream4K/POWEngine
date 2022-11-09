@@ -171,10 +171,13 @@ xcopy /y $(SolutionDir)3rdPartyLib\fmod\lib\$(Platform) $(OutDir)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AgentOptionsUpdate.cpp" />
+    <ClCompile Include="BlendedSteeringSystem.cpp" />
     <ClCompile Include="BoundAreaSystem.cpp" />
     <ClCompile Include="DebugSteeringSystem.cpp" />
     <ClCompile Include="EngineStatsComponent.cpp" />
     <ClCompile Include="EngineStatsTrackSystem.cpp" />
+    <ClCompile Include="FleeSteeringSystem.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ParticleApp.cpp" />
     <ClCompile Include="SceneFactory.cpp" />
@@ -188,10 +191,13 @@ xcopy /y $(SolutionDir)3rdPartyLib\fmod\lib\$(Platform) $(OutDir)</Command>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AgentOptionsUpdate.h" />
+    <ClInclude Include="BlendedSteeringSystem.h" />
     <ClInclude Include="BoundAreaSystem.h" />
     <ClInclude Include="DebugSteeringSystem.h" />
     <ClInclude Include="EngineStatsComponent.h" />
     <ClInclude Include="EngineStatsTrackSystem.h" />
+    <ClInclude Include="FleeSteeringSystem.h" />
     <ClInclude Include="ParticleApp.h" />
     <ClInclude Include="SceneFactory.h" />
     <ClInclude Include="TestScene.h" />

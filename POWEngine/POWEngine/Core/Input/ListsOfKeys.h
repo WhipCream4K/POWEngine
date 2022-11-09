@@ -30,6 +30,7 @@ public:
 	};
 
 	static constexpr uint8_t AxisCount{ 1 };
+	static constexpr uint8_t KeyCount{5};
 };
 
 

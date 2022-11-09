@@ -79,8 +79,7 @@ void powe::InputManager::XInputImpl::PollHardWareMessages(HardwareMessages& mess
 				gamepadData.buttons = state.Gamepad.wButtons;
 				gamepadData.playerIndex = uint8_t(i);
 
-
-
+				
 				gamepadData.LShoulder = ApplyDeadZone(AxisType::Shoulder, UCHAR_MAX, gamepad::ShoulderDeadZone, int(state.Gamepad.bLeftTrigger));
 				gamepadData.RShoulder = ApplyDeadZone(AxisType::Shoulder, UCHAR_MAX, gamepad::ShoulderDeadZone, int(state.Gamepad.bRightTrigger));
 
@@ -99,8 +98,7 @@ void powe::InputManager::XInputImpl::PollHardWareMessages(HardwareMessages& mess
 				//gamepadData.axisData.RThumbX = ApplyDeadZone(AxisType::Thumb, SHRT_MAX, gamepad::ThumbDeadZone, int(state.Gamepad.sThumbRX));
 				//gamepadData.axisData.RThumbY = ApplyDeadZone(AxisType::Thumb, SHRT_MAX, gamepad::ThumbDeadZone, int(state.Gamepad.sThumbRY));
 
-
-
+				
 				auto& hwMessage{ messages.hwMessages[currentMessageCnt++] };
 				hwMessage.hData = gamepadData;
 				hwMessage.eventId = uint8_t(EventType::Gamepad);
