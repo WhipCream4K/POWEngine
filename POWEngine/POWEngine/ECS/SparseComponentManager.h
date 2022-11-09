@@ -35,6 +35,8 @@ namespace powe
 		template<typename T>
 		RawByte* GetComponentData(GameObjectID id, ComponentTypeID compID) const;
 
+		RawByte* GetComponentData(GameObjectID id,ComponentTypeID compID,SizeType componentSize) const;
+
 		void RemoveComponentFromGameObject(
 			GameObjectID id,
 			ComponentTypeID compID,

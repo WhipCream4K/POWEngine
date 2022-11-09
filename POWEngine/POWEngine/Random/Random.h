@@ -8,10 +8,17 @@ class Random
 
 public:
 
+	Random();
+	
 	template<typename T>
 	static T RandInt(T from, T to);
 
 	static float RandFloat(float from,float to);
+
+private:
+	
+	static std::random_device m_RandDevice;
+	static std::mt19937 m_RandEngine;
 };
 
 template <typename T>

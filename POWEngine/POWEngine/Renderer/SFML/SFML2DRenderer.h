@@ -1,6 +1,7 @@
 #pragma once
 
 #include "POWEngine/Renderer/RenderAPI.h"
+#include "POWEngine/Core/CustomTypes.h"
 
 //#if USE_SFML_RENDERER
 

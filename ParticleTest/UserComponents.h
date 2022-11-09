@@ -5,6 +5,7 @@
 
 struct SteeringComponent : powe::Component<SteeringComponent>
 {
-    glm::fvec2 linearVelocity{};
+    glm::fvec2 linearVelocity{1.0f,1.0f};
     float angularVelocity{};
+    float maxVelocity{};
 };

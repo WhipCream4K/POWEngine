@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "SparseComponentManager.h"
 
+#include <iostream>
+
 #include "POWEngine/Core/WorldEntity/WorldEntity.h"
 
 powe::SparseComponentManager::SparseComponentManager(WorldEntity& world)
@@ -23,13 +25,14 @@ void powe::SparseComponentManager::AddComponentToSparseSet(
 	// if the data is depleted we move the whole block to a new allocated one
 	if ((sparseSet.CurrentEmptyIndex + 1) * componentSize >= sparseSet.TotalAllocateData)
 	{
-		const SizeType newSize{ (sparseSet.CurrentEmptyIndex + 3) * componentSize };
+		const SizeType newSize{ (((sparseSet.CurrentEmptyIndex + 1) * 2) * componentSize )};
 
 		const SharedPtr<RawByte[]> newAddress{ SharedPtr<RawByte[]>(new RawByte[newSize]{}) };
-
 		// move all the data over to a new one
+		
 		RawByte* sourceAddress{ sparseSet.Data.get() };
 		RawByte* destination{ newAddress.get() };
+		
 		for (int i = 0; i < int(sparseSet.CurrentEmptyIndex); ++i)
 		{
 			const SizeType offset{ i * componentSize };
@@ -53,6 +56,20 @@ void powe::SparseComponentManager::AddComponentToSparseSet(
 	{
 		sparseSet.GameObjectIDs.emplace_back(id);
 	}
+}
+
+powe::RawByte* powe::SparseComponentManager::GetComponentData(GameObjectID id, ComponentTypeID compID,
+	SizeType componentSize) const
+{
+	const auto findItr{ m_GameObjectToHandle.find(id) };
+	if(findItr != m_GameObjectToHandle.end() && findItr->second.contains(compID))
+	{
+		const SparseHandle handle{ findItr->second.at(compID) };
+
+		return &m_SparseComponentData.at(compID).Data[int(handle * componentSize)];
+	}
+
+	return nullptr;
 }
 
 void powe::SparseComponentManager::RemoveComponentFromGameObject(

@@ -4,6 +4,7 @@
 #include "BoundAreaSystem.h"
 #include "EngineStatsComponent.h"
 #include "EngineStatsTrackSystem.h"
+#include "SeekTestSystem.h"
 #include "POWEngine/Core/Components/Transform2D.h"
 #include "POWEngine/Renderer/SFML/SFML2DRenderer.h"
 #include "POWEngine/Renderer/System/SFML/SFML2DShapeRenderSystem.h"
@@ -26,9 +27,6 @@ void ParticleApp::OnEngineSetUp(powe::EngineProps& engineProps)
 
 void ParticleApp::OnWorldInitialize(powe::WorldEntity& world)
 {
-	// const GameObjectID engineStats{ world.CreateNewEntity() };
-	// world.AddComponentToGameObject(engineStats,EngineStatsComponent{});
-	// world.RegisterSystem(PipelineLayer::PostUpdate,std::make_shared<EngineStatsTrackSystem>());
 	
 	m_TestScene = std::make_shared<TestScene>(world);
 
@@ -36,4 +34,5 @@ void ParticleApp::OnWorldInitialize(powe::WorldEntity& world)
 		glm::fvec4{0.0f,0.0f,640.0f,480.0f}));
 
 	world.RegisterSystem(PipelineLayer::Update,std::make_shared<WanderingSteeringSystem>());
+	// world.RegisterSystem(PipelineLayer::Update,std::make_shared<SeekTestSystem>());
 }

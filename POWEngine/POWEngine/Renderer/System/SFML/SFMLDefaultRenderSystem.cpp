@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "POWEngine/Core/Components/Transform2D.h"
+#include "POWEngine/Renderer/Components/Debug2D/SFML/SFML2DShapeComponent.h"
 #include "POWEngine/Renderer/Components/SFML/SFMLDrawComponent.h"
 #include "POWEngine/Window/Window.h"
 
@@ -33,7 +34,7 @@ void powe::SFMLDefaultRenderSystem::OnDraw(const SFML2DRenderer& renderer, const
     sfTransform.scale({ scale.x,scale.y });
  
     SFMLDrawComponent* derivedDraw{GetComponentByID<SFMLDrawComponent>(sfmlDraw->derivedTypeID)};
-     
+    
     renderer.SubmitDrawSprite(derivedDraw->GetDrawable(), renderStates, sfmlDraw->drawOrder);
 }
 

@@ -201,10 +201,15 @@ namespace powe
             // get the data from sparse section
             auto& sparseManager{m_CurrentWorld->GetSparseComponentManager()};
 
-            RawByte* realCompData{
-                sparseManager.GetComponentData<U>(
-                    archetype.GameObjectIds[m_UpdateCountPerArchetype], id)
-            };
+            // RawByte* realCompData{
+            //     sparseManager.GetComponentData<U>(
+            //         archetype.GameObjectIds[m_UpdateCountPerArchetype], id)
+            // };
+
+            const SharedPtr<BaseComponent> baseComp{m_CurrentWorld->GetComponentTrait(id)};
+            
+            RawByte* realCompData{sparseManager.GetComponentData(
+                archetype.GameObjectIds[m_UpdateCountPerArchetype],id,baseComp->GetSize())};
 
             return reinterpret_cast<U*>(realCompData);
         }

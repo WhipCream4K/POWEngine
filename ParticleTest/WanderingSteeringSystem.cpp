@@ -31,17 +31,12 @@ void WanderingSteeringSystem::OnUpdate(float deltaTime, powe::GameObjectID)
     const glm::fvec2 aimOffset{glm::normalize(agentSteering->linearVelocity) * m_Offset};
     const glm::fvec2 target{agentPos + aimOffset + wanderTarget};
 
-    const glm::fvec2 desiredVel{glm::normalize(agentPos - target) * m_AgentSpeed};
-    glm::fvec2 steering{(desiredVel - agentSteering->linearVelocity)};
-
-    if(glm::length(steering) > m_MaxForce)
-    {
-        steering = glm::normalize(steering) * m_MaxForce; 
-    }
-
-    agentSteering->linearVelocity = (steering * deltaTime) + agentSteering->linearVelocity;
+    const glm::fvec2 desiredVel{glm::normalize( target - agentPos) * agentSteering->maxVelocity};
+    const glm::fvec2 steering{(desiredVel - agentSteering->linearVelocity)};
     
-    agentTransform->SetWorldPosition(agentPos + (agentSteering->linearVelocity * deltaTime));
 
+    // Apply force
+    agentSteering->linearVelocity += steering * deltaTime;
+    agentTransform->SetWorldPosition(agentPos + (agentSteering->linearVelocity * deltaTime));
     
 }

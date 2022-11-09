@@ -3,24 +3,41 @@
 #include "powengine.h"
 #include "UserComponents.h"
 #include "POWEngine/Core/Components/Transform2D.h"
+#include "POWEngine/Random/Random.h"
 #include "POWEngine/Renderer/Components/Debug2D/SFML/SFML2DShapeComponent.h"
 
 using namespace powe;
 
 TestScene::TestScene(powe::WorldEntity& world)
 {
-    const SharedPtr<GameObject> testShape{std::make_shared<GameObject>(world)};
-    testShape->AddComponent(Transform2D{testShape});
 
-    SFML2DCircle* circleShape{testShape->AddComponent(
-        SFML2DCircle{world,testShape->GetID()},
-        ComponentFlag::Sparse)};
+    const int objectAmount{500};
+    const glm::fvec2 limitHorizontal{-640.0f * 0.5f,640.0f * 0.5f};
+    const glm::fvec2 limitVertical{-480.0f * 0.5f,480.0f * 0.5f};
     
-    circleShape->SetSize({10.0f,10.0f});
+    for (int i = 0; i < objectAmount; ++i)
+    {
+        const SharedPtr<GameObject> wanderObject{std::make_shared<GameObject>(world)};
+        Transform2D* transform{ wanderObject->AddComponent(Transform2D{wanderObject})};
 
-    SteeringComponent* steering = testShape->AddComponent(SteeringComponent{});
-    steering->linearVelocity = glm::fvec2{1.0f,1.0f};
+        const glm::fvec2 randPos{Random::RandFloat(
+            limitHorizontal.x,limitHorizontal.y),
+            Random::RandFloat(limitVertical.x,limitVertical.y)};
 
+        transform->SetWorldPosition(randPos);
+    
+        SFML2DCircle* circleShape{wanderObject->AddComponent(
+        SFML2DCircle{world,wanderObject->GetID()},ComponentFlag::Sparse)};
+    
+        circleShape->SetSize({10.0f,10.0f});
+
+        SteeringComponent* steering = wanderObject->AddComponent(SteeringComponent{});
+        steering->maxVelocity = Random::RandFloat(50.0f,200.0f);
+
+        AddGameObject(wanderObject);
+    }
+
+    // Initialize bound area
     const SharedPtr<GameObject> boundArea{std::make_shared<GameObject>(world)};
     boundArea->AddComponent(Transform2D{boundArea});
 
@@ -37,5 +54,5 @@ TestScene::TestScene(powe::WorldEntity& world)
     
     
     AddGameObject(boundArea);
-    AddGameObject(testShape);
+    // AddGameObject(testShape);
 }
