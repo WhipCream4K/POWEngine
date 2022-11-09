@@ -11,5 +11,5 @@ protected:
 
     void OnUpdate(float, powe::GameObjectID) override;
 private:
-    
+    float m_FleeTolerance{16.0f};
 };

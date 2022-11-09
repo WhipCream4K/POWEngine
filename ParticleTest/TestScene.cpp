@@ -6,6 +6,7 @@
 #include "AgentOptionsUpdate.h"
 #include "BoundAreaSystem.h"
 #include "DebugSteeringSystem.h"
+#include "FleeSteeringSystem.h"
 #include "powengine.h"
 #include "UserComponents.h"
 #include "WanderingSteeringSystem.h"
@@ -70,7 +71,8 @@ TestScene::TestScene(powe::WorldEntity& world)
     
     world.RegisterSystem(PipelineLayer::PostUpdate,std::make_shared<BoundAreaSystem>(debugOpt));
 
-    world.RegisterSystem(PipelineLayer::Update,std::make_shared<WanderingSteeringSystem>());
+    // world.RegisterSystem(PipelineLayer::Update,std::make_shared<WanderingSteeringSystem>());
+    world.RegisterSystem(PipelineLayer::Update,std::make_shared<FleeSteeringSystem>());
 
     world.RegisterSystem(PipelineLayer::InputValidation,std::make_shared<DebugSteeringSystem>());
     world.RegisterSystem(PipelineLayer::InputValidation,std::make_shared<AgentOptionsUpdate>(debugOpt));

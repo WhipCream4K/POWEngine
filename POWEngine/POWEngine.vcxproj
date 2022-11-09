@@ -101,7 +101,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)PCH;$(SolutionDir)3rdPartyLib\SFML\include;$(SolutionDir)3rdPartyLib\fmod\include;$(ProjectDir);$(SolutionDir)3rdPartyLib\imgui;$(SolutionDir)3rdPartyLib\imgui-sfml;$(SolutionDir)3rdPartyLib\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)PCH;$(SolutionDir)3rdPartyLib\SFML\include;$(SolutionDir)3rdPartyLib\fmod\include;$(ProjectDir);$(SolutionDir)3rdPartyLib\imgui;$(SolutionDir)3rdPartyLib\imgui-sfml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -125,7 +125,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)PCH;$(SolutionDir)3rdPartyLib\SFML\include;$(SolutionDir)3rdPartyLib\fmod\include;$(ProjectDir);$(SolutionDir)3rdPartyLib\imgui;$(SolutionDir)3rdPartyLib\imgui-sfml;$(SolutionDir)3rdPartyLib\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)PCH;$(SolutionDir)3rdPartyLib\SFML\include;$(SolutionDir)3rdPartyLib\fmod\include;$(ProjectDir);$(SolutionDir)3rdPartyLib\imgui;$(SolutionDir)3rdPartyLib\imgui-sfml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -149,7 +149,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)PCH;$(SolutionDir)3rdPartyLib\SFML\include;$(SolutionDir)3rdPartyLib\fmod\include;$(ProjectDir);$(SolutionDir)3rdPartyLib\imgui;$(SolutionDir)3rdPartyLib\imgui-sfml;$(SolutionDir)3rdPartyLib\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)PCH;$(SolutionDir)3rdPartyLib\SFML\include;$(SolutionDir)3rdPartyLib\fmod\include;$(ProjectDir);$(SolutionDir)3rdPartyLib\imgui;$(SolutionDir)3rdPartyLib\imgui-sfml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -173,7 +173,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)PCH;$(SolutionDir)3rdPartyLib\SFML\include;$(SolutionDir)3rdPartyLib\fmod\include;$(ProjectDir);$(SolutionDir)3rdPartyLib\imgui;$(SolutionDir)3rdPartyLib\imgui-sfml;$(SolutionDir)3rdPartyLib\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)PCH;$(SolutionDir)3rdPartyLib\SFML\include;$(SolutionDir)3rdPartyLib\fmod\include;$(ProjectDir);$(SolutionDir)3rdPartyLib\imgui;$(SolutionDir)3rdPartyLib\imgui-sfml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
