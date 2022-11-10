@@ -19,7 +19,7 @@ namespace powe
 	public:
 
 		template<typename T>
-		static ComponentTypeID GetId();
+		static constexpr ComponentTypeID GetId();
 
 		//template<typename T>
 		//static SharedPtr<T> Create();
@@ -45,9 +45,7 @@ namespace powe
 	template <typename T>
 	ComponentTypeID BaseComponent::GetId()
 	{
-		//static const ComponentTypeID counter{ m_ComponentIdCounter++ };
 		static const ComponentTypeID counter{ m_ComponentIdCounter++ };
-		//++m_ComponentIdCounter;
 		return counter;
 	}
 	
