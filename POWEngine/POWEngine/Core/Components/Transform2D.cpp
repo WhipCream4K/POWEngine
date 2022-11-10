@@ -133,7 +133,7 @@ void powe::Transform2D::SetParent(const SharedPtr<GameObject>& gameObject, bool 
 		if (!parentTransform)
 			return;
 
-		if (keepWorldPosition)
+		if (!keepWorldPosition)
 		{
 			SetLocalPosition(GetLocalPosition() - parentTransform->GetPosition());
 			//SetLocalRotation(parentTransform->GetWorldRotation() + GetLocalRotation());
@@ -171,14 +171,17 @@ void powe::Transform2D::UpdateData(DirtyFlag flag)
 	if (const auto parent{ m_ParentNode.lock() })
 	{
 		parentTransform = parent->GetComponent<Transform2D>();
+		if(!parentTransform)
+			throw std::runtime_error("Parent doesn't have Transform2D component");
 	}
 
+	
 	switch (flag)
 	{
 	case DirtyFlag::Position:
 
 		if (parentTransform)
-			m_WorldPosition = parentTransform->GetPosition() + m_LocalPosition;
+			m_WorldPosition = parentTransform->m_WorldPosition + m_LocalPosition;
 		else
 			m_WorldPosition = m_LocalPosition;
 
@@ -187,7 +190,7 @@ void powe::Transform2D::UpdateData(DirtyFlag flag)
 	case DirtyFlag::Rotation:
 
 		if (parentTransform)
-			m_WorldZRotation = parentTransform->GetRotation() + m_LocalZRotation;
+			m_WorldZRotation = parentTransform->m_WorldZRotation + m_LocalZRotation;
 		else
 			m_WorldZRotation = m_LocalZRotation;
 
@@ -195,7 +198,7 @@ void powe::Transform2D::UpdateData(DirtyFlag flag)
 	case DirtyFlag::Scale:
 
 		if (parentTransform)
-			m_WorldScales = parentTransform->GetScale() * m_LocalScales;
+			m_WorldScales = parentTransform->m_WorldScales * m_LocalScales;
 		else
 			m_WorldScales = m_LocalScales;
 

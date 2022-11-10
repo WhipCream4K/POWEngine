@@ -12,13 +12,13 @@ using namespace powe;
 BoundAreaSystem::BoundAreaSystem(const glm::fvec4& box)
     : m_BoundingBox(box * 0.5f)
 {
-    DefineSystemKeys<Transform2D>();
+    DefineSystemKeys<Transform2D,VelocityComponent>();
 }
 
 BoundAreaSystem::BoundAreaSystem(const SharedPtr<powe::GameObject>& gb)
     : m_BoundArea(gb)
 {
-    DefineSystemKeys<Transform2D>();
+    DefineSystemKeys<Transform2D,VelocityComponent>();
 }
 
 void BoundAreaSystem::OnCreate(powe::GameObjectID)

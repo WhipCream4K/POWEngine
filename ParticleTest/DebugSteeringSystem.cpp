@@ -35,13 +35,15 @@ void DebugSteeringSystem::OnUpdate(float, powe::GameObjectID)
         m_DebugOpt->isOptionsChanged = true;
     }
 
-    if(ImGui::DragFloat("AgentSize",&m_DebugOpt->agentSize,1.0f,0.0f,20.0f))
+    if(ImGui::DragFloat("AgentSize",&m_DebugOpt->agentSize,0.5f,0.0f,20.0f))
     {
         m_DebugOpt->isOptionsChanged = true;
     }
     
     glm::fvec2 mousePos{ GetWorld()->GetInputSettings().GetMouseEngineAxisData()};
     ImGui::DragFloat2("MouseEnginePos",&mousePos.x);
+
+    ImGui::DragInt("AgentAmount",&m_DebugOpt->agentAmount);
 
     ImGui::End();
 }

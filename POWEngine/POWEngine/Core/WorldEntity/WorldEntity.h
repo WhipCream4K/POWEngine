@@ -394,6 +394,7 @@ namespace powe
 					RawByte* realCompData{ m_SparseComponentManager.GetComponentData<ComponentType>(id,compID) };
 
 					return reinterpret_cast<ComponentType*>(realCompData);
+					// return std::bit_cast<ComponentType,RawByte>(realCompData);
 				}
 
 

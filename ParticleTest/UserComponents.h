@@ -12,6 +12,7 @@ struct VelocityComponent : powe::Component<VelocityComponent>
 struct Steering
 {
     glm::fvec2 steeringForce{};
+    // float maxSteerForce{};
     float weightSteering{};
 };
 
@@ -21,12 +22,13 @@ struct WanderComponent : powe::Component<WanderComponent> , Steering
 
 struct FleeComponent : powe::Component<FleeComponent> , Steering
 {
-    float fleeRadius{};
+    float fleePower{};
 };
 
 struct DebugSteeringComponent : powe::Component<DebugSteeringComponent>
 {
     glm::fvec4 boundArea{};
+    int agentAmount{};
     float agentSize{1.5f};
     bool isOptionsChanged{};
 };
