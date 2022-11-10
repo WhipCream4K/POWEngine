@@ -12,14 +12,14 @@ powe::InputSystem::InputSystem()
 
 void powe::InputSystem::OnUpdate(float deltaTime, powe::GameObjectID id)
 {
-	const InputComponent* inputComponent{ GetComponent<InputComponent>() };
+	const auto& inputComponent{ GetComponent<InputComponent>() };
 	const InputSettings& inputSettings{ GetWorld()->GetInputSettings() };
 
-	const auto& realGamePadKey{ inputSettings.GetCurrentKeyState(inputComponent->GetRealPlayerIndex()) };
+	const auto& realGamePadKey{ inputSettings.GetCurrentKeyState(inputComponent.GetRealPlayerIndex()) };
 
 	const auto& worldAxisMap{ inputSettings.GetAxisMap() };
 
-	for (const auto& [axisName, commands] : inputComponent->GetAxisCommands())
+	for (const auto& [axisName, commands] : inputComponent.GetAxisCommands())
 	{
 		if (commands.empty())
 			continue;
@@ -30,7 +30,7 @@ void powe::InputSystem::OnUpdate(float deltaTime, powe::GameObjectID id)
 	const auto& worldActionMap{ inputSettings.GetActionMap() };
 	const SysKeyType thisFrameSysKey{ inputSettings.GetThisFrameSysKey() };
 
-	for (const auto& [actionName, actionPack] : inputComponent->GetActionCommands())
+	for (const auto& [actionName, actionPack] : inputComponent.GetActionCommands())
 	{
 		if (actionPack.empty())
 			continue;

@@ -6,87 +6,124 @@
 #include "POWEngine/Logger/LoggerUtils.h"
 
 powe::SystemBase::SystemBase()
-	: m_World()
-	, m_CurrentArchetype()
-	, m_UpdateCountPerArchetype()
+    : m_World()
+      , m_CurrentArchetype()
+      , m_UpdateCountPerArchetype()
 {
 }
 
+// powe::SystemBase::SystemBase(WorldEntity& worldEntt)
+//     : m_World(&worldEntt)
+//       , m_CurrentArchetype()
+//       , m_UpdateCountPerArchetype()
+// {
+// }
+
 void powe::SystemBase::InternalUpdate(const Archetype& archetype, float deltaTime)
 {
-	m_UpdateCountPerArchetype = 0;
-	m_CurrentArchetype = &archetype;
+    m_UpdateCountPerArchetype = 0;
+    m_CurrentArchetype = &archetype;
 
-	try
-	{
-		for (const auto gameObjectId : archetype.GameObjectIds)
-		{
-			OnUpdate(deltaTime, gameObjectId);
-			++m_UpdateCountPerArchetype;
-		}
-	}
-	catch (const std::exception& e)
-	{
-		std::string errMsg{ "System trying to access component that doesn't exist in this archetype -> " };
-		errMsg.append(e.what());
-		POWLOGWARNING(errMsg);
+    try
+    {
+        for (const auto gameObjectId : archetype.GameObjectIds)
+        {
+            OnUpdate(deltaTime, gameObjectId);
+            ++m_UpdateCountPerArchetype;
+        }
+    }
+    catch (const std::exception& e)
+    {
+        std::string errMsg{"System trying to access component that doesn't exist in this archetype -> "};
+        errMsg.append(e.what());
+        POWLOGWARNING(errMsg);
 
-		m_UpdateCountPerArchetype = 0;
-		m_CurrentArchetype = nullptr;
-	}
-
+        m_UpdateCountPerArchetype = 0;
+        m_CurrentArchetype = nullptr;
+    }
 }
 
 void powe::SystemBase::InternalCreate(const Archetype& archetype)
 {
-	m_UpdateCountPerArchetype = 0;
-	m_CurrentArchetype = &archetype;
+    m_UpdateCountPerArchetype = 0;
+    m_CurrentArchetype = &archetype;
 
-	try
-	{
-		for (const auto gameObjectId : archetype.GameObjectIds)
-		{
-			OnCreate(gameObjectId);
-			++m_UpdateCountPerArchetype;
-		}
-	}
-	catch (const std::exception& e)
-	{
-		std::string errMsg{ "System trying to access component that doesn't exist in this archetype -> " };
-		errMsg.append(e.what());
-		POWLOGWARNING(errMsg);
+    try
+    {
+        for (const auto gameObjectId : archetype.GameObjectIds)
+        {
+            OnCreate(gameObjectId);
+            ++m_UpdateCountPerArchetype;
+        }
+    }
+    catch (const std::exception& e)
+    {
+        std::string errMsg{"System trying to access component that doesn't exist in this archetype -> "};
+        errMsg.append(e.what());
+        POWLOGWARNING(errMsg);
 
-		m_UpdateCountPerArchetype = 0;
-		m_CurrentArchetype = nullptr;
-	}
+        m_UpdateCountPerArchetype = 0;
+        m_CurrentArchetype = nullptr;
+    }
 }
 
 void powe::SystemBase::InternalDestroy(const Archetype& archetype)
 {
-	m_UpdateCountPerArchetype = 0;
-	m_CurrentArchetype = &archetype;
+    m_UpdateCountPerArchetype = 0;
+    m_CurrentArchetype = &archetype;
 
-	try
-	{
-		for (const auto gameObjectId : archetype.GameObjectIds)
-		{
-			OnDestroy(gameObjectId);
-			++m_UpdateCountPerArchetype;
-		}
-	}
-	catch (const std::exception& e)
-	{
-		std::string errMsg{ "System trying to access component that doesn't exist in this archetype -> " };
-		errMsg.append(e.what());
-		POWLOGWARNING(errMsg);
+    try
+    {
+        for (const auto gameObjectId : archetype.GameObjectIds)
+        {
+            OnDestroy(gameObjectId);
+            ++m_UpdateCountPerArchetype;
+        }
+    }
+    catch (const std::exception& e)
+    {
+        std::string errMsg{"System trying to access component that doesn't exist in this archetype -> "};
+        errMsg.append(e.what());
+        POWLOGWARNING(errMsg);
 
-		m_UpdateCountPerArchetype = 0;
-		m_CurrentArchetype = nullptr;
-	}
+        m_UpdateCountPerArchetype = 0;
+        m_CurrentArchetype = nullptr;
+    }
 }
 
-void powe::SystemBase::SetWorld(WorldEntity* world)
+powe::RawByte* powe::SystemBase::GetComponentAddress(ComponentTypeID id, SizeType componentSize) const
 {
-	m_World = world;
+    return GetComponentAddressByID(*m_CurrentArchetype, id, componentSize);
 }
 
+powe::RawByte* powe::SystemBase::GetComponentAddressByID(const Archetype& archetype, ComponentTypeID id,
+                                                         SizeType componentSize) const
+{
+    const auto findItr = archetype.ComponentOffsets.find(id);
+
+    if (findItr != archetype.ComponentOffsets.end())
+    {
+        // check the key if it's a sparse component or not
+        if (!IsThisComponentSparse(findItr->first))
+        {
+            RawByte* dataAddress{
+                &archetype.ComponentData[
+                    m_UpdateCountPerArchetype * archetype.SizeOfComponentsBlock
+                    + findItr->second // offsets
+                ]
+            };
+
+            return dataAddress;
+        }
+
+        // if it is Sparse component
+        // get the data from sparse section
+        auto& sparseManager{m_World->GetSparseComponentManager()};
+
+        return sparseManager.GetComponentData(
+            archetype.GameObjectIds[m_UpdateCountPerArchetype], id, componentSize);
+    }
+
+    std::string errMsg{"There is no component ID: " + std::to_string(id)};
+    throw std::out_of_range(errMsg);
+}

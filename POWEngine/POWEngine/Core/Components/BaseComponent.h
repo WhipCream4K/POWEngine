@@ -43,7 +43,7 @@ namespace powe
 
 
 	template <typename T>
-	ComponentTypeID BaseComponent::GetId()
+	constexpr ComponentTypeID BaseComponent::GetId()
 	{
 		static const ComponentTypeID counter{ m_ComponentIdCounter++ };
 		return counter;

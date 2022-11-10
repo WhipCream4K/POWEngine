@@ -18,10 +18,10 @@ DebugSteeringSystem::DebugSteeringSystem()
 void DebugSteeringSystem::OnCreate(powe::GameObjectID)
 {
     if(!m_DebugOpt)
-        m_DebugOpt = GetComponent<DebugSteeringComponent>();
+        m_DebugOpt = &GetComponent<DebugSteeringComponent>();
 
     if(!m_DrawBoundingBox)
-        m_DrawBoundingBox = GetComponent<SFML2DRectangle>();
+        m_DrawBoundingBox = &GetComponent<SFML2DRectangle>();
 }
 
 void DebugSteeringSystem::OnUpdate(float, powe::GameObjectID)

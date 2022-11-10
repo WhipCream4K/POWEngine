@@ -9,13 +9,11 @@
 #include "DebugSteeringSystem.h"
 #include "FleeSteeringSystem.h"
 #include "powengine.h"
-#include "ResetRenderObjectSystem.h"
 #include "UserComponents.h"
 #include "WanderingSteeringSystem.h"
 #include "POWEngine/Core/Components/Transform2D.h"
 #include "POWEngine/Random/Random.h"
 #include "POWEngine/Renderer/Components/Debug2D/SFML/SFML2DShapeComponent.h"
-#include "POWEngine/Core/Prefab/RenderAttach.h"
 
 using namespace powe;
 
@@ -90,14 +88,10 @@ TestScene::TestScene(powe::WorldEntity& world)
 
     AddGameObject(debugOpt);
 
-    world.RegisterSystem(PipelineLayer::InputValidation, std::make_shared<DebugSteeringSystem>());
-    // world.RegisterSystem(PipelineLayer::InputValidation,std::make_shared<AgentOptionsUpdate>(debugOpt));
-
-
-    // world.RegisterSystem(PipelineLayer::Update, std::make_shared<WanderingSteeringSystem>());
-    // world.RegisterSystem(PipelineLayer::Update, std::make_shared<FleeSteeringSystem>());
-    world.RegisterSystem(PipelineLayer::Update, std::make_shared<BlendedSteeringSystem>());
-
-    world.RegisterSystem(PipelineLayer::PostUpdate, std::make_shared<BoundAreaSystem>(debugOpt));
-    // world.RegisterSystem(PipelineLayer::PostUpdate,std::make_shared<ResetRenderObjectSystem>());
+    world.RegisterSystem(PipelineLayer::InputValidation, DebugSteeringSystem{});
+    world.RegisterSystem(PipelineLayer::InputValidation, AgentOptionsUpdate{debugOpt});
+    
+    world.RegisterSystem(PipelineLayer::Update,BlendedSteeringSystem{});
+    
+    world.RegisterSystem(PipelineLayer::PostUpdate, BoundAreaSystem{debugOpt});
 }

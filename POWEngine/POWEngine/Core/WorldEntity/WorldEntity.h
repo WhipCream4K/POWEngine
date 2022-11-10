@@ -29,8 +29,13 @@ namespace powe
 
 		InputSettings& GetInputSettings() { return  m_InputSettings; }
 
+		// void RegisterSystem(PipelineLayer layer, const SharedPtr<SystemBase>& system);
+
 		// Lock-free add system
-		void RegisterSystem(PipelineLayer layer, const SharedPtr<SystemBase>& system);
+		template<typename SystemType>
+		EnableIsBasedOf<SystemBase,SystemType,SharedPtr<SystemType>>
+		RegisterSystem(PipelineLayer layer,SystemType&& constructor);
+		
 		void RemoveSystem(const SharedPtr<SystemBase>& system);
 
 		// TODO: Maybe do a thread safe registering component
@@ -204,6 +209,16 @@ namespace powe
 		GameObjectID m_GameObjectCounter{};
 
 	};
+
+	template <typename SystemType>
+	EnableIsBasedOf<SystemBase, SystemType, SharedPtr<SystemType>> WorldEntity::RegisterSystem(PipelineLayer layer,
+		SystemType&& constructor)
+	{
+		SharedPtr<SystemType> system{std::make_shared<SystemType>(std::move(constructor))};
+		system->m_World = this;
+		m_PendingAddSystem.Push(SystemTrait{system, layer});
+		return system;
+	}
 
 	template <typename ComponentType>
 	EnableIsBasedOf<BaseComponent, ComponentType> WorldEntity::RegisterComponent()

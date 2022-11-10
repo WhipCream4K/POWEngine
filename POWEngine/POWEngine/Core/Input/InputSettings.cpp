@@ -18,23 +18,12 @@ void powe::InputSettings::ParseHWMessages(const HardwareMessages& hwMessages)
 
     for (int i = 0; i < hwMessages.totalMessages; ++i)
     {
-        // const HardwareData& hwBus{ hwMessages.hwMessages[i] };
         ProcessHWData(hwMessages, i);
     }
 }
 
 float powe::InputSettings::GetInputAxis(const std::string& axisName, uint8_t playerIndex) const
 {
-    //try
-    //{
-    //}
-    //catch (const std::exception& e)
-    //{
-    //	std::string log{ e.what() };
-    //	log.append(" Can't find given axis name, maybe you forgot to add it?");
-    //	POWLOGERROR(log);
-    //}
-
     assert(playerIndex < MAXPLAYER && "Player index isn't not in range of max player");
     const auto findItr{m_AxisKeyMappings.find(axisName)};
     if (findItr != m_AxisKeyMappings.end())
@@ -54,7 +43,7 @@ bool powe::InputSettings::GetInputAction(const std::string& actionName, InputEve
     {
         for (const auto& actionKey : findItr->second.keyPool)
         {
-            if (m_MainKeyPool[playerIndex].contains(actionKey))
+            if (m_MainKeyPool.at(playerIndex).contains(actionKey))
             {
                 const auto& keyState = m_MainKeyPool[playerIndex].at(actionKey);
                 const InputEvent thisFrameEvent = InputEvent(
@@ -335,7 +324,7 @@ void powe::InputSettings::UpdateMainKeyPool()
 
 InputEvent powe::InputSettings::EvaluateMainKeyPool(const KeyData& inKey)
 {
-    auto& mainKeyPool{m_MainKeyPool[inKey.playerIndex]};
+    auto& mainKeyPool{m_MainKeyPool.at(inKey.playerIndex)};
 
     InputEvent thisFrameEvent{InputEvent::IE_None};
 

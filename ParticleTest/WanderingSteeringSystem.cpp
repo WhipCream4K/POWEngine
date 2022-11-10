@@ -13,13 +13,6 @@ WanderingSteeringSystem::WanderingSteeringSystem()
     DefineSystemKeys<powe::Transform2D,VelocityComponent>();
 }
 
-void WanderingSteeringSystem::OnCreate(powe::GameObjectID id)
-{
-    m_AgentTransform[id] = GetComponent<Transform2D>();
-    m_Velocity[id] = GetComponent<VelocityComponent>();
-    // m_Wander[game_object_id] = GetComponent<WanderComponent>();
-}
-
 void WanderingSteeringSystem::OnUpdate(float, powe::GameObjectID id [[maybe_unused]])
 {
     const float halfJitter{m_MaxJitter / 2.0f};
@@ -27,6 +20,7 @@ void WanderingSteeringSystem::OnUpdate(float, powe::GameObjectID id [[maybe_unus
         Random::RandFloat(-halfJitter,halfJitter),
         Random::RandFloat(-halfJitter,halfJitter)
     };
+    
     
     const auto& [agentTransform,agentVelocity,wanderComp] =
         GetComponentsView<Transform2D,VelocityComponent,WanderComponent>();
@@ -38,14 +32,14 @@ void WanderingSteeringSystem::OnUpdate(float, powe::GameObjectID id [[maybe_unus
     
     
     // calculate travel target
-    const glm::fvec2 agentPos{agentTransform->GetPosition()};
-    const glm::fvec2 aimOffset{glm::normalize(agentVelocity->linearVelocity) * m_Offset};
+    const glm::fvec2 agentPos{agentTransform.GetPosition()};
+    const glm::fvec2 aimOffset{glm::normalize(agentVelocity.linearVelocity) * m_Offset};
     const glm::fvec2 target{agentPos + aimOffset + wanderTarget};
 
-    const glm::fvec2 desiredVel{glm::normalize( target - agentPos) * agentVelocity->maxVelocity};
+    const glm::fvec2 desiredVel{glm::normalize( target - agentPos) * agentVelocity.maxVelocity};
     const glm::fvec2 steering{desiredVel};
     
-    wanderComp->steeringForce = steering;
+    wanderComp.steeringForce = steering;
     
     // Apply force
     // agentVelocity->linearVelocity += steering * deltaTime;

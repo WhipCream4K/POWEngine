@@ -19,12 +19,6 @@ powe::WorldEntity::~WorldEntity()
     ClearArchetype();
 }
 
-void powe::WorldEntity::RegisterSystem(PipelineLayer layer, const SharedPtr<SystemBase>& system)
-{
-    system->SetWorld(this);
-    m_PendingAddSystem.Push(SystemTrait{system, layer});
-}
-
 void powe::WorldEntity::RemoveSystem(const SharedPtr<SystemBase>& system)
 {
     m_PendingDeleteSystem.Push(system);

@@ -24,7 +24,7 @@ void AgentOptionsUpdate::OnUpdate(float, powe::GameObjectID)
 {
     if(m_DebugSteering->isOptionsChanged)
     {
-        SFML2DCircle* agentDraw{GetComponent<SFML2DCircle>()};
-        agentDraw->SetSize({m_DebugSteering->agentSize,m_DebugSteering->agentSize});
+        SFML2DCircle& agentDraw{GetComponent<SFML2DCircle>()};
+        agentDraw.SetSize({m_DebugSteering->agentSize,m_DebugSteering->agentSize});
     }
 }

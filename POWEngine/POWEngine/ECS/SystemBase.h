@@ -16,17 +16,18 @@ namespace powe
         friend class WorldEntity;
         
     public:
-        SystemBase();
         
+        SystemBase();
         SystemBase(const SystemBase&) = delete;
         SystemBase& operator=(const SystemBase&) = delete;
-        SystemBase(SystemBase&&) noexcept = delete;
-        SystemBase& operator=(SystemBase&&) noexcept = delete;
+        SystemBase(SystemBase&&) noexcept = default;
+        SystemBase& operator=(SystemBase&&) noexcept = default;
         virtual ~SystemBase() = default;
 
-    protected:
         WorldEntity* GetWorld() const { return m_World; }
 
+    protected:
+        
         void InternalUpdate(const Archetype&, float);
         void InternalCreate(const Archetype&);
         void InternalDestroy(const Archetype&);
@@ -39,24 +40,26 @@ namespace powe
 
         // Specialize GetComponent from iteration
         template <typename ComponentType>
-        EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> GetComponent() const;
+        EnableIsBasedOf<BaseComponent, ComponentType, ComponentType&> GetComponent() const;
 
         // Specialize GetComponent from iteration
-        template <typename ...Args>
-        std::tuple<std::add_pointer_t<Args>...> GetComponentsView() const;
+        // template <typename ...Args>
+        // std::tuple<std::add_pointer_t<Args>...> GetComponentsView() const;
 
-        template<typename T>
-        T* GetComponentByID(ComponentTypeID id) const;
+        template<typename ...Args>
+        std::tuple<std::add_lvalue_reference_t<Args>...> GetComponentsView() const;
+        
+        RawByte* GetComponentAddress(ComponentTypeID id,SizeType componentSize) const;
     
-
     private:
-        void SetWorld(WorldEntity* world);
-
-        template <typename T>
-        T* GetComponent(const Archetype& archetype) const;
-
+        
         template<typename T>
-        T* InternGetComponentByID(const Archetype& archetype,ComponentTypeID id) const;
+        T& GetComponent(const Archetype& archetype) const;
+
+        RawByte* GetComponentAddressByID(const Archetype& archetype,ComponentTypeID id,SizeType componentSize) const;
+        
+        // template<typename T>
+        // T* InternGetComponentByID(const Archetype& archetype,ComponentTypeID id) const;
 
         WorldEntity* m_World;
         
@@ -67,28 +70,32 @@ namespace powe
     };
 
     template <typename ComponentType>
-    EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> SystemBase::GetComponent() const
+    EnableIsBasedOf<BaseComponent, ComponentType, ComponentType&> SystemBase::GetComponent() const
     {
         return GetComponent<ComponentType>(*m_CurrentArchetype);
     }
 
     template <typename ... Args>
-    std::tuple<std::add_pointer_t<Args>...> SystemBase::GetComponentsView() const
+    std::tuple<std::add_lvalue_reference_t<Args>...> SystemBase::GetComponentsView() const
     {
-        return std::make_tuple(GetComponent<Args>(*m_CurrentArchetype)...);
+        return std::make_tuple(std::ref(GetComponent<Args>(*m_CurrentArchetype))...);
     }
 
-    template <typename T>
-    T* SystemBase::GetComponentByID(ComponentTypeID id) const
-    {
-        return InternGetComponentByID<T>(*m_CurrentArchetype,id);
-    }
+    // template <typename ... Args>
+    // std::tuple<std::add_pointer_t<Args>...> SystemBase::GetComponentsView() const
+    // {
+    //     return std::make_tuple(GetComponent<Args>(*m_CurrentArchetype)...);
+    // }
+
+    // template <typename T>
+    // T& SystemBase::GetComponentByID(ComponentTypeID id) const
+    // {
+    //     return InternGetComponentByID<T>(*m_CurrentArchetype,id);
+    // }
 
     template <typename T>
-    T* SystemBase::GetComponent(const Archetype& archetype) const
+    T& SystemBase::GetComponent(const Archetype& archetype) const
     {
-        //try
-        //{
         const ComponentTypeID compID{BaseComponent::GetId<T>()};
 
         const auto findItr = archetype.ComponentOffsets.find(compID);
@@ -105,7 +112,7 @@ namespace powe
                     ]
                 };
                 
-                return reinterpret_cast<T*>(dataAddress);
+                return *reinterpret_cast<T*>(dataAddress);
             }
 
             // if it is Sparse component
@@ -120,53 +127,44 @@ namespace powe
             };
 
 
-            return reinterpret_cast<T*>(realCompData);
-        }
-
-        throw std::out_of_range(typeid(T).name());
-
-        //}
-        //catch (const std::exception&)
-        //{
-        //	std::string errMsg{};
-        //	errMsg.append("component name: ");
-        //	errMsg.append(typeid(T).name());
-        //	throw std::out_of_range(errMsg); // throws to update loop
-        //}
-    }
-
-    template <typename T>
-    T* SystemBase::InternGetComponentByID(const Archetype& archetype, ComponentTypeID id) const
-    {
-        const auto findItr = archetype.ComponentOffsets.find(id);
-
-        if (findItr != archetype.ComponentOffsets.end())
-        {
-            // check the key if it's a sparse component or not
-            if (!IsThisComponentSparse(findItr->first))
-            {
-                RawByte* dataAddress{
-                    &archetype.ComponentData[
-                        m_UpdateCountPerArchetype * archetype.SizeOfComponentsBlock
-                        + findItr->second // offsets
-                    ]
-                };
-                
-                return reinterpret_cast<T*>(dataAddress);
-            }
-
-            // if it is Sparse component
-            // get the data from sparse section
-            auto& sparseManager{m_World->GetSparseComponentManager()};
-            
-            RawByte* realCompData{
-                sparseManager.GetComponentData<T>(
-                    archetype.GameObjectIds[m_UpdateCountPerArchetype], id)
-            };
-            
-            return reinterpret_cast<T*>(realCompData);
+            return *reinterpret_cast<T*>(realCompData);
         }
 
         throw std::out_of_range(typeid(T).name());
     }
+
+    // template <typename T>
+    // T* SystemBase::InternGetComponentByID(const Archetype& archetype, ComponentTypeID id) const
+    // {
+    //     const auto findItr = archetype.ComponentOffsets.find(id);
+    //
+    //     if (findItr != archetype.ComponentOffsets.end())
+    //     {
+    //         // check the key if it's a sparse component or not
+    //         if (!IsThisComponentSparse(findItr->first))
+    //         {
+    //             RawByte* dataAddress{
+    //                 &archetype.ComponentData[
+    //                     m_UpdateCountPerArchetype * archetype.SizeOfComponentsBlock
+    //                     + findItr->second // offsets
+    //                 ]
+    //             };
+    //             
+    //             return reinterpret_cast<T*>(dataAddress);
+    //         }
+    //
+    //         // if it is Sparse component
+    //         // get the data from sparse section
+    //         auto& sparseManager{m_World->GetSparseComponentManager()};
+    //         
+    //         RawByte* realCompData{
+    //             sparseManager.GetComponentData<T>(
+    //                 archetype.GameObjectIds[m_UpdateCountPerArchetype], id)
+    //         };
+    //         
+    //         return reinterpret_cast<T*>(realCompData);
+    //     }
+    //
+    //     throw std::out_of_range(typeid(T).name());
+    // }
 }

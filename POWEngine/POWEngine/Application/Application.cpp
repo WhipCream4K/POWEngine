@@ -33,7 +33,7 @@ void powe::Application::Run()
     while (!m_EngineCore->TranslateWindowInputs(m_MainWindow,m_WorldEntity))
     {
         m_EngineCore->Step(*m_WorldEntity);
-        m_EngineCore->Draw(m_MainWindow,m_WorldEntity);
+        m_EngineCore->Draw(*m_MainWindow,*m_WorldEntity);
     }
     
 }

@@ -19,24 +19,24 @@ void FleeSteeringSystem::OnUpdate(float, powe::GameObjectID)
     const glm::fvec2 mousePos{GetWorld()->GetInputSettings().GetMouseEngineAxisData()};
 
     // using mouse as flee target
-    const auto& agentPos{transform->GetPosition()};
+    const auto& agentPos{transform.GetPosition()};
     const glm::fvec2 targetVec{mousePos - agentPos};
 
     const float distToTarget{glm::length(targetVec)};
     
-    const float dynamicFactor{distToTarget / velocity->maxVelocity};
-    const glm::fvec2 futurePos{mousePos + velocity->linearVelocity * dynamicFactor};
+    const float dynamicFactor{distToTarget / velocity.maxVelocity};
+    const glm::fvec2 futurePos{mousePos + velocity.linearVelocity * dynamicFactor};
 
     glm::fvec2 steering{};
     if (glm::distance2(futurePos, agentPos) <= m_EvadeTolerance * m_EvadeTolerance)
     {
         steering =
-            (glm::normalize(agentPos - futurePos) * velocity->maxVelocity);
+            (glm::normalize(agentPos - futurePos) * velocity.maxVelocity);
     }
     else if (distToTarget <= m_FleeTolerance)
     {
-        steering = (glm::normalize(agentPos - mousePos) * velocity->maxVelocity) * fleeComp->fleePower;
+        steering = (glm::normalize(agentPos - mousePos) * velocity.maxVelocity) * fleeComp.fleePower;
     }
 
-    fleeComp->steeringForce = steering;
+    fleeComp.steeringForce = steering;
 }

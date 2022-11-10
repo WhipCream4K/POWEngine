@@ -29,9 +29,9 @@ void BoundAreaSystem::OnCreate(powe::GameObjectID)
 
 void BoundAreaSystem::OnUpdate(float, powe::GameObjectID)
 {
-    Transform2D* transform{GetComponent<Transform2D>()};
+    Transform2D& transform{GetComponent<Transform2D>()};
     
-    auto position{transform->GetPosition()};
+    auto position{transform.GetPosition()};
     
     // bound horizontal
     const float left{m_DebugSteeringOpt->boundArea.x - m_DebugSteeringOpt->boundArea.z * 0.5f};
@@ -57,5 +57,5 @@ void BoundAreaSystem::OnUpdate(float, powe::GameObjectID)
         position.y = down;
     }
     
-    transform->SetWorldPosition(position);
+    transform.SetWorldPosition(position);
 }

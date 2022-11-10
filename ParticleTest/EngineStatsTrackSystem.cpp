@@ -15,18 +15,18 @@ void EngineStatsTrackSystem::OnUpdate(float deltaTime, powe::GameObjectID)
 {
     auto engineStats = GetComponent<EngineStatsComponent>();
     
-    ++engineStats->fpsCounter;
-    engineStats->fpsTimeStamp += deltaTime;
+    ++engineStats.fpsCounter;
+    engineStats.fpsTimeStamp += deltaTime;
     
-    if(engineStats->fpsTimeStamp > 1.0f)
+    if(engineStats.fpsTimeStamp > 1.0f)
     {
-        engineStats->fpsTimeStamp -= 1.0f;
-        engineStats->fps = engineStats->fpsCounter;
-        engineStats->fpsCounter = 0;
+        engineStats.fpsTimeStamp -= 1.0f;
+        engineStats.fps = engineStats.fpsCounter;
+        engineStats.fpsCounter = 0;
     }
     
     ImGui::Begin("EngineStats");
-    ImGui::DragInt("FPS",&engineStats->fps);
+    ImGui::DragInt("FPS",&engineStats.fps);
     ImGui::DragFloat("DeltaTime",&deltaTime);
     ImGui::End();
 }

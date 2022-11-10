@@ -43,19 +43,19 @@ void powe::Transform2D::OnDestroy(WorldEntity&, GameObjectID)
 void powe::Transform2D::SetWorldPosition(const glm::vec2& position)
 {
 	m_WorldPosition = position;
-	SetChildrenDirtyFlag(DirtyFlag::Position);
+	// SetChildrenDirtyFlag(DirtyFlag::Position);
 }
 
 void powe::Transform2D::SetWorldScale(const glm::vec2& scales)
 {
 	m_WorldScales = scales;
-	SetChildrenDirtyFlag(DirtyFlag::Scale);
+	// SetChildrenDirtyFlag(DirtyFlag::Scale);
 }
 
 void powe::Transform2D::SetWorldRotation(float zRotation)
 {
 	m_WorldZRotation = zRotation;
-	SetChildrenDirtyFlag(DirtyFlag::Rotation);
+	// SetChildrenDirtyFlag(DirtyFlag::Rotation);
 }
 
 void powe::Transform2D::SetLocalPosition(const glm::vec2& position)

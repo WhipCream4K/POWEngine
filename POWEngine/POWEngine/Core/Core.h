@@ -39,9 +39,9 @@ namespace powe
 		const SharedPtr<WorldClock>& GetWorldClock() const { return m_WorldClock; }
 		const SharedPtr<Renderer>& GetRenderer() const { return m_MainRenderer; }
 
-		void Draw(
-			const SharedPtr<Window>& window,
-			const SharedPtr<WorldEntity>& worldEntt) const;
+		// void Draw(
+		// 	const SharedPtr<Window>& window,
+		// 	const SharedPtr<WorldEntity>& worldEntt) const;
 
 		void Draw(const Window& window, const WorldEntity& worldEntt) const;
 
