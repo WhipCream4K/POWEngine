@@ -29,8 +29,8 @@ namespace powe
 
 		InputSettings& GetInputSettings() { return  m_InputSettings; }
 
-		// void RegisterSystem(PipelineLayer layer, const SharedPtr<SystemBase>& system);
-
+		SimpleThreadPool* GetThreadPool() const {return m_SimpleThreadPool.get();}
+		
 		// Lock-free add system
 		template<typename SystemType>
 		EnableIsBasedOf<SystemBase,SystemType,SharedPtr<SystemType>>
@@ -45,9 +45,10 @@ namespace powe
 		void RegisterGameObject(GameObjectID id);
 
 		GameObjectID GetNewEntityID();
-
 		GameObjectID CreateNewEntity();
 
+		bool IsGameObjectExist(GameObjectID id) const;
+ 
 		template<typename ComponentType>
 		EnableIsBasedOf<BaseComponent, ComponentType, ComponentType*> AddComponentToGameObject(
 			GameObjectID id,
@@ -70,6 +71,7 @@ namespace powe
 		// -------- Pipeline -------------
 		// -------------------------------
 		void UpdatePipeline(PipelineLayer layer, float deltaTime);
+		// void UpdateAsyncPipeline(std::vector<std::future<void>>& futureUpdateSystem,float deltaTime);
 		void ResolveEntities();
 
 		template<typename ComponentType>
@@ -109,13 +111,14 @@ namespace powe
 		void InternalRemoveGameObjectFromPipeline();
 		void InternalRemoveComponentFromGameObject();
 		void ClearArchetype();
+
+		// TODO: This could be done in garbage collection
 		void ClearEmptyArchetype();
 
 #endif
 
 	private:
-
-
+		
 		void RemoveComponentByID(GameObjectID id, ComponentTypeID componentID);
 
 		SharedPtr<Archetype> GetArchetypeFromActiveList(const std::string& key) const;
@@ -158,6 +161,8 @@ namespace powe
 		// it makes sense that it would live on the stack with WorldEntity
 		InputSettings m_InputSettings;
 
+
+		// TODO: maybe made this a service?
 		OwnedPtr<SimpleThreadPool> m_SimpleThreadPool;
 
 		// ========== ECS ================
@@ -215,7 +220,6 @@ namespace powe
 		SystemType&& constructor)
 	{
 		SharedPtr<SystemType> system{std::make_shared<SystemType>(std::move(constructor))};
-		system->m_World = this;
 		m_PendingAddSystem.Push(SystemTrait{system, layer});
 		return system;
 	}
@@ -268,7 +272,7 @@ namespace powe
 
 		// Initialize data
 		ComponentType* outPointer{ new (componentData.get())
-			ComponentType(std::forward<ComponentType>(component)) };
+			ComponentType(std::move(component)) };
 
 		AddPreArchetype(id, componentId, componentData);
 

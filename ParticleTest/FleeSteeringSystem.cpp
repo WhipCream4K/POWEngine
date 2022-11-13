@@ -16,7 +16,7 @@ void FleeSteeringSystem::OnUpdate(float, powe::GameObjectID)
     const auto& [transform,velocity,fleeComp] =
         GetComponentsView<Transform2D, VelocityComponent, FleeComponent>();
 
-    const glm::fvec2 mousePos{GetWorld()->GetInputSettings().GetMouseEngineAxisData()};
+    const glm::fvec2 mousePos{GetWorld().GetInputSettings().GetMouseEnginePos()};
 
     // using mouse as flee target
     const auto& agentPos{transform.GetPosition()};

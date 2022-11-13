@@ -55,7 +55,7 @@ namespace powe
 		const KeyPool& GetCurrentKeyState(uint8_t playerIndex) const { return m_MainKeyPool[playerIndex]; }
 		const SysKeyType GetThisFrameSysKey() const { return m_CurrentFrameSystemKey; }
 
-		const glm::fvec2& GetMouseEngineAxisData() const {return m_MouseAxisData;}
+		const glm::fvec2& GetMouseEnginePos() const {return m_MouseAxisData;}
 
 		void SetAssignFirstControllerToNextPlayer(bool state);
 

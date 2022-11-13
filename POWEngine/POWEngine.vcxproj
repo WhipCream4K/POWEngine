@@ -193,6 +193,7 @@
     <ClInclude Include="POWEngine\Application\EngineProps.h" />
     <ClInclude Include="POWEngine\Core\Components\BaseComponent.h" />
     <ClInclude Include="POWEngine\ECS\SystemKeys.h" />
+    <ClInclude Include="POWEngine\ECS\ThreadExecute.h" />
     <ClInclude Include="POWEngine\JSON\json.hpp" />
     <ClInclude Include="POWEngine\JSON\JSONParser.h" />
     <ClInclude Include="POWEngine\Renderer\2D\Render2DProps.h" />
@@ -212,7 +213,6 @@
     <ClInclude Include="POWEngine\Core\Input\InputMapping.h" />
     <ClInclude Include="POWEngine\Core\Input\InputVars.h" />
     <ClInclude Include="POWEngine\Renderer\Components\Sprite\SFML\SFMLSpriteComponent.h" />
-    <ClInclude Include="POWEngine\Renderer\System\SFML\SFML2DShapeRenderSystem.h" />
     <ClInclude Include="POWEngine\Renderer\System\SFML\SFMLDefaultRenderSystem.h" />
     <ClInclude Include="POWEngine\Singleton\InstanceUtils.h" />
     <ClInclude Include="POWEngine\Sound\FMOD\AudioClip.h" />
@@ -277,14 +277,11 @@
     <ClInclude Include="POWEngine\Renderer\System\RenderSystemBase.h" />
     <ClInclude Include="POWEngine\Renderer\RenderAPI.h" />
     <ClInclude Include="POWEngine\ECS\SystemUtils.h" />
-    <ClInclude Include="POWEngine\Renderer\System\SFML\SFML2DRenderSystem.h" />
     <ClInclude Include="POWEngine\Singleton\ThreadSafeSingleton.h" />
     <ClInclude Include="POWEngine\Renderer\Components\Text\TextComponent.h" />
     <ClInclude Include="POWEngine\Renderer\Components\Text\SFML\SFMLText.h" />
     <ClInclude Include="POWEngine\Renderer\Components\Text\TextImpl.h" />
     <ClInclude Include="POWEngine\Renderer\Resources\Font\SFML\SFMLFont.h" />
-    <ClInclude Include="POWEngine\Renderer\System\SFML\SFMLTextRender.h" />
-    <ClInclude Include="POWEngine\Renderer\System\SFML\SFML2DBoundingBoxRender.h" />
     <ClInclude Include="POWEngine\Renderer\Components\Debug2D\DebugRectangle.h" />
     <ClInclude Include="POWEngine\Renderer\Components\Debug2D\SFML\SFMLDebugRectangle.h" />
     <ClInclude Include="POWEngine\Renderer\Components\Debug2D\RectangleImpl.h" />
@@ -295,6 +292,7 @@
     <ClCompile Include="POWEngine\Application\EngineProps.cpp" />
     <ClCompile Include="POWEngine\ECS\ECSUtils.cpp" />
     <ClCompile Include="POWEngine\ECS\SystemKeys.cpp" />
+    <ClCompile Include="POWEngine\ECS\ThreadExecute.cpp" />
     <ClCompile Include="POWEngine\Math\Math.cpp" />
     <ClCompile Include="POWEngine\Renderer\2D\Render2DProps.cpp" />
     <ClCompile Include="POWEngine\Renderer\Components\Debug2D\DebugRectangle.cpp" />
@@ -308,7 +306,6 @@
     <ClCompile Include="POWEngine\Core\Components\InputComponent.cpp" />
     <ClCompile Include="POWEngine\Core\Components\AudioComponent.cpp" />
     <ClCompile Include="POWEngine\Core\Input\InputMapping.cpp" />
-    <ClCompile Include="POWEngine\Renderer\System\SFML\SFML2DShapeRenderSystem.cpp" />
     <ClCompile Include="POWEngine\Renderer\System\SFML\SFMLDefaultRenderSystem.cpp" />
     <ClCompile Include="POWEngine\Sound\FMOD\AudioClip.cpp" />
     <ClCompile Include="POWEngine\Sound\FMOD\Channel.cpp" />
@@ -357,14 +354,11 @@
     <ClCompile Include="POWEngine\Renderer\Components\Sprite\SpriteImpl.cpp" />
     <ClCompile Include="POWEngine\Renderer\System\RenderSystemBase.cpp" />
     <ClCompile Include="POWEngine\Renderer\RenderAPI.cpp" />
-    <ClCompile Include="POWEngine\Renderer\System\SFML\SFML2DRenderSystem.cpp" />
     <ClCompile Include="POWEngine\Singleton\ThreadSafeSingleton.cpp" />
     <ClCompile Include="POWEngine\Renderer\Components\Text\TextComponent.cpp" />
     <ClCompile Include="POWEngine\Renderer\Components\Text\SFML\SFMLText.cpp" />
     <ClCompile Include="POWEngine\Renderer\Components\Text\TextImpl.cpp" />
     <ClCompile Include="POWEngine\Renderer\Resources\Font\SFML\SFMLFont.cpp" />
-    <ClCompile Include="POWEngine\Renderer\System\SFML\SFMLTextRender.cpp" />
-    <ClCompile Include="POWEngine\Renderer\System\SFML\SFML2DBoundingBoxRender.cpp" />
     <ClCompile Include="POWEngine\Renderer\Components\Debug2D\SFML\SFMLDebugRectangle.cpp" />
     <ClCompile Include="POWEngine\Renderer\Components\Debug2D\RectangleImpl.cpp" />
     <ClCompile Include="POWEngine\Random\Random.cpp" />

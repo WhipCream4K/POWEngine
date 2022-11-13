@@ -21,7 +21,6 @@ void WanderingSteeringSystem::OnUpdate(float, powe::GameObjectID id [[maybe_unus
         Random::RandFloat(-halfJitter,halfJitter)
     };
     
-    
     const auto& [agentTransform,agentVelocity,wanderComp] =
         GetComponentsView<Transform2D,VelocityComponent,WanderComponent>();
     
@@ -29,7 +28,6 @@ void WanderingSteeringSystem::OnUpdate(float, powe::GameObjectID id [[maybe_unus
 
     // const auto& agentTransform{GetComponent<Transform2D>()};
     // const auto& agentVelocity{GetComponent<VelocityComponent>()};
-    
     
     // calculate travel target
     const glm::fvec2 agentPos{agentTransform.GetPosition()};

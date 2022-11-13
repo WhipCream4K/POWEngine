@@ -29,3 +29,8 @@ powe::GameObject::~GameObject()
 {
 	m_World.RemoveGameObject(m_Id);
 }
+
+bool powe::GameObject::IsValid() const
+{
+	return m_World.IsGameObjectExist(m_Id);
+}

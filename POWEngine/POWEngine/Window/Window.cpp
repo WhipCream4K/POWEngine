@@ -6,6 +6,8 @@
 #if USE_SFML_WINDOW
 #include "SFML/SFMLWindow.h"
 using WindowType = powe::SFMLWindow;
+#else
+using WindowType = void*;
 #endif
 
 powe::Window::Window(uint32_t width, uint32_t height, const std::string& title, const OtherWindowParams& others)
@@ -26,11 +28,6 @@ powe::Window::Window(uint32_t width, uint32_t height, const std::string& title, 
 		POWLOGINFO(log);
 	}
 }
-
-// const powe::HardwareMessages& powe::Window::PollHardwareMessages(bool& shouldEarlyExit, bool& shouldIgnoreInputs) const
-// {
-// 	return m_WindowImpl->PollHardwareMessages(shouldEarlyExit, shouldIgnoreInputs);
-// }
 
 void powe::Window::PollHardwareMessages(HardwareMessages& hwMessages, bool& shouldEarlyExit,
 	bool& shouldIgnoreInputs) const

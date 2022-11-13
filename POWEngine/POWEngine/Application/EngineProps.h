@@ -18,7 +18,7 @@ namespace powe
     struct EngineProps
     {
         WindowProps winProps{};
-        SharedPtr<Renderer> renderer{}; 
+        Renderer* renderer{}; 
     };
     
 }

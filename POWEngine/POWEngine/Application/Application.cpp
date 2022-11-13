@@ -13,7 +13,7 @@ void powe::Application::Run()
     m_EngineCore = std::make_unique<Core>();
     
     EngineProps engineProps{};
-    engineProps.renderer = m_EngineCore->GetRenderer();
+    engineProps.renderer = &m_EngineCore->GetRenderer();
     
     OnEngineSetUp(engineProps);
     
@@ -30,8 +30,9 @@ void powe::Application::Run()
 
     m_EngineCore->StartWorldClock();
     
-    while (!m_EngineCore->TranslateWindowInputs(m_MainWindow,m_WorldEntity))
+    while (!m_EngineCore->TranslateWindowInputs(*m_MainWindow,*m_WorldEntity))
     {
+        // OnPreStep(*m_WorldEntity);
         m_EngineCore->Step(*m_WorldEntity);
         m_EngineCore->Draw(*m_MainWindow,*m_WorldEntity);
     }

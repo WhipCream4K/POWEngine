@@ -1,21 +1,48 @@
-﻿#include "pch.h"
-#include "SFMLDefaultRenderSystem.h"
+﻿#include "SFMLThreadRenderSystem.h"
 
+#include "UserComponents.h"
 #include <SFML/Graphics.hpp>
 #include "POWEngine/Core/Components/Transform2D.h"
-#include "POWEngine/Renderer/Components/Debug2D/SFML/SFML2DShapeComponent.h"
 #include "POWEngine/Renderer/Components/SFML/SFMLDrawComponent.h"
 #include "POWEngine/Window/Window.h"
+#include <future>
 
-powe::SFMLDefaultRenderSystem::SFMLDefaultRenderSystem()
+using namespace powe;
+
+SFMLThreadRenderSystem::SFMLThreadRenderSystem()
 {
-    DefineSystemKeys<Transform2D,SFMLDrawComponent>();
+    DefineSystemKeys<Transform2D,SFMLDrawComponent,AsyncRender>();
 }
 
-void powe::SFMLDefaultRenderSystem::OnDraw(const SFML2DRenderer& renderer, const Window& renderWindow, GameObjectID)
+void SFMLThreadRenderSystem::OnDraw(const powe::SFML2DRenderer& renderer, const powe::Window& renderWindow,
+    powe::GameObjectID)
 {
+    auto& asyncRender{GetComponent<AsyncRender>()};
+
+    bool isUpdateFinished{};
+    glm::fvec2 newPosition{};
+    
+    {
+        std::scoped_lock taskLock{asyncRender.taskLock};
+        if(asyncRender.transformUpdate.valid())
+        {
+            if(asyncRender.transformUpdate.wait_for(std::chrono::milliseconds(1))
+                == std::future_status::ready)
+            {
+                isUpdateFinished = true;
+                newPosition = asyncRender.transformUpdate.get();
+            }
+        }
+    }
+    
+    
     const auto& [transform2D, sfmlDraw] = 
     GetComponentsView<Transform2D, SFMLDrawComponent>();
+
+    if(isUpdateFinished)
+    {
+        transform2D.SetWorldPosition(newPosition);
+    }
 
     const glm::fvec2 halfWindowDim{
         float(renderWindow.GetWidth()) * 0.5f,
@@ -39,5 +66,3 @@ void powe::SFMLDefaultRenderSystem::OnDraw(const SFML2DRenderer& renderer, const
     
     renderer.SubmitDrawSprite(derivedDraw.GetDrawable(), renderStates, sfmlDraw.drawOrder);
 }
-
-

@@ -1,10 +1,6 @@
 ﻿#pragma once
 
-#include "POWEngine/Math/Math.h"
-
-#include "poweSystem.h"
-#include "UserComponents.h"
-// #include "POWEngine/Core/Components/Transform2D.h"
+#include "POWEngine/ECS/SystemBase.h"
 
 namespace powe
 {

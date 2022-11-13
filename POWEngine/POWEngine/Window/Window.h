@@ -8,7 +8,7 @@ namespace powe
 {
 	struct HardwareMessages;
 	class WindowImpl;
-	class Window final
+	class Window
 	{
 	public:
 
@@ -33,7 +33,11 @@ namespace powe
 		template<typename T>
 		T* GetWindowInstance() const;
 
-		~Window();
+		Window(const Window&) = delete;
+		Window& operator=(const Window&) = delete;
+		Window(Window&&) = default;
+		Window& operator=(Window&&) = default;
+		virtual ~Window();
 
 	protected:
 

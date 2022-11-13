@@ -34,19 +34,6 @@ void powe::Renderer::RemoveSystem(const SharedPtr<RenderSystemBase>& system)
     }
 }
 
-void powe::Renderer::UpdateSystem(const WorldEntity& ,
-                                  const std::unordered_map<std::string, SharedPtr<Archetype>>& ) const
-{
-    // for (const auto& system : m_RenderSystems)
-    // {
-    //     for (const auto& archetype : archetypePool | std::views::values) // since c++20
-    //     {
-    //         if (IsDigitExistInNumber(archetype->ComponentOffsets, system->GetKeys()))
-    //             system->InternalDraw(worldEntity, *archetype, *m_RenderAPI);
-    //     }
-    // }
-}
-
 void powe::Renderer::UpdateSystem(const WorldEntity& worldEntity, const Window& renderWindow,
     const std::unordered_map<std::string, SharedPtr<Archetype>>& archetypePool) const
 {

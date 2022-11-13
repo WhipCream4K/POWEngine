@@ -5,7 +5,8 @@
 #include "POWEngine/ECS/SystemBase.h"
 
 powe::WorldEntity::WorldEntity()
-    : m_SparseComponentManager(*this)
+    : m_SimpleThreadPool(std::make_unique<SimpleThreadPool>())
+    , m_SparseComponentManager(*this)
 {
 }
 
@@ -34,6 +35,11 @@ powe::GameObjectID powe::WorldEntity::CreateNewEntity()
     const GameObjectID newID{GetNewEntityID()};
     RegisterGameObject(newID);
     return newID;
+}
+
+bool powe::WorldEntity::IsGameObjectExist(GameObjectID id) const
+{
+    return m_GameObjectRecords.contains(id);
 }
 
 void powe::WorldEntity::RemoveComponentByID(GameObjectID id, ComponentTypeID componentID)
@@ -96,7 +102,7 @@ void powe::WorldEntity::UpdatePipeline(PipelineLayer layer, float deltaTime)
             if (!archetype->GameObjectIds.empty())
             {
                 if (IsDigitExistInNumber(archetype->ComponentOffsets, system->GetKeys()))
-                    system->InternalUpdate(*archetype, deltaTime);
+                    system->InternalUpdate(archetype.get(), deltaTime);
             }
         }
     }
@@ -296,7 +302,7 @@ void powe::WorldEntity::InternalRemoveComponentFromGameObject()
         // 3. Destroy the component and move over all the data after this gameobject
         {
             DestroyAllComponentDataInGameObject(*oldArchetype,
-                gbRecords.IndexInArchetype, gameObjectID, componentIDs,false);
+                gbRecords.IndexInArchetype, gameObjectID, componentIDs);
 
             oldArchetype->BuryBlock(*this, gbRecords.IndexInArchetype);
         }
@@ -647,7 +653,7 @@ void powe::WorldEntity::InternalAddSystemToPipeline()
                 if (!archetype->GameObjectIds.empty())
                 {
                     if (IsDigitExistInNumber(archetype->ComponentOffsets, system->GetKeys()))
-                        system->InternalCreate(*archetype);
+                        system->InternalCreate(this,*archetype);
                 }
             }
 

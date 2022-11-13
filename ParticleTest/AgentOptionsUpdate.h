@@ -13,7 +13,7 @@ class AgentOptionsUpdate : public powe::SystemBase
 public:
     AgentOptionsUpdate(const SharedPtr<powe::GameObject>& debugObject);
 protected:
-    void OnCreate(powe::GameObjectID) override;
+    void OnPreCreate() override;
     void OnUpdate(float, powe::GameObjectID) override;
 private:
 

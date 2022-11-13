@@ -8,11 +8,11 @@ namespace powe
     class SFML2DRectangle;
 }
 
-class DebugSteeringSystem : public powe::SystemBase
+class SceneControlSystem : public powe::SystemBase
 {
 public:
     
-    DebugSteeringSystem();
+    SceneControlSystem();
     
 protected:
 
@@ -23,4 +23,7 @@ private:
 
     powe::SFML2DRectangle* m_DrawBoundingBox{};
     DebugSteeringComponent* m_DebugOpt{};
+    SceneComponent* m_SceneComponent{};
+    std::vector<powe::GameObjectID> m_StandByGameObjects{};
+    int m_ActiveAgents{};
 };

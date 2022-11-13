@@ -1,4 +1,6 @@
 #pragma once
+#include <future>
+
 #include "POWEngine/Window/WindowContext.h"
 //#include "POWEngine/Rendering/Renderer.h"
 
@@ -18,9 +20,9 @@ namespace powe
 
 		Core();
 
-		bool TranslateWindowInputs(
-			const SharedPtr<Window>& window,
-			const SharedPtr<WorldEntity>& worldEntt) const;
+		// bool TranslateWindowInputs(
+		// 	const SharedPtr<Window>& window,
+		// 	const SharedPtr<WorldEntity>& worldEntt) const;
 
 		bool TranslateWindowInputs(
 			const Window& window,
@@ -30,14 +32,14 @@ namespace powe
 		/**
 		 * \brief Call this function before entering the core loop to prevent a big deltaTime in the first frame
 		 */
-		void StartWorldClock();
+		void StartWorldClock() const;
 
 
 		//void Step(const SharedPtr<WorldEntity>& worldEntt);
-		void Step(WorldEntity& worldEntity) const;
+		void Step(WorldEntity& worldEntity);
 
-		const SharedPtr<WorldClock>& GetWorldClock() const { return m_WorldClock; }
-		const SharedPtr<Renderer>& GetRenderer() const { return m_MainRenderer; }
+		WorldClock& GetWorldClock() const { return *m_WorldClock; }
+		Renderer& GetRenderer() const { return *m_MainRenderer; }
 
 		// void Draw(
 		// 	const SharedPtr<Window>& window,
@@ -51,9 +53,8 @@ namespace powe
 
 		Core(const Core&) = delete;
 		Core& operator=(const Core&) = delete;
-
-		//Core(Core&&) = delete;
-		//Core& operator=(Core&&) = delete;
+		Core(Core&&) = default;
+		Core& operator=(Core&&) = default;
 
 	private:
 
@@ -63,9 +64,11 @@ namespace powe
 		 */
 		 //OwnedPtr<CoreImpl> m_CoreImpl;
 
-		SharedPtr<WorldClock> m_WorldClock;
-		SharedPtr<Renderer> m_MainRenderer;
+		OwnedPtr<WorldClock> m_WorldClock;
+		OwnedPtr<Renderer> m_MainRenderer;
 		OwnedPtr<InputManager> m_InputManager{};
+
+		// std::vector<std::future<void>> m_AsyncUpdateSystems{};
 	};
 }
 

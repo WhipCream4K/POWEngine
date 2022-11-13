@@ -2,7 +2,7 @@
 
 #include "POWEngine/Services/ServiceLocator.h"
 
-#if defined(_DEBUG) || defined(RELEASE_WITH_LOGINFO)
+#if defined(RELEASE_WITH_LOGINFO)
 
 #define POWLOGNORMAL(MSG)	powe::ServiceLocator::GetLogger().LogInfoMessage(MSG)
 #define POWLOGINFO(MSG)		powe::ServiceLocator::GetLogger().LogInfoMessage(MSG,"at " __FUNCTION__)
@@ -11,9 +11,9 @@
 
 #else
 
-#define POWLOGNORMAL(MSG)	
-#define POWLOGINFO(MSG)
-#define POWLOGERROR(MSG)
-#define POWLOGWARNING(MSG)
+#define POWLOGNORMAL(MSG)	MSG
+#define POWLOGINFO(MSG)     MSG
+#define POWLOGERROR(MSG)    MSG
+#define POWLOGWARNING(MSG)  MSG
 
 #endif

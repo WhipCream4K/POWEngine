@@ -31,17 +31,17 @@ void BlendedSteeringSystem::OnUpdate(float deltaTime, powe::GameObjectID id [[ma
     
     // Flee Steering
     {
-        const glm::fvec2 mousePos{GetWorld()->GetInputSettings().GetMouseEngineAxisData()};
-
+        const glm::fvec2 mousePos{GetWorld().GetInputSettings().GetMouseEnginePos()};
+    
         // using mouse as flee target
         const auto& agentPos{agentTransform.GetPosition()};
         const glm::fvec2 targetVec{mousePos - agentPos};
-
+    
         const float distToTarget{glm::length(targetVec)};
     
         const float dynamicFactor{distToTarget / velocity.maxVelocity};
         const glm::fvec2 futurePos{mousePos + velocity.linearVelocity * dynamicFactor};
-
+    
         glm::fvec2 steering{};
         if (glm::distance2(futurePos, agentPos) <= m_EvadeTolerance * m_EvadeTolerance)
         {
@@ -53,10 +53,10 @@ void BlendedSteeringSystem::OnUpdate(float deltaTime, powe::GameObjectID id [[ma
             steering = (glm::normalize(agentPos - mousePos) * velocity.maxVelocity) 
             * fleeComponent.fleePower;
         }
-
+    
         fleeComponent.steeringForce = steering;
     }
-
+    
     // Wander Steering
     {
         const float halfJitter{m_MaxJitter / 2.0f};
@@ -74,7 +74,7 @@ void BlendedSteeringSystem::OnUpdate(float deltaTime, powe::GameObjectID id [[ma
         const glm::fvec2 agentPos{agentTransform.GetPosition()};
         const glm::fvec2 aimOffset{glm::normalize(velocity.linearVelocity) * m_Offset};
         const glm::fvec2 target{agentPos + aimOffset + wanderTarget};
-
+    
         const glm::fvec2 desiredVel{glm::normalize( target - agentPos) * velocity.maxVelocity};
         const glm::fvec2 steering{desiredVel};
     

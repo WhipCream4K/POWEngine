@@ -2,7 +2,7 @@
 
 #include "powengine.h"
 
-class SceneFactory;
+class TestScene;
 class ParticleApp final : public powe::Application
 {
 
@@ -16,6 +16,6 @@ public:
 
 private:
 
-	SharedPtr<SceneFactory> m_TestScene;
+	SharedPtr<TestScene> m_TestScene;
 };
 

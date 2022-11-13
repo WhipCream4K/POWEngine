@@ -172,17 +172,20 @@ xcopy /y $(SolutionDir)3rdPartyLib\fmod\lib\$(Platform) $(OutDir)</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AgentOptionsUpdate.cpp" />
+    <ClCompile Include="AsyncSystemTest.cpp" />
     <ClCompile Include="BlendedSteeringSystem.cpp" />
     <ClCompile Include="BoundAreaSystem.cpp" />
-    <ClCompile Include="DebugSteeringSystem.cpp" />
+    <ClCompile Include="SceneControlSystem.cpp" />
     <ClCompile Include="EngineStatsComponent.cpp" />
     <ClCompile Include="EngineStatsTrackSystem.cpp" />
     <ClCompile Include="FleeSteeringSystem.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ParticleApp.cpp" />
     <ClCompile Include="SceneFactory.cpp" />
+    <ClCompile Include="SFMLThreadRenderSystem.cpp" />
     <ClCompile Include="TestScene.cpp" />
     <ClCompile Include="UserComponents.cpp" />
+    <ClCompile Include="WanderAsync.cpp" />
     <ClCompile Include="WanderingSteeringSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -192,16 +195,19 @@ xcopy /y $(SolutionDir)3rdPartyLib\fmod\lib\$(Platform) $(OutDir)</Command>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AgentOptionsUpdate.h" />
+    <ClInclude Include="AsyncSystemTest.h" />
     <ClInclude Include="BlendedSteeringSystem.h" />
     <ClInclude Include="BoundAreaSystem.h" />
-    <ClInclude Include="DebugSteeringSystem.h" />
+    <ClInclude Include="SceneControlSystem.h" />
     <ClInclude Include="EngineStatsComponent.h" />
     <ClInclude Include="EngineStatsTrackSystem.h" />
     <ClInclude Include="FleeSteeringSystem.h" />
     <ClInclude Include="ParticleApp.h" />
     <ClInclude Include="SceneFactory.h" />
+    <ClInclude Include="SFMLThreadRenderSystem.h" />
     <ClInclude Include="TestScene.h" />
     <ClInclude Include="UserComponents.h" />
+    <ClInclude Include="WanderAsync.h" />
     <ClInclude Include="WanderingSteeringSystem.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

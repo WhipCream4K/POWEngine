@@ -12,21 +12,14 @@ powe::SystemBase::SystemBase()
 {
 }
 
-// powe::SystemBase::SystemBase(WorldEntity& worldEntt)
-//     : m_World(&worldEntt)
-//       , m_CurrentArchetype()
-//       , m_UpdateCountPerArchetype()
-// {
-// }
-
-void powe::SystemBase::InternalUpdate(const Archetype& archetype, float deltaTime)
+void powe::SystemBase::InternalUpdate(Archetype* archetype, float deltaTime)
 {
     m_UpdateCountPerArchetype = 0;
-    m_CurrentArchetype = &archetype;
+    m_CurrentArchetype = archetype;
 
     try
     {
-        for (const auto gameObjectId : archetype.GameObjectIds)
+        for (const auto gameObjectId : archetype->GameObjectIds)
         {
             OnUpdate(deltaTime, gameObjectId);
             ++m_UpdateCountPerArchetype;
@@ -43,13 +36,16 @@ void powe::SystemBase::InternalUpdate(const Archetype& archetype, float deltaTim
     }
 }
 
-void powe::SystemBase::InternalCreate(const Archetype& archetype)
+void powe::SystemBase::InternalCreate(WorldEntity* world,const Archetype& archetype)
 {
     m_UpdateCountPerArchetype = 0;
     m_CurrentArchetype = &archetype;
+    m_World = world;
 
     try
     {
+        OnPreCreate();
+        
         for (const auto gameObjectId : archetype.GameObjectIds)
         {
             OnCreate(gameObjectId);

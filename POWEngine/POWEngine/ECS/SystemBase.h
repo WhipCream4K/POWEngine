@@ -14,7 +14,7 @@ namespace powe
     class SystemBase : public SystemKeys
     {
         friend class WorldEntity;
-        
+        friend class ThreadSystem;
     public:
         
         SystemBase();
@@ -23,17 +23,22 @@ namespace powe
         SystemBase(SystemBase&&) noexcept = default;
         SystemBase& operator=(SystemBase&&) noexcept = default;
         virtual ~SystemBase() = default;
-
-        WorldEntity* GetWorld() const { return m_World; }
-
+    
     protected:
+
+        WorldEntity& GetWorld() const { return *m_World; }
         
-        void InternalUpdate(const Archetype&, float);
-        void InternalCreate(const Archetype&);
+        virtual void InternalUpdate(Archetype*, float);
+        virtual void InternalCreate(WorldEntity* world,const Archetype&);
         void InternalDestroy(const Archetype&);
 
         virtual void OnUpdate(float, powe::GameObjectID) = 0;
 
+        /**
+         * \brief Run once after all the elements have been iterate through
+         */
+        virtual void OnPreCreate() {}
+        
         virtual void OnCreate(GameObjectID) {}
 
         virtual void OnDestroy(GameObjectID) {}
@@ -60,11 +65,10 @@ namespace powe
         
         // template<typename T>
         // T* InternGetComponentByID(const Archetype& archetype,ComponentTypeID id) const;
-
+        
         WorldEntity* m_World;
         
         // using pointer to be more flexible. Doesn't really need smartpointer here there's no ownership changing anyway
-        // std::unordered_set<powe::ComponentTypeID> m_Keys;
         const Archetype* m_CurrentArchetype;
         uint32_t m_UpdateCountPerArchetype;
     };

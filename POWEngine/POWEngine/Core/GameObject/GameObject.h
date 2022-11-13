@@ -35,6 +35,8 @@ namespace powe
 		template<typename ComponentType>
 		void RemoveComponent() const;
 
+		bool IsValid() const;
+
 	private:
 
 		WorldEntity& m_World; // GameObject cannot exist without world entity

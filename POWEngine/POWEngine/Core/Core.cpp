@@ -11,33 +11,33 @@
 
 
 powe::Core::Core()
-	: m_WorldClock(std::make_shared<WorldClock>())
-	, m_MainRenderer(std::make_shared<Renderer>())
+	: m_WorldClock(std::make_unique<WorldClock>())
+	, m_MainRenderer(std::make_unique<Renderer>())
 	, m_InputManager(std::make_unique<InputManager>())
 {
 }
 
-bool powe::Core::TranslateWindowInputs(const SharedPtr<Window>& window, const SharedPtr<WorldEntity>& worldEntt) const
-{
-	m_WorldClock->Start();
-	
-	bool isEarlyExit{};
-	bool ignoreInputs{};
-
-	HardwareMessages hwMessages{};
-	window->PollHardwareMessages(hwMessages, isEarlyExit, ignoreInputs);
-
-	const float deltaTime{ m_WorldClock->GetDeltaTime() };
-	window->UpdateWindowContext(deltaTime);
-	
-	if (!ignoreInputs)
-	{
-		m_InputManager->PollHardWareMessages(hwMessages, deltaTime);
-		worldEntt->GetInputSettings().ParseHWMessages(hwMessages);
-	}
-
-	return isEarlyExit;
-}
+// bool powe::Core::TranslateWindowInputs(const SharedPtr<Window>& window, const SharedPtr<WorldEntity>& worldEntt) const
+// {
+// 	m_WorldClock->Start();
+// 	
+// 	bool isEarlyExit{};
+// 	bool ignoreInputs{};
+//
+// 	HardwareMessages hwMessages{};
+// 	window->PollHardwareMessages(hwMessages, isEarlyExit, ignoreInputs);
+//
+// 	const float deltaTime{ m_WorldClock->GetDeltaTime() };
+// 	window->UpdateWindowContext(deltaTime);
+// 	
+// 	if (!ignoreInputs)
+// 	{
+// 		m_InputManager->PollHardWareMessages(hwMessages, deltaTime);
+// 		worldEntt->GetInputSettings().ParseHWMessages(hwMessages);
+// 	}
+//
+// 	return isEarlyExit;
+// }
 
 bool powe::Core::TranslateWindowInputs(const Window& window, WorldEntity& worldEntt) const
 {
@@ -61,21 +61,26 @@ bool powe::Core::TranslateWindowInputs(const Window& window, WorldEntity& worldE
 	return isEarlyExit;
 }
 
-void powe::Core::StartWorldClock()
+void powe::Core::StartWorldClock() const
 {
-	m_WorldClock = std::make_shared<WorldClock>();
+	// m_WorldClock = std::make_shared<WorldClock>();
 	m_WorldClock->ResetTime();
 }
 
-void powe::Core::Step(WorldEntity& worldEntity) const
+void powe::Core::Step(WorldEntity& worldEntity)
 {
 	worldEntity.ResolveEntities();
 
 	const float deltaTime{ m_WorldClock->GetDeltaTime() };
 
 	worldEntity.UpdatePipeline(PipelineLayer::InputValidation, deltaTime);
+	
+	// m_AsyncUpdateSystems.clear();
+	// worldEntity.UpdateAsyncPipeline(m_AsyncUpdateSystems,deltaTime);
+	
 	worldEntity.UpdatePipeline(PipelineLayer::Update, deltaTime);
 	worldEntity.UpdatePipeline(PipelineLayer::PhysicsValidation, deltaTime);
+	
 	worldEntity.UpdatePipeline(PipelineLayer::PostUpdate, deltaTime);
 
 }

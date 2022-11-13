@@ -8,7 +8,7 @@ namespace powe
     class WorldEntity;
 }
 
-class TestScene : public SceneFactory
+class TestScene
 {
 public:
 
@@ -16,5 +16,5 @@ public:
 
 private:
 
-    SharedPtr<powe::GameObject> m_GameObjects;
+    SharedPtr<powe::GameObject> m_SceneObject;
 };

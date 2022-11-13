@@ -13,7 +13,7 @@ powe::InputSystem::InputSystem()
 void powe::InputSystem::OnUpdate(float deltaTime, powe::GameObjectID id)
 {
 	const auto& inputComponent{ GetComponent<InputComponent>() };
-	const InputSettings& inputSettings{ GetWorld()->GetInputSettings() };
+	const InputSettings& inputSettings{ GetWorld().GetInputSettings() };
 
 	const auto& realGamePadKey{ inputSettings.GetCurrentKeyState(inputComponent.GetRealPlayerIndex()) };
 
@@ -68,7 +68,7 @@ void powe::InputSystem::ExecuteAxisCommands(
 			{
 				for (const auto& command : commands)
 				{
-					command->Execute(*GetWorld(), deltaTime, id, currentState.axisThisFrame * scale);
+					command->Execute(GetWorld(), deltaTime, id, currentState.axisThisFrame * scale);
 				}
 			}
 		}
@@ -110,7 +110,7 @@ void powe::InputSystem::ExecuteActionCommands(
 			{
 				for (const auto& command : commands)
 				{
-					command->Execute(*GetWorld(), deltaTime, id,thisFrameEvent);
+					command->Execute(GetWorld(), deltaTime, id,thisFrameEvent);
 				}
 			}
 		}
