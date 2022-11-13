@@ -3,6 +3,8 @@
 #include "POWEngine/Core/Components/BaseComponent.h"
 // #include "POWEngine/Core/GameObject/GameObject.h"
 #include <future>
+#include <SFML/Graphics/CircleShape.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
 
 #include "POWEngine/Core/Components/Transform2D.h"
 #include "POWEngine/Math/Math.h"
@@ -50,10 +52,14 @@ struct DebugSteeringComponent : powe::Component<DebugSteeringComponent>
     glm::fvec4 boundArea{};
     int activeAgents{};
     float agentSize{1.5f};
+    OwnedPtr<sf::CircleShape> agentShape{};
+    OwnedPtr<sf::RectangleShape> boundAreaShape{};
 };
 
-struct RenderTag : powe::Component<RenderTag>
+
+struct DrawAsset : powe::Component<DrawAsset>
 {
+    sf::Drawable* drawAsset{}; 
 };
 
 struct AsyncRender : powe::Component<AsyncRender>

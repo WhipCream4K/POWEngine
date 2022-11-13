@@ -1,16 +1,8 @@
 #include "ParticleApp.h"
 
-
-#include "BoundAreaSystem.h"
-#include "EngineStatsComponent.h"
-#include "EngineStatsTrackSystem.h"
-#include "SFMLRenderWithTag.h"
-#include "SFMLThreadRenderSystem.h"
-#include "POWEngine/Core/Components/Transform2D.h"
+#include "SFMLAgentRenderSystem.h"
 #include "POWEngine/Renderer/SFML/SFML2DRenderer.h"
 #include "TestScene.h"
-#include "WanderingSteeringSystem.h"
-#include "POWEngine/Renderer/System/SFML/SFMLDefaultRenderSystem.h"
 
 using namespace powe;
 
@@ -22,12 +14,10 @@ void ParticleApp::OnEngineSetUp(powe::EngineProps& engineProps)
 	engineProps.winProps.startWithVSync = false;
 
 	engineProps.renderer->RegisterRenderAPI(std::make_unique<SFML2DRenderer>());
-	engineProps.renderer->RegisterSystem(std::make_shared<SFMLThreadRenderSystem>());
-	engineProps.renderer->RegisterSystem(std::make_shared<SFMLRenderWithTag>());
+	engineProps.renderer->RegisterRenderSystem(SFMLAgentRenderSystem{});
 }
 
 void ParticleApp::OnWorldInitialize(powe::WorldEntity& world)
 {
 	m_TestScene = std::make_shared<TestScene>(world);
-	// world.RegisterSystem(PipelineLayer::Update,std::make_shared<SeekTestSystem>());
 }

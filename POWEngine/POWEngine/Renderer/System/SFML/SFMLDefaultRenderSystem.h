@@ -8,7 +8,6 @@ namespace powe
     class SFMLDefaultRenderSystem : public RenderSystem<SFML2DRenderer>
     {
     public:
-        
         SFMLDefaultRenderSystem();
         void OnDraw(const SFML2DRenderer& renderer, const Window& renderWindow, GameObjectID id) override;
     };

@@ -12,13 +12,13 @@ using namespace powe;
 BoundAreaSystem::BoundAreaSystem(const glm::fvec4& box)
     : m_BoundingBox(box * 0.5f)
 {
-    DefineSystemKeys<PositionComponent,VelocityComponent>();
+    DefineSystemKeys<Transform2D,VelocityComponent>();
 }
 
 BoundAreaSystem::BoundAreaSystem(const SharedPtr<powe::GameObject>& gb)
     : m_BoundArea(gb)
 {
-    DefineSystemKeys<PositionComponent,VelocityComponent>();
+    DefineSystemKeys<Transform2D,VelocityComponent>();
 }
 
 void BoundAreaSystem::OnCreate(powe::GameObjectID)
@@ -29,9 +29,9 @@ void BoundAreaSystem::OnCreate(powe::GameObjectID)
 
 void BoundAreaSystem::OnUpdate(float, powe::GameObjectID)
 {
-    PositionComponent& transform{GetComponent<PositionComponent>()};
+    Transform2D& transform{GetComponent<Transform2D>()};
     
-    auto position{transform.position};
+    auto position{transform.GetPosition()};
     
     // bound horizontal
     const float left{m_DebugSteeringOpt->boundArea.x - m_DebugSteeringOpt->boundArea.z * 0.5f};
@@ -57,5 +57,6 @@ void BoundAreaSystem::OnUpdate(float, powe::GameObjectID)
         position.y = down;
     }
     
-    transform.position = position;
+    // transform.position = position;
+    transform.SetWorldPosition(position);
 }

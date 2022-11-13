@@ -29,18 +29,20 @@ namespace powe
 
 		void Draw(const Window& window) const;
 
-		template<typename SystemType>
-		EnableIsBasedOf<RenderSystemBase,SystemType,WeakPtr<SystemBase>>
+		template<typename SystemType,typename ...Args>
+		EnableIsBasedOf<RenderSystemBase,SystemType,WeakPtr<SystemType>>
 		RegisterRenderSystem(SystemType&& constructor);
 		
 		void RegisterSystem(const SharedPtr<RenderSystemBase>& system);
-		void RemoveSystem(const SharedPtr<RenderSystemBase>& system);
+		// void RemoveSystem(const SharedPtr<RenderSystemBase>& system);
 
+		void RemoveSystem(RenderSystemBase* system);
+		
 		void UpdateSystem(
 			const WorldEntity& worldEntity,
 			const Window& renderWindow,
 			const std::unordered_map<std::string,SharedPtr<Archetype>>& archetypePool
-			) const;
+			);
 
 		void RegisterRenderAPI(OwnedPtr<RenderAPI>&& renderInst);
 
@@ -49,14 +51,16 @@ namespace powe
 
 		OwnedPtr<RenderAPI> m_RenderAPI;
 		std::vector<SharedPtr<RenderSystemBase>> m_RenderSystems;
+		std::vector<SharedPtr<RenderSystemBase>> m_PreRenderSystems;
 	};
 
-	template <typename SystemType>
-	EnableIsBasedOf<RenderSystemBase, SystemType, WeakPtr<SystemBase>> Renderer::RegisterRenderSystem(
+	template <typename SystemType, typename ... Args>
+	EnableIsBasedOf<RenderSystemBase, SystemType, WeakPtr<SystemType>> Renderer::RegisterRenderSystem(
 		SystemType&& constructor)
 	{
-		SharedPtr<SystemType> renderSystem{std::make_shared<SystemType>(std::move(constructor))};
-		m_RenderSystems.emplace_back();
+		SharedPtr<SystemType> system{std::make_shared<SystemType>(std::move(constructor))};
+		m_RenderSystems.emplace_back(system);
+		return system;
 	}
 }
 

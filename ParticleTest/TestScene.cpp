@@ -1,6 +1,5 @@
 ﻿#include "TestScene.h"
 
-#include "AsyncSystemTest.h"
 #include "BlendedSteeringSystem.h"
 #include "BoundAreaSystem.h"
 #include "FleeSteeringSystem.h"
@@ -16,65 +15,18 @@ using namespace powe;
 
 TestScene::TestScene(powe::WorldEntity& world)
 {
+    constexpr int objectAmount{10000};
+    
     // Scene Component
     const SharedPtr<GameObject> sceneData{std::make_shared<GameObject>(world)};
     m_SceneObject = sceneData;
     SceneComponent* sceneComp{sceneData->AddComponent(SceneComponent{})};
-    
-    constexpr int objectAmount{30000};
-    constexpr  glm::fvec2 limitHorizontal{-640.0f * 0.5f, 640.0f * 0.5f};
-    constexpr glm::fvec2 limitVertical{-480.0f * 0.5f, 480.0f * 0.5f};
-
-    for (int i = 0; i < objectAmount; ++i)
-    {
-        const SharedPtr<GameObject> steeringAgent{std::make_shared<GameObject>(world)};
-        PositionComponent* position{steeringAgent->AddComponent(PositionComponent{})};
-
-        const glm::fvec2 randPos{
-            Random::RandFloat(
-                limitHorizontal.x, limitHorizontal.y),
-            Random::RandFloat(limitVertical.x, limitVertical.y)
-        };
-
-        position->position = randPos;
-
-        VelocityComponent* velocity = steeringAgent->AddComponent(VelocityComponent{});
-        velocity->maxVelocity = Random::RandFloat(25.0f, 100.0f);
-
-        WanderComponent* wander{steeringAgent->AddComponent(WanderComponent{})};
-        wander->weightSteering = 0.2f;
-
-        FleeComponent* flee{steeringAgent->AddComponent(FleeComponent{})};
-        flee->weightSteering = 0.8f;
-        flee->fleePower = 1.5f;
-
-        sceneComp->agentObjects.emplace_back(steeringAgent);
-
-        // async draw object
-        {
-            const SharedPtr<GameObject> drawObject{std::make_shared<GameObject>(world)};
-            drawObject->AddComponent(Transform2D{drawObject});            
-
-            SFML2DCircle* circleShape{
-                drawObject->AddComponent(
-                    SFML2DCircle{world, drawObject->GetID()})
-            };
-
-            circleShape->SetSize({1.5f, 1.5f});
-
-            drawObject->AddComponent(AsyncRender{});
-
-            sceneComp->drawObjects.emplace_back(drawObject);
-        }
-    }
 
     // Initialize Debug options
     sceneData->AddComponent(Transform2D{sceneData});
 
     DebugSteeringComponent* debugComp{sceneData->AddComponent(DebugSteeringComponent{})};
-
-    sceneData->AddComponent(RenderTag{});
-
+    
     const glm::fvec2 boundStartDim{640.0f, 480.f};
 
     debugComp->boundArea.x = 0.0f;
@@ -84,24 +36,81 @@ TestScene::TestScene(powe::WorldEntity& world)
 
     debugComp->activeAgents = objectAmount;
 
-    SFML2DRectangle* rectangle{
-        sceneData->AddComponent(SFML2DRectangle{world, sceneData->GetID()}
-                               , ComponentFlag::Sparse)
-    };
+    debugComp->agentShape = std::make_unique<sf::CircleShape>();
+    
+    debugComp->agentShape->setRadius(1.5f);
+    debugComp->agentShape->setOrigin(1.5f,1.5f);
+    debugComp->agentShape->setFillColor(sf::Color::White);
 
-    rectangle->SetFillColor({0, 0, 0, 0});
-    rectangle->SetOutColor({0, 255, 0, 255});
-    rectangle->SetSize(boundStartDim);
-    rectangle->SetOutlineThickness(1.5f);
-    rectangle->drawOrder = -1;
+    debugComp->boundAreaShape = std::make_unique<sf::RectangleShape>();
+    debugComp->boundAreaShape->setFillColor(sf::Color{0,0,0,0});
+    debugComp->boundAreaShape->setSize({boundStartDim.x,boundStartDim.y});
+    debugComp->boundAreaShape->setOrigin({boundStartDim.x * 0.5f,boundStartDim.y * 0.5f});
+    debugComp->boundAreaShape->setOutlineColor(sf::Color::Green);
+    debugComp->boundAreaShape->setOutlineThickness(1.5f);
+
+    DrawAsset* boundAreaDraw = sceneData->AddComponent(DrawAsset{});
+    boundAreaDraw->drawAsset = debugComp->boundAreaShape.get();
+
+    // Initialize Agent
+    constexpr  glm::fvec2 limitHorizontal{-640.0f * 0.5f, 640.0f * 0.5f};
+    constexpr glm::fvec2 limitVertical{-480.0f * 0.5f, 480.0f * 0.5f};
+
+    for (int i = 0; i < objectAmount; ++i)
+    {
+        const SharedPtr<GameObject> steeringAgent{std::make_shared<GameObject>(world)};
+
+        DrawAsset* draw_asset = steeringAgent->AddComponent(DrawAsset{});
+        draw_asset->drawAsset = debugComp->agentShape.get();
+        
+        Transform2D* transform2D{steeringAgent->AddComponent(Transform2D{steeringAgent})};
+
+        const glm::fvec2 randPos{
+            Random::RandFloat(
+                limitHorizontal.x, limitHorizontal.y),
+            Random::RandFloat(limitVertical.x, limitVertical.y)
+        };
+
+        // transform2D->position = randPos;
+        transform2D->SetWorldPosition(randPos);
+        
+        VelocityComponent* velocity = steeringAgent->AddComponent(VelocityComponent{});
+        velocity->maxVelocity = Random::RandFloat(25.0f, 100.0f);
+
+        WanderComponent* wander{steeringAgent->AddComponent(WanderComponent{})};
+        wander->weightSteering = 0.2f;
+
+        FleeComponent* flee{steeringAgent->AddComponent(FleeComponent{})};
+        flee->weightSteering = 0.8f;
+        flee->fleePower = 1.5f;
+        
+        sceneComp->agentObjects.emplace_back(steeringAgent);
+
+        // async draw object
+        {
+            // const SharedPtr<GameObject> drawObject{std::make_shared<GameObject>(world)};
+            // drawObject->AddComponent(Transform2D{drawObject});            
+            //
+            // SFML2DCircle* circleShape{
+            //     drawObject->AddComponent(
+            //         SFML2DCircle{world, drawObject->GetID()})
+            // };
+            //
+            // circleShape->SetSize({1.5f, 1.5f});
+            //
+            // drawObject->AddComponent(AsyncRender{});
+            //
+            // sceneComp->drawObjects.emplace_back(drawObject);
+        }
+    }
+
+
+    
     
     world.RegisterSystem(PipelineLayer::InputValidation, SceneControlSystem{});
 
-    world.RegisterSystem(PipelineLayer::Update,AsyncSystemTest{sceneData});
-    // world.RegisterSystem(PipelineLayer::AsyncUpdate,WanderingSteeringSystem{});
-    // world.RegisterSystem(PipelineLayer::AsyncUpdate,FleeSteeringSystem{});
-    
-    // world.RegisterSystem(PipelineLayer::PostUpdate, AgentOptionsUpdate{sceneData});
-    // world.RegisterSystem(PipelineLayer::PostUpdate, BoundAreaSystem{sceneData});
-    // world.RegisterSystem(PipelineLayer::Update,BlendedSteeringSystem{});
+    world.RegisterSystem(PipelineLayer::Update,BlendedSteeringSystem{});
+
+    world.RegisterSystem(PipelineLayer::PostUpdate, BoundAreaSystem{sceneData});
+
 }

@@ -17,13 +17,15 @@ namespace powe
     public:
         
         RenderSystemBase() = default;
-        RenderSystemBase(const RenderSystemBase&) = delete;
-        RenderSystemBase& operator=(const RenderSystemBase&) = delete;
+        RenderSystemBase(const RenderSystemBase&) = default;
+        RenderSystemBase& operator=(const RenderSystemBase&) = default;
         RenderSystemBase(RenderSystemBase&&) = default;
         RenderSystemBase& operator=(RenderSystemBase&&) = default;
         virtual ~RenderSystemBase() = default;
 
     protected:
+        
+        virtual void InternalCreate(const WorldEntity&,const Archetype&,const RenderAPI&) = 0;
         
         virtual void InternalDraw(const WorldEntity& worldEntity,
             const Window& renderWindow,const Archetype&, const RenderAPI&) = 0;
@@ -52,8 +54,12 @@ namespace powe
         void InternalDraw(const WorldEntity& worldEntity,
             const Window& renderWindow,
             const Archetype&, const RenderAPI&) final;
+
+        void InternalCreate(const WorldEntity&, const Archetype&, const RenderAPI&) override;
         
         virtual void OnDraw(const T& renderer,const Window& renderWindow, GameObjectID id) = 0;
+        virtual void OnPreCreate() {}
+        virtual void OnCreate(const T&,GameObjectID) {}
 
     public:
         
@@ -96,12 +102,46 @@ namespace powe
         m_CurrentArchetype = &archetype;
         m_UpdateCountPerArchetype = 0;
         m_CurrentWorld = &worldEntity;
-
+        
         try
         {
             for (const GameObjectID gameObjectID : archetype.GameObjectIds)
             {
                 OnDraw(static_cast<const T&>(renderer),renderWindow, gameObjectID);
+                ++m_UpdateCountPerArchetype;
+            }
+        }
+        catch (const std::exception& e)
+        {
+            std::string errMsg{"System trying to access component that doesn't exist in this archetype -> "};
+            errMsg.append(e.what());
+            POWLOGWARNING(errMsg);
+
+            m_UpdateCountPerArchetype = 0;
+            m_CurrentArchetype = nullptr;
+            m_CurrentWorld = nullptr;
+        }
+
+        m_UpdateCountPerArchetype = 0;
+        m_CurrentArchetype = nullptr;
+        m_CurrentWorld = nullptr;
+    }
+
+    template <typename T>
+    void RenderSystem<T>::InternalCreate(const WorldEntity& world_entity, const Archetype& archetype,
+        const RenderAPI& renderer)
+    {
+        m_CurrentArchetype = &archetype;
+        m_UpdateCountPerArchetype = 0;
+        m_CurrentWorld = &world_entity;
+
+        try
+        {
+            OnPreCreate();
+            
+            for (const GameObjectID gameObjectID : archetype.GameObjectIds)
+            {
+                OnCreate(static_cast<const T&>(renderer), gameObjectID);
                 ++m_UpdateCountPerArchetype;
             }
         }

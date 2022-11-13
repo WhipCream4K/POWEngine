@@ -2,6 +2,7 @@
 
 #include "powengine.h"
 
+class SFMLAgentRenderSystem;
 class TestScene;
 class ParticleApp final : public powe::Application
 {

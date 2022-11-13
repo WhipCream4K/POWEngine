@@ -50,12 +50,8 @@ void SceneControlSystem::OnUpdate(float, powe::GameObjectID)
 
     if(ImGui::DragFloat("AgentSize",&m_DebugOpt->agentSize,0.5f,0.0f,20.0f))
     {
-        for (int i = 0; i < m_DebugOpt->activeAgents; ++i)
-        {
-            const auto& gameObject{m_SceneComponent->drawObjects[i]};
-            SFML2DCircle* draw{gameObject->GetComponent<SFML2DCircle>()};
-            draw->SetSize({m_DebugOpt->agentSize,m_DebugOpt->agentSize});
-        }
+        m_DebugOpt->agentShape->setRadius(m_DebugOpt->agentSize);
+        m_DebugOpt->agentShape->setOrigin(m_DebugOpt->agentSize,m_DebugOpt->agentSize);
     }
     
     glm::fvec2 mousePos{ GetWorld().GetInputSettings().GetMouseEnginePos()};
@@ -73,9 +69,13 @@ void SceneControlSystem::OnUpdate(float, powe::GameObjectID)
                 const auto& gameObject{m_SceneComponent->agentObjects[i]};
                 VelocityComponent* vel = gameObject->AddComponent(VelocityComponent{});
                 vel->maxVelocity = Random::RandFloat(25.0f, 100.0f);
-                SFML2DCircle* draw{gameObject->AddComponent(SFML2DCircle{GetWorld(),gameObject->GetID()})};
 
-                draw->SetSize({m_DebugOpt->agentSize,m_DebugOpt->agentSize});
+                DrawAsset* drawable = gameObject->AddComponent(DrawAsset{});
+                drawable->drawAsset = m_DebugOpt->agentShape.get();
+                
+                // SFML2DCircle* draw{gameObject->AddComponent(SFML2DCircle{GetWorld(),gameObject->GetID()})};
+                //
+                // draw->SetSize({m_DebugOpt->agentSize,m_DebugOpt->agentSize});
             }
         }
         else if(agentDiff > 0)
@@ -84,7 +84,7 @@ void SceneControlSystem::OnUpdate(float, powe::GameObjectID)
             {
                 const auto& gameObject{m_SceneComponent->agentObjects[i]};
                 gameObject->RemoveComponent<VelocityComponent>();
-                gameObject->RemoveComponent<SFML2DCircle>();
+                gameObject->RemoveComponent<DrawAsset>();
             }
         }
 

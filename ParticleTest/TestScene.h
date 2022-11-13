@@ -14,6 +14,8 @@ public:
 
     TestScene(powe::WorldEntity& world);
 
+    SharedPtr<powe::GameObject> GetSceneObject() const {return m_SceneObject;}
+    
 private:
 
     SharedPtr<powe::GameObject> m_SceneObject;
