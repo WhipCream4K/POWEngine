@@ -11,23 +11,24 @@
 #include "POWEngine/Logger/LoggerUtils.h"
 using namespace powe;
 
-AsyncSystemTest::AsyncSystemTest()
+AsyncSystemTest::AsyncSystemTest(const SharedPtr<powe::GameObject>& sceneObject)
+    : m_SceneObject(sceneObject)
 {
-    DefineSystemKeys<Transform2D, VelocityComponent>();
+    DefineSystemKeys<PositionComponent, VelocityComponent>();
 }
 
 void AsyncSystemTest::OnPreCreate()
 {
-    if(!m_SceneComponent)
+    if (!m_SceneComponent)
     {
         m_SceneComponent = m_SceneObject.lock()->GetComponent<SceneComponent>();
+        m_DebugSteering = m_SceneObject.lock()->GetComponent<DebugSteeringComponent>();
 
-        for (int i = 0; i < m_SceneComponent->asyncObjects.size(); ++i)
+        for (SizeType i = 0; i < m_SceneComponent->drawObjects.size(); ++i)
         {
             m_ThreadTasks.emplace_back(std::make_shared<WanderAsync>());
         }
     }
-    
 }
 
 void AsyncSystemTest::InternalUpdate(powe::Archetype* archetype, float deltaTime)
@@ -41,23 +42,27 @@ void AsyncSystemTest::InternalUpdate(powe::Archetype* archetype, float deltaTime
             shared_from_this(),
             archetype,
             deltaTime);
-    }
-    else
-    {
-        // block
-        for (const auto& threadTask : m_ThreadTasks)
-        {
-            if(!threadTask->IsFinished())
-                return;
-        }
 
-        // start again
-        m_TaskFuture = world.GetThreadPool()->PushMemberTask(
-            &AsyncSystemTest::ExecuteTasks,
-            shared_from_this(),
-            archetype,
-            deltaTime);
+        return;
     }
+
+    // block
+    for (SizeType i = 0; i < archetype->GameObjectIds.size(); ++i)
+    {
+        const auto& threadTask{m_ThreadTasks[i]};
+        if(!threadTask->IsFinished())
+            return;
+    }
+    
+    // m_TaskFuture.wait();
+
+    // start again
+    m_TaskFuture = world.GetThreadPool()->PushMemberTask(
+        &AsyncSystemTest::ExecuteTasks,
+        shared_from_this(),
+        archetype,
+        deltaTime);
+    
 }
 
 void AsyncSystemTest::OnDestroy(powe::GameObjectID)
@@ -65,36 +70,37 @@ void AsyncSystemTest::OnDestroy(powe::GameObjectID)
     m_TaskFuture.get();
 }
 
-void AsyncSystemTest::ExecuteTasks(Archetype* archetype, float deltaTime)
+void AsyncSystemTest::ExecuteTasks(Archetype* archetype [[maybe_unused]], float deltaTime [[maybe_unused]])
 {
+    // POWLOGWARNING("This Thread finished");
     // might blow up
     auto* world{&GetWorld()};
 
-    if (!m_SceneObject.lock())
+    if (!m_SceneComponent && !m_DebugSteering)
         return;
 
     // might blow up
-    
+
     for (SizeType i = 0; i < archetype->GameObjectIds.size(); ++i)
     {
         const auto& taskExecute{m_ThreadTasks[i]};
-        taskExecute->OnCreate(world, archetype, deltaTime);
-        const auto& renderObject{m_SceneComponent->asyncObjects[i]};
+        taskExecute->OnCreate(world, archetype,i);
+        const auto& renderObject{m_SceneComponent->drawObjects[i]};
 
         // might blow up
         AsyncRender* async_render{renderObject->GetComponent<AsyncRender>()};
-        if(!async_render)
+        if (!async_render)
             continue;
-    
+
         {
-            std::scoped_lock updateLock{async_render->taskLock };
-            
+            std::scoped_lock updateLock{async_render->taskLock};
+
             async_render->transformUpdate = world->GetThreadPool()->PushMemberTask(
                 &WanderAsync::CalculatePosition,
                 taskExecute,
+                m_DebugSteering->boundArea,
                 deltaTime,
                 archetype->GameObjectIds[i]);
         }
-        
     }
 }

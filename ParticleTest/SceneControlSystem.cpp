@@ -52,7 +52,7 @@ void SceneControlSystem::OnUpdate(float, powe::GameObjectID)
     {
         for (int i = 0; i < m_DebugOpt->activeAgents; ++i)
         {
-            const auto& gameObject{m_SceneComponent->agentObjects[i]};
+            const auto& gameObject{m_SceneComponent->drawObjects[i]};
             SFML2DCircle* draw{gameObject->GetComponent<SFML2DCircle>()};
             draw->SetSize({m_DebugOpt->agentSize,m_DebugOpt->agentSize});
         }

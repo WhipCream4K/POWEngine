@@ -13,7 +13,7 @@ namespace powe
         ThreadExecute() = default;
         
         bool IsFinished() const;
-        void OnCreate(WorldEntity* world,Archetype*,float);
+        void OnCreate(WorldEntity* world, const Archetype*,uint32_t);
 
     protected:
         
@@ -29,7 +29,7 @@ namespace powe
     
         const Archetype* m_CurrentArchetype{};
         WorldEntity* m_World{};
-        uint32_t m_GameObjectID{};
+        uint32_t m_UpdateIndex{};
         std::atomic_bool m_TaskFinished{};
     };
 
@@ -53,7 +53,7 @@ namespace powe
             {
                 RawByte* dataAddress{
                     &archetype.ComponentData[
-                        m_GameObjectID * archetype.SizeOfComponentsBlock
+                        m_UpdateIndex * archetype.SizeOfComponentsBlock
                         + findItr->second // offsets
                     ]
                 };
@@ -69,7 +69,7 @@ namespace powe
 
             RawByte* realCompData{
                 sparseManager.GetComponentData<T>(
-                    archetype.GameObjectIds[m_GameObjectID], compID)
+                    archetype.GameObjectIds[m_UpdateIndex], compID)
             };
 
 

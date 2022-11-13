@@ -18,11 +18,11 @@ public:
 		sf::RenderWindow& renderWindow{ sfmlWindow->GetRenderWindow() };
 
 		// sort the render order
-		std::ranges::sort(m_SF2DDrawEntities, [](const DrawEntity& left, const DrawEntity& right)
-			{
-				return left.drawOrder < right.drawOrder;
-			});
-
+		// std::ranges::sort(m_SF2DDrawEntities, [](const DrawEntity& left, const DrawEntity& right)
+		// 	{
+		// 		return left.drawOrder < right.drawOrder;
+		// 	});
+		
 		for (const auto& drawEntt : m_SF2DDrawEntities)
 		{
 			//POWLOGERROR(std::to_string(m_SF2DDrawEntities.size()));

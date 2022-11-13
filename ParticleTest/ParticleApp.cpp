@@ -4,6 +4,7 @@
 #include "BoundAreaSystem.h"
 #include "EngineStatsComponent.h"
 #include "EngineStatsTrackSystem.h"
+#include "SFMLRenderWithTag.h"
 #include "SFMLThreadRenderSystem.h"
 #include "POWEngine/Core/Components/Transform2D.h"
 #include "POWEngine/Renderer/SFML/SFML2DRenderer.h"
@@ -22,6 +23,7 @@ void ParticleApp::OnEngineSetUp(powe::EngineProps& engineProps)
 
 	engineProps.renderer->RegisterRenderAPI(std::make_unique<SFML2DRenderer>());
 	engineProps.renderer->RegisterSystem(std::make_shared<SFMLThreadRenderSystem>());
+	engineProps.renderer->RegisterSystem(std::make_shared<SFMLRenderWithTag>());
 }
 
 void ParticleApp::OnWorldInitialize(powe::WorldEntity& world)

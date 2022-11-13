@@ -26,7 +26,7 @@ namespace powe
 struct SceneComponent : powe::Component<SceneComponent>
 {
     std::vector<SharedPtr<powe::GameObject>> agentObjects{};
-    std::vector<SharedPtr<powe::GameObject>> asyncObjects{};
+    std::vector<SharedPtr<powe::GameObject>> drawObjects{};
 };
 
 struct Steering
@@ -42,6 +42,7 @@ struct WanderComponent : powe::Component<WanderComponent> , Steering
 struct FleeComponent : powe::Component<FleeComponent> , Steering
 {
     float fleePower{};
+    int padding[16]{};
 };
 
 struct DebugSteeringComponent : powe::Component<DebugSteeringComponent>
@@ -51,13 +52,29 @@ struct DebugSteeringComponent : powe::Component<DebugSteeringComponent>
     float agentSize{1.5f};
 };
 
-struct AsyncTag : powe::Component<AsyncTag>
+struct RenderTag : powe::Component<RenderTag>
 {
-    int padding[sizeof(int)]{};
 };
 
 struct AsyncRender : powe::Component<AsyncRender>
 {
+    AsyncRender() = default;
+    AsyncRender& operator=(AsyncRender&& other) noexcept
+    {
+        if(this != &other)
+        {
+            transformUpdate = std::move(other.transformUpdate);
+        }
+
+        return *this;
+    }
+    
+    AsyncRender(AsyncRender&& other) noexcept
+        : transformUpdate(std::move(other.transformUpdate))
+    {
+    }
+
+    ~AsyncRender() override = default;
     
     std::future<glm::fvec2> transformUpdate{};
     std::mutex taskLock{};

@@ -31,3 +31,9 @@ T Random::RandInt(T from, T to)
 	return dist(randEngine);
 }
 
+class ThreadSafeRandom
+{
+public:
+	static float RandFloat(float from,float to);
+};
+

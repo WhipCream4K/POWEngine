@@ -34,7 +34,6 @@ namespace powe
 
 		// TODO: This should be unique ptr
 		SharedPtr<RawByte[]> ComponentData{}; // Array of component struct
-		std::mutex m_Mutex;
 
 		SizeType SizeOfComponentsBlock{};
 		SizeType TotalAllocatedData{};

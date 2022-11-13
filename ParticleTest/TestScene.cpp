@@ -21,7 +21,7 @@ TestScene::TestScene(powe::WorldEntity& world)
     m_SceneObject = sceneData;
     SceneComponent* sceneComp{sceneData->AddComponent(SceneComponent{})};
     
-    constexpr int objectAmount{20000};
+    constexpr int objectAmount{30000};
     constexpr  glm::fvec2 limitHorizontal{-640.0f * 0.5f, 640.0f * 0.5f};
     constexpr glm::fvec2 limitVertical{-480.0f * 0.5f, 480.0f * 0.5f};
 
@@ -48,6 +48,8 @@ TestScene::TestScene(powe::WorldEntity& world)
         flee->weightSteering = 0.8f;
         flee->fleePower = 1.5f;
 
+        sceneComp->agentObjects.emplace_back(steeringAgent);
+
         // async draw object
         {
             const SharedPtr<GameObject> drawObject{std::make_shared<GameObject>(world)};
@@ -55,26 +57,23 @@ TestScene::TestScene(powe::WorldEntity& world)
 
             SFML2DCircle* circleShape{
                 drawObject->AddComponent(
-                    SFML2DCircle{world, steeringAgent->GetID()})
+                    SFML2DCircle{world, drawObject->GetID()})
             };
 
             circleShape->SetSize({1.5f, 1.5f});
 
             drawObject->AddComponent(AsyncRender{});
 
-            sceneComp->asyncObjects.emplace_back(drawObject);
+            sceneComp->drawObjects.emplace_back(drawObject);
         }
-        
-        sceneComp->agentObjects.emplace_back(steeringAgent);
-        
-        // AddGameObject(steeringAgent);
-        // AddGameObject(drawObject);
     }
 
     // Initialize Debug options
     sceneData->AddComponent(Transform2D{sceneData});
 
     DebugSteeringComponent* debugComp{sceneData->AddComponent(DebugSteeringComponent{})};
+
+    sceneData->AddComponent(RenderTag{});
 
     const glm::fvec2 boundStartDim{640.0f, 480.f};
 
@@ -95,15 +94,10 @@ TestScene::TestScene(powe::WorldEntity& world)
     rectangle->SetSize(boundStartDim);
     rectangle->SetOutlineThickness(1.5f);
     rectangle->drawOrder = -1;
-
-    auto asyncTest{std::make_shared<GameObject>(world)};
-    asyncTest->AddComponent(AsyncTag{});
-
-    sceneComp->asyncObjects.emplace_back(asyncTest);
     
     world.RegisterSystem(PipelineLayer::InputValidation, SceneControlSystem{});
 
-    // world.RegisterSystem(PipelineLayer::Update,AsyncSystemTest{});
+    world.RegisterSystem(PipelineLayer::Update,AsyncSystemTest{sceneData});
     // world.RegisterSystem(PipelineLayer::AsyncUpdate,WanderingSteeringSystem{});
     // world.RegisterSystem(PipelineLayer::AsyncUpdate,FleeSteeringSystem{});
     

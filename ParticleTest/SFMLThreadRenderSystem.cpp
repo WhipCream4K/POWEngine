@@ -63,6 +63,5 @@ void SFMLThreadRenderSystem::OnDraw(const powe::SFML2DRenderer& renderer, const 
     // needs to be valid
     SFMLDrawComponent& derivedDraw{*reinterpret_cast<SFMLDrawComponent*>(
         GetComponentAddress(sfmlDraw.derivedTypeID,sfmlDraw.derivedSize))};
-    
-    renderer.SubmitDrawSprite(derivedDraw.GetDrawable(), renderStates, sfmlDraw.drawOrder);
+    // renderer.SubmitDrawSprite(derivedDraw.GetDrawable(), renderStates, sfmlDraw.drawOrder);
 }
