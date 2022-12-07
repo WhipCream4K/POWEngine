@@ -61,7 +61,7 @@ namespace powe
 
 	private:
 
-		static InputEvent InterpretInputState(bool isKeyPressed, const InputEvent& savedInputState);
+		// static InputEvent InterpretInputState(bool isKeyPressed, const InputEvent& savedInputState);
 		void ProcessHWData(const HardwareMessages& hardwareMessages,int id);
 
 		void AddKeyToMainKeyPool(const Key& key);

@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "SFMLWindow.h"
+
 #include "POWEngine/Core/Input/Key.h"
 #include "POWEngine/Core/Input/ListsOfKeys.h"
 
@@ -377,6 +378,11 @@ void powe::SFMLWindow::UpdateWindowContext(float deltaTime)
     UpdateDebugWindowContext(deltaTime);
 }
 
+void powe::SFMLWindow::SetFramerateLimit(int fps)
+{
+    m_WndHandle.setFramerateLimit(fps);
+}
+
 const glm::uvec4& powe::SFMLWindow::GetClearColor() const
 {
     return m_ClearColor;
@@ -412,7 +418,7 @@ void powe::SFMLWindow::RenderDebugWindowContext()
 {
 #ifdef USE_IMGUI
     ImGui::ShowDemoWindow();
-    ImGui::SFML::Render(m_WndHandle);
+    ImGui::SFML::Render( m_WndHandle);
 #endif
 }
 

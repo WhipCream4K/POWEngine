@@ -26,7 +26,12 @@ namespace powe
 		~SFML2DRenderer() override;
 
 		void SubmitDrawSprite(sf::Drawable* drawable,const sf::RenderStates& renderStates,int drawOrder) const;
+		void SubmitRenderEntity(const sf::Drawable& drawable,const sf::RenderStates& renderStates) const;
+
+		void OnWindowResize(const Window& window) override;
+		void OnWindowCreate(const Window& window) override;
 		void DrawBufferOnWindow(const Window& window) const override;
+		void ClearBackBuffer() override;
 
 	private:
 

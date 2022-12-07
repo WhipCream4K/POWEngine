@@ -114,37 +114,6 @@ void powe::InputSettings::SetAssignFirstControllerToNextPlayer(bool state)
     m_AssignFirstControllerToNextIndex = state;
 }
 
-InputEvent powe::InputSettings::InterpretInputState(bool isKeyPressed, const InputEvent& savedInputState)
-{
-    if (isKeyPressed)
-    {
-        switch (savedInputState)
-        {
-        case InputEvent::IE_Released:
-        case InputEvent::IE_None:
-            return InputEvent::IE_Pressed;
-
-        case InputEvent::IE_Pressed: return InputEvent::IE_Down;
-        case InputEvent::IE_Down: return savedInputState;
-        }
-    }
-    else
-    {
-        switch (savedInputState)
-        {
-        case InputEvent::IE_Pressed:
-        case InputEvent::IE_Down:
-            return InputEvent::IE_Released;
-
-        case InputEvent::IE_Released: return InputEvent::IE_None;
-        case InputEvent::IE_None: return savedInputState;
-        }
-    }
-
-
-    return InputEvent::IE_None;
-}
-
 void powe::InputSettings::ProcessHWData(const HardwareMessages& hardwareMessages, int id)
 {
     KeyData keyData{};
@@ -196,7 +165,7 @@ void powe::InputSettings::ProcessHWData(const HardwareMessages& hardwareMessages
             const float horizontalPos = float(hardwareMessages.mouseAxis.mousePos.x) - halfWinDim.x;
             const float verticalPos = halfWinDim.y - float(hardwareMessages.mouseAxis.mousePos.y);
 
-            if(abs(m_MouseAxisData.x - horizontalPos) > 0.001f)
+            if(glm::abs(m_MouseAxisData.x - horizontalPos) > 0.001f)
             {
                 // mouse X
                 KeyData customKey{};
@@ -208,7 +177,7 @@ void powe::InputSettings::ProcessHWData(const HardwareMessages& hardwareMessages
                 UpdateAxisMapping(customKey, thisFrameEvent);
             }
 
-            if(abs(m_MouseAxisData.y - verticalPos) > 0.001f)
+            if(glm::abs(m_MouseAxisData.y - verticalPos) > 0.001f)
             {
                 // mouse Y
                 KeyData customKey{};

@@ -1,6 +1,8 @@
 #pragma once
 
 //#include "POWEngine/Core/CustomTypes.h"
+#include <functional>
+
 #include "WindowContext.h"
 #include "POWEngine/Math/Math.h"
 
@@ -12,9 +14,11 @@ namespace powe
 	{
 	public:
 
-		Window(uint32_t width, uint32_t height, const std::string& title,const OtherWindowParams& others = {});
+		using ResizeCallback = std::function<void(uint32_t,uint32_t)>;
+		using CreateCallback = std::function<void()>;
+		
+		Window(uint32_t width, uint32_t height, const std::string& title,uint8_t id,const OtherWindowParams& others = {});
 
-		// const HardwareMessages& PollHardwareMessages(bool& shouldEarlyExit, bool& shouldIgnoreInputs) const;
 		void PollHardwareMessages(HardwareMessages& hwMessages,bool& shouldEarlyExit, bool& shouldIgnoreInputs) const;
 		void Resize(uint32_t width, uint32_t height);
 		void SetTitle(const std::string& newTitle);
@@ -22,12 +26,18 @@ namespace powe
 
 		[[nodiscard]] uint32_t GetHeight() const { return m_Height; }
 		[[nodiscard]] uint32_t GetWidth() const { return m_Width; }
-		// [[nodiscard]] const glm::uvec2& GetRelativeMousePos() const;
 
+		void RegisterOnResizeCallback(const ResizeCallback& callback);
+		void RegisterOnCreateCallback(const CreateCallback& callback);
+
+		void BroadcastOnCreate() const;
+		
 		void SetVSync(bool vsync) const;
+		void SetFramerateLimit(int fps) const;
 		void Display() const;
 		void ClearWindow() const;
 		void SetClearColor(const glm::uvec4& color) const;
+		uint8_t GetID() const {return m_ID;}
 		[[nodiscard]] const glm::uvec4& GetClearColor() const;
 
 		template<typename T>
@@ -43,10 +53,13 @@ namespace powe
 
 		OwnedPtr<WindowImpl> m_WindowImpl;
 
-		//glm::uvec4 m_ClearColor{};
+		std::vector<ResizeCallback> m_OnResizeCallback;
+		std::vector<CreateCallback> m_OnCreateCallback;
+		
 		std::string m_Title;
 		uint32_t m_Width;
 		uint32_t m_Height;
+		uint8_t m_ID{};
 	};
 
 	template <typename T>

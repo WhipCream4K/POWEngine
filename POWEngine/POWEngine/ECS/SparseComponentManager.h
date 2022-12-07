@@ -43,10 +43,12 @@ namespace powe
 			bool callInternDestroy = true
 		);
 
-		void RemoveGameObjectFromSparse(
-			const std::vector<GameObjectID>& gameObjects
-		);
+		void SoftClear();
 
+		void RemoveGameObjectFromSparse(
+			const std::vector<GameObjectID>& gameObjects	
+		);
+		
 		~SparseComponentManager();
 
 	private:

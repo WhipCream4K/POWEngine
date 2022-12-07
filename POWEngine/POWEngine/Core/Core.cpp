@@ -75,9 +75,6 @@ void powe::Core::Step(WorldEntity& worldEntity)
 
 	worldEntity.UpdatePipeline(PipelineLayer::InputValidation, deltaTime);
 	
-	// m_AsyncUpdateSystems.clear();
-	// worldEntity.UpdateAsyncPipeline(m_AsyncUpdateSystems,deltaTime);
-	
 	worldEntity.UpdatePipeline(PipelineLayer::Update, deltaTime);
 	worldEntity.UpdatePipeline(PipelineLayer::PhysicsValidation, deltaTime);
 	
@@ -98,8 +95,11 @@ void powe::Core::Step(WorldEntity& worldEntity)
 void powe::Core::Draw(const Window& window, const WorldEntity& worldEntt) const
 {
 	window.ClearWindow();
-	m_MainRenderer->UpdateSystem(worldEntt, window,worldEntt.GetActiveArchetypes());
-	m_MainRenderer->Draw(window);
+
+	
+	
+	// m_MainRenderer->UpdateSystem(worldEntt, window,worldEntt.GetActiveArchetypes());
+	// m_MainRenderer->Draw(window);
 	window.Display();
 
 	m_WorldClock->End();

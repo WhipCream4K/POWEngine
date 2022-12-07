@@ -23,8 +23,7 @@ namespace powe
 		Renderer(Renderer&&) = delete;
 		Renderer& operator=(Renderer&&) = delete;
 		~Renderer();
-
-
+	
 	public:
 
 		void Draw(const Window& window) const;
@@ -34,7 +33,6 @@ namespace powe
 		RegisterRenderSystem(SystemType&& constructor);
 		
 		void RegisterSystem(const SharedPtr<RenderSystemBase>& system);
-		// void RemoveSystem(const SharedPtr<RenderSystemBase>& system);
 
 		void RemoveSystem(RenderSystemBase* system);
 		
@@ -45,6 +43,8 @@ namespace powe
 			);
 
 		void RegisterRenderAPI(OwnedPtr<RenderAPI>&& renderInst);
+
+		RenderAPI* GetRenderAPI() const {return m_RenderAPI.get();}
 
 
 	private:

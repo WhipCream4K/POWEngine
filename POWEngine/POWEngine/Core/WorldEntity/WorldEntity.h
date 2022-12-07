@@ -1,24 +1,27 @@
 #pragma once
 
+#include "POWEngine/ECS/ECSSystemBackend.h"
 #include "POWEngine/Core/Input/InputSettings.h"
 #include "POWEngine/ECS/Archetype.h"
 #include "POWEngine/Core/Components/BaseComponent.h"
 #include "POWEngine/Core/Thread/SimpleThreadPool.h"
 #include "POWEngine/LockFree/LFStack.h"
 #include "PipelineLayer.h"
+#include "POWEngine/Application/AppResource.h"
+#include "POWEngine/Core/CoreResource.h"
 #include "POWEngine/ECS/ECSUtils.h"
 #include "POWEngine/ECS/SparseComponentManager.h"
 
 namespace powe
 {
 	class SystemBase;
-	class WorldEntity final
+	class WorldEntity final : public CoreResource , public AppResource
 	{
-		using SystemPipelines = std::array<std::vector<SharedPtr<SystemBase>>, size_t(PipelineLayer::Count)>;
+		using SystemPipelines = std::array<std::vector<SharedPtr<ECSSystemBackend>>, size_t(PipelineLayer::Count)>;
 
 	public:
 
-		WorldEntity();
+		WorldEntity(const SharedPtr<Core>& core);
 		WorldEntity(const WorldEntity&) = delete;
 		WorldEntity& operator=(const WorldEntity&) = delete;
 		WorldEntity(WorldEntity&&) noexcept = delete;
@@ -71,7 +74,6 @@ namespace powe
 		// -------- Pipeline -------------
 		// -------------------------------
 		void UpdatePipeline(PipelineLayer layer, float deltaTime);
-		// void UpdateAsyncPipeline(std::vector<std::future<void>>& futureUpdateSystem,float deltaTime);
 		void ResolveEntities();
 
 		template<typename ComponentType>
@@ -176,7 +178,7 @@ namespace powe
 
 		struct SystemTrait
 		{
-			SharedPtr<SystemBase> system{};
+			SharedPtr<ECSSystemBackend> system{};
 			PipelineLayer layer{};
 		};
 

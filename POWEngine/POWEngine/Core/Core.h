@@ -13,16 +13,11 @@ namespace powe
 	class WorldEntity;
 	class WorldClock;
 	class Renderer;
-	//class CoreImpl;
 	class Core final
 	{
 	public:
 
 		Core();
-
-		// bool TranslateWindowInputs(
-		// 	const SharedPtr<Window>& window,
-		// 	const SharedPtr<WorldEntity>& worldEntt) const;
 
 		bool TranslateWindowInputs(
 			const Window& window,
@@ -34,16 +29,10 @@ namespace powe
 		 */
 		void StartWorldClock() const;
 
-
-		//void Step(const SharedPtr<WorldEntity>& worldEntt);
 		void Step(WorldEntity& worldEntity);
 
 		WorldClock& GetWorldClock() const { return *m_WorldClock; }
 		Renderer& GetRenderer() const { return *m_MainRenderer; }
-
-		// void Draw(
-		// 	const SharedPtr<Window>& window,
-		// 	const SharedPtr<WorldEntity>& worldEntt) const;
 
 		void Draw(const Window& window, const WorldEntity& worldEntt) const;
 
@@ -68,7 +57,6 @@ namespace powe
 		OwnedPtr<Renderer> m_MainRenderer;
 		OwnedPtr<InputManager> m_InputManager{};
 
-		// std::vector<std::future<void>> m_AsyncUpdateSystems{};
 	};
 }
 

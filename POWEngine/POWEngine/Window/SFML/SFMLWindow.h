@@ -27,6 +27,7 @@ namespace powe
 		void Display() override;
 		void SetVSync(bool VSync) override;
 		void UpdateWindowContext(float deltaTime) override;
+		void SetFramerateLimit(int fps) override;
 		const glm::uvec4& GetClearColor() const override;
 
 		sf::RenderWindow& GetRenderWindow() { return m_WndHandle; }
@@ -47,10 +48,8 @@ namespace powe
 		HardwareMessages m_HWMessages;
 		sf::RenderWindow m_WndHandle;
 		
-		// glm::uvec2 m_MousePosLastPoll;
 		glm::uvec4 m_ClearColor{};
 		glm::uvec2 m_WindowSize{};
-		// glm::fvec2 m_DeltaMousePos;
 	};
 
 }

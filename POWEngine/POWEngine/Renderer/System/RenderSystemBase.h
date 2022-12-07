@@ -10,7 +10,7 @@ namespace powe
     class RenderAPI;
     class Window;
 
-    class RenderSystemBase : public SystemKeys
+    class RenderSystemBase : public ECSSystemBackend
     {
         friend class Renderer;
         
@@ -21,14 +21,16 @@ namespace powe
         RenderSystemBase& operator=(const RenderSystemBase&) = default;
         RenderSystemBase(RenderSystemBase&&) = default;
         RenderSystemBase& operator=(RenderSystemBase&&) = default;
-        virtual ~RenderSystemBase() = default;
+        virtual ~RenderSystemBase() override = default;
 
     protected:
+
+        virtual void Draw(const RenderAPI&) = 0;
         
-        virtual void InternalCreate(const WorldEntity&,const Archetype&,const RenderAPI&) = 0;
+        // virtual void InternalCreate(const WorldEntity&,const Archetype&,const RenderAPI&) = 0;
         
-        virtual void InternalDraw(const WorldEntity& worldEntity,
-            const Window& renderWindow,const Archetype&, const RenderAPI&) = 0;
+        // virtual void InternalDraw(const WorldEntity& worldEntity,
+        //     const Window& renderWindow,const Archetype&, const RenderAPI&) = 0;
     };
 
     template <bool U>

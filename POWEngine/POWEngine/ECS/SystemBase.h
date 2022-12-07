@@ -2,7 +2,8 @@
 
 #include <stdexcept>
 
-#include "SystemKeys.h"
+// #include "SystemKeys.h"
+#include "ECSSystemBackend.h"
 #include "POWEngine/ECS/ECSUtils.h"
 #include "POWEngine/Core/WorldEntity/WorldEntity.h"
 
@@ -11,10 +12,8 @@ namespace powe
     struct Archetype;
     class SparseComponentManager;
 
-    class SystemBase : public SystemKeys
+    class SystemBase : public ECSSystemBackend
     {
-        friend class WorldEntity;
-        friend class ThreadSystem;
     public:
         
         SystemBase();
@@ -22,34 +21,23 @@ namespace powe
         SystemBase& operator=(const SystemBase&) = delete;
         SystemBase(SystemBase&&) noexcept = default;
         SystemBase& operator=(SystemBase&&) noexcept = default;
-        virtual ~SystemBase() = default;
+        virtual ~SystemBase() override = default;
     
     protected:
 
-        WorldEntity& GetWorld() const { return *m_World; }
+        void Update(const Archetype&, float) override;
+        void Destroy(const Archetype&) override;
         
         virtual void InternalUpdate(Archetype*, float);
         virtual void InternalCreate(WorldEntity* world,const Archetype&);
         void InternalDestroy(const Archetype&);
 
         virtual void OnUpdate(float, powe::GameObjectID) = 0;
-
-        /**
-         * \brief Run once after all the elements have been iterate through
-         */
-        virtual void OnPreCreate() {}
-        
-        virtual void OnCreate(GameObjectID) {}
-
         virtual void OnDestroy(GameObjectID) {}
 
         // Specialize GetComponent from iteration
         template <typename ComponentType>
         EnableIsBasedOf<BaseComponent, ComponentType, ComponentType&> GetComponent() const;
-
-        // Specialize GetComponent from iteration
-        // template <typename ...Args>
-        // std::tuple<std::add_pointer_t<Args>...> GetComponentsView() const;
 
         template<typename ...Args>
         std::tuple<std::add_lvalue_reference_t<Args>...> GetComponentsView() const;
@@ -66,7 +54,7 @@ namespace powe
         // template<typename T>
         // T* InternGetComponentByID(const Archetype& archetype,ComponentTypeID id) const;
         
-        WorldEntity* m_World;
+        // WorldEntity* m_World;
         
         // using pointer to be more flexible. Doesn't really need smartpointer here there's no ownership changing anyway
         const Archetype* m_CurrentArchetype;
@@ -85,23 +73,12 @@ namespace powe
         return std::make_tuple(std::ref(GetComponent<Args>(*m_CurrentArchetype))...);
     }
 
-    // template <typename ... Args>
-    // std::tuple<std::add_pointer_t<Args>...> SystemBase::GetComponentsView() const
-    // {
-    //     return std::make_tuple(GetComponent<Args>(*m_CurrentArchetype)...);
-    // }
-
-    // template <typename T>
-    // T& SystemBase::GetComponentByID(ComponentTypeID id) const
-    // {
-    //     return InternGetComponentByID<T>(*m_CurrentArchetype,id);
-    // }
-
     template <typename T>
     T& SystemBase::GetComponent(const Archetype& archetype) const
     {
         const ComponentTypeID compID{BaseComponent::GetId<T>()};
-
+        const WorldEntity& world{GetWorld()};
+        
         const auto findItr = archetype.ComponentOffsets.find(compID);
 
         if (findItr != archetype.ComponentOffsets.end())
@@ -121,7 +98,7 @@ namespace powe
 
             // if it is Sparse component
             // get the data from sparse section
-            auto& sparseManager{m_World->GetSparseComponentManager()};
+            auto& sparseManager{world.GetSparseComponentManager()};
 
             //const SparseHandle* handle{ reinterpret_cast<SparseHandle*>(dataAddress) };
 

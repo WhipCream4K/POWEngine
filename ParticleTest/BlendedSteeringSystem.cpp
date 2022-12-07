@@ -13,10 +13,6 @@ BlendedSteeringSystem::BlendedSteeringSystem()
 
 void BlendedSteeringSystem::OnCreate(powe::GameObjectID id [[maybe_unused]])
 {
-    m_Transform[id] = &GetComponent<Transform2D>();
-    m_Velocity[id] = &GetComponent<VelocityComponent>();
-    m_FleeComponent[id] = &GetComponent<FleeComponent>();
-    m_WanderComponent[id] = &GetComponent<WanderComponent>();
 }
 
 void BlendedSteeringSystem::OnUpdate(float deltaTime, powe::GameObjectID id [[maybe_unused]])
@@ -106,4 +102,9 @@ void BlendedSteeringSystem::OnUpdate(float deltaTime, powe::GameObjectID id [[ma
     }
     
     agentTransform.SetWorldPosition(agentTransform.GetPosition() + velocity.linearVelocity * deltaTime);
+}
+
+void BlendedSteeringSystem::UpdateCellRendering(powe::Transform2D& transform, CellComponent& cellComponent)
+{
+    
 }

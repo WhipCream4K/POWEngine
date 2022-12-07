@@ -173,6 +173,7 @@ xcopy /y $(SolutionDir)3rdPartyLib\fmod\lib\$(Platform) $(OutDir)</Command>
   <ItemGroup>
     <ClCompile Include="BlendedSteeringSystem.cpp" />
     <ClCompile Include="BoundAreaSystem.cpp" />
+    <ClCompile Include="CellUpdateSystem.cpp" />
     <ClCompile Include="SceneControlSystem.cpp" />
     <ClCompile Include="EngineStatsComponent.cpp" />
     <ClCompile Include="EngineStatsTrackSystem.cpp" />
@@ -193,6 +194,7 @@ xcopy /y $(SolutionDir)3rdPartyLib\fmod\lib\$(Platform) $(OutDir)</Command>
   <ItemGroup>
     <ClInclude Include="BlendedSteeringSystem.h" />
     <ClInclude Include="BoundAreaSystem.h" />
+    <ClInclude Include="CellUpdateSystem.h" />
     <ClInclude Include="SceneControlSystem.h" />
     <ClInclude Include="EngineStatsComponent.h" />
     <ClInclude Include="EngineStatsTrackSystem.h" />

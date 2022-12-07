@@ -4,8 +4,9 @@
 #include "POWEngine/ECS/Archetype.h"
 #include "POWEngine/ECS/SystemBase.h"
 
-powe::WorldEntity::WorldEntity()
-    : m_SimpleThreadPool(std::make_unique<SimpleThreadPool>())
+powe::WorldEntity::WorldEntity(const SharedPtr<Core>& core)
+    : CoreResource(core)
+    , AppResource(nullptr)
     , m_SparseComponentManager(*this)
 {
 }
@@ -102,7 +103,7 @@ void powe::WorldEntity::UpdatePipeline(PipelineLayer layer, float deltaTime)
             if (!archetype->GameObjectIds.empty())
             {
                 if (IsDigitExistInNumber(archetype->ComponentOffsets, system->GetKeys()))
-                    system->InternalUpdate(archetype.get(), deltaTime);
+                    system->Update(*archetype, deltaTime);
             }
         }
     }
@@ -653,7 +654,7 @@ void powe::WorldEntity::InternalAddSystemToPipeline()
                 if (!archetype->GameObjectIds.empty())
                 {
                     if (IsDigitExistInNumber(archetype->ComponentOffsets, system->GetKeys()))
-                        system->InternalCreate(this,*archetype);
+                        system->Initialize(*this);
                 }
             }
 
@@ -678,7 +679,7 @@ void powe::WorldEntity::InternalRemoveSystemFromPipeline()
         for (auto& systemPipeline : m_SystemPipeline)
         {
             const auto findItr{
-                std::ranges::remove_if(systemPipeline, [&removingSystems](const SharedPtr<SystemBase>& activeSystem)
+                std::ranges::remove_if(systemPipeline, [&removingSystems](const SharedPtr<ECSSystemBackend>& activeSystem)
                 {
                     return std::ranges::find(removingSystems, activeSystem) != removingSystems.end();
                 })
@@ -691,7 +692,7 @@ void powe::WorldEntity::InternalRemoveSystemFromPipeline()
                     if (!archetype->GameObjectIds.empty())
                     {
                         if (IsDigitExistInNumber(archetype->ComponentOffsets, it->get()->GetKeys()))
-                            it->get()->InternalDestroy(*archetype);
+                            it->get()->Destroy(*archetype);
                     }
                 }
             }

@@ -56,6 +56,16 @@ struct DebugSteeringComponent : powe::Component<DebugSteeringComponent>
     OwnedPtr<sf::RectangleShape> boundAreaShape{};
 };
 
+struct CellComponent : powe::Component<CellComponent>
+{
+    int oldCellID{};
+};
+
+struct CellUpdaterComponent : powe::Component<CellUpdaterComponent>
+{
+    std::vector<std::unordered_set<powe::GameObjectID>> cell{};
+};
+
 
 struct DrawAsset : powe::Component<DrawAsset>
 {

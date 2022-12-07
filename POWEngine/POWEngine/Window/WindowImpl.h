@@ -22,6 +22,7 @@ namespace powe
 		virtual const glm::uvec4& GetClearColor() const = 0;
 		virtual void SetVSync(bool) = 0;
 		virtual void UpdateWindowContext(float deltaTime) = 0;
+		virtual void SetFramerateLimit(int fps) = 0;
 		// [[nodiscard]] virtual const glm::uvec2& GetRelativeMousePos() const = 0;
 
 		virtual ~WindowImpl();
