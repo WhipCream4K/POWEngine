@@ -9,4 +9,9 @@ powe::WindowImpl::WindowImpl(uint32_t , uint32_t , const std::string& , const Ot
 {
 }
 
+std::mutex& powe::WindowImpl::GetWindowMutex()
+{
+    return m_ClassMutex;
+}
+
 powe::WindowImpl::~WindowImpl() = default;

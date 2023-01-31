@@ -1,8 +1,9 @@
 #pragma once
 
+#include "POWEngine/Utils/MacroDef.h"
 #include "POWEngine/Services/ServiceLocator.h"
 
-#if defined(RELEASE_WITH_LOGINFO)
+#if defined(RELEASE_WITH_LOGINFO) || defined(_DEBUG)
 
 #define POWLOGNORMAL(MSG)	powe::ServiceLocator::GetLogger().LogInfoMessage(MSG)
 #define POWLOGINFO(MSG)		powe::ServiceLocator::GetLogger().LogInfoMessage(MSG,"at " __FUNCTION__)

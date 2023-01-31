@@ -1,5 +1,4 @@
 
-#define RELEASE_WITH_LOGINFO
 #include <iostream>
 #include "ParticleApp.h"
 

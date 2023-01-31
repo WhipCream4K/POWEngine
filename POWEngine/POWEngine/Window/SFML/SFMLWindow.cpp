@@ -4,10 +4,7 @@
 #include "POWEngine/Core/Input/Key.h"
 #include "POWEngine/Core/Input/ListsOfKeys.h"
 
-#ifdef USE_IMGUI
-#include <imgui-SFML.h>
-#include <imgui.h>
-#endif
+#include "POWEngine/Debug/imgui/ImGUI.h"
 
 #if USE_SFML_WINDOW
 
@@ -28,7 +25,7 @@ powe::SFMLWindow::SFMLWindow(uint32_t width, uint32_t height, const std::string&
     // m_MousePosLastPoll.x = mousePos.x;
     // m_MousePosLastPoll.y = mousePos.y;
 
-    InitDebugWindowContext();
+    // InitDebugWindowContext();
 }
 
 powe::SFMLWindow::SFMLWindow(uint32_t width, uint32_t height, const std::string& title)
@@ -43,156 +40,8 @@ powe::SFMLWindow::SFMLWindow(uint32_t width, uint32_t height, const std::string&
     const auto mousePos = sf::Mouse::getPosition(m_WndHandle);
     // m_MousePosLastPoll.x = mousePos.x;
     // m_MousePosLastPoll.y = mousePos.y;
-
-    InitDebugWindowContext();
+    // InitDebugWindowContext();
 }
-
-// const powe::HardwareMessages& powe::SFMLWindow::PollHardwareMessages(bool& shouldEarlyExit, bool& shouldIgnoreInputs)
-// {
-// 	m_HWMessages.totalMessages = 0;
-//
-// 	uint8_t messageCnt{};
-//
-//
-// 	if (m_WndHandle.isOpen())
-// 	{
-// 		ImGui::NewFrame();
-//
-// 		sf::Event sfmlEvent{};
-// 		
-// 		while (m_WndHandle.pollEvent(sfmlEvent))
-// 		{
-// 			if (messageCnt > MinimumWindowEventCnt)
-// 				break;
-//
-// 			HardwareData messageData{};
-//
-// 			switch (sfmlEvent.type)
-// 			{
-//
-// 			case sf::Event::Closed:
-// 			{
-// 				shouldEarlyExit = true;
-// 				return m_HWMessages;
-// 			}
-// 			case sf::Event::GainedFocus:
-// 			{
-// 				break;
-// 			}
-// 			case sf::Event::LostFocus:
-// 			{
-// 				shouldIgnoreInputs = true;
-// 				return m_HWMessages;
-// 			}
-// 			case sf::Event::KeyPressed:
-// 			{
-// 				KeyboardData keyboardData{ uint8_t(sfmlEvent.key.code) };
-// 				keyboardData.sysKey = uint8_t(sfmlEvent.key.alt << int(KeyboardSysKey::KS_Alt) |
-// 					sfmlEvent.key.control << int(KeyboardSysKey::KS_Ctrl) |
-// 					sfmlEvent.key.shift << int(KeyboardSysKey::KS_Shift) |
-// 					sfmlEvent.key.system << int(KeyboardSysKey::KS_System));
-//
-// 				keyboardData.isPressed = true;
-//
-// 				messageData.hData = keyboardData;
-// 				messageData.eventId = uint8_t(EventType::KeyboardButton);
-// 				messageData.inDevice = InputDevice::D_Keyboard;
-//
-// 				m_HWMessages.hwMessages[messageCnt++] = messageData;
-//
-// 				break;
-// 			}
-// 			case sf::Event::KeyReleased:
-// 			{
-// 				KeyboardData keyboardData{ uint8_t(sfmlEvent.key.code) };
-// 				keyboardData.sysKey = uint8_t(sfmlEvent.key.alt << int(KeyboardSysKey::KS_Alt) |
-// 					sfmlEvent.key.control << int(KeyboardSysKey::KS_Ctrl) |
-// 					sfmlEvent.key.shift << int(KeyboardSysKey::KS_Shift) |
-// 					sfmlEvent.key.system << int(KeyboardSysKey::KS_System));
-//
-// 				keyboardData.isPressed = false;
-//
-// 				messageData.hData = keyboardData;
-// 				messageData.eventId = uint8_t(EventType::KeyboardButton);
-// 				messageData.inDevice = InputDevice::D_Keyboard;
-//
-// 				m_HWMessages.hwMessages[messageCnt++] = messageData;
-//
-// 				break;
-// 			}
-// 			case sf::Event::Resized:
-// 			{
-// 				Resize(sfmlEvent.size.width, sfmlEvent.size.height);
-// 				break;
-// 			}
-// 			case sf::Event::MouseButtonPressed:
-// 			{
-// 				//messageData.hData = MouseData{ MouseCharKey(sfmlEvent.mouseButton.button) };
-// 				messageData.hData = MouseKeyData{ uint8_t(sfmlEvent.mouseButton.button),true };
-// 				messageData.eventId = uint8_t(EventType::MouseButton);
-// 				messageData.inDevice = InputDevice::D_Mouse;
-//
-// 				m_HWMessages.hwMessages[messageCnt++] = messageData;
-//
-// 				break;
-// 			}
-// 			case sf::Event::MouseButtonReleased:
-// 			{
-// 				//messageData.hData = MouseData{ MouseCharKey(sfmlEvent.mouseButton.button) };
-// 				messageData.hData = MouseKeyData{ uint8_t(sfmlEvent.mouseButton.button),false };
-// 				messageData.eventId = uint8_t(EventType::MouseButton);
-// 				messageData.inDevice = InputDevice::D_Mouse;
-//
-// 				m_HWMessages.hwMessages[messageCnt++] = messageData;
-//
-// 				break;
-// 			}
-// 			case sf::Event::MouseWheelScrolled:
-// 			{
-// 				//messageData.hData = MouseData{ MouseCharKey(MouseKey::MK_Middle),MouseWheelDelta(sfmlEvent.mouseWheelScroll.delta)};
-// 				messageData.hData = MouseWheelDelta(sfmlEvent.mouseWheelScroll.delta);
-// 				messageData.eventId = uint8_t(EventType::MouseWheelMoved);
-// 				messageData.inDevice = InputDevice::D_Mouse;
-//
-// 				m_HWMessages.hwMessages[messageCnt++] = messageData;
-//
-// 				break;
-// 			}
-// 			case sf::Event::MouseMoved:
-// 			{
-// 				messageData.eventId = uint8_t(EventType::MouseMoved);
-// 				messageData.inDevice = InputDevice::D_Mouse;
-//
-// 				m_DeltaMousePos.x = float(sfmlEvent.mouseMove.x - m_MousePosLastPoll.x);
-// 				m_DeltaMousePos.y = float(m_MousePosLastPoll.y - sfmlEvent.mouseMove.y);
-//
-// 				MousePos mousePos = MousePos{
-// 					m_DeltaMousePos.x,
-// 					m_DeltaMousePos.y,
-// 					sfmlEvent.mouseMove.x,
-// 					sfmlEvent.mouseMove.y };
-//
-// 				//messageData.hData = MouseData{ MouseKey::MK_Count,0.0f,mousePos };
-// 				messageData.hData = mousePos;
-//
-// 				// m_MousePosLastPoll.x = sfmlEvent.mouseMove.x;
-// 				// m_MousePosLastPoll.y = sfmlEvent.mouseMove.y;
-//
-// 				m_HWMessages.hwMessages[messageCnt++] = messageData;
-//
-// 				break;
-// 			}
-//
-// 			default: break;
-// 			}
-// 		}
-//
-// 		ParseHWMessageToDebugWindow(sfmlEvent);
-// 		m_HWMessages.totalMessages = messageCnt;
-// 	}
-//
-// 	return m_HWMessages;
-// }
 
 void powe::SFMLWindow::PollHardwareMessages(
     HardwareMessages& hardwareMessages,
@@ -215,8 +64,9 @@ void powe::SFMLWindow::PollHardwareMessages(
             {
             case sf::Event::Closed:
                 {
+                    m_WndHandle.close();
                     shouldEarlyExit = true;
-                    return;
+                    // return;
                 }
             case sf::Event::GainedFocus:
                 {
@@ -225,7 +75,7 @@ void powe::SFMLWindow::PollHardwareMessages(
             case sf::Event::LostFocus:
                 {
                     shouldIgnoreInputs = true;
-                    return;
+                    // return;
                 }
             case sf::Event::KeyPressed:
                 {
@@ -365,7 +215,7 @@ void powe::SFMLWindow::SetClearColor(const glm::uvec4& color)
 void powe::SFMLWindow::Display()
 {
     RenderDebugWindowContext();
-    m_WndHandle.display();
+    // m_WndHandle.display();
 }
 
 void powe::SFMLWindow::SetVSync(bool VSync)
@@ -393,33 +243,34 @@ powe::SFMLWindow::~SFMLWindow()
     m_WndHandle.close();
 }
 
-void powe::SFMLWindow::ParseHWMessageToDebugWindow(sf::Event& ev) const
+void powe::SFMLWindow::ParseHWMessageToDebugWindow(sf::Event& ev [[maybe_unused]]) const
 {
-#ifdef USE_IMGUI
+#if USE_IMGUI
     ImGui::SFML::ProcessEvent(m_WndHandle, ev);
+    // ImGui::NewFrame();
 #endif
 }
 
-void powe::SFMLWindow::UpdateDebugWindowContext(float deltaTime)
+void powe::SFMLWindow::UpdateDebugWindowContext(float deltaTime [[maybe_unused]])
 {
-#ifdef USE_IMGUI
+#if USE_IMGUI
     ImGui::SFML::Update(m_WndHandle, sf::seconds(deltaTime));
 #endif
 }
 
 void powe::SFMLWindow::InitDebugWindowContext()
 {
-#ifdef USE_IMGUI
+#if USE_IMGUI
     ImGui::SFML::Init(m_WndHandle);
 #endif
 }
 
 void powe::SFMLWindow::RenderDebugWindowContext()
 {
-#ifdef USE_IMGUI
-    ImGui::ShowDemoWindow();
-    ImGui::SFML::Render( m_WndHandle);
-#endif
+      #if USE_IMGUI
+          // ImGui::ShowDemoWindow();
+          ImGui::SFML::Render( m_WndHandle);
+      #endif
 }
 
 

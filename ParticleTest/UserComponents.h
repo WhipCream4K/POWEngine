@@ -52,46 +52,18 @@ struct DebugSteeringComponent : powe::Component<DebugSteeringComponent>
     glm::fvec4 boundArea{};
     int activeAgents{};
     float agentSize{1.5f};
-    OwnedPtr<sf::CircleShape> agentShape{};
+    OwnedPtr<sf::RectangleShape> agentShape{};
     OwnedPtr<sf::RectangleShape> boundAreaShape{};
 };
 
-struct CellComponent : powe::Component<CellComponent>
-{
-    int oldCellID{};
-};
-
-struct CellUpdaterComponent : powe::Component<CellUpdaterComponent>
-{
-    std::vector<std::unordered_set<powe::GameObjectID>> cell{};
-};
-
-
 struct DrawAsset : powe::Component<DrawAsset>
 {
-    sf::Drawable* drawAsset{}; 
+    sf::Drawable* drawAsset{};
 };
 
-struct AsyncRender : powe::Component<AsyncRender>
+struct AgentVerticesBatch : powe::Component<AgentVerticesBatch>
 {
-    AsyncRender() = default;
-    AsyncRender& operator=(AsyncRender&& other) noexcept
-    {
-        if(this != &other)
-        {
-            transformUpdate = std::move(other.transformUpdate);
-        }
-
-        return *this;
-    }
-    
-    AsyncRender(AsyncRender&& other) noexcept
-        : transformUpdate(std::move(other.transformUpdate))
-    {
-    }
-
-    ~AsyncRender() override = default;
-    
-    std::future<glm::fvec2> transformUpdate{};
-    std::mutex taskLock{};
+    sf::VertexArray vertexBuffer{};
+    float rectSize{};
+    uint32_t vertexID{};
 };

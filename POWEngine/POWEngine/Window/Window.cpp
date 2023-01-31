@@ -29,6 +29,8 @@ powe::Window::Window(uint32_t width, uint32_t height, const std::string& title, 
         log.append(typeid(WindowType).name());
         POWLOGINFO(log);
     }
+
+    BroadcastOnCreate();
 }
 
 void powe::Window::PollHardwareMessages(HardwareMessages& hwMessages, bool& shouldEarlyExit,
@@ -43,6 +45,7 @@ void powe::Window::Resize(uint32_t width, uint32_t height)
     m_Height = height;
 
     m_WindowImpl->Resize(width, height);
+    BroadcastOnResize();
 }
 
 void powe::Window::SetTitle(const std::string& newTitle)
@@ -57,21 +60,46 @@ void powe::Window::UpdateWindowContext(float deltaTime) const
     m_WindowImpl->UpdateWindowContext(deltaTime);
 }
 
-void powe::Window::RegisterOnResizeCallback(const ResizeCallback& callback)
+uint32_t powe::Window::RegisterOnResizeCallback(const ResizeCallback& callback)
 {
-    m_OnResizeCallback.emplace_back(callback);
+    const uint32_t handle{m_OnResizeHandle++};
+    m_OnResizeCallback.emplace_back(handle,callback);
+    return handle;
 }
 
-void powe::Window::RegisterOnCreateCallback(const CreateCallback& callback)
+void powe::Window::RemoveOnResizeCallback(uint32_t handle)
 {
-    m_OnCreateCallback.emplace_back(callback);
+    if(m_OnResizeCallback.empty())
+        return;
+        
+    const auto ret{std::ranges::remove_if(m_OnResizeCallback,[&handle](const ResizePair& pair)
+    {
+        return handle == pair.first;
+    })};
+
+    m_OnResizeCallback.erase(ret.begin(),ret.end());
+}
+
+uint32_t powe::Window::RegisterOnCreateCallback(const CreateCallback& callback)
+{
+    const uint32_t handle{m_OnCreateHandle++};
+    m_OnCreateCallback.emplace_back(handle,callback);
+    return handle;
 }
 
 void powe::Window::BroadcastOnCreate() const
 {
-    for (const auto& callback : m_OnCreateCallback)
+    for (const auto& callback : m_OnCreateCallback | std::views::values)
     {
-        callback();
+        callback(*this);
+    }
+}
+
+void powe::Window::BroadcastOnResize() const
+{
+    for (const auto& callback : m_OnResizeCallback | std::views::values)
+    {
+        callback(*this);
     }
 }
 
@@ -103,6 +131,11 @@ void powe::Window::SetClearColor(const glm::uvec4& color) const
 const glm::uvec4& powe::Window::GetClearColor() const
 {
     return m_WindowImpl->GetClearColor();
+}
+
+std::mutex& powe::Window::GetWindowMutex() const
+{
+    return m_WindowImpl->GetWindowMutex();
 }
 
 powe::Window::~Window() = default;

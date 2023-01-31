@@ -9,9 +9,11 @@ namespace powe
 	{
 	public:
 
-		NullRenderer(uint32_t width, uint32_t height, const OtherWindowParams& other);
+		// NullRenderer(uint32_t width, uint32_t height, const OtherWindowParams& other);
 		NullRenderer() = default;
-		void DrawBufferOnWindow(const Window&) const override{}
+		void DeferredDrawOnWindow(const Window&) override {}
+		void DisplayBuffer(const Window&) override {}
+		void ClearBackBuffer() override {}
 	};
 }
 

@@ -19,4 +19,5 @@ public:
 private:
 
     SharedPtr<powe::GameObject> m_SceneObject;
+    SharedPtr<powe::GameObject> m_AgentVerticesBatch{};
 };

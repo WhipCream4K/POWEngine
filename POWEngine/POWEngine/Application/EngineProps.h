@@ -1,6 +1,12 @@
 #pragma once
 
 #include "POWEngine/Math/Math.h"
+#include "POWEngine/Core/CustomTypes.h"
+
+namespace powe
+{
+    class RenderAPI;
+}
 
 namespace powe
 {
@@ -18,7 +24,8 @@ namespace powe
     struct EngineProps
     {
         WindowProps winProps{};
-        Renderer* renderer{}; 
+        OwnedPtr<RenderAPI> mainWindowRenderAPI{};
+        // RenderAPI* renderer{}; 
     };
     
 }

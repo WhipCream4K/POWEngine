@@ -10,9 +10,5 @@
 #include "POWEngine/Window/Window.h"
 #include "POWEngine/Logger/LoggerUtils.h"
 #include "POWEngine/Core/GameObject/GameObject.h"
-
-
-#if USE_SFML_RENDERER
-#include "POWEngine/Rendering/SFML/SFML2DRenderer.h"
-#endif
+#include "POWEngine/Utils/MacroDef.h"
 

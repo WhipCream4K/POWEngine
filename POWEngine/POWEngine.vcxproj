@@ -190,10 +190,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="POWEngine\Application\Application.h" />
-    <ClInclude Include="POWEngine\Application\AppResource.h" />
     <ClInclude Include="POWEngine\Application\EngineProps.h" />
+    <ClInclude Include="POWEngine\Application\IApplication.h" />
     <ClInclude Include="POWEngine\Core\Components\BaseComponent.h" />
-    <ClInclude Include="POWEngine\Core\CoreResource.h" />
+    <ClInclude Include="POWEngine\Core\ICore.h" />
+    <ClInclude Include="POWEngine\Debug\imgui\SFMLImGuiOverlay.h" />
+    <ClInclude Include="POWEngine\Debug\imgui\ImGUI.h" />
     <ClInclude Include="POWEngine\ECS\ECSSystemBackend.h" />
     <ClInclude Include="POWEngine\ECS\SystemKeys.h" />
     <ClInclude Include="POWEngine\ECS\ThreadExecute.h" />
@@ -206,8 +208,6 @@
     <ClInclude Include="POWEngine\Renderer\Components\SFML\ISFMLDrawable.h" />
     <ClInclude Include="POWEngine\Renderer\Components\SFML\SFMLDrawComponent.h" />
     <ClInclude Include="POWEngine\Renderer\Components\Text\SFML\SFMLTextComponent.h" />
-    <ClInclude Include="POWEngine\Renderer\RenderCommand.h" />
-    <ClInclude Include="POWEngine\Renderer\RenderThread.h" />
     <ClInclude Include="POWEngine\Renderer\Resources\Font\FontImpl.h" />
     <ClInclude Include="POWEngine\Renderer\Resources\Font\Font.h" />
     <ClInclude Include="POWEngine\Core\Input\EventType.h" />
@@ -218,8 +218,8 @@
     <ClInclude Include="POWEngine\Core\Input\InputMapping.h" />
     <ClInclude Include="POWEngine\Core\Input\InputVars.h" />
     <ClInclude Include="POWEngine\Renderer\Components\Sprite\SFML\SFMLSpriteComponent.h" />
+    <ClInclude Include="POWEngine\Renderer\SFML\SFML2DRenderer.h" />
     <ClInclude Include="POWEngine\Renderer\System\SFML\SFMLDefaultRenderSystem.h" />
-    <ClInclude Include="POWEngine\Services\SingleInstanceContainer.h" />
     <ClInclude Include="POWEngine\Singleton\InstanceUtils.h" />
     <ClInclude Include="POWEngine\Sound\FMOD\AudioClip.h" />
     <ClInclude Include="POWEngine\Sound\FMOD\Channel.h" />
@@ -273,8 +273,7 @@
     <ClInclude Include="POWEngine\ECS\SparseComponentManager.h" />
     <ClInclude Include="POWEngine\Sound\SoundSystem.h" />
     <ClInclude Include="POWEngine\Renderer\Renderer.h" />
-    <ClInclude Include="POWEngine\Renderer\RendererImpl.h" />
-    <ClInclude Include="POWEngine\Renderer\SFML\SFML2DRenderer.h" />
+    <ClInclude Include="POWEngine\Renderer\SFML\SFML2DRendererThreaded.h" />
     <ClInclude Include="POWEngine\Renderer\Components\Sprite\SpriteComponent.h" />
     <ClInclude Include="POWEngine\Renderer\Resources\Texture\Texture.h" />
     <ClInclude Include="POWEngine\Renderer\Resources\Texture\TextureImpl.h" />
@@ -295,9 +294,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="POWEngine\Application\Application.cpp" />
-    <ClCompile Include="POWEngine\Application\AppResource.cpp" />
     <ClCompile Include="POWEngine\Application\EngineProps.cpp" />
-    <ClCompile Include="POWEngine\Core\CoreResource.cpp" />
+    <ClCompile Include="POWEngine\Application\IApplication.cpp" />
+    <ClCompile Include="POWEngine\Core\ICore.cpp" />
+    <ClCompile Include="POWEngine\Debug\imgui\SFMLImGuiOverlay.cpp" />
     <ClCompile Include="POWEngine\ECS\ECSSystemBackend.cpp" />
     <ClCompile Include="POWEngine\ECS\ECSUtils.cpp" />
     <ClCompile Include="POWEngine\ECS\SystemKeys.cpp" />
@@ -309,16 +309,14 @@
     <ClCompile Include="POWEngine\Renderer\Components\Debug2D\IShape2D.cpp" />
     <ClCompile Include="POWEngine\Renderer\Components\SFML\ISFMLDrawable.cpp" />
     <ClCompile Include="POWEngine\Renderer\Components\SFML\SFMLDrawComponent.cpp" />
-    <ClCompile Include="POWEngine\Renderer\RenderCommand.cpp" />
-    <ClCompile Include="POWEngine\Renderer\RenderThread.cpp" />
     <ClCompile Include="POWEngine\Renderer\Resources\Font\FontImpl.cpp" />
     <ClCompile Include="POWEngine\Renderer\Resources\Font\Font.cpp" />
     <ClCompile Include="POWEngine\Core\Input\InputSystem.cpp" />
     <ClCompile Include="POWEngine\Core\Components\InputComponent.cpp" />
     <ClCompile Include="POWEngine\Core\Components\AudioComponent.cpp" />
     <ClCompile Include="POWEngine\Core\Input\InputMapping.cpp" />
+    <ClCompile Include="POWEngine\Renderer\SFML\SFML2DRenderer.cpp" />
     <ClCompile Include="POWEngine\Renderer\System\SFML\SFMLDefaultRenderSystem.cpp" />
-    <ClCompile Include="POWEngine\Services\SingleInstanceContainer.cpp" />
     <ClCompile Include="POWEngine\Sound\FMOD\AudioClip.cpp" />
     <ClCompile Include="POWEngine\Sound\FMOD\Channel.cpp" />
     <ClCompile Include="POWEngine\Renderer\NullRenderer.cpp" />
@@ -357,8 +355,7 @@
     <ClCompile Include="POWEngine\ECS\SparseComponentManager.cpp" />
     <ClCompile Include="POWEngine\Sound\SoundSystem.cpp" />
     <ClCompile Include="POWEngine\Renderer\Renderer.cpp" />
-    <ClCompile Include="POWEngine\Renderer\RendererImpl.cpp" />
-    <ClCompile Include="POWEngine\Renderer\SFML\SFML2DRenderer.cpp" />
+    <ClCompile Include="POWEngine\Renderer\SFML\SFML2DRendererThreaded.cpp" />
     <ClCompile Include="POWEngine\Renderer\Components\Sprite\SpriteComponent.cpp" />
     <ClCompile Include="POWEngine\Renderer\Resources\Texture\Texture.cpp" />
     <ClCompile Include="POWEngine\Renderer\Resources\Texture\TextureImpl.cpp" />
@@ -374,6 +371,9 @@
     <ClCompile Include="POWEngine\Renderer\Components\Debug2D\SFML\SFMLDebugRectangle.cpp" />
     <ClCompile Include="POWEngine\Renderer\Components\Debug2D\RectangleImpl.cpp" />
     <ClCompile Include="POWEngine\Random\Random.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="POWEngine\Debug" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

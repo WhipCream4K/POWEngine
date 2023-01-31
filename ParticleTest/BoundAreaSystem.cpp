@@ -21,10 +21,10 @@ BoundAreaSystem::BoundAreaSystem(const SharedPtr<powe::GameObject>& gb)
     DefineSystemKeys<Transform2D,VelocityComponent>();
 }
 
-void BoundAreaSystem::OnCreate(powe::GameObjectID)
+void BoundAreaSystem::OnCreate()
 {
     if(!m_DebugSteeringOpt)
-        m_DebugSteeringOpt = m_BoundArea.lock()->GetComponent<DebugSteeringComponent>();
+        m_DebugSteeringOpt = m_BoundArea.lock()->GetComponent<DebugSteeringComponent>(); 
 }
 
 void BoundAreaSystem::OnUpdate(float, powe::GameObjectID)

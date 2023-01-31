@@ -12,7 +12,7 @@ powe::SFMLDefaultRenderSystem::SFMLDefaultRenderSystem()
     DefineSystemKeys<Transform2D,SFMLDrawComponent>();
 }
 
-void powe::SFMLDefaultRenderSystem::OnDraw(const SFML2DRenderer& renderer, const Window& renderWindow, GameObjectID)
+void powe::SFMLDefaultRenderSystem::OnDraw(const SFML2DRendererThreaded& renderer, const Window& renderWindow, GameObjectID)
 {
     const auto& [transform2D, sfmlDraw] = 
     GetComponentsView<Transform2D, SFMLDrawComponent>();

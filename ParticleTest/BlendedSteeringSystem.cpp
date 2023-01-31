@@ -11,10 +11,6 @@ BlendedSteeringSystem::BlendedSteeringSystem()
     DefineSystemKeys<powe::Transform2D,VelocityComponent,FleeComponent,WanderComponent>();
 }
 
-void BlendedSteeringSystem::OnCreate(powe::GameObjectID id [[maybe_unused]])
-{
-}
-
 void BlendedSteeringSystem::OnUpdate(float deltaTime, powe::GameObjectID id [[maybe_unused]])
 {
     const auto& [agentTransform,velocity,fleeComponent,wanderComponent] =
@@ -24,7 +20,7 @@ void BlendedSteeringSystem::OnUpdate(float deltaTime, powe::GameObjectID id [[ma
     // const auto& velocity{m_Velocity.at(id)};
     // const auto& fleeComponent{m_FleeComponent.at(id)};
     // const auto& wanderComponent{m_WanderComponent.at(id)};
-    
+
     // Flee Steering
     {
         const glm::fvec2 mousePos{GetWorld().GetInputSettings().GetMouseEnginePos()};
@@ -49,6 +45,7 @@ void BlendedSteeringSystem::OnUpdate(float deltaTime, powe::GameObjectID id [[ma
             steering = (glm::normalize(agentPos - mousePos) * velocity.maxVelocity) 
             * fleeComponent.fleePower;
         }
+        
     
         fleeComponent.steeringForce = steering;
     }
@@ -104,7 +101,7 @@ void BlendedSteeringSystem::OnUpdate(float deltaTime, powe::GameObjectID id [[ma
     agentTransform.SetWorldPosition(agentTransform.GetPosition() + velocity.linearVelocity * deltaTime);
 }
 
-void BlendedSteeringSystem::UpdateCellRendering(powe::Transform2D& transform, CellComponent& cellComponent)
+void BlendedSteeringSystem::UpdateCellRendering(powe::Transform2D&, CellComponent&)
 {
     
 }

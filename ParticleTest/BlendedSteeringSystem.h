@@ -20,7 +20,6 @@ public:
     
 protected:
 
-    void OnCreate(powe::GameObjectID) override;
     void OnUpdate(float, powe::GameObjectID) override;
 
 private:

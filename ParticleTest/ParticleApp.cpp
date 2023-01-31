@@ -1,8 +1,8 @@
 #include "ParticleApp.h"
 
 #include "SFMLAgentRenderSystem.h"
-#include "POWEngine/Renderer/SFML/SFML2DRenderer.h"
 #include "TestScene.h"
+#include "POWEngine/Renderer/SFML/SFML2DRenderer.h"
 
 using namespace powe;
 
@@ -12,9 +12,8 @@ void ParticleApp::OnEngineSetUp(powe::EngineProps& engineProps)
 	engineProps.winProps.height = 720;
 	engineProps.winProps.windowName = "ParticleTest";
 	engineProps.winProps.startWithVSync = false;
-
-	engineProps.renderer->RegisterRenderAPI(std::make_unique<SFML2DRenderer>());
-	engineProps.renderer->RegisterRenderSystem(SFMLAgentRenderSystem{});
+	engineProps.mainWindowRenderAPI = std::make_unique<SFML2DRenderer>();
+	
 }
 
 void ParticleApp::OnWorldInitialize(powe::WorldEntity& world)

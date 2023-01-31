@@ -1,27 +1,32 @@
 #pragma once
 
-#include "POWEngine/ECS/ECSSystemBackend.h"
 #include "POWEngine/Core/Input/InputSettings.h"
 #include "POWEngine/ECS/Archetype.h"
 #include "POWEngine/Core/Components/BaseComponent.h"
 #include "POWEngine/Core/Thread/SimpleThreadPool.h"
 #include "POWEngine/LockFree/LFStack.h"
 #include "PipelineLayer.h"
-#include "POWEngine/Application/AppResource.h"
-#include "POWEngine/Core/CoreResource.h"
 #include "POWEngine/ECS/ECSUtils.h"
 #include "POWEngine/ECS/SparseComponentManager.h"
+#include "POWEngine/Window/Window.h"
+
+namespace powe
+{
+	class RenderAPI;
+}
 
 namespace powe
 {
 	class SystemBase;
-	class WorldEntity final : public CoreResource , public AppResource
+	class ECSSystemBackend;
+	class WorldEntity final
 	{
 		using SystemPipelines = std::array<std::vector<SharedPtr<ECSSystemBackend>>, size_t(PipelineLayer::Count)>;
 
 	public:
 
-		WorldEntity(const SharedPtr<Core>& core);
+		// really don't know how to approach this
+		WorldEntity();
 		WorldEntity(const WorldEntity&) = delete;
 		WorldEntity& operator=(const WorldEntity&) = delete;
 		WorldEntity(WorldEntity&&) noexcept = delete;
@@ -36,10 +41,10 @@ namespace powe
 		
 		// Lock-free add system
 		template<typename SystemType>
-		EnableIsBasedOf<SystemBase,SystemType,SharedPtr<SystemType>>
+		EnableIsBasedOf<ECSSystemBackend,SystemType,SharedPtr<SystemType>>
 		RegisterSystem(PipelineLayer layer,SystemType&& constructor);
 		
-		void RemoveSystem(const SharedPtr<SystemBase>& system);
+		void RemoveSystem(const SharedPtr<ECSSystemBackend>& system);
 
 		// TODO: Maybe do a thread safe registering component
 		template<typename ComponentType>
@@ -74,6 +79,7 @@ namespace powe
 		// -------- Pipeline -------------
 		// -------------------------------
 		void UpdatePipeline(PipelineLayer layer, float deltaTime);
+		void RenderCommandPipeline(const Window& renderWindow,const RenderAPI& renderAPI) const;
 		void ResolveEntities();
 
 		template<typename ComponentType>
@@ -183,7 +189,7 @@ namespace powe
 		};
 
 		LFStack<SystemTrait> m_PendingAddSystem;
-		LFStack<SharedPtr<SystemBase>> m_PendingDeleteSystem;
+		LFStack<SharedPtr<ECSSystemBackend>> m_PendingDeleteSystem;
 
 		// -------------------------------
 		// --------- Component -----------
@@ -218,11 +224,11 @@ namespace powe
 	};
 
 	template <typename SystemType>
-	EnableIsBasedOf<SystemBase, SystemType, SharedPtr<SystemType>> WorldEntity::RegisterSystem(PipelineLayer layer,
+	EnableIsBasedOf<ECSSystemBackend, SystemType, SharedPtr<SystemType>> WorldEntity::RegisterSystem(PipelineLayer layer,
 		SystemType&& constructor)
 	{
 		SharedPtr<SystemType> system{std::make_shared<SystemType>(std::move(constructor))};
-		m_PendingAddSystem.Push(SystemTrait{system, layer});
+		m_PendingAddSystem.Push(SystemTrait{system,layer});
 		return system;
 	}
 

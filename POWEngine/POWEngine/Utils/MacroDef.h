@@ -16,3 +16,10 @@ SizeType GetSize() const override                                       \
 {                                                                       \
 return sizeof(##type);                                                \
 }                                                                       \
+
+
+#define SFML_SUPPORT 1
+#define USE_SFML_WINDOW 1
+#define USE_SFML_RENDERER 1
+#define RELEASE_WITH_LOGINFO 1
+#define USE_IMGUI 1

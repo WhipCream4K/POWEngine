@@ -1,10 +1,13 @@
 ﻿#include "TestScene.h"
 
+#include "AgentDrawSystem.h"
 #include "BlendedSteeringSystem.h"
 #include "BoundAreaSystem.h"
+#include "EngineStatsComponent.h"
 #include "FleeSteeringSystem.h"
 #include "SceneControlSystem.h"
 #include "powengine.h"
+#include "SceneDraw.h"
 #include "UserComponents.h"
 #include "WanderingSteeringSystem.h"
 #include "POWEngine/Core/Components/Transform2D.h"
@@ -36,14 +39,17 @@ TestScene::TestScene(powe::WorldEntity& world)
 
     debugComp->activeAgents = objectAmount;
 
-    debugComp->agentShape = std::make_unique<sf::CircleShape>();
+    debugComp->agentShape = std::make_unique<sf::RectangleShape>();
     
-    debugComp->agentShape->setRadius(1.5f);
+    // debugComp->agentShape->setRadius(3.0f);
+    debugComp->agentShape->setSize({3.0f,3.0f});
     debugComp->agentShape->setOrigin(1.5f,1.5f);
-    debugComp->agentShape->setFillColor(sf::Color::White);
+    sf::Color agentColor{sf::Color::White};
+    // agentColor.a = 0;
+    debugComp->agentShape->setFillColor(agentColor);
 
     debugComp->boundAreaShape = std::make_unique<sf::RectangleShape>();
-    debugComp->boundAreaShape->setFillColor(sf::Color{0,0,0,0});
+    debugComp->boundAreaShape->setFillColor(sf::Color::Transparent);
     debugComp->boundAreaShape->setSize({boundStartDim.x,boundStartDim.y});
     debugComp->boundAreaShape->setOrigin({boundStartDim.x * 0.5f,boundStartDim.y * 0.5f});
     debugComp->boundAreaShape->setOutlineColor(sf::Color::Green);
@@ -60,8 +66,8 @@ TestScene::TestScene(powe::WorldEntity& world)
     {
         const SharedPtr<GameObject> steeringAgent{std::make_shared<GameObject>(world)};
 
-        DrawAsset* draw_asset = steeringAgent->AddComponent(DrawAsset{});
-        draw_asset->drawAsset = debugComp->agentShape.get();
+        // DrawAsset* draw_asset = steeringAgent->AddComponent(DrawAsset{});
+        // draw_asset->drawAsset = debugComp->agentShape.get();
         
         Transform2D* transform2D{steeringAgent->AddComponent(Transform2D{steeringAgent})};
 
@@ -86,26 +92,18 @@ TestScene::TestScene(powe::WorldEntity& world)
         
         sceneComp->agentObjects.emplace_back(steeringAgent);
 
-        // async draw object
-        {
-            // const SharedPtr<GameObject> drawObject{std::make_shared<GameObject>(world)};
-            // drawObject->AddComponent(Transform2D{drawObject});            
-            //
-            // SFML2DCircle* circleShape{
-            //     drawObject->AddComponent(
-            //         SFML2DCircle{world, drawObject->GetID()})
-            // };
-            //
-            // circleShape->SetSize({1.5f, 1.5f});
-            //
-            // drawObject->AddComponent(AsyncRender{});
-            //
-            // sceneComp->drawObjects.emplace_back(drawObject);
-        }
+        sceneData->AddComponent(EngineStatsComponent{});
     }
 
-
+    m_AgentVerticesBatch = std::make_shared<powe::GameObject>(world);
     
+    AgentVerticesBatch* agentVertices = m_AgentVerticesBatch->AddComponent(AgentVerticesBatch{});
+    agentVertices->vertexBuffer.setPrimitiveType(sf::PrimitiveType::Quads);
+    agentVertices->vertexBuffer.resize(objectAmount * 4);
+    agentVertices->rectSize = 2.5f;
+
+    m_AgentVerticesBatch->AddComponent(Transform2D{m_AgentVerticesBatch});
+    m_AgentVerticesBatch->AddComponent(DrawAsset{});
     
     world.RegisterSystem(PipelineLayer::InputValidation, SceneControlSystem{});
 
@@ -113,4 +111,7 @@ TestScene::TestScene(powe::WorldEntity& world)
 
     world.RegisterSystem(PipelineLayer::PostUpdate, BoundAreaSystem{sceneData});
 
+    world.RegisterSystem(PipelineLayer::PostUpdate,AgentDrawSystem{});
+
+    world.RegisterSystem(PipelineLayer::IssueRenderCommand,SceneDraw{});
 }

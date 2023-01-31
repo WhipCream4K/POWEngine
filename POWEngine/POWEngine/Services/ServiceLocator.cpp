@@ -1,13 +1,19 @@
 #include "pch.h"
 #include "ServiceLocator.h"
+
 #include "POWEngine/Logger/LoggerUtils.h"
 #include "POWEngine/Sound/SoundSystem.h"
+#include "POWEngine/Core/ICore.h"
+#include "POWEngine/Application/IApplication.h"
 
 powe::NullSoundSystem powe::ServiceLocator::m_NullAudio{};
 SharedPtr<powe::SoundSystem> powe::ServiceLocator::m_SoundSystem{ SharedPtr<powe::NullSoundSystem>(&ServiceLocator::m_NullAudio,[](powe::NullSoundSystem*){})};
 
 powe::NullLogger powe::ServiceLocator::m_NullLogger{};
 SharedPtr<powe::Logger> powe::ServiceLocator::m_Logger{ SharedPtr<powe::NullLogger>(&powe::ServiceLocator::m_NullLogger,[](powe::NullLogger*) {}) };
+
+SharedPtr<powe::IApplication> powe::ServiceLocator::m_AppInterface{};
+SharedPtr<powe::ICore> powe::ServiceLocator::m_CoreInterface{};
 
 
 //void powe::ServiceLocator::Initialize()
@@ -42,3 +48,24 @@ void powe::ServiceLocator::RegisterLogger(const SharedPtr<Logger>& logger)
 	testMsg.append(typeid(*logger).name());
 	POWLOGNORMAL(testMsg);
 }
+
+powe::ICore& powe::ServiceLocator::GetCoreInterface()
+{
+	return *m_CoreInterface;
+}
+
+void powe::ServiceLocator::RegisterCoreInterface(const SharedPtr<ICore>& core)
+{
+	m_CoreInterface = core;
+}
+
+powe::IApplication& powe::ServiceLocator::GetAppInterface()
+{
+	return *m_AppInterface;
+}
+
+void powe::ServiceLocator::RegisterAppInterface(const SharedPtr<IApplication>& appInterface)
+{
+	m_AppInterface = appInterface;
+}
+

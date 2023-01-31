@@ -1,8 +1,9 @@
 #pragma once
 #include <future>
 
-#include "POWEngine/Window/WindowContext.h"
-//#include "POWEngine/Rendering/Renderer.h"
+#include "ICore.h"
+#include "POWEngine/Renderer/Renderer.h"
+#include "POWEngine/Window/Window.h"
 
 namespace powe
 {
@@ -13,10 +14,10 @@ namespace powe
 	class WorldEntity;
 	class WorldClock;
 	class Renderer;
-	class Core final
+	class Core final : public ICore
 	{
 	public:
-
+		
 		Core();
 
 		bool TranslateWindowInputs(
@@ -30,32 +31,43 @@ namespace powe
 		void StartWorldClock() const;
 
 		void Step(WorldEntity& worldEntity);
+		
+		bool FullStepMultiThreaded(const Renderer& renderer,WorldEntity& world);
+		bool FullStep(const Renderer& renderer,WorldEntity& world) const;
 
-		WorldClock& GetWorldClock() const { return *m_WorldClock; }
-		Renderer& GetRenderer() const { return *m_MainRenderer; }
-
-		void Draw(const Window& window, const WorldEntity& worldEntt) const;
-
-		void RegisterRendererType(OwnedPtr<RenderAPI>&& renderAPI) const;
-
-		~Core();
-
+		
 		Core(const Core&) = delete;
 		Core& operator=(const Core&) = delete;
-		Core(Core&&) = default;
+		Core(Core&&) noexcept = default;
 		Core& operator=(Core&&) = default;
+		~Core();
 
 	private:
 
+		void WaitForLastFrameDisplay(const Renderer& renderer) const;
+		void WaitForRenderThread(RenderAPI* renderAPI);
+		
+		static constexpr uint32_t MaxQueuedFrame{2};
+		uint32_t m_RenderCommandCount{};
+
+		uint32_t m_CurrentFrameCount{};
+		
+		bool m_StartFrame{};
+		
+		//
+		// std::future<void> m_WaitForFrameDisplay;
+		// std::promise<void> m_PromiseForFrameDisplay;
+
+		// class LocalThreadDisplay;
+		// OwnedPtr<LocalThreadDisplay> m_LocalThreadDisplay;
+			
 		/**
 		 * \brief Implementation of the core engine to expand the scalability of the core engine
 		 * i.e Inputs handle by sdl and rendering handles by OpenGL or DX12
 		 */
-		 //OwnedPtr<CoreImpl> m_CoreImpl;
 
-		OwnedPtr<WorldClock> m_WorldClock;
-		OwnedPtr<Renderer> m_MainRenderer;
-		OwnedPtr<InputManager> m_InputManager{};
+		// OwnedPtr<WorldClock> m_WorldClock;
+		// OwnedPtr<Renderer> m_MainRenderer;
 
 	};
 }

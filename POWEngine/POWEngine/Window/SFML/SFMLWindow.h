@@ -17,11 +17,9 @@ namespace powe
 
 		SFMLWindow(uint32_t width, uint32_t height, const std::string& title, OtherWindowParams others);
 		SFMLWindow(uint32_t width, uint32_t height, const std::string& title);
-		// const HardwareMessages& PollHardwareMessages(bool& shouldEarlyExit, bool& shouldIgnoreInputs) override;
 		void PollHardwareMessages(HardwareMessages& hardwareMessages,bool& shouldEarlyExit,bool& shouldIgnoreInputs) override;
 		void Resize(uint32_t width, uint32_t height) override;
 		void SetTitle(const std::string& title) override;
-		// const glm::uvec2& GetRelativeMousePos() const override;
 		void ClearWindow() override;
 		void SetClearColor(const glm::uvec4&) override;
 		void Display() override;
@@ -44,7 +42,6 @@ namespace powe
 
 	private:
 
-		//WindowMessages m_WndMessages;
 		HardwareMessages m_HWMessages;
 		sf::RenderWindow m_WndHandle;
 		

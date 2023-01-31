@@ -18,7 +18,7 @@ public:
     BoundAreaSystem(const glm::fvec4& box);
     BoundAreaSystem(const SharedPtr<powe::GameObject>& gb);
 
-    void OnCreate(powe::GameObjectID) override;
+    void OnCreate() override;
     void OnUpdate(float, powe::GameObjectID) override;
     
 private:

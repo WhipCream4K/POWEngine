@@ -6,5 +6,6 @@ enum class PipelineLayer
 	Update,
 	PhysicsValidation,
 	PostUpdate,
+	IssueRenderCommand,
 	Count
 };

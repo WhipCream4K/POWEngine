@@ -7,12 +7,6 @@
 #ifndef PCH_H
 #define PCH_H
 
-#define SFML_SUPPORT
-#define USE_SFML_WINDOW 1
-#define USE_SFML_RENDERER 1
-#define RELEASE_WITH_LOGINFO
-#define USE_IMGUI
-
 // add headers that you want to pre-compile here
 
 #include <array>
@@ -27,5 +21,6 @@
 
 #include "POWEngine/Core/CustomTypes.h"
 #include "POWEngine/Math/Math.h"
+#include "POWEngine/Utils/MacroDef.h"
 
 #endif //PCH_H

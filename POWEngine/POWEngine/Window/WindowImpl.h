@@ -1,5 +1,7 @@
 #pragma once
 
+#include <mutex>
+
 #include "WindowContext.h"
 
 namespace powe
@@ -23,13 +25,16 @@ namespace powe
 		virtual void SetVSync(bool) = 0;
 		virtual void UpdateWindowContext(float deltaTime) = 0;
 		virtual void SetFramerateLimit(int fps) = 0;
+
+		std::mutex& GetWindowMutex();
+		
 		// [[nodiscard]] virtual const glm::uvec2& GetRelativeMousePos() const = 0;
 
 		virtual ~WindowImpl();
 
 	protected:
 
-
+		std::mutex m_ClassMutex; 
 		//glm::uvec2 m_MousePosLastPoll;
 	};
 }

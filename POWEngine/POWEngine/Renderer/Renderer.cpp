@@ -1,74 +1,96 @@
 #include "pch.h"
 #include "Renderer.h"
-#include "RenderAPI.h"
+
 #include "POWEngine/Renderer/System/RenderSystemBase.h"
 #include "NullRenderer.h"
 #include "POWEngine/Core/GameObject/GameObject.h"
+#include "POWEngine/Debug/imgui/SFMLImGuiOverlay.h"
 
 powe::Renderer::Renderer()
     : m_RenderAPI(std::make_unique<NullRenderer>())
 {
+#if USE_IMGUI && USE_SFML_RENDERER
+#else
+    // m_DebugOverlay = std::make_unique<NullRenderer>();
+#endif
+
+    m_DebugOverlay = std::make_unique<SFMLImGuiOverlay>();
+
 }
 
 powe::Renderer::~Renderer() = default;
 
-void powe::Renderer::Draw(const Window& window) const
+powe::RenderAPI* powe::Renderer::GetRenderAPI() const
 {
-    m_RenderAPI->DrawBufferOnWindow(window);
+    return m_RenderAPI.get();
 }
 
-void powe::Renderer::RegisterSystem(const SharedPtr<RenderSystemBase>&)
+void powe::Renderer::Update(float deltaTime) const
 {
-    // if (system)
-    // {
-    //     if (std::ranges::find(m_RenderSystems, system) == m_RenderSystems.end())
-    //         m_RenderSystems.emplace_back(system);
-    // }
+    m_DebugOverlay->Update(deltaTime);
 }
 
-void powe::Renderer::RemoveSystem(RenderSystemBase* system)
+void powe::Renderer::SetTargetWindow(const SharedPtr<Window>& window)
 {
-    if (system)
+    m_TargetWindow = window;
+    m_RawTargetWindow = window.get();
+    
+    if(!m_IsInitialized)
     {
-        auto removeRange = std::ranges::remove_if(m_RenderSystems,
-                                                  [system](const SharedPtr<RenderSystemBase>& activeSystem)
-                                                  {
-                                                      return system == activeSystem.get();
-                                                  });
-
-        m_RenderSystems.erase(removeRange.begin(), removeRange.end());
+        m_RenderAPI->OnWindowCreate(*window);
+        m_DebugOverlay->OnWindowCreate(*window);
+        m_IsInitialized = true;
     }
-}
-
-void powe::Renderer::UpdateSystem(const WorldEntity& worldEntity, const Window& renderWindow,
-                                  const std::unordered_map<std::string, SharedPtr<Archetype>>& archetypePool)
-{
-    // for (const auto& system : m_PreRenderSystems)
-    // {
-    //     for (const auto& archetype : archetypePool | std::views::values) // since c++20
-    //     {
-    //         if (IsDigitExistInNumber(archetype->ComponentOffsets, system->GetKeys()))
-    //         {
-    //             system->InternalCreate(worldEntity, *archetype, *m_RenderAPI);
-    //             m_RenderSystems.emplace_back(system);
-    //         }
-    //     }
-    // }
-    //
-    // m_PreRenderSystems.clear();
-
-    for (const auto& system : m_RenderSystems)
+    else
     {
-        for (const auto& archetype : archetypePool | std::views::values) // since c++20
-        {
-            if (IsDigitExistInNumber(archetype->ComponentOffsets, system->GetKeys()))
-                system->InternalDraw(worldEntity, renderWindow, *archetype, *m_RenderAPI);
-        }
+        m_RenderAPI->OnChangeWindow(*window);
+        m_DebugOverlay->OnChangeWindow(*window);
     }
+
+    m_RawTargetWindow->RemoveOnResizeCallback(m_RendererResizeCallbackHandle);
+    m_RawTargetWindow->RemoveOnResizeCallback(m_DebugResizeCallbackHandle);
+    
+    m_RendererResizeCallbackHandle = window->RegisterOnResizeCallback([this](const Window& window)
+    {
+        m_RenderAPI->OnWindowResize(window);
+    });
+
+    m_DebugResizeCallbackHandle = window->RegisterOnResizeCallback([this](const Window& window)
+    {
+        m_DebugOverlay->OnWindowResize(window);
+    });
 }
 
-
-void powe::Renderer::RegisterRenderAPI(OwnedPtr<RenderAPI>&& renderInst)
+powe::Window* powe::Renderer::GetTargetWindow() const
 {
-    m_RenderAPI = std::move(renderInst);
+    if(const auto targetWindow = m_TargetWindow.lock())
+        return targetWindow.get();
+    return nullptr;
+}
+
+void powe::Renderer::SetRenderAPI(OwnedPtr<RenderAPI> renderAPI)
+{
+    m_RenderAPI = std::move(renderAPI);
+}
+
+void powe::Renderer::SetClearColor(const glm::uvec4& )
+{
+    
+}
+
+void powe::Renderer::ClearBackBuffer() const
+{
+    m_DebugOverlay->ClearBackBuffer();
+    m_RenderAPI->ClearBackBuffer();
+}
+
+void powe::Renderer::DisplayBuffer() const
+{
+    m_DebugOverlay->DisplayBuffer(*m_RawTargetWindow);
+    m_RenderAPI->DisplayBuffer(*m_RawTargetWindow);
+}
+
+void powe::Renderer::DeferredDrawOnWindow() const
+{
+    m_RenderAPI->DeferredDrawOnWindow(*m_RawTargetWindow);
 }

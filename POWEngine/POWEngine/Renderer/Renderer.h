@@ -1,66 +1,60 @@
 #pragma once
-#include <SFML/OpenGL.hpp>
 
 #include "POWEngine/Window/WindowContext.h"
 #include "POWEngine/Core/CustomTypes.h"
-#include "POWEngine/Core/WorldEntity/WorldEntity.h"
+
+namespace powe
+{
+	class SFMLImGuiOverlay;
+}
 
 namespace powe
 {
 	struct Archetype;
 	class RendererImpl;
 	class Window;
-	class RenderSystemBase;
 	class RenderAPI;
 	class WorldEntity;
-	class Renderer
+
+	// a class that couple render api and target window together
+	// because the renderer needs window to be alive during thread execution
+	// hence the ownership has to take place
+	class Renderer final
 	{
 	public:
 
 		Renderer();
-		Renderer(const Renderer&) = delete;
-		Renderer& operator=(const Renderer&) = delete;
-		Renderer(Renderer&&) = delete;
-		Renderer& operator=(Renderer&&) = delete;
 		~Renderer();
-	
-	public:
-
-		void Draw(const Window& window) const;
-
-		template<typename SystemType,typename ...Args>
-		EnableIsBasedOf<RenderSystemBase,SystemType,WeakPtr<SystemType>>
-		RegisterRenderSystem(SystemType&& constructor);
 		
-		void RegisterSystem(const SharedPtr<RenderSystemBase>& system);
 
-		void RemoveSystem(RenderSystemBase* system);
+		/**
+		 * \brief Renderer can change any window and it will reinitialize their buffer respectively
+		 * \param window Target Window
+		 */
+		void SetTargetWindow(const SharedPtr<Window>& window);
+		Window* GetUnCheckedTargetWindow() const {return m_RawTargetWindow;}
+		Window* GetTargetWindow() const;
+		void SetRenderAPI(OwnedPtr<RenderAPI> renderAPI);
+		RenderAPI* GetRenderAPI() const;
+
+		void Update(float deltaTime) const;
+		void SetClearColor(const glm::uvec4& color);
+		void ClearBackBuffer() const;
+		void DisplayBuffer() const;
+		void DeferredDrawOnWindow() const;
 		
-		void UpdateSystem(
-			const WorldEntity& worldEntity,
-			const Window& renderWindow,
-			const std::unordered_map<std::string,SharedPtr<Archetype>>& archetypePool
-			);
-
-		void RegisterRenderAPI(OwnedPtr<RenderAPI>&& renderInst);
-
-		RenderAPI* GetRenderAPI() const {return m_RenderAPI.get();}
-
 
 	private:
-
+		WeakPtr<Window> m_TargetWindow;
+		Window* m_RawTargetWindow;
+		
 		OwnedPtr<RenderAPI> m_RenderAPI;
-		std::vector<SharedPtr<RenderSystemBase>> m_RenderSystems;
-		std::vector<SharedPtr<RenderSystemBase>> m_PreRenderSystems;
-	};
+		uint32_t m_RendererResizeCallbackHandle{};
 
-	template <typename SystemType, typename ... Args>
-	EnableIsBasedOf<RenderSystemBase, SystemType, WeakPtr<SystemType>> Renderer::RegisterRenderSystem(
-		SystemType&& constructor)
-	{
-		SharedPtr<SystemType> system{std::make_shared<SystemType>(std::move(constructor))};
-		m_RenderSystems.emplace_back(system);
-		return system;
-	}
+		OwnedPtr<SFMLImGuiOverlay> m_DebugOverlay{};
+		uint32_t m_DebugResizeCallbackHandle{};
+		
+		bool m_IsInitialized{};
+	};
 }
 

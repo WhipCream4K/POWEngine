@@ -4,10 +4,8 @@
 #include "POWEngine/ECS/Archetype.h"
 #include "POWEngine/ECS/SystemBase.h"
 
-powe::WorldEntity::WorldEntity(const SharedPtr<Core>& core)
-    : CoreResource(core)
-    , AppResource(nullptr)
-    , m_SparseComponentManager(*this)
+powe::WorldEntity::WorldEntity()
+    : m_SparseComponentManager(*this)
 {
 }
 
@@ -21,7 +19,7 @@ powe::WorldEntity::~WorldEntity()
     ClearArchetype();
 }
 
-void powe::WorldEntity::RemoveSystem(const SharedPtr<SystemBase>& system)
+void powe::WorldEntity::RemoveSystem(const SharedPtr<ECSSystemBackend>& system)
 {
     m_PendingDeleteSystem.Push(system);
 }
@@ -104,6 +102,25 @@ void powe::WorldEntity::UpdatePipeline(PipelineLayer layer, float deltaTime)
             {
                 if (IsDigitExistInNumber(archetype->ComponentOffsets, system->GetKeys()))
                     system->Update(*archetype, deltaTime);
+            }
+        }
+    }
+}
+
+void powe::WorldEntity::RenderCommandPipeline(const Window& renderWindow, const RenderAPI& renderAPI) const
+{
+    const auto& systemsInThisPipeline{m_SystemPipeline[int(PipelineLayer::IssueRenderCommand)]};
+
+    for (const auto& system : systemsInThisPipeline)
+    {
+        for (const auto& archetype : m_ArchetypesPool | std::views::values)
+        {
+            if (!archetype->GameObjectIds.empty())
+            {
+                if (IsDigitExistInNumber(archetype->ComponentOffsets, system->GetKeys()))
+                {
+                    system->Draw(renderWindow,*archetype,renderAPI);
+                }
             }
         }
     }
@@ -654,7 +671,7 @@ void powe::WorldEntity::InternalAddSystemToPipeline()
                 if (!archetype->GameObjectIds.empty())
                 {
                     if (IsDigitExistInNumber(archetype->ComponentOffsets, system->GetKeys()))
-                        system->Initialize(*this);
+                        system->Initialize(*this,*archetype);
                 }
             }
 
@@ -665,7 +682,7 @@ void powe::WorldEntity::InternalAddSystemToPipeline()
 
 void powe::WorldEntity::InternalRemoveSystemFromPipeline()
 {
-    std::vector<SharedPtr<SystemBase>> removingSystems{};
+    std::vector<SharedPtr<ECSSystemBackend>> removingSystems{};
 
     while (!m_PendingDeleteSystem.Empty())
     {

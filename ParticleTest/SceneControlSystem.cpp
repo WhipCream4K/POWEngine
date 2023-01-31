@@ -1,8 +1,5 @@
 ﻿#include "SceneControlSystem.h"
 
-#include <imgui-SFML.h>
-#include <imgui.h>
-
 #include "UserComponents.h"
 #include "POWEngine/Core/Components/Transform2D.h"
 #include "POWEngine/Core/GameObject/GameObject.h"
@@ -11,57 +8,93 @@
 #include "POWEngine/Random/Random.h"
 #include "POWEngine/Renderer/Components/Debug2D/SFML/SFML2DShapeComponent.h"
 
+#include "POWEngine/Debug/imgui/ImGUI.h"
+
 
 using namespace powe;
 
 SceneControlSystem::SceneControlSystem()
 {
-    DefineSystemKeys<SceneComponent,DebugSteeringComponent>();
+    DefineSystemKeys<SceneComponent, DebugSteeringComponent>();
 }
 
-void SceneControlSystem::OnCreate(powe::GameObjectID id [[maybe_unused]])
+SceneControlSystem::SceneControlSystem(const SharedPtr<powe::GameObject>& agentVertices)
+    : m_AgentVertices(agentVertices)
+{
+    DefineSystemKeys<SceneComponent, DebugSteeringComponent>();
+}
+
+void SceneControlSystem::OnPerGameObjectCreate(powe::GameObjectID id)
 {
     const auto& world{GetWorld()};
-    
-    if(!m_DebugOpt)
+
+    if (!m_DebugOpt)
     {
         m_DebugOpt = world.GetComponent<DebugSteeringComponent>(id);
         m_ActiveAgents = m_DebugOpt->activeAgents;
     }
 
-    if(!m_DrawBoundingBox)
-        m_DrawBoundingBox = world.GetComponent<SFML2DRectangle>(id);
-
-    if(!m_SceneComponent)
+    if (!m_SceneComponent)
         m_SceneComponent = world.GetComponent<SceneComponent>(id);
+
+    if(!m_EngineComponent)
+        m_EngineComponent = world.GetComponent<EngineStatsComponent>(id);
+
+    if(!m_AgentVerticesBatch)
+    {
+        m_AgentVerticesBatch = world.FindUniqueComponent<AgentVerticesBatch>();
+    }
     
-    if(!m_SceneComponent || !m_DebugOpt || !m_DrawBoundingBox)
+    if (!m_SceneComponent || !m_DebugOpt || !m_EngineComponent || !m_AgentVerticesBatch)
         POWLOGERROR("No Scene Control Data");
 }
 
-void SceneControlSystem::OnUpdate(float, powe::GameObjectID)
+void SceneControlSystem::OnUpdate(float deltaTime [[maybe_unused]], powe::GameObjectID)
 {
+
+    ++m_EngineComponent->fpsCounter;
+    m_EngineComponent->fpsTimeStamp += deltaTime;
+    
+    if(m_EngineComponent->fpsTimeStamp >= 1.0f)
+    {
+        m_EngineComponent->fpsTimeStamp -= 1.0f;
+        m_EngineComponent->fps = m_EngineComponent->fpsCounter;
+        m_EngineComponent->fpsCounter = 0;
+    }
+
+    // reset batch count
+    m_AgentVerticesBatch->vertexID = 0;
+    m_AgentVerticesBatch->vertexBuffer.clear();
+
+#if USE_IMGUI
+    
     ImGui::Begin("Debug Window");
 
-    if(ImGui::DragFloat4("Bounding Box",&m_DebugOpt->boundArea.x))
+    ImGui::DragFloat("FrameTime",&deltaTime);
+
+    ImGui::DragInt("FPS",&m_EngineComponent->fps);
+    
+    if (ImGui::DragFloat4("Bounding Box", &m_DebugOpt->boundArea.x))
     {
-        m_DrawBoundingBox->SetSize({m_DebugOpt->boundArea.z,m_DebugOpt->boundArea.w});
+        m_DebugOpt->boundAreaShape->setSize({m_DebugOpt->boundArea.z, m_DebugOpt->boundArea.w});
     }
 
-    if(ImGui::DragFloat("AgentSize",&m_DebugOpt->agentSize,0.5f,0.0f,20.0f))
+    if (ImGui::DragFloat("AgentSize", &m_AgentVerticesBatch->rectSize, 0.5f, 0.0f, 20.0f))
     {
-        m_DebugOpt->agentShape->setRadius(m_DebugOpt->agentSize);
-        m_DebugOpt->agentShape->setOrigin(m_DebugOpt->agentSize,m_DebugOpt->agentSize);
+        // m_DebugOpt->agentShape->setRadius(m_DebugOpt->agentSize);
+        // m_DebugOpt->agentShape->setSize({m_DebugOpt->agentSize,m_DebugOpt->agentSize});
+        // m_DebugOpt->agentShape->setOrigin(m_DebugOpt->agentSize, m_DebugOpt->agentSize);
     }
     
-    glm::fvec2 mousePos{ GetWorld().GetInputSettings().GetMouseEnginePos()};
-    ImGui::DragFloat2("MouseEnginePos",&mousePos.x);
+    glm::fvec2 mousePos{GetWorld().GetInputSettings().GetMouseEnginePos()};
+    
+    ImGui::DragFloat2("MouseEnginePos", &mousePos.x);
 
-    if(ImGui::DragInt("Agent Amount",&m_ActiveAgents,1.0f,0,
-        int(m_SceneComponent->agentObjects.size()),"%d",ImGuiSliderFlags_Logarithmic))
+    if (ImGui::DragInt("Agent Amount", &m_ActiveAgents, 1.0f, 0,
+                       int(m_SceneComponent->agentObjects.size()), "%d", ImGuiSliderFlags_Logarithmic))
     {
         const int agentDiff{int(m_DebugOpt->activeAgents - m_ActiveAgents)};
-        if(agentDiff < 0)
+        if (agentDiff < 0)
         {
             // remove
             for (int i = m_DebugOpt->activeAgents; i < m_ActiveAgents; ++i)
@@ -69,16 +102,10 @@ void SceneControlSystem::OnUpdate(float, powe::GameObjectID)
                 const auto& gameObject{m_SceneComponent->agentObjects[i]};
                 VelocityComponent* vel = gameObject->AddComponent(VelocityComponent{});
                 vel->maxVelocity = Random::RandFloat(25.0f, 100.0f);
-
-                DrawAsset* drawable = gameObject->AddComponent(DrawAsset{});
-                drawable->drawAsset = m_DebugOpt->agentShape.get();
                 
-                // SFML2DCircle* draw{gameObject->AddComponent(SFML2DCircle{GetWorld(),gameObject->GetID()})};
-                //
-                // draw->SetSize({m_DebugOpt->agentSize,m_DebugOpt->agentSize});
             }
         }
-        else if(agentDiff > 0)
+        else if (agentDiff > 0)
         {
             for (int i = m_ActiveAgents; i < m_DebugOpt->activeAgents; ++i)
             {
@@ -92,4 +119,6 @@ void SceneControlSystem::OnUpdate(float, powe::GameObjectID)
     }
 
     ImGui::End();
+
+#endif
 }
