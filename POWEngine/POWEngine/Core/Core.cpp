@@ -8,9 +8,7 @@
 #include "WorldEntity/WorldEntity.h"
 #include "POWEngine/Core/Input/InputStruct.h"
 
-powe::Core::Core()
-{
-}
+powe::Core::Core() = default;
 
 bool powe::Core::TranslateWindowInputs(const Window& window, WorldEntity& worldEntt) const
 {
@@ -23,7 +21,6 @@ bool powe::Core::TranslateWindowInputs(const Window& window, WorldEntity& worldE
 	window.PollHardwareMessages(hwMessages, isEarlyExit, ignoreInputs);
 	
 	const float deltaTime{ m_WorldClock->GetDeltaTime() };
-	// window.UpdateWindowContext(deltaTime);
 	
 	if (!ignoreInputs)
 	{
@@ -39,20 +36,29 @@ void powe::Core::StartWorldClock() const
 	m_WorldClock->ResetTime();
 }
 
-void powe::Core::Step(WorldEntity& worldEntity)
+void powe::Core::Step(WorldEntity& worldEntity) const
 {
-	m_WorldClock->Start();
-	
 	worldEntity.ResolveEntities();
 
 	const float deltaTime{ m_WorldClock->GetDeltaTime() };
-	
+
 	worldEntity.UpdatePipeline(PipelineLayer::InputValidation, deltaTime);
 	
 	worldEntity.UpdatePipeline(PipelineLayer::Update, deltaTime);
 	worldEntity.UpdatePipeline(PipelineLayer::PhysicsValidation, deltaTime);
 	
 	worldEntity.UpdatePipeline(PipelineLayer::PostUpdate, deltaTime);
+}
+
+void powe::Core::Draw(const Renderer& renderer,WorldEntity& world) const
+{
+	const Window* targetWindow{renderer.GetUnCheckedTargetWindow()};
+	
+	renderer.ClearBackBuffer();
+	world.RenderCommandPipeline(*targetWindow,*renderer.GetRenderAPI());
+	renderer.DisplayBuffer();
+
+	m_WorldClock->End();
 }
 
 
@@ -84,7 +90,6 @@ bool powe::Core::FullStepMultiThreaded(const Renderer& renderer, WorldEntity& wo
 		renderer.DeferredDrawOnWindow();
 	}
 
-	// renderer.GetTargetWindow()->Display();
 	
 	m_WorldClock->End();
 
@@ -98,18 +103,13 @@ bool powe::Core::FullStep(const Renderer& renderer, WorldEntity& world) const
 {
 	const Window* targetWindow{renderer.GetUnCheckedTargetWindow()};
 	const bool shouldQuit = TranslateWindowInputs(*targetWindow,world);
-
-	m_WorldClock->Start();
-
+	
 	
 	// Update
 	{
 		world.ResolveEntities();
 
 		const float deltaTime{ m_WorldClock->GetDeltaTime() };
-
-		// Pre update on UI Thread
-		renderer.Update(deltaTime);
 
 		world.UpdatePipeline(PipelineLayer::InputValidation, deltaTime);
 	

@@ -11,6 +11,7 @@ namespace sf
     class VertexArray;
     class RenderStates;
     class Drawable;
+    class RenderWindow;
 }
 
 namespace powe
@@ -29,6 +30,8 @@ namespace powe
         void ClearBackBuffer() override;
         void SetClearColor(const glm::uvec4&) override;
 
+        sf::RenderWindow* GetRenderWindow() const;
+        
         SFML2DRenderer();
         SFML2DRenderer(const SFML2DRenderer&) = delete;
         SFML2DRenderer& operator=(const SFML2DRenderer&) = delete;

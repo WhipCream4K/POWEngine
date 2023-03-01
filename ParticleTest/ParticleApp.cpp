@@ -13,7 +13,6 @@ void ParticleApp::OnEngineSetUp(powe::EngineProps& engineProps)
 	engineProps.winProps.windowName = "ParticleTest";
 	engineProps.winProps.startWithVSync = false;
 	engineProps.mainWindowRenderAPI = std::make_unique<SFML2DRenderer>();
-	
 }
 
 void ParticleApp::OnWorldInitialize(powe::WorldEntity& world)

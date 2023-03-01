@@ -8,7 +8,8 @@ namespace powe
 	class RenderAPI
 	{
 	public:
-		
+
+		// virtual void PreRender();
 		virtual void DisplayBuffer(const Window&) = 0;
 		virtual void DeferredDrawOnWindow(const Window&) {}
 		

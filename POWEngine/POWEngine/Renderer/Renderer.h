@@ -37,8 +37,7 @@ namespace powe
 		void SetRenderAPI(OwnedPtr<RenderAPI> renderAPI);
 		RenderAPI* GetRenderAPI() const;
 
-		void Update(float deltaTime) const;
-		void SetClearColor(const glm::uvec4& color);
+		void SetClearColor(const glm::uvec4& color) const;
 		void ClearBackBuffer() const;
 		void DisplayBuffer() const;
 		void DeferredDrawOnWindow() const;
@@ -50,9 +49,6 @@ namespace powe
 		
 		OwnedPtr<RenderAPI> m_RenderAPI;
 		uint32_t m_RendererResizeCallbackHandle{};
-
-		OwnedPtr<SFMLImGuiOverlay> m_DebugOverlay{};
-		uint32_t m_DebugResizeCallbackHandle{};
 		
 		bool m_IsInitialized{};
 	};

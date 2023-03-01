@@ -191,10 +191,10 @@
   <ItemGroup>
     <ClInclude Include="POWEngine\Application\Application.h" />
     <ClInclude Include="POWEngine\Application\EngineProps.h" />
-    <ClInclude Include="POWEngine\Application\IApplication.h" />
     <ClInclude Include="POWEngine\Core\Components\BaseComponent.h" />
     <ClInclude Include="POWEngine\Core\ICore.h" />
-    <ClInclude Include="POWEngine\Debug\imgui\SFMLImGuiOverlay.h" />
+    <ClInclude Include="POWEngine\Debug\imgui\ImGUISFMLDrawSystem.h" />
+    <ClInclude Include="POWEngine\Debug\imgui\ImGUISFMLUpdateSystem.h" />
     <ClInclude Include="POWEngine\Debug\imgui\ImGUI.h" />
     <ClInclude Include="POWEngine\ECS\ECSSystemBackend.h" />
     <ClInclude Include="POWEngine\ECS\SystemKeys.h" />
@@ -202,9 +202,6 @@
     <ClInclude Include="POWEngine\JSON\json.hpp" />
     <ClInclude Include="POWEngine\JSON\JSONParser.h" />
     <ClInclude Include="POWEngine\Renderer\2D\Render2DProps.h" />
-    <ClInclude Include="POWEngine\Renderer\Components\Debug2D\SFML\SFML2DShapeComponent.h" />
-    <ClInclude Include="POWEngine\Renderer\Components\Debug2D\SFML\SFMLDebugRectangleComponent.h" />
-    <ClInclude Include="POWEngine\Renderer\Components\Debug2D\IShape2D.h" />
     <ClInclude Include="POWEngine\Renderer\Components\SFML\ISFMLDrawable.h" />
     <ClInclude Include="POWEngine\Renderer\Components\SFML\SFMLDrawComponent.h" />
     <ClInclude Include="POWEngine\Renderer\Components\Text\SFML\SFMLTextComponent.h" />
@@ -287,26 +284,20 @@
     <ClInclude Include="POWEngine\Renderer\Components\Text\SFML\SFMLText.h" />
     <ClInclude Include="POWEngine\Renderer\Components\Text\TextImpl.h" />
     <ClInclude Include="POWEngine\Renderer\Resources\Font\SFML\SFMLFont.h" />
-    <ClInclude Include="POWEngine\Renderer\Components\Debug2D\DebugRectangle.h" />
-    <ClInclude Include="POWEngine\Renderer\Components\Debug2D\SFML\SFMLDebugRectangle.h" />
-    <ClInclude Include="POWEngine\Renderer\Components\Debug2D\RectangleImpl.h" />
     <ClInclude Include="POWEngine\Random\Random.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="POWEngine\Application\Application.cpp" />
     <ClCompile Include="POWEngine\Application\EngineProps.cpp" />
-    <ClCompile Include="POWEngine\Application\IApplication.cpp" />
     <ClCompile Include="POWEngine\Core\ICore.cpp" />
-    <ClCompile Include="POWEngine\Debug\imgui\SFMLImGuiOverlay.cpp" />
+    <ClCompile Include="POWEngine\Debug\imgui\ImGUISFMLDrawSystem.cpp" />
+    <ClCompile Include="POWEngine\Debug\imgui\ImGUISFMLUpdateSystem.cpp" />
     <ClCompile Include="POWEngine\ECS\ECSSystemBackend.cpp" />
     <ClCompile Include="POWEngine\ECS\ECSUtils.cpp" />
     <ClCompile Include="POWEngine\ECS\SystemKeys.cpp" />
     <ClCompile Include="POWEngine\ECS\ThreadExecute.cpp" />
     <ClCompile Include="POWEngine\Math\Math.cpp" />
     <ClCompile Include="POWEngine\Renderer\2D\Render2DProps.cpp" />
-    <ClCompile Include="POWEngine\Renderer\Components\Debug2D\DebugRectangle.cpp" />
-    <ClCompile Include="POWEngine\Renderer\Components\Debug2D\SFML\SFML2DShapeComponent.cpp" />
-    <ClCompile Include="POWEngine\Renderer\Components\Debug2D\IShape2D.cpp" />
     <ClCompile Include="POWEngine\Renderer\Components\SFML\ISFMLDrawable.cpp" />
     <ClCompile Include="POWEngine\Renderer\Components\SFML\SFMLDrawComponent.cpp" />
     <ClCompile Include="POWEngine\Renderer\Resources\Font\FontImpl.cpp" />
@@ -368,12 +359,11 @@
     <ClCompile Include="POWEngine\Renderer\Components\Text\SFML\SFMLText.cpp" />
     <ClCompile Include="POWEngine\Renderer\Components\Text\TextImpl.cpp" />
     <ClCompile Include="POWEngine\Renderer\Resources\Font\SFML\SFMLFont.cpp" />
-    <ClCompile Include="POWEngine\Renderer\Components\Debug2D\SFML\SFMLDebugRectangle.cpp" />
-    <ClCompile Include="POWEngine\Renderer\Components\Debug2D\RectangleImpl.cpp" />
     <ClCompile Include="POWEngine\Random\Random.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="POWEngine\Debug" />
+    <Folder Include="POWEngine\Renderer\Components\Debug2D\SFML" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -44,7 +44,6 @@ struct WanderComponent : powe::Component<WanderComponent> , Steering
 struct FleeComponent : powe::Component<FleeComponent> , Steering
 {
     float fleePower{};
-    int padding[16]{};
 };
 
 struct DebugSteeringComponent : powe::Component<DebugSteeringComponent>
@@ -64,6 +63,8 @@ struct DrawAsset : powe::Component<DrawAsset>
 struct AgentVerticesBatch : powe::Component<AgentVerticesBatch>
 {
     sf::VertexArray vertexBuffer{};
-    float rectSize{};
+    // float rectSize{};
     uint32_t vertexID{};
 };
+
+// #define EntityDraw

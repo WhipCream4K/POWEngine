@@ -25,7 +25,6 @@ namespace powe
     {
         WindowProps winProps{};
         OwnedPtr<RenderAPI> mainWindowRenderAPI{};
-        // RenderAPI* renderer{}; 
     };
     
 }

@@ -30,7 +30,9 @@ namespace powe
 		 */
 		void StartWorldClock() const;
 
-		void Step(WorldEntity& worldEntity);
+		
+		void Step(WorldEntity& worldEntity) const;
+		void Draw(const Renderer& renderer,WorldEntity& world) const;
 		
 		bool FullStepMultiThreaded(const Renderer& renderer,WorldEntity& world);
 		bool FullStep(const Renderer& renderer,WorldEntity& world) const;
@@ -45,7 +47,6 @@ namespace powe
 	private:
 
 		void WaitForLastFrameDisplay(const Renderer& renderer) const;
-		void WaitForRenderThread(RenderAPI* renderAPI);
 		
 		static constexpr uint32_t MaxQueuedFrame{2};
 		uint32_t m_RenderCommandCount{};
@@ -54,20 +55,10 @@ namespace powe
 		
 		bool m_StartFrame{};
 		
-		//
-		// std::future<void> m_WaitForFrameDisplay;
-		// std::promise<void> m_PromiseForFrameDisplay;
-
-		// class LocalThreadDisplay;
-		// OwnedPtr<LocalThreadDisplay> m_LocalThreadDisplay;
-			
 		/**
 		 * \brief Implementation of the core engine to expand the scalability of the core engine
 		 * i.e Inputs handle by sdl and rendering handles by OpenGL or DX12
 		 */
-
-		// OwnedPtr<WorldClock> m_WorldClock;
-		// OwnedPtr<Renderer> m_MainRenderer;
 
 	};
 }

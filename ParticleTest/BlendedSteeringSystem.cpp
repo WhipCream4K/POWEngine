@@ -100,8 +100,3 @@ void BlendedSteeringSystem::OnUpdate(float deltaTime, powe::GameObjectID id [[ma
     
     agentTransform.SetWorldPosition(agentTransform.GetPosition() + velocity.linearVelocity * deltaTime);
 }
-
-void BlendedSteeringSystem::UpdateCellRendering(powe::Transform2D&, CellComponent&)
-{
-    
-}

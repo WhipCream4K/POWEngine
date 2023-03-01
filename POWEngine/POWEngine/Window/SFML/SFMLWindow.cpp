@@ -5,6 +5,7 @@
 #include "POWEngine/Core/Input/ListsOfKeys.h"
 
 #include "POWEngine/Debug/imgui/ImGUI.h"
+#include "POWEngine/Logger/LoggerUtils.h"
 
 #if USE_SFML_WINDOW
 
@@ -16,31 +17,20 @@ powe::SFMLWindow::SFMLWindow(uint32_t width, uint32_t height, const std::string&
           sf::String{title.c_str()},
           static_cast<sf::Uint32>(others[0]),
           reinterpret_cast<const sf::ContextSettings&>(others[sizeof(sf::Uint32)]))
-      // , m_MousePosLastPoll()
       , m_ClearColor(0, 0, 0, 255)
     , m_WindowSize(width,height)
-// , m_DeltaMousePos()
 {
-    const auto mousePos = sf::Mouse::getPosition(m_WndHandle);
-    // m_MousePosLastPoll.x = mousePos.x;
-    // m_MousePosLastPoll.y = mousePos.y;
-
-    // InitDebugWindowContext();
+    InitDebugWindowContext();
 }
 
 powe::SFMLWindow::SFMLWindow(uint32_t width, uint32_t height, const std::string& title)
     : WindowImpl(width, height, title)
       , m_HWMessages()
       , m_WndHandle(sf::VideoMode(width, height), sf::String{title.c_str()})
-      // , m_MousePosLastPoll()
       , m_ClearColor(0, 0, 0, 255)
 , m_WindowSize(width,height)
-// , m_DeltaMousePos()
 {
-    const auto mousePos = sf::Mouse::getPosition(m_WndHandle);
-    // m_MousePosLastPoll.x = mousePos.x;
-    // m_MousePosLastPoll.y = mousePos.y;
-    // InitDebugWindowContext();
+    InitDebugWindowContext();
 }
 
 void powe::SFMLWindow::PollHardwareMessages(
@@ -149,13 +139,13 @@ void powe::SFMLWindow::PollHardwareMessages(
                 }
             case sf::Event::MouseMoved:
                 {
+                    
                     messageData.eventId = uint8_t(EventType::MouseMoved);
                     messageData.inDevice = InputDevice::D_Mouse;
 
                     hardwareMessages.mouseAxis.mousePos.x = sfmlEvent.mouseMove.x;
                     hardwareMessages.mouseAxis.mousePos.y = sfmlEvent.mouseMove.y;
 
-                    hardwareMessages.mouseAxis.windowDimension = m_WindowSize;
 
                     // m_DeltaMousePos.x = float(sfmlEvent.mouseMove.x - m_MousePosLastPoll.x);
                     // m_DeltaMousePos.y = float(m_MousePosLastPoll.y - sfmlEvent.mouseMove.y);
@@ -180,6 +170,8 @@ void powe::SFMLWindow::PollHardwareMessages(
             }
         }
 
+        hardwareMessages.mouseAxis.windowDimension = m_WindowSize;
+        
         ParseHWMessageToDebugWindow(sfmlEvent);
         hardwareMessages.totalMessages = messageCnt;
     }
@@ -214,7 +206,6 @@ void powe::SFMLWindow::SetClearColor(const glm::uvec4& color)
 
 void powe::SFMLWindow::Display()
 {
-    RenderDebugWindowContext();
     // m_WndHandle.display();
 }
 
@@ -223,9 +214,8 @@ void powe::SFMLWindow::SetVSync(bool VSync)
     m_WndHandle.setVerticalSyncEnabled(VSync);
 }
 
-void powe::SFMLWindow::UpdateWindowContext(float deltaTime)
+void powe::SFMLWindow::UpdateWindowContext(float)
 {
-    UpdateDebugWindowContext(deltaTime);
 }
 
 void powe::SFMLWindow::SetFramerateLimit(int fps)
@@ -240,6 +230,11 @@ const glm::uvec4& powe::SFMLWindow::GetClearColor() const
 
 powe::SFMLWindow::~SFMLWindow()
 {
+
+#if USE_IMGUI & USE_SFML_WINDOW
+    ImGui::SFML::Shutdown(m_WndHandle);
+#endif
+    
     m_WndHandle.close();
 }
 
@@ -247,30 +242,18 @@ void powe::SFMLWindow::ParseHWMessageToDebugWindow(sf::Event& ev [[maybe_unused]
 {
 #if USE_IMGUI
     ImGui::SFML::ProcessEvent(m_WndHandle, ev);
-    // ImGui::NewFrame();
-#endif
-}
-
-void powe::SFMLWindow::UpdateDebugWindowContext(float deltaTime [[maybe_unused]])
-{
-#if USE_IMGUI
-    ImGui::SFML::Update(m_WndHandle, sf::seconds(deltaTime));
 #endif
 }
 
 void powe::SFMLWindow::InitDebugWindowContext()
 {
 #if USE_IMGUI
-    ImGui::SFML::Init(m_WndHandle);
+    if(!ImGui::SFML::Init(m_WndHandle))
+    {
+        POWLOGERROR("Cannot initialize imgui sfml");
+        throw std::runtime_error("");
+    }
 #endif
-}
-
-void powe::SFMLWindow::RenderDebugWindowContext()
-{
-      #if USE_IMGUI
-          // ImGui::ShowDemoWindow();
-          ImGui::SFML::Render( m_WndHandle);
-      #endif
 }
 
 

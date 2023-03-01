@@ -26,9 +26,14 @@ void AgentDrawSystem::OnCreate()
         drawAsset->drawAsset = &m_AgentVerticesBatch->vertexBuffer;
     }
 
-    if(!m_AgentVerticesBatch)
+    if(!m_DebugOptions)
     {
-        throw std::runtime_error("No AgentVerticesBatch component");
+        m_DebugOptions = world.FindUniqueComponent<DebugSteeringComponent>();
+    }
+
+    if(!m_AgentVerticesBatch || !m_DebugOptions)
+    {
+        throw std::runtime_error("AgentDrawSystem Initialization failed");
     }
 }
 
@@ -39,26 +44,26 @@ void AgentDrawSystem::OnUpdate(float, powe::GameObjectID)
     const glm::vec2 centerPoint{ transform2D.GetPosition() };
 
     const sf::Vertex v1{sf::Vector2f{
-        centerPoint.x - m_AgentVerticesBatch->rectSize * 0.5f,
-        -centerPoint.y - m_AgentVerticesBatch->rectSize * 0.5f},
+        centerPoint.x - m_DebugOptions->agentSize * 0.5f,
+        -centerPoint.y - m_DebugOptions->agentSize * 0.5f},
         sf::Color::White
     };
 
     const sf::Vertex v2{sf::Vector2f{
-        centerPoint.x - m_AgentVerticesBatch->rectSize * 0.5f,
-         -centerPoint.y + m_AgentVerticesBatch->rectSize * 0.5f},
+        centerPoint.x - m_DebugOptions->agentSize * 0.5f,
+         -centerPoint.y + m_DebugOptions->agentSize * 0.5f},
         sf::Color::White
     };
 
     const sf::Vertex v3{sf::Vector2f{
-        centerPoint.x + m_AgentVerticesBatch->rectSize * 0.5f,
-        -centerPoint.y + m_AgentVerticesBatch->rectSize * 0.5f},
+        centerPoint.x + m_DebugOptions->agentSize * 0.5f,
+        -centerPoint.y + m_DebugOptions->agentSize * 0.5f},
         sf::Color::White
     };
 
     const sf::Vertex v4{sf::Vector2f{
-        centerPoint.x + m_AgentVerticesBatch->rectSize * 0.5f,
-        -centerPoint.y - m_AgentVerticesBatch->rectSize * 0.5f},
+        centerPoint.x + m_DebugOptions->agentSize * 0.5f,
+        -centerPoint.y - m_DebugOptions->agentSize * 0.5f},
         sf::Color::White
     };
 

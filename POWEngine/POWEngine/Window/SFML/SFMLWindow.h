@@ -33,12 +33,9 @@ namespace powe
 		~SFMLWindow() override;
 
 	private:
-
-		// built-in sfml imgui
+		
 		void ParseHWMessageToDebugWindow(sf::Event& ev) const;
-		void UpdateDebugWindowContext(float deltaTime);
 		void InitDebugWindowContext();
-		void RenderDebugWindowContext();
 
 	private:
 

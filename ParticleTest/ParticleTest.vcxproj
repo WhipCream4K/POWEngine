@@ -181,7 +181,6 @@ xcopy /y $(SolutionDir)3rdPartyLib\fmod\lib\$(Platform) $(OutDir)</Command>
     <ClCompile Include="ParticleApp.cpp" />
     <ClCompile Include="SceneDraw.cpp" />
     <ClCompile Include="SceneFactory.cpp" />
-    <ClCompile Include="SFMLAgentRenderSystem.cpp" />
     <ClCompile Include="TestScene.cpp" />
     <ClCompile Include="UserComponents.cpp" />
     <ClCompile Include="WanderingSteeringSystem.cpp" />
@@ -201,7 +200,6 @@ xcopy /y $(SolutionDir)3rdPartyLib\fmod\lib\$(Platform) $(OutDir)</Command>
     <ClInclude Include="ParticleApp.h" />
     <ClInclude Include="SceneDraw.h" />
     <ClInclude Include="SceneFactory.h" />
-    <ClInclude Include="SFMLAgentRenderSystem.h" />
     <ClInclude Include="TestScene.h" />
     <ClInclude Include="UserComponents.h" />
     <ClInclude Include="WanderingSteeringSystem.h" />

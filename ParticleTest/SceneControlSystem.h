@@ -31,4 +31,7 @@ private:
     SceneComponent* m_SceneComponent{};
     std::vector<powe::GameObjectID> m_StandByGameObjects{};
     int m_ActiveAgents{};
+
+    std::vector<float> m_FrameTimes{};
+    int m_FrameTimePoints{};
 };

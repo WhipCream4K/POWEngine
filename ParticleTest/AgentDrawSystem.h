@@ -7,6 +7,7 @@
 
 
 struct AgentVerticesBatch;
+struct DebugSteeringComponent;
 
 namespace powe
 {
@@ -23,9 +24,9 @@ protected:
 
     void OnCreate() override;
     void OnUpdate(float, powe::GameObjectID) override;
-    
-    
+
 private:
     
     AgentVerticesBatch* m_AgentVerticesBatch{};
+    DebugSteeringComponent* m_DebugOptions{};
 };

@@ -54,8 +54,10 @@ namespace powe
 
 		const KeyPool& GetCurrentKeyState(uint8_t playerIndex) const { return m_MainKeyPool[playerIndex]; }
 		const SysKeyType GetThisFrameSysKey() const { return m_CurrentFrameSystemKey; }
-
-		const glm::fvec2& GetMouseEnginePos() const {return m_MouseAxisData;}
+		
+		glm::fvec2 GetMouseEnginePos() const;
+		const glm::fvec2& GetFocusWindowDimension() const {return m_FocusWindowDimension;}
+		const glm::fvec2& GetMouseAbsolutePos() const {return m_MouseAbsoluteAxisData;}
 
 		void SetAssignFirstControllerToNextPlayer(bool state);
 
@@ -84,7 +86,9 @@ namespace powe
 		//KeyPool m_MainKeyPool;
 		std::array<KeyPool, MAXPLAYER> m_MainKeyPool;
 
-		glm::fvec2 m_MouseAxisData{};
+		glm::fvec2 m_MouseAbsoluteAxisData{};
+		glm::fvec2 m_FocusWindowDimension{};
+		
 		
 		bool m_ShouldRevalidateMouseValue{};
 		bool m_AssignFirstControllerToNextIndex{};

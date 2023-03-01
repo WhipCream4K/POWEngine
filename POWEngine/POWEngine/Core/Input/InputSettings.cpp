@@ -109,6 +109,16 @@ bool powe::InputSettings::IsKeyBoardPressed(KeyType key)
     return sf::Keyboard::isKeyPressed(sf::Keyboard::Key(key));
 }
 
+glm::fvec2 powe::InputSettings::GetMouseEnginePos() const
+{
+    const glm::fvec2 halfWinDM{m_FocusWindowDimension.x * 0.5f, m_FocusWindowDimension.y * 0.5f};
+    
+    return {
+        m_MouseAbsoluteAxisData.x - halfWinDM.x,
+        halfWinDM.y - m_MouseAbsoluteAxisData.y
+    };
+}
+
 void powe::InputSettings::SetAssignFirstControllerToNextPlayer(bool state)
 {
     m_AssignFirstControllerToNextIndex = state;
@@ -118,6 +128,10 @@ void powe::InputSettings::ProcessHWData(const HardwareMessages& hardwareMessages
 {
     KeyData keyData{};
     const HardwareData& hwData{hardwareMessages.hwMessages[id]};
+
+    // Update window dimension
+    m_FocusWindowDimension = hardwareMessages.mouseAxis.windowDimension;
+    
     switch (EventType(hwData.eventId))
     {
     case EventType::MouseButton:
@@ -157,39 +171,42 @@ void powe::InputSettings::ProcessHWData(const HardwareMessages& hardwareMessages
     case EventType::MouseMoved:
         {
             // mouse moved  has 2 keys
-            const glm::fvec2 halfWinDim{
-                float(hardwareMessages.mouseAxis.windowDimension.x) * 0.5f,
-                float(hardwareMessages.mouseAxis.windowDimension.y) * 0.5f
-            };
+            // const glm::fvec2 halfWinDim{
+            //     float(hardwareMessages.mouseAxis.windowDimension.x) * 0.5f,
+            //     float(hardwareMessages.mouseAxis.windowDimension.y) * 0.5f
+            // };
 
-            const float horizontalPos = float(hardwareMessages.mouseAxis.mousePos.x) - halfWinDim.x;
-            const float verticalPos = halfWinDim.y - float(hardwareMessages.mouseAxis.mousePos.y);
+            // const float horizontalPos = float(hardwareMessages.mouseAxis.mousePos.x) - halfWinDim.x;
+            // const float verticalPos = halfWinDim.y - float(hardwareMessages.mouseAxis.mousePos.y);
 
-            if(glm::abs(m_MouseAxisData.x - horizontalPos) > 0.001f)
+            const float horizontalPos = float(hardwareMessages.mouseAxis.mousePos.x);
+            const float verticalPos = float(hardwareMessages.mouseAxis.mousePos.y);
+
+            if(glm::abs(m_MouseAbsoluteAxisData.x - horizontalPos) > 0.001f)
             {
                 // mouse X
                 KeyData customKey{};
                 customKey.key = {InputDevice::D_Mouse, MouseKey::MK_AxisX};
-                customKey.axisValue = (m_MouseAxisData.x - horizontalPos) / halfWinDim.x;
-                customKey.isDown = true;
-                customKey.playerIndex = 0;
-                InputEvent thisFrameEvent{EvaluateMainKeyPool(customKey)};
-                UpdateAxisMapping(customKey, thisFrameEvent);
-            }
-
-            if(glm::abs(m_MouseAxisData.y - verticalPos) > 0.001f)
-            {
-                // mouse Y
-                KeyData customKey{};
-                customKey.key = {InputDevice::D_Mouse, MouseKey::MK_AxisY};
-                customKey.axisValue = (m_MouseAxisData.x - horizontalPos) / halfWinDim.y;
+                customKey.axisValue = (m_MouseAbsoluteAxisData.x - horizontalPos) / m_FocusWindowDimension.x;
                 customKey.isDown = true;
                 customKey.playerIndex = 0;
                 InputEvent thisFrameEvent{EvaluateMainKeyPool(customKey)};
                 UpdateAxisMapping(customKey, thisFrameEvent);
             }
             
-            m_MouseAxisData = {horizontalPos, verticalPos};
+            if(glm::abs(m_MouseAbsoluteAxisData.y - verticalPos) > 0.001f)
+            {
+                // mouse Y
+                KeyData customKey{};
+                customKey.key = {InputDevice::D_Mouse, MouseKey::MK_AxisY};
+                customKey.axisValue = (m_MouseAbsoluteAxisData.x - horizontalPos) / m_FocusWindowDimension.y;
+                customKey.isDown = true;
+                customKey.playerIndex = 0;
+                InputEvent thisFrameEvent{EvaluateMainKeyPool(customKey)};
+                UpdateAxisMapping(customKey, thisFrameEvent);
+            }
+            
+            m_MouseAbsoluteAxisData = {horizontalPos, verticalPos};
         }
         return;
     case EventType::KeyboardButton:
@@ -215,7 +232,6 @@ void powe::InputSettings::ProcessHWData(const HardwareMessages& hardwareMessages
 
                 const uint8_t playerIndex{uint8_t(gData.playerIndex + shouldAssignFirstControllerToNextIdx)};
 
-                //if (!m_MainKeyPool[gData.playerIndex].contains(gamepadKey))
                 if (!m_MainKeyPool[playerIndex].contains(gamepadKey))
                     continue;
 

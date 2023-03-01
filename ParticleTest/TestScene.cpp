@@ -12,7 +12,7 @@
 #include "WanderingSteeringSystem.h"
 #include "POWEngine/Core/Components/Transform2D.h"
 #include "POWEngine/Random/Random.h"
-#include "POWEngine/Renderer/Components/Debug2D/SFML/SFML2DShapeComponent.h"
+// #include "POWEngine/Renderer/Components/Debug2D/SFML/SFML2DShapeComponent.h"
 
 using namespace powe;
 
@@ -40,12 +40,15 @@ TestScene::TestScene(powe::WorldEntity& world)
     debugComp->activeAgents = objectAmount;
 
     debugComp->agentShape = std::make_unique<sf::RectangleShape>();
+
+    debugComp->agentSize = 3.0f;
     
     // debugComp->agentShape->setRadius(3.0f);
-    debugComp->agentShape->setSize({3.0f,3.0f});
-    debugComp->agentShape->setOrigin(1.5f,1.5f);
+    debugComp->agentShape->setSize({debugComp->agentSize,debugComp->agentSize});
+
+    const float halfAgentSize{debugComp->agentSize * 0.5f};
+    debugComp->agentShape->setOrigin(halfAgentSize,halfAgentSize);
     sf::Color agentColor{sf::Color::White};
-    // agentColor.a = 0;
     debugComp->agentShape->setFillColor(agentColor);
 
     debugComp->boundAreaShape = std::make_unique<sf::RectangleShape>();
@@ -66,8 +69,10 @@ TestScene::TestScene(powe::WorldEntity& world)
     {
         const SharedPtr<GameObject> steeringAgent{std::make_shared<GameObject>(world)};
 
-        // DrawAsset* draw_asset = steeringAgent->AddComponent(DrawAsset{});
-        // draw_asset->drawAsset = debugComp->agentShape.get();
+#ifdef EntityDraw
+        DrawAsset* draw_asset = steeringAgent->AddComponent(DrawAsset{});
+        draw_asset->drawAsset = debugComp->agentShape.get();
+#endif
         
         Transform2D* transform2D{steeringAgent->AddComponent(Transform2D{steeringAgent})};
 
@@ -95,23 +100,31 @@ TestScene::TestScene(powe::WorldEntity& world)
         sceneData->AddComponent(EngineStatsComponent{});
     }
 
+#ifndef EntityDraw 
+    
     m_AgentVerticesBatch = std::make_shared<powe::GameObject>(world);
     
     AgentVerticesBatch* agentVertices = m_AgentVerticesBatch->AddComponent(AgentVerticesBatch{});
     agentVertices->vertexBuffer.setPrimitiveType(sf::PrimitiveType::Quads);
     agentVertices->vertexBuffer.resize(objectAmount * 4);
-    agentVertices->rectSize = 2.5f;
 
+    // Scene Draw
     m_AgentVerticesBatch->AddComponent(Transform2D{m_AgentVerticesBatch});
     m_AgentVerticesBatch->AddComponent(DrawAsset{});
+
+    world.RegisterSystem(PipelineLayer::PostUpdate,AgentDrawSystem{});
+
+
+#endif
+
+    world.GetInputSettings().AddActionMapping("DecreaseEntities",
+        {ActionMap::ActionKeyPack{InputDevice::D_Keyboard,Keyboard::A}});
     
     world.RegisterSystem(PipelineLayer::InputValidation, SceneControlSystem{});
 
     world.RegisterSystem(PipelineLayer::Update,BlendedSteeringSystem{});
 
     world.RegisterSystem(PipelineLayer::PostUpdate, BoundAreaSystem{sceneData});
-
-    world.RegisterSystem(PipelineLayer::PostUpdate,AgentDrawSystem{});
 
     world.RegisterSystem(PipelineLayer::IssueRenderCommand,SceneDraw{});
 }

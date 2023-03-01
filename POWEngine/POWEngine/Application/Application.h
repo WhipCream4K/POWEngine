@@ -1,6 +1,6 @@
 #pragma once
 #include "EngineProps.h"
-#include "IApplication.h"
+#include "AppResource.h"
 #include "POWEngine/Core/Core.h"
 #include "POWEngine/Renderer/Renderer.h"
 
@@ -10,7 +10,7 @@ namespace powe
     // class Core;
     class Window;
 
-    class Application : public IApplication, public std::enable_shared_from_this<Application>
+    class Application : public std::enable_shared_from_this<Application>
     {
     public:
         Application();
@@ -41,19 +41,10 @@ namespace powe
         }
 
     private:
-        bool TranslateWindowInputs(
-            const Window& window,
-            WorldEntity& worldEntt
-        ) const;
-
-
+        
         Core m_EngineCore; // core only handle window, world, render interactions so it can be on stack
 
         OwnedPtr<WorldEntity> m_WorldEntity;
-
-        OwnedPtr<WorldClock> m_WorldClock;
-
-        OwnedPtr<InputManager> m_InputManager;
 
         SharedPtr<Window> m_GameWindow;
         Renderer m_GameWindowRenderer;

@@ -73,6 +73,7 @@ namespace powe
         m_UpdateCountPerArchetype = 0;
         m_CurrentArchetype = &archetype;
 
+        // TODO: Change to an event system
         if (m_CacheRenderAPI != &renderAPI)
         {
             if(const T* renderType{dynamic_cast<const T*>(&renderAPI)}; renderType)

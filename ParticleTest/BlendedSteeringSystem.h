@@ -23,8 +23,6 @@ protected:
     void OnUpdate(float, powe::GameObjectID) override;
 
 private:
-
-    void UpdateCellRendering(powe::Transform2D& transform,CellComponent& cellComponent);
     
     float m_MaxJitter{1.0f};
     float m_Offset{6.0f};

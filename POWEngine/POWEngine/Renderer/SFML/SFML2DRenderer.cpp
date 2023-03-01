@@ -7,6 +7,8 @@
 #include "POWEngine/Utils/Utils.h"
 #include "POWEngine/Window/SFML/SFMLWindow.h"
 
+#include "POWEngine/Debug/imgui/ImGUI.h"
+
 class powe::SFML2DRenderer::SFML2DRendererImpl
 {
 public:
@@ -18,6 +20,7 @@ public:
     void SubmitRenderEntity(const sf::VertexArray& vertexArray) const;
     void DisplayBuffer(const Window& window) const;
     void SetClearColor(const sf::Color& color);
+    sf::RenderWindow* GetFocusWindow() const {return m_TargetRenderWindow;}
     
 private:
     
@@ -108,6 +111,11 @@ void powe::SFML2DRenderer::ClearBackBuffer()
 void powe::SFML2DRenderer::SetClearColor(const glm::uvec4& color)
 {
     m_RendererImpl->SetClearColor(sf::ConvertToSFColor(color));
+}
+
+sf::RenderWindow* powe::SFML2DRenderer::GetRenderWindow() const
+{
+    return m_RendererImpl->GetFocusWindow();
 }
 
 powe::SFML2DRenderer::SFML2DRenderer()
