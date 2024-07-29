@@ -11,3 +11,9 @@
 [submodule "POWEngine/POWEngine/Math/glm"]
 	path = POWEngine/POWEngine/Math/glm
 	url = https://github.com/g-truc/glm.git
+[submodule "3rdPartyLib/glfw"]
+	path = 3rdPartyLib/glfw
+	url = https://github.com/glfw/glfw.git
+[submodule "3rdPartyLib/imgui_powe"]
+	path = 3rdPartyLib/imgui_powe
+	url = https://github.com/WhipCream4K/imgui_powe.git
