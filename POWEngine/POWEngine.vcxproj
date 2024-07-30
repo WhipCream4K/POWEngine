@@ -101,7 +101,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)PCH;$(SolutionDir)3rdPartyLib\SFML\include;$(SolutionDir)3rdPartyLib\fmod\include;$(ProjectDir);$(SolutionDir)3rdPartyLib\imgui;$(SolutionDir)3rdPartyLib\imgui-sfml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)PCH;$(SolutionDir)3rdPartyLib\SFML\include;$(SolutionDir)3rdPartyLib\fmod\include;$(SolutionDir)3rdPartyLib\imgui;$(SolutionDir)3rdPartyLib\imgui-sfml;$(ProjectDir);$(SolutionDir)3rdPartyLib\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -125,7 +125,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)PCH;$(SolutionDir)3rdPartyLib\SFML\include;$(SolutionDir)3rdPartyLib\fmod\include;$(ProjectDir);$(SolutionDir)3rdPartyLib\imgui;$(SolutionDir)3rdPartyLib\imgui-sfml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)PCH;$(SolutionDir)3rdPartyLib\SFML\include;$(SolutionDir)3rdPartyLib\fmod\include;$(SolutionDir)3rdPartyLib\imgui;$(SolutionDir)3rdPartyLib\imgui-sfml;$(ProjectDir);$(SolutionDir)3rdPartyLib\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -149,7 +149,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)PCH;$(SolutionDir)3rdPartyLib\SFML\include;$(SolutionDir)3rdPartyLib\fmod\include;$(ProjectDir);$(SolutionDir)3rdPartyLib\imgui;$(SolutionDir)3rdPartyLib\imgui-sfml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)PCH;$(SolutionDir)3rdPartyLib\SFML\include;$(SolutionDir)3rdPartyLib\fmod\include;$(SolutionDir)3rdPartyLib\imgui;$(SolutionDir)3rdPartyLib\imgui-sfml;$(ProjectDir);$(SolutionDir)3rdPartyLib\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -173,7 +173,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)PCH;$(SolutionDir)3rdPartyLib\SFML\include;$(SolutionDir)3rdPartyLib\fmod\include;$(ProjectDir);$(SolutionDir)3rdPartyLib\imgui;$(SolutionDir)3rdPartyLib\imgui-sfml;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)PCH;$(SolutionDir)3rdPartyLib\SFML\include;$(SolutionDir)3rdPartyLib\fmod\include;$(SolutionDir)3rdPartyLib\imgui;$(SolutionDir)3rdPartyLib\imgui-sfml;$(ProjectDir);$(SolutionDir)3rdPartyLib\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -189,181 +189,161 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="POWEngine\Application\Application.h" />
-    <ClInclude Include="POWEngine\Application\EngineProps.h" />
-    <ClInclude Include="POWEngine\Core\Components\BaseComponent.h" />
-    <ClInclude Include="POWEngine\Core\ICore.h" />
-    <ClInclude Include="POWEngine\Debug\imgui\ImGUISFMLDrawSystem.h" />
-    <ClInclude Include="POWEngine\Debug\imgui\ImGUISFMLUpdateSystem.h" />
-    <ClInclude Include="POWEngine\Debug\imgui\ImGUI.h" />
-    <ClInclude Include="POWEngine\ECS\ECSSystemBackend.h" />
-    <ClInclude Include="POWEngine\ECS\SystemKeys.h" />
-    <ClInclude Include="POWEngine\ECS\ThreadExecute.h" />
-    <ClInclude Include="POWEngine\JSON\json.hpp" />
-    <ClInclude Include="POWEngine\JSON\JSONParser.h" />
-    <ClInclude Include="POWEngine\Renderer\2D\Render2DProps.h" />
-    <ClInclude Include="POWEngine\Renderer\Components\SFML\ISFMLDrawable.h" />
-    <ClInclude Include="POWEngine\Renderer\Components\SFML\SFMLDrawComponent.h" />
-    <ClInclude Include="POWEngine\Renderer\Components\Text\SFML\SFMLTextComponent.h" />
-    <ClInclude Include="POWEngine\Renderer\Resources\Font\FontImpl.h" />
-    <ClInclude Include="POWEngine\Renderer\Resources\Font\Font.h" />
-    <ClInclude Include="POWEngine\Core\Input\EventType.h" />
-    <ClInclude Include="POWEngine\Core\Input\InputSystem.h" />
-    <ClInclude Include="POWEngine\Core\Components\InputComponent.h" />
-    <ClInclude Include="POWEngine\Core\Components\AudioComponent.h" />
+    <ClInclude Include="Core\Memory\Allocator.h" />
+    <ClInclude Include="Core\Application\AppDesc.h" />
+    <ClInclude Include="Core\Application\Application.h" />
+    <ClInclude Include="ECS\ECSManager.h" />
+    <ClInclude Include="ECS\Components\BaseComponent.h" />
+    <ClInclude Include="ECS\EntityView.h" />
+    <ClInclude Include="Parser\JSON\json.hpp" />
+    <ClInclude Include="Parser\JSON\JSONParser.h" />
+    <ClInclude Include="Core\Memory\MemoryTracker.h" />
+    <ClInclude Include="Renderer\2D\Render2DProps.h" />
+    <ClInclude Include="Renderer\Components\SFML\ISFMLDrawable.h" />
+    <ClInclude Include="Renderer\Components\SFML\SFMLDrawComponent.h" />
+    <ClInclude Include="Renderer\Components\Text\SFML\SFMLTextComponent.h" />
+    <ClInclude Include="Renderer\Resources\Font\FontImpl.h" />
+    <ClInclude Include="Renderer\Resources\Font\Font.h" />
+    <ClInclude Include="Core\Input\EventType.h" />
+    <ClInclude Include="Core\Input\InputSystem.h" />
+    <ClInclude Include="ECS\Components\InputComponent.h" />
+    <ClInclude Include="ECS\Components\AudioComponent.h" />
     <ClInclude Include="include\poweComponent.h" />
-    <ClInclude Include="POWEngine\Core\Input\InputMapping.h" />
-    <ClInclude Include="POWEngine\Core\Input\InputVars.h" />
-    <ClInclude Include="POWEngine\Renderer\Components\Sprite\SFML\SFMLSpriteComponent.h" />
-    <ClInclude Include="POWEngine\Renderer\SFML\SFML2DRenderer.h" />
-    <ClInclude Include="POWEngine\Renderer\System\SFML\SFMLDefaultRenderSystem.h" />
-    <ClInclude Include="POWEngine\Singleton\InstanceUtils.h" />
-    <ClInclude Include="POWEngine\Sound\FMOD\AudioClip.h" />
-    <ClInclude Include="POWEngine\Sound\FMOD\Channel.h" />
+    <ClInclude Include="Core\Input\InputMapping.h" />
+    <ClInclude Include="Core\Input\InputVars.h" />
+    <ClInclude Include="Renderer\Components\Sprite\SFML\SFMLSpriteComponent.h" />
+    <ClInclude Include="Renderer\SFML\SFML2DRenderer.h" />
+    <ClInclude Include="Renderer\System\SFML\SFMLDefaultRenderSystem.h" />
+    <ClInclude Include="Platform\Windows\FMOD\FMODAudioClip.h" />
+    <ClInclude Include="Platform\Windows\FMOD\Channel.h" />
     <ClInclude Include="include\poweCustomtype.h" />
     <ClInclude Include="include\powengine.h" />
     <ClInclude Include="include\poweSystem.h" />
-    <ClInclude Include="POWEngine\Renderer\NullRenderer.h" />
-    <ClInclude Include="POWEngine\Logger\Logger.h" />
-    <ClInclude Include="POWEngine\Logger\NullLogger.h" />
-    <ClInclude Include="POWEngine\Renderer\Components\Sprite\SFML\SFMLSprite.h" />
-    <ClInclude Include="POWEngine\Sound\FMOD\FMOD2DSound.h" />
-    <ClInclude Include="POWEngine\Sound\FMOD\FMODUtils.h" />
-    <ClInclude Include="POWEngine\Sound\NullSoundSystem.h" />
-    <ClInclude Include="POWEngine\ECS\ECSUtils.h" />
-    <ClInclude Include="POWEngine\Core\GameObject\GameObject.h" />
-    <ClInclude Include="POWEngine\LockFree\LFStack.h" />
-    <ClInclude Include="POWEngine\ECS\ECSTypes.h" />
-    <ClInclude Include="POWEngine\Core\Input\InputStruct.h" />
-    <ClInclude Include="POWEngine\Core\Input\ListsOfKeys.h" />
-    <ClInclude Include="POWEngine\Core\Input\InputSettings.h" />
-    <ClInclude Include="POWEngine\Core\Input\InputManager.h" />
-    <ClInclude Include="POWEngine\Core\Input\Key.h" />
-    <ClInclude Include="POWEngine\LockFree\LFQueue.h" />
-    <ClInclude Include="POWEngine\ECS\Archetype.h" />
-    <ClInclude Include="POWEngine\Core\WorldEntity\PipelineLayer.h" />
-    <ClInclude Include="POWEngine\Logger\Console\ConsoleLogger.h" />
+    <ClInclude Include="Renderer\NullRenderer.h" />
+    <ClInclude Include="Core\Logger\Logger.h" />
+    <ClInclude Include="Core\Logger\NullLogger.h" />
+    <ClInclude Include="Renderer\Components\Sprite\SFML\SFMLSprite.h" />
+    <ClInclude Include="Platform\Windows\FMOD\FMOD2DSound.h" />
+    <ClInclude Include="Platform\Windows\FMOD\FMODUtils.h" />
+    <ClInclude Include="ECS\ECSUtils.h" />
+    <ClInclude Include="ECS\GameObject\GameObject.h" />
+    <ClInclude Include="LockFree\LFStack.h" />
+    <ClInclude Include="ECS\ECSTypes.h" />
+    <ClInclude Include="Core\Input\InputStruct.h" />
+    <ClInclude Include="Core\Input\ListsOfKeys.h" />
+    <ClInclude Include="Core\Input\InputSettings.h" />
+    <ClInclude Include="Core\Input\InputManager.h" />
+    <ClInclude Include="Core\Input\Key.h" />
+    <ClInclude Include="LockFree\LFQueue.h" />
+    <ClInclude Include="ECS\Archetype.h" />
+    <ClInclude Include="Core\WorldEntity\PipelineLayer.h" />
+    <ClInclude Include="Core\Logger\Console\ConsoleLogger.h" />
     <ClInclude Include="PCH\pch.h" />
-    <ClInclude Include="POWEngine\Core\Core.h" />
-    <ClInclude Include="POWEngine\Core\CustomTypes.h" />
-    <ClInclude Include="POWEngine\Logger\LoggerUtils.h" />
-    <ClInclude Include="POWEngine\Math\Math.h" />
-    <ClInclude Include="POWEngine\Services\ServiceIndicator.h" />
-    <ClInclude Include="POWEngine\Sound\SoundInfo.h" />
-    <ClInclude Include="POWEngine\Sound\SoundTypes.h" />
-    <ClInclude Include="POWEngine\Utils\MacroDef.h" />
-    <ClInclude Include="POWEngine\Utils\Utils.h" />
-    <ClInclude Include="POWEngine\Window\SFML\SFMLWindow.h" />
-    <ClInclude Include="POWEngine\Window\Window.h" />
-    <ClInclude Include="POWEngine\Window\WindowContext.h" />
-    <ClInclude Include="POWEngine\Window\WindowEvents.h" />
-    <ClInclude Include="POWEngine\Window\WindowImpl.h" />
-    <ClInclude Include="POWEngine\Core\Thread\SimpleThreadPool.h" />
-    <ClInclude Include="POWEngine\Services\ServiceLocator.h" />
-    <ClInclude Include="POWEngine\Singleton\Singleton.h" />
-    <ClInclude Include="POWEngine\Core\IdGenerator\UniqueIdGenerator.h" />
-    <ClInclude Include="POWEngine\Core\Clock\WorldClock.h" />
-    <ClInclude Include="POWEngine\Core\WorldEntity\WorldEntity.h" />
-    <ClInclude Include="POWEngine\Services\Service.h" />
-    <ClInclude Include="POWEngine\ECS\SystemBase.h" />
-    <ClInclude Include="POWEngine\Core\Components\Transform2D.h" />
-    <ClInclude Include="POWEngine\ECS\SparseComponentManager.h" />
-    <ClInclude Include="POWEngine\Sound\SoundSystem.h" />
-    <ClInclude Include="POWEngine\Renderer\Renderer.h" />
-    <ClInclude Include="POWEngine\Renderer\SFML\SFML2DRendererThreaded.h" />
-    <ClInclude Include="POWEngine\Renderer\Components\Sprite\SpriteComponent.h" />
-    <ClInclude Include="POWEngine\Renderer\Resources\Texture\Texture.h" />
-    <ClInclude Include="POWEngine\Renderer\Resources\Texture\TextureImpl.h" />
-    <ClInclude Include="POWEngine\Renderer\Resources\Texture\SFML\SFMLTexture.h" />
-    <ClInclude Include="POWEngine\Renderer\Components\Sprite\SpriteImpl.h" />
-    <ClInclude Include="POWEngine\Renderer\System\RenderSystemBase.h" />
-    <ClInclude Include="POWEngine\Renderer\RenderAPI.h" />
-    <ClInclude Include="POWEngine\ECS\SystemUtils.h" />
-    <ClInclude Include="POWEngine\Singleton\ThreadSafeSingleton.h" />
-    <ClInclude Include="POWEngine\Renderer\Components\Text\TextComponent.h" />
-    <ClInclude Include="POWEngine\Renderer\Components\Text\SFML\SFMLText.h" />
-    <ClInclude Include="POWEngine\Renderer\Components\Text\TextImpl.h" />
-    <ClInclude Include="POWEngine\Renderer\Resources\Font\SFML\SFMLFont.h" />
-    <ClInclude Include="POWEngine\Random\Random.h" />
+    <ClInclude Include="Core\Core.h" />
+    <ClInclude Include="Core\CustomTypes.h" />
+    <ClInclude Include="Core\Logger\LoggerUtils.h" />
+    <ClInclude Include="Math\Math.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="Sound\SoundInfo.h" />
+    <ClInclude Include="Utils\MacroDef.h" />
+    <ClInclude Include="Utils\Utils.h" />
+    <ClInclude Include="Renderer\Window\SFML\SFMLWindow.h" />
+    <ClInclude Include="Renderer\Window\Window.h" />
+    <ClInclude Include="Renderer\Window\WindowContext.h" />
+    <ClInclude Include="Renderer\Window\WindowEvents.h" />
+    <ClInclude Include="Renderer\Window\WindowImpl.h" />
+    <ClInclude Include="Core\Thread\SimpleThreadPool.h" />
+    <ClInclude Include="Utils\ServiceLocator.h" />
+    <ClInclude Include="Utils\Singleton.h" />
+    <ClInclude Include="Core\Clock\WorldClock.h" />
+    <ClInclude Include="Core\WorldEntity\WorldEntity.h" />
+    <ClInclude Include="Utils\Service.h" />
+    <ClInclude Include="ECS\Components\Transform2D.h" />
+    <ClInclude Include="Sound\SoundService.h" />
+    <ClInclude Include="Renderer\Renderer.h" />
+    <ClInclude Include="Renderer\SFML\SFML2DRendererThreaded.h" />
+    <ClInclude Include="Renderer\Components\Sprite\SpriteComponent.h" />
+    <ClInclude Include="Renderer\Resources\Texture\Texture.h" />
+    <ClInclude Include="Renderer\Resources\Texture\TextureImpl.h" />
+    <ClInclude Include="Renderer\Resources\Texture\SFML\SFMLTexture.h" />
+    <ClInclude Include="Renderer\Components\Sprite\SpriteImpl.h" />
+    <ClInclude Include="Renderer\System\RenderSystemBase.h" />
+    <ClInclude Include="Renderer\RenderAPI.h" />
+    <ClInclude Include="Core\Thread\ThreadSafeSingleton.h" />
+    <ClInclude Include="Renderer\Components\Text\TextComponent.h" />
+    <ClInclude Include="Renderer\Components\Text\SFML\SFMLText.h" />
+    <ClInclude Include="Renderer\Components\Text\TextImpl.h" />
+    <ClInclude Include="Renderer\Resources\Font\SFML\SFMLFont.h" />
+    <ClInclude Include="Random\Random.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="POWEngine\Application\Application.cpp" />
-    <ClCompile Include="POWEngine\Application\EngineProps.cpp" />
-    <ClCompile Include="POWEngine\Core\ICore.cpp" />
-    <ClCompile Include="POWEngine\Debug\imgui\ImGUISFMLDrawSystem.cpp" />
-    <ClCompile Include="POWEngine\Debug\imgui\ImGUISFMLUpdateSystem.cpp" />
-    <ClCompile Include="POWEngine\ECS\ECSSystemBackend.cpp" />
-    <ClCompile Include="POWEngine\ECS\ECSUtils.cpp" />
-    <ClCompile Include="POWEngine\ECS\SystemKeys.cpp" />
-    <ClCompile Include="POWEngine\ECS\ThreadExecute.cpp" />
-    <ClCompile Include="POWEngine\Math\Math.cpp" />
-    <ClCompile Include="POWEngine\Renderer\2D\Render2DProps.cpp" />
-    <ClCompile Include="POWEngine\Renderer\Components\SFML\ISFMLDrawable.cpp" />
-    <ClCompile Include="POWEngine\Renderer\Components\SFML\SFMLDrawComponent.cpp" />
-    <ClCompile Include="POWEngine\Renderer\Resources\Font\FontImpl.cpp" />
-    <ClCompile Include="POWEngine\Renderer\Resources\Font\Font.cpp" />
-    <ClCompile Include="POWEngine\Core\Input\InputSystem.cpp" />
-    <ClCompile Include="POWEngine\Core\Components\InputComponent.cpp" />
-    <ClCompile Include="POWEngine\Core\Components\AudioComponent.cpp" />
-    <ClCompile Include="POWEngine\Core\Input\InputMapping.cpp" />
-    <ClCompile Include="POWEngine\Renderer\SFML\SFML2DRenderer.cpp" />
-    <ClCompile Include="POWEngine\Renderer\System\SFML\SFMLDefaultRenderSystem.cpp" />
-    <ClCompile Include="POWEngine\Sound\FMOD\AudioClip.cpp" />
-    <ClCompile Include="POWEngine\Sound\FMOD\Channel.cpp" />
-    <ClCompile Include="POWEngine\Renderer\NullRenderer.cpp" />
-    <ClCompile Include="POWEngine\Logger\Logger.cpp" />
-    <ClCompile Include="POWEngine\Logger\NullLogger.cpp" />
-    <ClCompile Include="POWEngine\Renderer\Components\Sprite\SFML\SFMLSprite.cpp" />
-    <ClCompile Include="POWEngine\Sound\FMOD\FMOD2DSound.cpp" />
-    <ClCompile Include="POWEngine\Sound\NullSoundSystem.cpp" />
-    <ClCompile Include="POWEngine\ECS\Archetype.cpp" />
-    <ClCompile Include="POWEngine\Core\GameObject\GameObject.cpp" />
-    <ClCompile Include="POWEngine\LockFree\LFStack.cpp" />
-    <ClCompile Include="POWEngine\Core\Components\BaseComponent.cpp" />
-    <ClCompile Include="POWEngine\Core\Input\InputSettings.cpp" />
-    <ClCompile Include="POWEngine\Core\Input\InputManager.cpp" />
-    <ClCompile Include="POWEngine\LockFree\LFQueue.cpp" />
-    <ClCompile Include="POWEngine\Logger\Console\ConsoleLogger.cpp" />
+    <ClCompile Include="Core\Memory\Allocator.cpp" />
+    <ClCompile Include="Core\Application\Application.cpp" />
+    <ClCompile Include="ECS\ECSManager.cpp" />
+    <ClCompile Include="ECS\ECSUtils.cpp" />
+    <ClCompile Include="ECS\EntityView.cpp" />
+    <ClCompile Include="Math\Math.cpp" />
+    <ClCompile Include="Core\Memory\MemoryTracker.cpp" />
+    <ClCompile Include="Renderer\2D\Render2DProps.cpp" />
+    <ClCompile Include="Renderer\Components\SFML\ISFMLDrawable.cpp" />
+    <ClCompile Include="Renderer\Components\SFML\SFMLDrawComponent.cpp" />
+    <ClCompile Include="Renderer\Resources\Font\FontImpl.cpp" />
+    <ClCompile Include="Renderer\Resources\Font\Font.cpp" />
+    <ClCompile Include="Core\Input\InputSystem.cpp" />
+    <ClCompile Include="ECS\Components\InputComponent.cpp" />
+    <ClCompile Include="ECS\Components\AudioComponent.cpp" />
+    <ClCompile Include="Core\Input\InputMapping.cpp" />
+    <ClCompile Include="Renderer\SFML\SFML2DRenderer.cpp" />
+    <ClCompile Include="Renderer\System\SFML\SFMLDefaultRenderSystem.cpp" />
+    <ClCompile Include="Platform\Windows\FMOD\FMODAudioClip.cpp" />
+    <ClCompile Include="Platform\Windows\FMOD\Channel.cpp" />
+    <ClCompile Include="Renderer\NullRenderer.cpp" />
+    <ClCompile Include="Core\Logger\Logger.cpp" />
+    <ClCompile Include="Core\Logger\NullLogger.cpp" />
+    <ClCompile Include="Renderer\Components\Sprite\SFML\SFMLSprite.cpp" />
+    <ClCompile Include="Platform\Windows\FMOD\FMOD2DSound.cpp" />
+    <ClCompile Include="ECS\Archetype.cpp" />
+    <ClCompile Include="ECS\GameObject\GameObject.cpp" />
+    <ClCompile Include="LockFree\LFStack.cpp" />
+    <ClCompile Include="ECS\Components\BaseComponent.cpp" />
+    <ClCompile Include="Core\Input\InputSettings.cpp" />
+    <ClCompile Include="Core\Input\InputManager.cpp" />
+    <ClCompile Include="LockFree\LFQueue.cpp" />
+    <ClCompile Include="Core\Logger\Console\ConsoleLogger.cpp" />
     <ClCompile Include="PCH\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="POWEngine\Core\Core.cpp" />
-    <ClCompile Include="POWEngine\Window\SFML\SFMLWindow.cpp" />
-    <ClCompile Include="POWEngine\Window\Window.cpp" />
-    <ClCompile Include="POWEngine\Window\WindowImpl.cpp" />
-    <ClCompile Include="POWEngine\Core\Thread\SimpleThreadPool.cpp" />
-    <ClCompile Include="POWEngine\Services\ServiceLocator.cpp" />
-    <ClCompile Include="POWEngine\Singleton\Singleton.cpp" />
-    <ClCompile Include="POWEngine\Core\IdGenerator\UniqueIdGenerator.cpp" />
-    <ClCompile Include="POWEngine\Core\Clock\WorldClock.cpp" />
-    <ClCompile Include="POWEngine\Core\WorldEntity\WorldEntity.cpp" />
-    <ClCompile Include="POWEngine\Services\Service.cpp" />
-    <ClCompile Include="POWEngine\ECS\SystemBase.cpp" />
-    <ClCompile Include="POWEngine\Core\Components\Transform2D.cpp" />
-    <ClCompile Include="POWEngine\ECS\SparseComponentManager.cpp" />
-    <ClCompile Include="POWEngine\Sound\SoundSystem.cpp" />
-    <ClCompile Include="POWEngine\Renderer\Renderer.cpp" />
-    <ClCompile Include="POWEngine\Renderer\SFML\SFML2DRendererThreaded.cpp" />
-    <ClCompile Include="POWEngine\Renderer\Components\Sprite\SpriteComponent.cpp" />
-    <ClCompile Include="POWEngine\Renderer\Resources\Texture\Texture.cpp" />
-    <ClCompile Include="POWEngine\Renderer\Resources\Texture\TextureImpl.cpp" />
-    <ClCompile Include="POWEngine\Renderer\Resources\Texture\SFML\SFMLTexture.cpp" />
-    <ClCompile Include="POWEngine\Renderer\Components\Sprite\SpriteImpl.cpp" />
-    <ClCompile Include="POWEngine\Renderer\System\RenderSystemBase.cpp" />
-    <ClCompile Include="POWEngine\Renderer\RenderAPI.cpp" />
-    <ClCompile Include="POWEngine\Singleton\ThreadSafeSingleton.cpp" />
-    <ClCompile Include="POWEngine\Renderer\Components\Text\TextComponent.cpp" />
-    <ClCompile Include="POWEngine\Renderer\Components\Text\SFML\SFMLText.cpp" />
-    <ClCompile Include="POWEngine\Renderer\Components\Text\TextImpl.cpp" />
-    <ClCompile Include="POWEngine\Renderer\Resources\Font\SFML\SFMLFont.cpp" />
-    <ClCompile Include="POWEngine\Random\Random.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="POWEngine\Debug" />
-    <Folder Include="POWEngine\Renderer\Components\Debug2D\SFML" />
+    <ClCompile Include="Core\Core.cpp" />
+    <ClCompile Include="Renderer\Window\SFML\SFMLWindow.cpp" />
+    <ClCompile Include="Renderer\Window\Window.cpp" />
+    <ClCompile Include="Renderer\Window\WindowImpl.cpp" />
+    <ClCompile Include="Core\Thread\SimpleThreadPool.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Utils\ServiceLocator.cpp" />
+    <ClCompile Include="Utils\Singleton.cpp" />
+    <ClCompile Include="Core\Clock\WorldClock.cpp" />
+    <ClCompile Include="Core\WorldEntity\WorldEntity.cpp" />
+    <ClCompile Include="Utils\Service.cpp" />
+    <ClCompile Include="ECS\Components\Transform2D.cpp" />
+    <ClCompile Include="Sound\SoundService.cpp" />
+    <ClCompile Include="Renderer\Renderer.cpp" />
+    <ClCompile Include="Renderer\SFML\SFML2DRendererThreaded.cpp" />
+    <ClCompile Include="Renderer\Components\Sprite\SpriteComponent.cpp" />
+    <ClCompile Include="Renderer\Resources\Texture\Texture.cpp" />
+    <ClCompile Include="Renderer\Resources\Texture\TextureImpl.cpp" />
+    <ClCompile Include="Renderer\Resources\Texture\SFML\SFMLTexture.cpp" />
+    <ClCompile Include="Renderer\Components\Sprite\SpriteImpl.cpp" />
+    <ClCompile Include="Renderer\System\RenderSystemBase.cpp" />
+    <ClCompile Include="Renderer\RenderAPI.cpp" />
+    <ClCompile Include="Core\Thread\ThreadSafeSingleton.cpp" />
+    <ClCompile Include="Renderer\Components\Text\TextComponent.cpp" />
+    <ClCompile Include="Renderer\Components\Text\SFML\SFMLText.cpp" />
+    <ClCompile Include="Renderer\Components\Text\TextImpl.cpp" />
+    <ClCompile Include="Renderer\Resources\Font\SFML\SFMLFont.cpp" />
+    <ClCompile Include="Random\Random.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -13,126 +13,180 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{c60797c7-f6ec-452c-a287-73c81d98f7a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Clock">
+      <UniqueIdentifier>{38f036d6-ac77-4504-bb44-c1cb64b96138}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Input">
+      <UniqueIdentifier>{d30bd1f8-8b49-460f-a0d6-c45ee10bc2ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Window">
+      <UniqueIdentifier>{a82fa3c9-ee63-41e7-b68d-a5fc36aa52e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Thread">
+      <UniqueIdentifier>{d9bea15b-3f07-498b-a6d7-65859bcf2020}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ECS">
+      <UniqueIdentifier>{7e6d0e78-d726-4be5-8931-752ba7735452}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Application">
+      <UniqueIdentifier>{e866041e-dc0a-4b33-8fa2-c3006b61be42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Debug">
+      <UniqueIdentifier>{08ed5349-9589-4bee-a33d-9cf600e04e6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Logging">
+      <UniqueIdentifier>{c4ff5eb4-2d8a-4aef-8917-b6c1babdd8cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LockFreeSTL">
+      <UniqueIdentifier>{ceb77656-41c3-4c07-9ed6-bdc1a98f5269}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{48f3ed71-ff3d-4559-8d2c-b38608ffa246}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderer">
+      <UniqueIdentifier>{2caae038-0a0d-4aa3-9594-bb319cd821ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{36e674b7-1cfa-49d3-bc27-c804303bfff8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Parser">
+      <UniqueIdentifier>{a604b70a-5011-4a31-8762-8667b3abf9f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{95e7ecb2-9c78-45ba-a60b-ba5e6f2d2e72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Components">
+      <UniqueIdentifier>{8323d356-4b04-437d-8e6b-28b6e2f41054}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Resource">
+      <UniqueIdentifier>{c050ea2e-455a-413c-a8d9-c0cf48430455}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\GameObject">
+      <UniqueIdentifier>{4ceb235c-04fb-4bd9-a4e0-735fb1b8195d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform">
+      <UniqueIdentifier>{fe780db8-109a-4765-ae1c-d399c8967d7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Windows">
+      <UniqueIdentifier>{3a4b2f13-8352-476c-9c73-1d8ffce77602}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform\Windows\Sound">
+      <UniqueIdentifier>{316df143-a046-453d-a849-49d575468fe5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="pch">
+      <UniqueIdentifier>{63d8d2f5-ef0a-433f-b0a1-9c852f5413ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Random">
+      <UniqueIdentifier>{9ef0ba57-fea9-4533-baf4-f259a06a5e75}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PCH\pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Core\Core.h">
+    <ClInclude Include="Core\Core.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Core\CustomTypes.h">
+    <ClInclude Include="Core\CustomTypes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Window\Window.h">
+    <ClInclude Include="Renderer\Window\Window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Window\WindowContext.h">
+    <ClInclude Include="Renderer\Window\WindowContext.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Window\SFML\SFMLWindow.h">
+    <ClInclude Include="Renderer\Window\SFML\SFMLWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Window\WindowImpl.h">
+    <ClInclude Include="Renderer\Window\WindowImpl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Logger\Console\ConsoleLogger.h">
+    <ClInclude Include="Core\Logger\Console\ConsoleLogger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Core\Thread\SimpleThreadPool.h">
+    <ClInclude Include="Core\Thread\SimpleThreadPool.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\LockFree\LFQueue.h">
+    <ClInclude Include="LockFree\LFQueue.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Services\ServiceLocator.h">
+    <ClInclude Include="Utils\ServiceLocator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Singleton\Singleton.h">
+    <ClInclude Include="Utils\Singleton.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Core\IdGenerator\UniqueIdGenerator.h">
+    <ClInclude Include="Core\WorldEntity\WorldEntity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Core\WorldEntity\WorldEntity.h">
+    <ClInclude Include="Core\Clock\WorldClock.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Core\Clock\WorldClock.h">
+    <ClInclude Include="Core\Input\InputManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Core\Input\InputManager.h">
+    <ClInclude Include="Utils\Service.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Services\Service.h">
+    <ClInclude Include="Core\Input\InputSettings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Core\Input\InputSettings.h">
+    <ClInclude Include="Core\Input\Key.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Core\Input\Key.h">
+    <ClInclude Include="Core\Input\ListsOfKeys.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Core\Input\ListsOfKeys.h">
+    <ClInclude Include="Core\Logger\LoggerUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Logger\LoggerUtils.h">
+    <ClInclude Include="Renderer\Window\WindowEvents.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Window\WindowEvents.h">
+    <ClInclude Include="Core\Input\InputStruct.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Core\Input\InputStruct.h">
+    <ClInclude Include="Math\Math.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Math\Math.h">
+    <ClInclude Include="ECS\Archetype.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\ECS\SystemBase.h">
+    <ClInclude Include="ECS\ECSTypes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\ECS\Archetype.h">
+    <ClInclude Include="Core\WorldEntity\PipelineLayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\ECS\ECSTypes.h">
+    <ClInclude Include="LockFree\LFStack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Core\WorldEntity\PipelineLayer.h">
+    <ClInclude Include="ECS\GameObject\GameObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\LockFree\LFStack.h">
+    <ClInclude Include="ECS\Components\Transform2D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Core\GameObject\GameObject.h">
+    <ClInclude Include="ECS\ECSUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Core\Components\Transform2D.h">
+    <ClInclude Include="Sound\SoundService.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\ECS\ECSUtils.h">
+    <ClInclude Include="Platform\Windows\FMOD\FMOD2DSound.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\ECS\SparseComponentManager.h">
+    <ClInclude Include="Core\Logger\NullLogger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Services\ServiceIndicator.h">
+    <ClInclude Include="Core\Logger\Logger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Sound\SoundSystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="POWEngine\Sound\NullSoundSystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="POWEngine\Sound\FMOD\FMOD2DSound.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="POWEngine\Logger\NullLogger.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="POWEngine\Logger\Logger.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="POWEngine\Sound\SoundInfo.h">
+    <ClInclude Include="Sound\SoundInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\powengine.h">
@@ -144,393 +198,336 @@
     <ClInclude Include="include\poweSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Sound\FMOD\Channel.h">
+    <ClInclude Include="Platform\Windows\FMOD\Channel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Sound\SoundTypes.h">
+    <ClInclude Include="Platform\Windows\FMOD\FMODUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Sound\FMOD\FMODUtils.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="POWEngine\Sound\FMOD\AudioClip.h">
+    <ClInclude Include="Platform\Windows\FMOD\FMODAudioClip.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\poweComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Core\Components\AudioComponent.h">
+    <ClInclude Include="ECS\Components\AudioComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\ECS\SystemUtils.h">
+    <ClInclude Include="Core\Thread\ThreadSafeSingleton.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Singleton\ThreadSafeSingleton.h">
+    <ClInclude Include="Core\Input\InputMapping.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Singleton\InstanceUtils.h">
+    <ClInclude Include="Core\Input\InputVars.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Core\Input\InputMapping.h">
+    <ClInclude Include="ECS\Components\InputComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Core\Input\InputVars.h">
+    <ClInclude Include="Core\Input\InputSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Core\Components\InputComponent.h">
+    <ClInclude Include="Core\Input\EventType.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Core\Input\InputSystem.h">
+    <ClInclude Include="Parser\JSON\JSONParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Core\Input\EventType.h">
+    <ClInclude Include="Parser\JSON\json.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\JSON\JSONParser.h">
+    <ClInclude Include="Random\Random.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\JSON\json.hpp">
+    <ClInclude Include="Core\Application\Application.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Random\Random.h">
+    <ClInclude Include="Renderer\2D\Render2DProps.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Application\Application.h">
+    <ClInclude Include="Renderer\Components\Text\SFML\SFMLTextComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Application\EngineProps.h">
+    <ClInclude Include="Renderer\Resources\Font\FontImpl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Renderer\2D\Render2DProps.h">
+    <ClInclude Include="Renderer\Resources\Font\Font.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Renderer\Components\Debug2D\SFML\SFMLDebugRectangleComponent.h">
+    <ClInclude Include="Renderer\Components\Sprite\SFML\SFMLSpriteComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Renderer\Components\Text\SFML\SFMLTextComponent.h">
+    <ClInclude Include="Renderer\NullRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Renderer\Resources\Font\FontImpl.h">
+    <ClInclude Include="Renderer\Components\Sprite\SFML\SFMLSprite.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Renderer\Resources\Font\Font.h">
+    <ClInclude Include="Renderer\Renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Renderer\Components\Sprite\SFML\SFMLSpriteComponent.h">
+    <ClInclude Include="Renderer\SFML\SFML2DRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Renderer\NullRenderer.h">
+    <ClInclude Include="Renderer\Components\Sprite\SpriteComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Renderer\Components\Sprite\SFML\SFMLSprite.h">
+    <ClInclude Include="Renderer\Resources\Texture\Texture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Renderer\Renderer.h">
+    <ClInclude Include="Renderer\Resources\Texture\TextureImpl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Renderer\RendererImpl.h">
+    <ClInclude Include="Renderer\Resources\Texture\SFML\SFMLTexture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Renderer\SFML\SFML2DRenderer.h">
+    <ClInclude Include="Renderer\Components\Sprite\SpriteImpl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Renderer\Components\Sprite\SpriteComponent.h">
+    <ClInclude Include="Renderer\System\RenderSystemBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Renderer\Resources\Texture\Texture.h">
+    <ClInclude Include="Renderer\RenderAPI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Renderer\Resources\Texture\TextureImpl.h">
+    <ClInclude Include="Renderer\Components\Text\TextComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Renderer\Resources\Texture\SFML\SFMLTexture.h">
+    <ClInclude Include="Renderer\Components\Text\SFML\SFMLText.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Renderer\Components\Sprite\SpriteImpl.h">
+    <ClInclude Include="Renderer\Components\Text\TextImpl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Renderer\System\RenderSystemBase.h">
+    <ClInclude Include="Renderer\Resources\Font\SFML\SFMLFont.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Renderer\RenderAPI.h">
+    <ClInclude Include="ECS\Components\BaseComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Renderer\System\SFML\SFML2DRenderSystem.h">
+    <ClInclude Include="Renderer\Components\SFML\ISFMLDrawable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Renderer\Components\Text\TextComponent.h">
+    <ClInclude Include="Renderer\Components\SFML\SFMLDrawComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Renderer\Components\Text\SFML\SFMLText.h">
+    <ClInclude Include="Renderer\System\SFML\SFMLDefaultRenderSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Renderer\Components\Text\TextImpl.h">
+    <ClInclude Include="Utils\MacroDef.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Renderer\Resources\Font\SFML\SFMLFont.h">
+    <ClInclude Include="Utils\Utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Renderer\System\SFML\SFMLTextRender.h">
+    <ClInclude Include="Renderer\SFML\SFML2DRendererThreaded.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Renderer\System\SFML\SFML2DBoundingBoxRender.h">
+    <ClInclude Include="Core\Application\AppDesc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Renderer\Components\Debug2D\DebugRectangle.h">
+    <ClInclude Include="Core\Memory\Allocator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Renderer\Components\Debug2D\SFML\SFMLDebugRectangle.h">
+    <ClInclude Include="Core\Memory\MemoryTracker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Renderer\Components\Debug2D\RectangleImpl.h">
+    <ClInclude Include="Scene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\ECS\SystemKeys.h">
+    <ClInclude Include="ECS\ECSManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="POWEngine\Renderer\System\SFML\SFML2DShapeRenderSystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="POWEngine\Core\Components\BaseComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="POWEngine\Renderer\Components\Debug2D\SFML\SFML2DShapeComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="POWEngine\Renderer\Components\Debug2D\IShape2D.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="POWEngine\Renderer\Components\SFML\ISFMLDrawable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="POWEngine\Renderer\Components\SFML\SFMLDrawComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="POWEngine\Renderer\System\SFML\SFMLDefaultRenderSystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="POWEngine\Utils\MacroDef.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="POWEngine\Utils\Utils.h">
+    <ClInclude Include="ECS\EntityView.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Renderer\Window\Window.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\Window\WindowImpl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\ServiceLocator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\Singleton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\WorldEntity\WorldEntity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Clock\WorldClock.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\Service.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\Components\Transform2D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Application\Application.cpp">
+      <Filter>Core\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\Archetype.cpp">
+      <Filter>ECS</Filter>
+    </ClCompile>
+    <ClCompile Include="Platform\Windows\FMOD\FMODAudioClip.cpp">
+      <Filter>Platform\Windows\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\Components\AudioComponent.cpp">
+      <Filter>Game\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\Components\BaseComponent.cpp">
+      <Filter>Game\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Platform\Windows\FMOD\Channel.cpp">
+      <Filter>Platform\Windows\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Logger\Console\ConsoleLogger.cpp">
+      <Filter>Core\Logging</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Core.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\ECSUtils.cpp">
+      <Filter>ECS</Filter>
+    </ClCompile>
+    <ClCompile Include="Platform\Windows\FMOD\FMOD2DSound.cpp">
+      <Filter>Platform\Windows\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\Resources\Font\Font.cpp">
+      <Filter>Core\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\Resources\Font\FontImpl.cpp">
+      <Filter>Core\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\GameObject\GameObject.cpp">
+      <Filter>Game\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="ECS\Components\InputComponent.cpp">
+      <Filter>Game\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Input\InputManager.cpp">
+      <Filter>Core\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Input\InputMapping.cpp">
+      <Filter>Core\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Input\InputSettings.cpp">
+      <Filter>Core\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Input\InputSystem.cpp">
+      <Filter>Core\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="LockFree\LFQueue.cpp">
+      <Filter>LockFreeSTL</Filter>
+    </ClCompile>
+    <ClCompile Include="LockFree\LFStack.cpp">
+      <Filter>LockFreeSTL</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Logger\Logger.cpp">
+      <Filter>Core\Logging</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\Math.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Logger\NullLogger.cpp">
+      <Filter>Core\Logging</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\NullRenderer.cpp">
+      <Filter>Core\Logging</Filter>
+    </ClCompile>
     <ClCompile Include="PCH\pch.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Core\Core.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Window\Window.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Window\SFML\SFMLWindow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Window\WindowImpl.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Logger\Console\ConsoleLogger.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Core\Thread\SimpleThreadPool.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\LockFree\LFQueue.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Services\ServiceLocator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Singleton\Singleton.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Core\IdGenerator\UniqueIdGenerator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Core\WorldEntity\WorldEntity.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Core\Clock\WorldClock.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Core\Input\InputManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Services\Service.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Core\Input\InputSettings.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\ECS\SystemBase.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Core\Components\BaseComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\LockFree\LFStack.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Core\GameObject\GameObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\ECS\Archetype.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Core\Components\Transform2D.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\ECS\SparseComponentManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Sound\SoundSystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Sound\NullSoundSystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Sound\FMOD\FMOD2DSound.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Logger\NullLogger.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Logger\Logger.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Sound\FMOD\Channel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Sound\FMOD\AudioClip.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Core\Components\AudioComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Singleton\ThreadSafeSingleton.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Core\Input\InputMapping.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Core\Components\InputComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Core\Input\InputSystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Random\Random.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Application\Application.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Application\EngineProps.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Renderer\2D\Render2DProps.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Renderer\Components\Debug2D\DebugRectangle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Renderer\Resources\Font\FontImpl.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>pch</Filter>
     </ClCompile>
-    <ClCompile Include="POWEngine\Renderer\Resources\Font\Font.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Renderer\NullRenderer.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Random\Random.cpp">
+      <Filter>Random</Filter>
     </ClCompile>
-    <ClCompile Include="POWEngine\Renderer\Components\Sprite\SFML\SFMLSprite.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="POWEngine\Renderer\Renderer.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Renderer\2D\Render2DProps.cpp">
+      <Filter>Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="POWEngine\Renderer\RendererImpl.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Renderer\Components\SFML\ISFMLDrawable.cpp">
+      <Filter>Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="POWEngine\Renderer\SFML\SFML2DRenderer.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Renderer\RenderAPI.cpp">
+      <Filter>Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="POWEngine\Renderer\Components\Sprite\SpriteComponent.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Renderer\Renderer.cpp">
+      <Filter>Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="POWEngine\Renderer\Resources\Texture\Texture.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Renderer\System\RenderSystemBase.cpp">
+      <Filter>Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="POWEngine\Renderer\Resources\Texture\TextureImpl.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Renderer\SFML\SFML2DRendererThreaded.cpp">
+      <Filter>Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="POWEngine\Renderer\Resources\Texture\SFML\SFMLTexture.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Renderer\System\SFML\SFMLDefaultRenderSystem.cpp">
+      <Filter>Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="POWEngine\Renderer\Components\Sprite\SpriteImpl.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Renderer\SFML\SFML2DRenderer.cpp">
+      <Filter>Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="POWEngine\Renderer\System\RenderSystemBase.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Renderer\Components\SFML\SFMLDrawComponent.cpp">
+      <Filter>Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="POWEngine\Renderer\RenderAPI.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Renderer\Resources\Font\SFML\SFMLFont.cpp">
+      <Filter>Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="POWEngine\Renderer\System\SFML\SFML2DRenderSystem.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Renderer\Components\Sprite\SFML\SFMLSprite.cpp">
+      <Filter>Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="POWEngine\Renderer\Components\Text\TextComponent.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Renderer\Components\Text\SFML\SFMLText.cpp">
+      <Filter>Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="POWEngine\Renderer\Components\Text\SFML\SFMLText.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Renderer\Resources\Texture\SFML\SFMLTexture.cpp">
+      <Filter>Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="POWEngine\Renderer\Components\Text\TextImpl.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Renderer\Window\SFML\SFMLWindow.cpp">
+      <Filter>Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="POWEngine\Renderer\Resources\Font\SFML\SFMLFont.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Core\Thread\SimpleThreadPool.cpp">
+      <Filter>Core\Thread</Filter>
     </ClCompile>
-    <ClCompile Include="POWEngine\Renderer\System\SFML\SFMLTextRender.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Sound\SoundService.cpp">
+      <Filter>Platform\Windows\Sound</Filter>
     </ClCompile>
-    <ClCompile Include="POWEngine\Renderer\System\SFML\SFML2DBoundingBoxRender.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Renderer\Components\Sprite\SpriteComponent.cpp">
+      <Filter>Game\Components</Filter>
     </ClCompile>
-    <ClCompile Include="POWEngine\Renderer\Components\Debug2D\SFML\SFMLDebugRectangle.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Renderer\Components\Text\TextComponent.cpp">
+      <Filter>Game\Components</Filter>
     </ClCompile>
-    <ClCompile Include="POWEngine\Renderer\Components\Debug2D\RectangleImpl.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Renderer\Components\Sprite\SpriteImpl.cpp">
+      <Filter>Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="POWEngine\ECS\ECSUtils.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Renderer\Components\Text\TextImpl.cpp">
+      <Filter>Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="POWEngine\ECS\SystemKeys.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Renderer\Resources\Texture\Texture.cpp">
+      <Filter>Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="POWEngine\Renderer\System\SFML\SFML2DShapeRenderSystem.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Renderer\Resources\Texture\TextureImpl.cpp">
+      <Filter>Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="POWEngine\Renderer\Components\Debug2D\SFML\SFML2DShapeComponent.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Core\Thread\ThreadSafeSingleton.cpp">
+      <Filter>Core\Thread</Filter>
     </ClCompile>
-    <ClCompile Include="POWEngine\Renderer\Components\Debug2D\IShape2D.cpp">
+    <ClCompile Include="Core\Memory\Allocator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="POWEngine\Renderer\Components\SFML\ISFMLDrawable.cpp">
+    <ClCompile Include="Core\Memory\MemoryTracker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="POWEngine\Renderer\Components\SFML\SFMLDrawComponent.cpp">
+    <ClCompile Include="Scene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="POWEngine\Renderer\System\SFML\SFMLDefaultRenderSystem.cpp">
+    <ClCompile Include="ECS\ECSManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="POWEngine\Math\Math.cpp">
+    <ClCompile Include="ECS\EntityView.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

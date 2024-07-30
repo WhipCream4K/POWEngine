@@ -19,8 +19,11 @@
 #include <stdexcept>
 #include <ranges>
 
-#include "POWEngine/Core/CustomTypes.h"
-#include "POWEngine/Math/Math.h"
-#include "POWEngine/Utils/MacroDef.h"
+//#include "../Core/CustomTypes.h"
+//#include "../Math/Math.h"
+//#include "../Utils/MacroDef.h"
+
+#include "../POWEngine/Core/CustomTypes.h"
+
 
 #endif //PCH_H
