@@ -1,7 +1,7 @@
 #include "pch.h"
-#include "WorldClock.h"
+#include "Clock.h"
 
-powe::WorldClock::WorldClock()
+powe::Clock::Clock()
 	: m_CurrentFrame()
 	, m_EndFrame()
 	, m_DeltaTime()
@@ -10,7 +10,7 @@ powe::WorldClock::WorldClock()
 	m_EndFrame = std::chrono::high_resolution_clock::now();
 }
 
-void powe::WorldClock::Start()
+void powe::Clock::Start()
 {
 	using seconds = std::chrono::duration<float>;
 	m_CurrentFrame = std::chrono::high_resolution_clock::now();
@@ -19,12 +19,12 @@ void powe::WorldClock::Start()
 	m_TotalElapsedTime += m_DeltaTime;
 }
 
-void powe::WorldClock::End()
+void powe::Clock::End()
 {
 	m_EndFrame = m_CurrentFrame;
 }
 
-void powe::WorldClock::ResetTime()
+void powe::Clock::ResetTime()
 {
 	m_EndFrame = std::chrono::high_resolution_clock::now();
 }

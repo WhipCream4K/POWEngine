@@ -3,51 +3,37 @@
 #include "Core/Core.h"
 #include "Renderer/RenderAPI.h"
 #include "AppDesc.h"
+#include "Core/Memory/Allocator.h"
 
 namespace powe
 {
     class WorldEntity;
     class Window;
-
-    class Application : public std::enable_shared_from_this<Application>
+    class Core;
+    class Layer;
+    class Clock;
+    class WindowManager;
+    class Application
     {
     public:
 
-        Application() = default;
+        Application(const AppDesc& desc);
         Application(const Application&) = delete;
         Application& operator=(const Application&) = delete;
         Application(Application&&) = delete;
         Application& operator=(Application&&) = delete;
         virtual ~Application() = default;
 
+        void PushLayer(UniquePtr<Layer>&& layer);
+        void PopLayer();
         void Run();
-
-
-    protected:
-
-        //virtual void OnAppStartUp(AppDesc& appDesc)
-        //{
-        //}
-
-        //virtual void OnPreStep(WorldEntity&)
-        //{
-        //}
-
-        //virtual void OnWorldInitialize(WorldEntity&)
-        //{
-        //}
 
     private:
 
-        static uint8_t WindowIDCounter;
-        
-        //Core m_EngineCore; // core only handlek window, world, render interactions so it can be on stack
+        Vector<UniquePtr<Layer>> m_LayerStack;
+        UniquePtr<Clock> m_Clock;
+        UniquePtr<WindowManager> m_WindowManager;
 
-        //OwnedPtr<WorldEntity> m_WorldEntity;
-
-        //SharedPtr<Window> m_GameWindow;
-        //Renderer m_GameWindowRenderer;
-
-        std::unordered_map<uint8_t, UniquePtr<Window>> m_OpenWindows;
+        TrackableAllocator m_TrackAllocator;
     };
 }

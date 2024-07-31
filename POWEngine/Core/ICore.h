@@ -3,7 +3,7 @@
 
 namespace powe
 {
-    class WorldClock;
+    class Clock;
     class Renderer;
     class InputManager;
     class RenderAPI;
@@ -14,12 +14,12 @@ namespace powe
         ICore();
         ~ICore();
         
-        WorldClock& GetWorldClock() const {return *m_WorldClock;}
+        Clock& GetWorldClock() const {return *m_WorldClock;}
         InputManager& GetInputManager() const {return *m_InputManager;}
         
     protected:
 
-        UniquePtr<WorldClock> m_WorldClock;
+        UniquePtr<Clock> m_WorldClock;
         UniquePtr<InputManager> m_InputManager;
     };
 }

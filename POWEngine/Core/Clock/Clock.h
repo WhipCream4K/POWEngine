@@ -4,13 +4,11 @@
 
 namespace powe
 {
-	class WorldClock final
+	class Clock final
 	{
 	public:
 
-		friend class Core;
-
-		WorldClock();
+		Clock();
 
 		void Start();
 		void End();

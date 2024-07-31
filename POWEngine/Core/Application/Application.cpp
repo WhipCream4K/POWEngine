@@ -1,15 +1,23 @@
 #include "pch.h"
 #include "Application.h"
+#include "Core/Layer.h"
 
-//#include "POWEngine/Services/ServiceLocator.h"
-//#include "POWEngine/Logger/Console/ConsoleLogger.h"
-//#include "POWEngine/Core/WorldEntity/WorldEntity.h"
-//#include "POWEngine/Window/Window.h"
-//#include "POWEngine/Debug/imgui/ImGUI.h"
-//#include "POWEngine/Debug/imgui/ImGUISFMLDrawSystem.h"
-//#include "POWEngine/Debug/imgui/ImGUISFMLUpdateSystem.h"
+powe::Application::Application(const AppDesc& desc)
+{
+}
 
-uint8_t powe::Application::WindowIDCounter{};
+void powe::Application::PushLayer(UniquePtr<Layer>&& layer)
+{   
+    m_LayerStack.emplace_back(std::move(layer));
+    layer->OnAttach();
+}
+
+void powe::Application::PopLayer()
+{
+    Layer* topLayer{ m_LayerStack.back().get()};
+    topLayer->OnDetach();
+    m_LayerStack.pop_back();
+}
 
 void powe::Application::Run()
 {

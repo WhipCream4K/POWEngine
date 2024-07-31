@@ -22,7 +22,7 @@ namespace powe
 		// Shouldn't throw
 		bool IsValid() const
 		{
-			return m_OldAddress != nullptr && (m_OldAddress == &m_Archetype[m_EntityIndex]);
+			return m_OldAddress != nullptr && (m_OldAddress == &m_Archetype[m_EntityID]);
 		}
 
 		operator bool() const

@@ -1,9 +1,9 @@
 #pragma once
 #include <future>
 
-#include "ICore.h"
-#include "POWEngine/Renderer/Renderer.h"
-#include "POWEngine/Window/Window.h"
+//#include "ICore.h"
+//#include "POWEngine/Renderer/Renderer.h"
+//#include "POWEngine/Window/Window.h"
 
 namespace powe
 {
@@ -12,9 +12,9 @@ namespace powe
 	class ServiceLocator;
 	class Window;
 	class WorldEntity;
-	class WorldClock;
+	class Clock;
 	class Renderer;
-	class Core final : public ICore
+	class Core 
 	{
 	public:
 		
@@ -30,30 +30,33 @@ namespace powe
 		 */
 		void StartWorldClock() const;
 
+		virtual void Initialize() = 0;
+		virtual void Update(float delta) = 0;
+
 		
-		void Step(WorldEntity& worldEntity) const;
-		void Draw(const Renderer& renderer,WorldEntity& world) const;
-		
-		bool FullStepMultiThreaded(const Renderer& renderer,WorldEntity& world);
-		bool FullStep(const Renderer& renderer,WorldEntity& world) const;
+		//void Step(WorldEntity& worldEntity) const;
+		//void Draw(const Renderer& renderer,WorldEntity& world) const;
+		//
+		//bool FullStepMultiThreaded(const Renderer& renderer,WorldEntity& world);
+		//bool FullStep(const Renderer& renderer,WorldEntity& world) const;
 
 		
 		Core(const Core&) = delete;
 		Core& operator=(const Core&) = delete;
 		Core(Core&&) noexcept = default;
 		Core& operator=(Core&&) = default;
-		~Core();
+		virtual ~Core();
 
 	private:
 
-		void WaitForLastFrameDisplay(const Renderer& renderer) const;
-		
-		static constexpr uint32_t MaxQueuedFrame{2};
-		uint32_t m_RenderCommandCount{};
+		//void WaitForLastFrameDisplay(const Renderer& renderer) const;
+		//
+		//static constexpr uint32_t MaxQueuedFrame{2};
+		//uint32_t m_RenderCommandCount{};
 
-		uint32_t m_CurrentFrameCount{};
-		
-		bool m_StartFrame{};
+		//uint32_t m_CurrentFrameCount{};
+		//
+		//bool m_StartFrame{};
 		
 		/**
 		 * \brief Implementation of the core engine to expand the scalability of the core engine

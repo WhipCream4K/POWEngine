@@ -10,7 +10,7 @@
 #include <memory_resource>
 #include <string>
 
-//#include "../Window/WindowContext.h"
+
 
 template<typename UserClass>
 using SharedPtr = std::shared_ptr<UserClass>;

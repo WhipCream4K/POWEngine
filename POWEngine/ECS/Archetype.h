@@ -7,8 +7,6 @@
 
 namespace powe
 {
-	template<typename T>
-	concept ComponentConcept = std::is_copy_constructible_v<T> && !std::is_pointer_v<T> && std::is_standard_layout_v<T>;
 
 	template<ComponentConcept... Args>
 	class Archetype final
@@ -44,34 +42,66 @@ namespace powe
 		constexpr auto crbegin() const { return m_Components.crbegin(); }
 		constexpr auto crend() const { return m_Components.crend(); }
 
+		operator [](EntityID id) noexcept
+		{
+			return m_Components[m_EntityToIndex[id]];
+		}
+
+		operator [](EntityID id) const noexcept
+		{
+			return m_Components[m_EntityToIndex[id]];
+		}
+
 		void emplace_back(EntityID id, Args&&... components)
 		{
 			m_Components.emplace_back(std::make_tuple<ComponentBlock>(std::move(components));
-			m_EntityToIndex.emplace_back(id);
+			m_EntityToIndex[id] = m_Components.size() - 1;
 		}
 
 		Iterator find(EntityID id)
 		{
-			const auto findItr{ std::find(m_EntityToIndex.begin(), m_EntityToIndex.end(), id) };
-			if (findItr != m_EntityToIndex.end())
+			if (auto it = m_EntityToIndex.find(id); it != m_EntityToIndex.end())
 			{
-				return m_Components.begin() + std::distance(m_EntityToIndex.begin(), findItr);
+				return m_Components.begin() + it->second;
 			}
-
+			
 			return m_Components.end();
 		}
 
 		typename Iterator erase(typename Iterator begin, typename Iterator end)
 		{
-			m_EntityToIndex.erase(m_EntityToIndex.begin() + std::distance(m_Components.begin(), begin),
-				m_EntityToIndex.begin() + std::distance(m_Components.begin(), end));
+			for (auto it = m_EntityToIndex.begin() ; it != m_EntityToIndex.end();)
+			{
+				if (it->second >= std::distance(m_Components.begin(), begin) && it->second < std::distance(m_Components.begin(), end))
+				{
+					it = m_EntityToIndex.erase(it);
+				}
+				else
+				{
+					++it;
+				}
+			}
+			
 
 			return m_Components.erase(begin, end);
 		}
 
 		typename Iterator erase(typename Iterator pos)
 		{
-			m_EntityToIndex.erase(m_EntityToIndex.begin() + std::distance(m_Components.begin(), pos));
+
+			for (auto it = m_EntityToIndex.begin() ; it != m_EntityToIndex.end())
+			{
+				if (it->second == std::distance(m_Components.begin(), pos))
+				{
+					it = m_EntityToIndex.erase(it);
+					break;
+				}
+				else
+				{
+					++it;
+				}
+			}
+
 			return m_Components.erase(pos);
 		}
 
@@ -83,11 +113,7 @@ namespace powe
 	private:
 
 		Vector<ComponentBlock> m_Components;
-
-		// This will served as EntityID to index mapping.
-		// Where the index of the vector will be the index of the component block
-		// and the EntityID will be the entity that owns the component block
-		Vector<EntityID> m_EntityToIndex;
+		UnOrderedMap<EntityID,size_t> m_EntityToIndex;
 	};
 
 }

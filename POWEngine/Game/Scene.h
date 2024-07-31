@@ -1,11 +1,18 @@
 #pragma once
 
+#include "ECS/ECSManager.h"
+
 namespace powe
 {
-	class Scene
+	class Scene final
 	{
 	public:
+
+		
+
 	private:
+
+
 
 	};
 }

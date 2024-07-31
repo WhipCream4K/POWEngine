@@ -123,7 +123,7 @@
     <ClInclude Include="Core\WorldEntity\WorldEntity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Clock\WorldClock.h">
+    <ClInclude Include="Core\Clock\Clock.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Core\Input\InputManager.h">
@@ -333,13 +333,22 @@
     <ClInclude Include="Core\Memory\MemoryTracker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Scene.h">
+    <ClInclude Include="Game\Scene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ECS\ECSManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ECS\EntityView.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Layer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\WIndowManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\EngineLayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -359,7 +368,7 @@
     <ClCompile Include="Core\WorldEntity\WorldEntity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Clock\WorldClock.cpp">
+    <ClCompile Include="Core\Clock\Clock.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Utils\Service.cpp">
@@ -521,13 +530,22 @@
     <ClCompile Include="Core\Memory\MemoryTracker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Scene.cpp">
+    <ClCompile Include="Game\Scene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ECS\ECSManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ECS\EntityView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\WindowManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Layer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\EngineLayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

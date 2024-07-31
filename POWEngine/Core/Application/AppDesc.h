@@ -1,6 +1,14 @@
 #pragma once
 
-struct AppDesc
-{
+#include "Core/Memory/Allocator.h"
+#include <optional>
 
-};
+
+
+namespace powe
+{
+	struct AppDesc
+	{
+	};
+}
+

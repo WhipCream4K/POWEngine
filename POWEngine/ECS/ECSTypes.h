@@ -59,4 +59,7 @@ namespace powe
 		ECSComponentMap<SharedPtr<RawByte[]>> componentData{};
 		std::vector<ComponentTypeID> archetypeKey{};
 	};
+
+	template<typename T>
+	concept ComponentConcept = std::is_copy_constructible_v<T> && !std::is_pointer_v<T> && std::is_standard_layout_v<T>;
 }

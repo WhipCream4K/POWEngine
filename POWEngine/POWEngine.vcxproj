@@ -189,9 +189,12 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Game\EngineLayer.h" />
+    <ClInclude Include="Core\Layer.h" />
     <ClInclude Include="Core\Memory\Allocator.h" />
     <ClInclude Include="Core\Application\AppDesc.h" />
     <ClInclude Include="Core\Application\Application.h" />
+    <ClInclude Include="Core\WIndowManager.h" />
     <ClInclude Include="ECS\ECSManager.h" />
     <ClInclude Include="ECS\Components\BaseComponent.h" />
     <ClInclude Include="ECS\EntityView.h" />
@@ -243,7 +246,7 @@
     <ClInclude Include="Core\CustomTypes.h" />
     <ClInclude Include="Core\Logger\LoggerUtils.h" />
     <ClInclude Include="Math\Math.h" />
-    <ClInclude Include="Scene.h" />
+    <ClInclude Include="Game\Scene.h" />
     <ClInclude Include="Sound\SoundInfo.h" />
     <ClInclude Include="Utils\MacroDef.h" />
     <ClInclude Include="Utils\Utils.h" />
@@ -255,7 +258,7 @@
     <ClInclude Include="Core\Thread\SimpleThreadPool.h" />
     <ClInclude Include="Utils\ServiceLocator.h" />
     <ClInclude Include="Utils\Singleton.h" />
-    <ClInclude Include="Core\Clock\WorldClock.h" />
+    <ClInclude Include="Core\Clock\Clock.h" />
     <ClInclude Include="Core\WorldEntity\WorldEntity.h" />
     <ClInclude Include="Utils\Service.h" />
     <ClInclude Include="ECS\Components\Transform2D.h" />
@@ -277,8 +280,11 @@
     <ClInclude Include="Random\Random.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Game\EngineLayer.cpp" />
+    <ClCompile Include="Core\Layer.cpp" />
     <ClCompile Include="Core\Memory\Allocator.cpp" />
     <ClCompile Include="Core\Application\Application.cpp" />
+    <ClCompile Include="Core\WindowManager.cpp" />
     <ClCompile Include="ECS\ECSManager.cpp" />
     <ClCompile Include="ECS\ECSUtils.cpp" />
     <ClCompile Include="ECS\EntityView.cpp" />
@@ -321,10 +327,10 @@
     <ClCompile Include="Renderer\Window\Window.cpp" />
     <ClCompile Include="Renderer\Window\WindowImpl.cpp" />
     <ClCompile Include="Core\Thread\SimpleThreadPool.cpp" />
-    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Game\Scene.cpp" />
     <ClCompile Include="Utils\ServiceLocator.cpp" />
     <ClCompile Include="Utils\Singleton.cpp" />
-    <ClCompile Include="Core\Clock\WorldClock.cpp" />
+    <ClCompile Include="Core\Clock\Clock.cpp" />
     <ClCompile Include="Core\WorldEntity\WorldEntity.cpp" />
     <ClCompile Include="Utils\Service.cpp" />
     <ClCompile Include="ECS\Components\Transform2D.cpp" />

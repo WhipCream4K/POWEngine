@@ -3,10 +3,10 @@
 
 #include "Input/InputManager.h"
 #include "POWEngine/Window/Window.h"
-#include "POWEngine/Core/Clock/WorldClock.h"
-#include "POWEngine/Renderer/Renderer.h"
+#include "Core/Clock/CLock.h"
+#include "Renderer/Renderer.h"
 #include "WorldEntity/WorldEntity.h"
-#include "POWEngine/Core/Input/InputStruct.h"
+#include "Core/Input/InputStruct.h"
 
 powe::Core::Core() = default;
 
@@ -50,7 +50,7 @@ void powe::Core::Step(WorldEntity& worldEntity) const
 	worldEntity.UpdatePipeline(PipelineLayer::PostUpdate, deltaTime);
 }
 
-void powe::Core::Draw(const Renderer& renderer,WorldEntity& world) const
+void powe::GameCore::Draw(const Renderer& renderer,WorldEntity& world) const
 {
 	const Window* targetWindow{renderer.GetUnCheckedTargetWindow()};
 	
@@ -62,7 +62,7 @@ void powe::Core::Draw(const Renderer& renderer,WorldEntity& world) const
 }
 
 
-bool powe::Core::FullStepMultiThreaded(const Renderer& renderer, WorldEntity& world)
+bool powe::GameCore::FullStepMultiThreaded(const Renderer& renderer, WorldEntity& world)
 {
 	WaitForLastFrameDisplay(renderer);
 	
@@ -99,7 +99,7 @@ bool powe::Core::FullStepMultiThreaded(const Renderer& renderer, WorldEntity& wo
 	return shouldQuit;
 }
 
-bool powe::Core::FullStep(const Renderer& renderer, WorldEntity& world) const
+bool powe::GameCore::FullStep(const Renderer& renderer, WorldEntity& world) const
 {
 	const Window* targetWindow{renderer.GetUnCheckedTargetWindow()};
 	const bool shouldQuit = TranslateWindowInputs(*targetWindow,world);
@@ -131,7 +131,7 @@ bool powe::Core::FullStep(const Renderer& renderer, WorldEntity& world) const
 	return shouldQuit;
 }
 
-powe::Core::~Core() = default;
+powe::GameCore::~GameCore() = default;
 
 void powe::Core::WaitForLastFrameDisplay(const Renderer& renderer) const
 {
