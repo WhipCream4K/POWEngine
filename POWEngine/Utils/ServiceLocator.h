@@ -1,71 +1,63 @@
 #pragma once
 
-#include "Service.h"
-#include "Core/Logger/Logger.h"
-#include "Sound/SoundService.h"
+#include <variant>
+
+#include "Core/CustomTypes.h"
+#include "Utils/Utils.h"
 
 namespace powe
 {
-	class IService;
-	class SoundService;
-	class ConsoleLogger;
-	class CoreResource;
-	class ICore;
+	template<typename T>
+	concept ServiceConcept = requires(T t)
+	{
+		{ t.ServiceType() } -> std::convertible_to<std::string>;
+	};
+
+	template<ServiceConcept... IService>
 	class ServiceLocator final
 	{
 
 	public:
 
-		ServiceLocator() = delete;
-		ServiceLocator(const ServiceLocator&) = delete;
-		ServiceLocator& operator=(const ServiceLocator&) = delete;
-		ServiceLocator(ServiceLocator&&) noexcept = delete;
-		ServiceLocator& operator=(ServiceLocator&&) noexcept = delete;
-		~ServiceLocator() = default;
-
-		static SoundService& GetSoundSystem() { return *m_SoundSystem; }
-		static void RegisterSoundSystem(const SharedPtr<SoundService>& soundSystem);
-
-		static Logger& GetLogger() { return *m_Logger; }
-		static void RegisterLogger(const SharedPtr<Logger>& logger);
-
-
-		// Not thread-safe method to register a service
-		template<typename T>
-		void RegisterService(const SharedPtr<T>& service)
-		{
-			static_assert(std::is_base_of_v<IService, T>, "Service must derive from IService");
-			const std::string serviceType{ typeid(T).name() }; // There can only be one service of each type
-			m_Services.try_emplace(serviceType, service);
+		ServiceLocator(std::pmr::memory_resource* memResource)
+			: m_Services(memResource)
+			, m_MemResource(memResource)
+		{	
 		}
 
-		template<typename T>
-		WeakPtr<T> GetService()
+		ServiceLocator(const ServiceLocator&) = delete;
+		ServiceLocator& operator=(const ServiceLocator&) = delete;
+		ServiceLocator(ServiceLocator&&) noexcept = default;
+		ServiceLocator& operator=(ServiceLocator&&) noexcept = default;
+		~ServiceLocator() = default;
+
+		template<typename T> requires  is_one_of<T,IService...>
+		void RegisterService(T&& object)
 		{
-			static_assert(std::is_base_of_v<IService, T>, "Service must derive from IService");
-			const std::string serviceType{ typeid(T).name() };
+			auto service{AllocateUnique<T>(std::move(object), m_MemResource)};
+			const std::string serviceType{service->ServiceType()};
+			m_Services.try_emplace(serviceType,std::move(service));
+		}
+
+		template<typename T> requires is_one_of<T,IService...>
+		T* GetService()
+		{
+			const std::string serviceType{ std::declval<T>().ServiceType() };
 			const auto it{ m_Services.find(serviceType) };
 			if (it != m_Services.end())
 			{
-				return it->second.get();
+				return std::get<UniquePtr<T>>(it->second).get();
 			}
 			return nullptr;
 		}
 		
+
 	private:
 
-		std::unordered_map<std::string, SharedPtr<IService>> m_Services;
+		using ServiceVariant = std::variant<UniquePtr<IService>...>;
 
-		// ----- Audio ------
-		static SharedPtr<SoundService> m_SoundSystem;
-		// ------------------
-
-		// ----- Logger ------
-		static SharedPtr<Logger> m_Logger;
-		// -------------------
-
-		// ----- Engine Core ------
-		//static SharedPtr<ICore> m_CoreInterface;
+		UnOrderedMap<std::string, ServiceVariant> m_Services;
+		std::pmr::memory_resource* m_MemResource;
 	};
 }
 

@@ -8,7 +8,7 @@ class Random
 
 public:
 
-	Random();
+	Random() = default;
 	
 	template<typename T>
 	static T RandInt(T from, T to);

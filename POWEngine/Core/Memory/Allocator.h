@@ -58,7 +58,7 @@ namespace powe
 
 			m_TotalAllocateMemory.fetch_sub(bytes);
 #endif
-			std::pmr::get_default_resource()->deallocate(ptr, bytes, alignment);
+			m_Upstream->deallocate(ptr, bytes, alignment);
 		}
 
 		virtual bool do_is_equal(const std::pmr::memory_resource& other) const noexcept override
@@ -74,6 +74,7 @@ namespace powe
 		std::pmr::memory_resource* m_Upstream{};
 
 	};
+
 }
 
 

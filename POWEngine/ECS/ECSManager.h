@@ -9,12 +9,15 @@ namespace powe
 	template<ComponentConcept... Args>
 	std::string GetArchetypeKey()
 	{
-		return std::string(typeid(Args).name() + ...);
+		return (std::string(typeid(Args).name()) + ...);
 	}
 
 	class ECSManager final
 	{
 	public:
+
+		ECSManager() = default;
+		ECSManager(std::pmr::memory_resource* memResource);
 
 		EntityID CreateEntity() { return m_CurrentEntityID++; }
 
@@ -26,6 +29,13 @@ namespace powe
 			archetype.emplace_back(newID,std::forward<Args>(args)...);
 			return newID;
 		}
+
+		template<ComponentConcept T>
+		void AddComponent(EntityID entityID, T&& component)
+		{
+			
+		}
+		
 		
 		template<ComponentConcept... Args>
 		Archetype<Args...>& GetArchetype();

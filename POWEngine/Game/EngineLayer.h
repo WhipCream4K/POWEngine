@@ -2,6 +2,7 @@
 
 #include "Core/CustomTypes.h"
 #include "Core/Layer.h"
+#include "Core/Memory/Allocator.h"
 
 namespace powe
 {
@@ -10,7 +11,11 @@ namespace powe
 	{
 	public:
 
+		EngineLayer();
+
 		Scene& CreatScene(std::string_view sceneName);
+		void SetActiveScene(std::string_view sceneName) { m_ActiveScene = m_Scenes.at(sceneName.data()).get(); }
+		std::pmr::memory_resource* GetAllocator() { return &m_TrackAllocator; }
 
 	protected:
 
@@ -19,8 +24,9 @@ namespace powe
 		void OnUpdate(float deltaTime) override;
 
 	private:
+		TrackableAllocator m_TrackAllocator;
 
-		//Vector<UniquePtr<Scene>> m_Scenes
 		UnOrderedMap<std::string,UniquePtr<Scene>> m_Scenes;
+		Scene* m_ActiveScene;
 	};
 }

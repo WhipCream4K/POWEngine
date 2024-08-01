@@ -1,10 +1,9 @@
 #pragma once
 
-#include "POWEngine/Core/CustomTypes.h"
-#include "POWEngine/Core/Thread/SimpleThreadPool.h"
-#include "POWEngine/LockFree/LFQueue.h"
-//#include "POWEngine/Services/Service.h"
-#include "POWEngine/Logger/Logger.h"
+#include "Core/CustomTypes.h"
+//#include "POWEngine/Core/Thread/SimpleThreadPool.h"
+//#include "POWEngine/LockFree/LFQueue.h"
+#include "Core/Logger/Logger.h"
 
 namespace powe
 {
@@ -22,7 +21,7 @@ namespace powe
 
 	public:
 
-		// TODO: Rule of 5
+
 		ConsoleLogger();
 		ConsoleLogger(const ConsoleLogger&) = delete;
 		ConsoleLogger& operator=(const ConsoleLogger&) = delete;
@@ -33,26 +32,7 @@ namespace powe
 	public:
 
 		void AddMessage(const std::string& msg);
-
-		//void AddInfoMessage(const std::string& msg);
-		//void AddWarningMessage(const std::string& msg,const std::string& where);
-		//void AddErrorMessage(const std::string& msg,const std::string& where);
-
-		void LogErrorMessage(const std::string&, const std::string& fromWhere = "", bool showOrigin = false) override;
-		void LogInfoMessage(const std::string&, const std::string& fromWhere = "", bool showOrigin = false) override;
-		void LogWarningMessage(const std::string&, const std::string& fromWhere = "", bool showOrigin = false) override;
-
-	private:
-
-		void Run();
-
-		//static inline void DisplayConsoleMessage(const std::string& msg);
-
-		LFQueue<std::string> m_MessageQueue;
-		std::condition_variable m_TaskWait;
-		std::mutex m_Mutex;
-		std::future<void> m_MessageThread;
-		bool m_IsContextExit;
+		void Log(LogSeverity severity, const std::string& message, const std::string& fromWhere = "") override;
 	};
 }
 

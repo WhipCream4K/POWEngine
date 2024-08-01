@@ -42,19 +42,19 @@ namespace powe
 		constexpr auto crbegin() const { return m_Components.crbegin(); }
 		constexpr auto crend() const { return m_Components.crend(); }
 
-		operator [](EntityID id) noexcept
+		std::tuple<ComponentBlock>& operator [](EntityID id) noexcept
 		{
 			return m_Components[m_EntityToIndex[id]];
 		}
 
-		operator [](EntityID id) const noexcept
+		std::tuple<ComponentBlock>& operator [](EntityID id) const noexcept
 		{
 			return m_Components[m_EntityToIndex[id]];
 		}
 
 		void emplace_back(EntityID id, Args&&... components)
 		{
-			m_Components.emplace_back(std::make_tuple<ComponentBlock>(std::move(components));
+			m_Components.emplace_back(std::make_tuple<ComponentBlock>(std::move(components)));
 			m_EntityToIndex[id] = m_Components.size() - 1;
 		}
 
@@ -89,7 +89,7 @@ namespace powe
 		typename Iterator erase(typename Iterator pos)
 		{
 
-			for (auto it = m_EntityToIndex.begin() ; it != m_EntityToIndex.end())
+			for (auto it = m_EntityToIndex.begin() ; it != m_EntityToIndex.end();)
 			{
 				if (it->second == std::distance(m_Components.begin(), pos))
 				{
@@ -114,6 +114,12 @@ namespace powe
 
 		Vector<ComponentBlock> m_Components;
 		UnOrderedMap<EntityID,size_t> m_EntityToIndex;
+	};
+
+	template<ComponentConcept... Args>
+	class ArchetypeView
+	{
+	public:
 	};
 
 }

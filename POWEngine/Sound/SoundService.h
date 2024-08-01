@@ -2,13 +2,13 @@
 
 #include <future>
 
-#include "Services/Service.h"
+//#include "Services/Service.h"
 #include "SoundInfo.h"
 
 namespace powe
 {
 
-	class SoundService : public IService
+	class SoundService
 	{
 	public:
 
@@ -20,6 +20,8 @@ namespace powe
 		virtual ~SoundService() = default;
 
 	public:
+
+		const std::string ServiceType() const { return "SoundService"; }
 
 		virtual SoundID RegisterSoundEntity(const std::string& filePath, bool shouldLoaded = false) = 0;
 		virtual void UnRegisterSoundEntity(SoundID id) = 0;

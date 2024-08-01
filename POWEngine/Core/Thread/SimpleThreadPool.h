@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "POWEngine/Core/CustomTypes.h"
+#include "Core/CustomTypes.h"
 #include <thread>
 #include <future>
 #include <queue>
@@ -13,7 +13,7 @@ namespace powe
 	{
 	public:
 
-		SimpleThreadPool(size_t threadCount = (size_t)std::thread::hardware_concurrency());
+		SimpleThreadPool(std::pmr::memory_resource* memResource, size_t threadCount = (size_t)std::thread::hardware_concurrency());
 		SimpleThreadPool(const SimpleThreadPool&) = delete;
 		SimpleThreadPool& operator=(const SimpleThreadPool&) = delete;
 		SimpleThreadPool(SimpleThreadPool&&) noexcept = delete;
@@ -22,161 +22,75 @@ namespace powe
 
 	public:
 
-		// TODO: MARK maybe this should be depricate because object in memory can be moved everywhere and it's going to blow up
-		// template<
-		// 	typename Func,
-		// 	typename UserClass = typename FnTraits<Func>::class_type,
-		// 	typename ...Args,
-		// 	typename Ret = std::invoke_result_t<Func, UserClass, Args...>>
-		// 	std::future<Ret> PushMemberTask(Func&& fn, UserClass* obj, Args&&... args);
+		template<typename Func, typename ... Args, typename Ret = std::invoke_result_t<Func, Args...>>
+		constexpr std::future<Ret> EnqueueFuture(Func&& fn, Args&&... args)
+		{
 
-		template<
-			typename Func,
-		typename UserClass,
-		typename ...Args,
-		typename Ret = std::invoke_result_t<Func,UserClass,Args...>>
-		std::future<Ret> PushMemberTask(Func&& fn,UserClass obj,Args&&... args);
+			std::pmr::polymorphic_allocator<std::packaged_task<Ret(Args...)>> allocator{ m_MemResource };
 
-		template<
-			typename Func,
-			typename ...Args,
-			typename Ret = std::invoke_result_t<Func, Args...>>
-			std::future<Ret> PushTask(Func&& fn, Args&&... args);
+			auto task = std::allocate_shared<std::packaged_task<Ret(Args...)>>(allocator, [func = std::forward<Func>(fn), ...args = std::forward<Args>(args)]() mutable {
+				return func(std::forward<Args>(args)...);
+				});
+
+			std::future<Ret> res = task->get_future();
+
+			{
+				std::scoped_lock lock(m_Mutex);
+
+				// Don't allow enqueueing after stopping the pool
+				if (m_Stop)
+					throw std::runtime_error("enqueue on stopped ThreadPool");
+
+				m_Tasks.emplace([task] { (*task)(); });
+			}
+
+			m_ThreadCV.notify_one();
+
+			return res;
+		}
+
+		template<typename Func, typename ... Args>
+		constexpr void Enqueue(Func&& fn, Args&&... args)
+		{
+			std::pmr::polymorphic_allocator<std::packaged_task<void()>> allocator{ m_MemResource };
+
+			auto task = std::allocate_shared<std::packaged_task<void()>>(allocator, [func = std::forward<Func>(fn), ...args = std::forward<Args>(args)]() mutable {
+				func(std::forward<Args>(args)...);
+				});
+
+			{
+				std::scoped_lock lock(m_Mutex);
+
+				// Don't allow enqueueing after stopping the pool
+				if (m_Stop)
+					throw std::runtime_error("enqueue on stopped ThreadPool");
+
+				m_Tasks.emplace([task] { (*task)(); });
+			}
+
+			m_ThreadCV.notify_one();
+		}
+
+
 
 
 	private:
 
 		void Run();
 
-		std::vector<std::future<void>> m_Workers;
+		std::pmr::memory_resource* m_MemResource;
+		Vector<std::jthread> m_Workers;
 		std::queue<std::packaged_task<void()>> m_Tasks;
-		std::condition_variable m_TaskWait;
+		std::condition_variable m_ThreadCV;
 		std::mutex m_Mutex;
+		bool m_Stop;
 	};
-	
-	// template <typename Func, typename UserClass, typename ... Args, typename Ret>
-	// std::future<Ret> SimpleThreadPool::PushMemberTask(Func&& fn, UserClass* obj, Args&&... args)
-	// {
-	// 	std::packaged_task<void()> task{};
-	// 	std::future<Ret> future{};
+
+	//#include "Core/Application/Application.h"
 	//
-	// 	if constexpr (std::is_void_v<Ret>)
-	// 	{
-	// 		task = std::packaged_task<void()>{ [
-	// 			func = std::forward<Func>(fn),
-	// 		&obj,
-	// 		... largs = std::forward<Args>(args)] ()
-	// 		{
-	// 			(obj->*func)(largs...);
-	// 		} };
-	//
-	// 		future = task.get_future();
-	// 	}
-	// 	else
-	// 	{
-	// 		auto sharedPromise{ std::make_shared<std::promise<Ret>>() };
-	//
-	// 		// Perfect capture c++20 https://stackoverflow.com/questions/47496358/c-lambdas-how-to-capture-variadic-parameter-pack-from-the-upper-scope
-	// 		task = std::packaged_task<void()>{ [
-	// 			func = std::forward<Func>(fn),
-	// 				&obj,
-	// 				... largs = std::forward<Args>(args) ,
-	// 				sharedPromise] ()
-	// 			{
-	// 				sharedPromise->set_value(std::invoke(func,obj,largs...));
-	// 			} };
-	//
-	//
-	// 		future = sharedPromise->get_future();
-	// 	}
-	//
-	//
-	// 	{
-	// 		std::unique_lock lock{ m_Mutex };
-	// 		m_Tasks.emplace(std::move(task));
-	// 	}
-	//
-	//
-	// 	m_TaskWait.notify_one();
-	//
-	// 	return future;
-	// }
-
-	template <typename Func, typename UserClass, typename ... Args, typename Ret>
-	std::future<Ret> SimpleThreadPool::PushMemberTask(Func&& fn, UserClass obj, Args&&... args)
-	{
-		std::packaged_task<void()> task{};
-		std::future<Ret> future{};
-		WeakPtr<typename UserClass::element_type> weakCaller{obj};
-
-		if constexpr (std::is_void_v<Ret>)
-		{
-			task = std::packaged_task<void()>{ [
-				weakCaller,
-				func = std::forward<Func>(fn),
-			... largs = std::forward<Args>(args)] () mutable 
-			{
-				if(auto caller = weakCaller.lock(); caller)
-					(*caller.*func)(largs...);
-					// std::invoke(func,caller,largs...);
-			} };
-
-			future = task.get_future();
-		}
-		else
-		{
-			auto sharedPromise{ std::make_shared<std::promise<Ret>>() };
-
-			// Perfect capture c++20 https://stackoverflow.com/questions/47496358/c-lambdas-how-to-capture-variadic-parameter-pack-from-the-upper-scope
-			task = std::packaged_task<void()>{ [
-				weakCaller,
-				func = std::forward<Func>(fn),
-					... largs = std::forward<Args>(args) ,
-					sharedPromise] ()
-			{
-				if(auto  caller = weakCaller.lock(); caller)
-					sharedPromise->set_value(std::invoke(func,caller,largs...));
-			} };
-			
-			future = sharedPromise->get_future();
-		}
-
-
-		{
-			std::scoped_lock lock{ m_Mutex };
-			m_Tasks.emplace(std::move(task));
-		}
-		
-		m_TaskWait.notify_one();
-
-		return future;
-	}
-
-	template <typename Func, typename ... Args, typename Ret>
-	std::future<Ret> SimpleThreadPool::PushTask(Func&& fn, Args&&... args)
-	{
-		// if I don't create promise with shared pointer then when I retrieved future object it's referencing null object
-		auto sharedPromise{ std::make_shared<std::promise<Ret>>() };
-		std::future<Ret> future{ sharedPromise->get_future() };
-		std::packaged_task<void()> task{};
-
-		// Perfect capture
-		task = std::move(std::packaged_task<void()>{ [
-			func = std::forward<Func>(fn),
-				... largs = std::forward<Args>(args),
-				sharedPromise] ()
-			{
-				sharedPromise->set_value(func(largs...));
-			}});
-
-		{
-			std::scoped_lock lock{ m_Mutex };
-			m_Tasks.emplace(std::move(task));
-		}
-
-		m_TaskWait.notify_one();
-
-		return future;
-	}
+	//	SimpleThreadPool& GetThreadPool()
+	//	{
+	//		return Application::Get().GetThreadPool();
+	//	}
 }
 
