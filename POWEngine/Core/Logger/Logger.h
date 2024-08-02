@@ -7,7 +7,7 @@ namespace powe
 	{
 		Info,
 		Warning,
-		Errror
+		Error
 	};
 
 	class Logger

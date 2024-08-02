@@ -33,6 +33,9 @@ namespace powe
 
 		void AddMessage(const std::string& msg);
 		void Log(LogSeverity severity, const std::string& message, const std::string& fromWhere = "") override;
+
+	private:
+
 	};
 }
 

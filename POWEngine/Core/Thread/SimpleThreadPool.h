@@ -7,6 +7,8 @@
 #include <queue>
 #include <functional>
 
+#include "Core/Application/Application.h"
+
 namespace powe
 {
 	class SimpleThreadPool
@@ -86,11 +88,10 @@ namespace powe
 		bool m_Stop;
 	};
 
-	//#include "Core/Application/Application.h"
-	//
-	//	SimpleThreadPool& GetThreadPool()
-	//	{
-	//		return Application::Get().GetThreadPool();
-	//	}
+
+	SimpleThreadPool& GetThreadPool()
+	{
+		return Application::Get().GetThreadPool();
+	}
 }
 

@@ -151,3 +151,25 @@
 ////{
 ////	std::cout << msg << '\n';
 ////}
+
+void powe::ConsoleLogger::Log(LogSeverity severity, const std::string& message, const std::string& fromWhere)
+{
+	std::string log{};
+
+	switch (severity)
+	{
+	case LogSeverity::Info:
+		log.append(LogInfo + message + " " + fromWhere);
+		break;
+	case LogSeverity::Warning:
+		log.append(LogWarning + message + " " + fromWhere);
+		break;
+	case LogSeverity::Error:
+		log.append(LogError + message + " " + fromWhere);
+		break;
+	default:
+		break;
+	}
+
+	AddMessage(log);
+}
