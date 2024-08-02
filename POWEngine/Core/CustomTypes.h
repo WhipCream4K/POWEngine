@@ -42,8 +42,8 @@ struct FnTraits<Ret(UserClass::*)(Args...) const> : FnTraits<Ret(UserClass&, Arg
 	using class_type = UserClass;
 };
 
-template<typename T,typename... Ts>
-concept is_one_of = (std::is_same_v<T, Ts> || ...);
+template<typename T, typename... Ts>
+concept is_one_of = (std::is_same_v<T, Ts> || ...) || ( std::is_base_of_v<Ts, T> || ... );
 
 namespace powe
 {

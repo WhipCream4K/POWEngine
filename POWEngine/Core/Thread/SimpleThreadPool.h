@@ -24,6 +24,8 @@ namespace powe
 
 	public:
 
+		std::string ServiceType() const { return "ThreadPool"; }
+
 		template<typename Func, typename ... Args, typename Ret = std::invoke_result_t<Func, Args...>>
 		constexpr std::future<Ret> EnqueueFuture(Func&& fn, Args&&... args)
 		{
@@ -87,11 +89,5 @@ namespace powe
 		std::mutex m_Mutex;
 		bool m_Stop;
 	};
-
-
-	SimpleThreadPool& GetThreadPool()
-	{
-		return Application::Get().GetThreadPool();
-	}
 }
 

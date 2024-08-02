@@ -5,21 +5,19 @@
 #include "Utils/Utils.h"
 #include "Core/Logger/Logger.h"
 #include "Utils/ServiceLocator.h"
+#include "Core/Thread/SimpleThreadPool.h"
 #include "Core/Layer.h"
 #include "Core/Clock/Clock.h"
 
 
 namespace powe
 {
-	class WorldEntity;
-	class Window;
 	class Core;
 	class Layer;
-	class Clock;
 	class WindowManager;
 	class SimpleThreadPool;
 
-	using ServiceLocatorT = ServiceLocator<Logger>;
+	using ServiceLocatorT = ServiceLocator<Logger,SimpleThreadPool>;
 
 	class Application final
 	{
@@ -41,7 +39,6 @@ namespace powe
 		static Application& Get() { return *m_Instance; }
 
 		ServiceLocatorT& GetServiceLocator() { return *m_ServiceLocator; }
-		SimpleThreadPool& GetThreadPool() { return *m_ThreadPool; }
 		WindowManager& GetWindowManager() { return *m_WindowManager; }
 
 
@@ -54,7 +51,6 @@ namespace powe
 		Clock m_Clock;
 		UniquePtr<WindowManager> m_WindowManager;
 		UniquePtr<ServiceLocatorT> m_ServiceLocator;
-		UniquePtr<SimpleThreadPool> m_ThreadPool;
 
 		static Application* m_Instance;
 	};
