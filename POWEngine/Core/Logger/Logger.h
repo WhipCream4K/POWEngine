@@ -22,13 +22,8 @@ namespace powe
 		virtual ~Logger() = default;
 
 		std::string ServiceType() const { return "Logger"; }
-
-		//virtual void LogInfoMessage(const std::string&,const std::string& fromWhere = "",bool showOrigin = false) = 0;
-		//virtual void LogWarningMessage(const std::string&, const std::string& fromWhere = "", bool showOrigin = false) = 0;
-		//virtual void LogErrorMessage(const std::string&, const std::string& fromWhere = "", bool showOrigin = false) = 0;
-
-		virtual void Log(LogSeverity severity, const std::string& message, const std::string& fromWhere = "") = 0;
-		
+		virtual void LogLevel(LogSeverity severity, const std::string& message, const std::string& fromWhere = "") = 0;
+		virtual void Log(const std::string& message) = 0;
 	};
 }
 

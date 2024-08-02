@@ -42,37 +42,50 @@ namespace powe
 			}
 		}
 
-		void push(T&& data) {
-
-			Node* newNode = Allocate(std::move(data));
+		void push(const T& data)
+		{
+			Node* newNode{ Allocate(data) };
 			Node* oldTail;
 
 			do
 			{
 				oldTail = m_Tail.load(std::memory_order_relaxed);
 				newNode->version = oldTail->version + 1;
-				newNode->next.store(oldTail->next.load(std::memory_order_relaxed), std::memory_order_relaxed);
-			} while (!m_Tail.compare_exchange_weak(oldTail, newNode));
+				oldTail->next.store(newNode, std::memory_order_relaxed);
+			} while (!m_Tail.compare_exchange_weak(oldTail, newNode)); // using DCAS
+		}
+
+		void push(T&& data) {
+
+			Node* newNode{ Allocate(std::forward<T>(data)) };
+			Node* oldTail;
+
+			do
+			{
+				oldTail = m_Tail.load(std::memory_order_relaxed);
+				newNode->version = oldTail->version + 1;
+				oldTail->next.store(newNode, std::memory_order_relaxed);
+			} while (!m_Tail.compare_exchange_weak(oldTail, newNode)); // using DCAS
 
 		}
 
 		bool pop(T& result) {
 
-			Node* prevHead = m_Head.load(std::memory_order_relaxed);
+			Node* prevHead{ m_Head.load(std::memory_order_relaxed) };
 			Node* newHead;
 
-			while(prevHead != nullptr)
+			while (prevHead != nullptr)
 			{
 				newHead = prevHead->next.load(std::memory_order_relaxed);
-				
-				if(newHead == nullptr)
+
+				if (newHead == nullptr)
 				{
 					return false;
 				}
 
 				newHead->version = prevHead->version + 1;
-				
-				if(m_Head.compare_exchange_weak(prevHead, newHead,std::memory_order_release,std::memory_order_relaxed))
+
+				if (m_Head.compare_exchange_weak(prevHead, newHead, std::memory_order_release, std::memory_order_relaxed))
 				{
 					break;
 				}
@@ -83,10 +96,16 @@ namespace powe
 			return true;
 		}
 
+		bool empty() const
+		{
+			return m_Head.load(std::memory_order_relaxed) == m_Tail.load(std::memory_order_relaxed);
+		}
+
 	private:
 
-		Node* Allocate(T&& data) {
-			return new (m_MemResource->allocate(sizeof(Node), alignof(Node))) Node(std::move(data));
+		template<typename U>
+		Node* Allocate(U&& data) {
+			return new (m_MemResource->allocate(sizeof(Node), alignof(Node))) Node(std::forward<U>(data));
 		}
 
 	private:

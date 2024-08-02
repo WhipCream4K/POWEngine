@@ -4,6 +4,7 @@
 //#include "POWEngine/Core/Thread/SimpleThreadPool.h"
 //#include "POWEngine/LockFree/LFQueue.h"
 #include "Core/Logger/Logger.h"
+#include "LockFree/LFQueue.h"
 
 namespace powe
 {
@@ -19,10 +20,16 @@ namespace powe
 	class ConsoleLogger : public Logger
 	{
 
+		struct LogMsg
+		{
+			LogSeverity severity;
+			std::string message;
+		};
+
 	public:
 
 
-		ConsoleLogger();
+		ConsoleLogger(std::pmr::memory_resource* memResource);
 		ConsoleLogger(const ConsoleLogger&) = delete;
 		ConsoleLogger& operator=(const ConsoleLogger&) = delete;
 		ConsoleLogger(ConsoleLogger&&) = delete;
@@ -31,10 +38,18 @@ namespace powe
 
 	public:
 
-		void AddMessage(const std::string& msg);
-		void Log(LogSeverity severity, const std::string& message, const std::string& fromWhere = "") override;
+		void LogLevel(LogSeverity severity, const std::string& message, const std::string& fromWhere = "") override;
+		void Log(const std::string& message) override;
 
 	private:
+
+		void Run();
+
+		LFQueue<LogMsg> m_MessageQueue;
+		std::jthread m_MessageThread;
+		std::mutex m_Mutex;
+		std::condition_variable m_ThreadCV;
+		bool m_Stop;
 
 	};
 }
