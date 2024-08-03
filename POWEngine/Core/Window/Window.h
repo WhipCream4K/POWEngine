@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include <functional>
+#include "Core/CustomTypes.h"
 
 namespace powe
 {
@@ -9,11 +9,19 @@ namespace powe
 	{
 	public:
 
-		Window(std::pmr::memory_resource* memResource,const std::string& title, int width, int height);
+		Window(PMRResource* memResource,std::string_view title,int width, int height);
 		~Window();
 
 		void Initialize();
+
+		
+		/**
+		 * Poll events will fill the event queue with events that have occurred since the last time it was called.
+		 * It's using the stack allocated event queue of the window.
+		 */
 		void PollEvents();
+
+		
 		void SwapBuffers();
 		void SetFullscreen(bool fullscreen);
 		void SetTitle(const std::string& title);
@@ -24,13 +32,16 @@ namespace powe
 		int GetHeight() const;
 		bool IsFullscreen() const;
 
+		static void InitializeLibrary();
+		static void TerminateLibrary();
+
 	private:
 
-		// Private Methods
+
 		void CreateWindow();
 		void DestroyWindow();
 
-		// Private Members
+
 		std::string m_Title;
 		std::pmr::memory_resource* m_MemResource;
 
@@ -39,6 +50,6 @@ namespace powe
 		bool m_Fullscreen;
 
 
-		void* m_WindowHandle;
+		SharedPtr<void> m_WindowHandle;
 	};
 }

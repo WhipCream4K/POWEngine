@@ -1,7 +1,6 @@
 #pragma once
 
-#include "POWEngine/Sound/SoundTypes.h"
-#include "POWEngine/Sound/SoundInfo.h"
+#include "Sound/SoundInfo.h"
 #include <mutex>
 
 namespace FMOD

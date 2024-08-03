@@ -25,5 +25,15 @@
 
 #include "../POWEngine/Core/CustomTypes.h"
 
+#define USE_GLFW_WINDOW 1
+
+// enum
+// {
+//     USE_GLFW_WINDOW = 1,
+//     // USE_SFML_WINDOW = 1,
+//     // USE_SFML_RENDERER = 1,
+//     RELEASE_WITH_LOGINFO = 1,
+//     USE_IMGUI = 1
+// };
 
 #endif //PCH_H

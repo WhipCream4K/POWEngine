@@ -9,7 +9,7 @@ namespace powe
 	{
 	public:
 		
-		std::string ServiceType() const { return typeid(T).name(); }
+		static std::string ServiceType() { return typeid(T).name(); }
 	};
 	
 }

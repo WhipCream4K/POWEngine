@@ -4,7 +4,6 @@
 #include <typeindex>
 
 #include "Core/CustomTypes.h"
-#include "Utils/Utils.h"
 #include "Service.h"
 
 
@@ -35,7 +34,6 @@ namespace powe
 		void RegisterService(Args&&... args)
 		{
 			std::pmr::polymorphic_allocator<T> alloc{m_MemResource};
-
 			SharedPtr<T> service{std::allocate_shared<T>(alloc,std::forward<Args>(args)...)};
 			m_Services[std::type_index(typeid(T))] = service;
 		}

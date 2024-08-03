@@ -189,7 +189,9 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Core\Window.h" />
+    <ClInclude Include="Core\SubSystem.h" />
+    <ClInclude Include="Core\Window\GLFW\glfwWindow.cpp" />
+    <ClInclude Include="Core\Window\Window.h" />
     <ClInclude Include="Game\EngineLayer.h" />
     <ClInclude Include="Core\Layer.h" />
     <ClInclude Include="Core\Memory\Allocator.h" />
@@ -211,6 +213,10 @@
     <ClInclude Include="Core\CustomTypes.h" />
     <ClInclude Include="Core\Logger\LoggerUtils.h" />
     <ClInclude Include="Game\Scene.h" />
+    <ClInclude Include="Platform\Windows\FMOD\Channel.h" />
+    <ClInclude Include="Platform\Windows\FMOD\FMOD2DSound.h" />
+    <ClInclude Include="Platform\Windows\FMOD\FMODAudioClip.h" />
+    <ClInclude Include="Platform\Windows\FMOD\FMODUtils.h" />
     <ClInclude Include="Sound\SoundInfo.h" />
     <ClInclude Include="Utils\MacroDef.h" />
     <ClInclude Include="Utils\Utils.h" />
@@ -223,7 +229,7 @@
     <ClInclude Include="Random\Random.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Core\Window.cpp" />
+    <ClCompile Include="Core\SubSystem.cpp" />
     <ClCompile Include="Game\EngineLayer.cpp" />
     <ClCompile Include="Core\Layer.cpp" />
     <ClCompile Include="Core\Memory\Allocator.cpp" />
@@ -245,6 +251,9 @@
     </ClCompile>
     <ClCompile Include="Core\Thread\SimpleThreadPool.cpp" />
     <ClCompile Include="Game\Scene.cpp" />
+    <ClCompile Include="Platform\Windows\FMOD\Channel.cpp" />
+    <ClCompile Include="Platform\Windows\FMOD\FMOD2DSound.cpp" />
+    <ClCompile Include="Platform\Windows\FMOD\FMODAudioClip.cpp" />
     <ClCompile Include="Utils\ServiceLocator.cpp" />
     <ClCompile Include="Utils\Singleton.cpp" />
     <ClCompile Include="Core\Clock\Clock.cpp" />

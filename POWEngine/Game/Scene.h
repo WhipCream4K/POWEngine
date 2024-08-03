@@ -1,8 +1,12 @@
 #pragma once
 
+#include <typeindex>
+
 #include "ECS/Archetype.h"
 #include "EngineLayer.h"
 #include "SceneSystem.h"
+#include "Utils/Utils.h"
+
 
 namespace powe
 {
@@ -19,9 +23,14 @@ namespace powe
 		void Update(float deltaTime);
 
 		template<CSceneSystem T>
-		T* AddSceneSystem(SceneSystem&& system);
+		T* AddSceneSystem(T&& system)
+		{
+			auto sceneSystem = AllocateUnique<T>(m_EngineLayer->GetAllocator(),std::move(system));
+			m_SceneSystems.push_back(std::move(sceneSystem));
+			return static_cast<T*>(m_SceneSystems.back().get());
+		}
 
-		template<typename T>
+		template<typename T> requires CSceneSystem<T>
 		void RemoveSceneSystem()
 		{
 			std::erase_if(m_SceneSystems, [](const UniquePtr<SceneSystem>& sceneSystem)
@@ -30,25 +39,20 @@ namespace powe
 				});
 		}
 
-		ECSManager& GetECSManager() { return *m_ECSManager.get(); }
+		ECSManager& GetECSManager() const { return *m_ECSManager.get(); }
 
 		// EngineLayer is guaranteed to be valid as long as Scene Exists
-		EngineLayer& GetParentLayer() { return *m_EngineLayer; }
+		EngineLayer& GetParentLayer() const { return *m_EngineLayer; }
+
+		
 
 	private:
 
 		UniquePtr<ECSManager> m_ECSManager;
 		EngineLayer* m_EngineLayer; // Scene doesn't own EngineLayer
 		Vector<UniquePtr<SceneSystem>> m_SceneSystems;
+		UnOrderedMap<std::type_index, SharedPtr<void>> m_SubSystems;
 	};
-	template<CSceneSystem T>
-	inline T* Scene::AddSceneSystem(SceneSystem&& system)
-	{
-		m_SceneSystems.emplace_back(AllocateUnique<T>(std::move(system), m_EngineLayer->GetAllocator()));
-		T* scenePtr{ m_SceneSystems.back().get() };
-		scenePtr->OnInitialize();
-		return static_cast<T*>(scenePtr);
-	}
 }
 
 

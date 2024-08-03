@@ -86,4 +86,6 @@ namespace powe
 
 	template<typename T>
 	using RefWrap = std::reference_wrapper<T>;
+
+	using PMRResource = std::pmr::memory_resource;
 }

@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Core/Window.h"
+#include "Window/Window.h"
+#include "Core/CustomTypes.h"
 
 namespace powe
 {
@@ -8,10 +9,18 @@ namespace powe
 	{
 	public:
 
-		Window* GetMainWindow() const { return m_Windows[0].get(); }
+		WindowManager(PMRResource* memResource);
+		~WindowManager();
+		Window* CreateWindow(std::string_view title, int width, int height);
+		Window* GetMainWindow() const {return m_MainWindow;}
+		void DestroyWindow(std::string_view windowName);
+
+		bool Update();
 
 	private:
 
-		Vector<SharedPtr<Window>> m_Windows;
+		UnOrderedMap<std::string,UniquePtr<Window>> m_Windows;
+		Window* m_MainWindow;
+		PMRResource* m_MemResource;
 	};
 }

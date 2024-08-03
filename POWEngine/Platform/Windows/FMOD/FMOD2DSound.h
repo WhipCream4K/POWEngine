@@ -1,11 +1,10 @@
 #pragma once
 
-//#include "Service/SoundService.h"
-#include "Services/Service.h"
+#include "Sound/SoundService.h"
 
 namespace powe
 {
-	class FMOD2DSound final : public IService
+	class FMOD2DSound final : public SoundService
 	{
 	public:
 
