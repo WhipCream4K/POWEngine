@@ -24,6 +24,9 @@ namespace powe
 		{
 		}
 
+		Archetype(Archetype&&) noexcept = default;
+		Archetype& operator=(Archetype&&) noexcept = default;
+
 		constexpr auto begin() noexcept { return m_Components.begin(); }
 		constexpr auto end()  noexcept { return m_Components.end(); }
 

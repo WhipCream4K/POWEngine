@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Utils/Service.h"
+
 namespace powe
 {
 
@@ -10,21 +12,22 @@ namespace powe
 		Error
 	};
 
-	class Logger
+	class Logger : public IService<Logger>
 	{
 	public:
 
 		Logger() = default;
-		Logger(const Logger&) = delete;
-		Logger& operator=(const Logger&) = delete;
-		Logger(Logger&&) = delete;
-		Logger& operator=(Logger&&) = delete;
+		Logger(const Logger&) = default;
+		Logger& operator=(const Logger&) noexcept = default;
+		Logger(Logger&&) = default;
+		Logger& operator=(Logger&&) noexcept = default;
 		virtual ~Logger() = default;
 
-		std::string ServiceType() const { return "Logger"; }
 		virtual void LogLevel(LogSeverity severity, const std::string& message, const std::string& fromWhere = "") = 0;
 		virtual void Log(const std::string& message) = 0;
 	};
+
+
 }
 
 

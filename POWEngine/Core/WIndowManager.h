@@ -11,7 +11,7 @@ namespace powe
 		Window* GetMainWindow() const { return m_Windows[0].get(); }
 
 	private:
-		
+
 		Vector<SharedPtr<Window>> m_Windows;
 	};
 }

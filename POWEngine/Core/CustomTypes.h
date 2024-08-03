@@ -9,6 +9,7 @@
 #include <unordered_map>
 #include <memory_resource>
 #include <string>
+#include "Core/Memory/Allocator.h"
 
 template<typename FnType>
 struct FnTraits {};
@@ -43,7 +44,7 @@ struct FnTraits<Ret(UserClass::*)(Args...) const> : FnTraits<Ret(UserClass&, Arg
 };
 
 template<typename T, typename... Ts>
-concept is_one_of = (std::is_same_v<T, Ts> || ...) || ( std::is_base_of_v<Ts, T> || ... );
+concept is_one_of = (std::is_same_v<T, Ts> || ...) || (std::is_base_of_v<Ts,T> || ...);
 
 namespace powe
 {
@@ -64,34 +65,8 @@ namespace powe
 	template<typename UserClass>
 	using WeakPtr = std::weak_ptr<UserClass>;
 
-	template<typename T>
-	struct AllocatorDeleter
-	{
 
-		std::pmr::memory_resource* allocator;
-
-		AllocatorDeleter(std::pmr::memory_resource* upStream)
-			: allocator(upStream)
-		{
-		}
-
-		AllocatorDeleter() = default;
-
-		void operator()(void* ptr)
-		{
-			if constexpr (!std::is_void_v<T>)
-			{
-				static_cast<T*>(ptr)->~T();
-				allocator->deallocate(ptr, sizeof(T), alignof(T));
-			}
-			else
-			{
-				allocator->deallocate(ptr, 0, alignof(std::max_align_t));
-			}
-		}
-	};
-
-	template<typename UserClass, typename Deleter = AllocatorDeleter<UserClass>>
+	template<typename UserClass, typename Deleter = AllocatorDeleter<std::decay_t<UserClass>>>
 	using UniquePtr = std::unique_ptr<UserClass, Deleter>;
 
 	template<typename T>

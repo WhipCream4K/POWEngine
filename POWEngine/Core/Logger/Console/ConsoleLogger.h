@@ -1,8 +1,6 @@
 #pragma once
 
 #include "Core/CustomTypes.h"
-//#include "POWEngine/Core/Thread/SimpleThreadPool.h"
-//#include "POWEngine/LockFree/LFQueue.h"
 #include "Core/Logger/Logger.h"
 #include "LockFree/LFQueue.h"
 
@@ -32,8 +30,8 @@ namespace powe
 		ConsoleLogger(std::pmr::memory_resource* memResource);
 		ConsoleLogger(const ConsoleLogger&) = delete;
 		ConsoleLogger& operator=(const ConsoleLogger&) = delete;
-		ConsoleLogger(ConsoleLogger&&) = delete;
-		ConsoleLogger& operator=(ConsoleLogger&&) = delete;
+		ConsoleLogger(ConsoleLogger&&) = default;
+		ConsoleLogger& operator=(ConsoleLogger&&) = default;
 		~ConsoleLogger() override;
 
 	public:

@@ -29,7 +29,7 @@ namespace powe
 		LFQueue(std::pmr::memory_resource* memResource)
 			: m_MemResource(memResource)
 		{
-			static_assert(std::atomic<Node*>{}.is_always_lock_free(), "Atomic Node is not lock free");
+			static_assert(std::atomic<Node*>::is_always_lock_free, "Atomic Node is not lock free");
 
 			Node* node = new (m_MemResource->allocate(sizeof(Node), alignof(Node))) Node(std::numeric_limits<T>::min());
 			m_Head.store(node, std::memory_order_relaxed);
@@ -71,7 +71,13 @@ namespace powe
 
 		bool pop(T& result) {
 
+			if(m_Head.load(std::memory_order_relaxed) == m_Tail.load(std::memory_order_relaxed))
+			{
+				return false;
+			}
+
 			Node* prevHead{ m_Head.load(std::memory_order_relaxed) };
+
 			Node* newHead;
 
 			while (prevHead != nullptr)

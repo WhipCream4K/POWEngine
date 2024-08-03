@@ -14,6 +14,7 @@
 
 powe::ConsoleLogger::ConsoleLogger(std::pmr::memory_resource* memResource)
 	: m_MessageQueue(memResource)
+	, m_Stop(false)
 {
 	m_MessageThread = std::jthread(&ConsoleLogger::Run, this);
 }
@@ -82,10 +83,13 @@ void powe::ConsoleLogger::Run()
 		{
 		case LogSeverity::Info:
 			SetConsoleTextAttribute(consoleHandle, 15); // White text
+			break;
 		case LogSeverity::Warning:
 			SetConsoleTextAttribute(consoleHandle, 14); // Yellow text
+			break;
 		case LogSeverity::Error:
 			SetConsoleTextAttribute(consoleHandle, FOREGROUND_RED);
+			break;
 		default:
 			break;
 		}

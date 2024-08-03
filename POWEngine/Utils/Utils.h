@@ -1,22 +1,6 @@
 ﻿#pragma once
 
-//#include <SFML/Graphics/Color.hpp>
 #include "Core/CustomTypes.h"
-#include "Core/Memory/Allocator.h"
-
-//namespace sf
-//{
-//    static sf::Color ConvertToSFColor(const glm::uvec4& color)
-//    {
-//        sf::Color sfColor{};
-//        sfColor.r = sf::Uint8(color.r);
-//        sfColor.g = sf::Uint8(color.g);
-//        sfColor.b = sf::Uint8(color.b);
-//        sfColor.a = sf::Uint8(color.a);
-//
-//        return sfColor;
-//    }
-//}
 
 namespace powe
 {
@@ -30,10 +14,19 @@ namespace powe
 	}
 
 	template<typename T>
-	constexpr UniquePtr<T,AllocatorDeleter<T>> AllocateUnique(T&& object, std::pmr::memory_resource* memResource)
+	inline constexpr UniquePtr<T,AllocatorDeleter<T>> AllocateUnique(T&& object, std::pmr::memory_resource* memResource)
 	{
         void* memory = memResource->allocate(sizeof(T), alignof(T));
-        T* ptr = new (memory) T(std::move(object));
+		T* ptr{ new (memory) T(std::move(object)) };
         return UniquePtr<T, AllocatorDeleter<T>>(ptr, AllocatorDeleter<T>(memResource));
     }
+
+	//template<typename T>
+	//constexpr std::unique_ptr<T,AllocatorDeleter<T>> AllocateUnique(T&& object, std::pmr::memory_resource* memResource)
+	//{
+	//	using decayT = std::decay_t<T>;
+	//	void* memory = memResource->allocate(sizeof(T), alignof(T));
+	//	decayT* ptr{ new (memory) decayT(std::forward<T>(object)) };
+	//	return std::unique_ptr<decayT, AllocatorDeleter<T>>(ptr, AllocatorDeleter<decayT>(memResource));
+	//}
 }

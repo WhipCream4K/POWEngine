@@ -15,7 +15,6 @@ namespace powe
 	class Core;
 	class Layer;
 	class WindowManager;
-	class SimpleThreadPool;
 
 	using ServiceLocatorT = ServiceLocator<Logger,SimpleThreadPool>;
 

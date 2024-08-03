@@ -16,8 +16,9 @@ namespace powe
 	{
 	public:
 
-		ECSManager() = default;
 		ECSManager(std::pmr::memory_resource* memResource);
+		ECSManager(ECSManager&&) noexcept = default;
+		ECSManager& operator=(ECSManager&&) noexcept = default;
 
 		EntityID CreateEntity() { return m_CurrentEntityID++; }
 

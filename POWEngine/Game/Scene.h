@@ -45,7 +45,7 @@ namespace powe
 	inline T* Scene::AddSceneSystem(SceneSystem&& system)
 	{
 		m_SceneSystems.emplace_back(AllocateUnique<T>(std::move(system), m_EngineLayer->GetAllocator()));
-		T * scenePtr{ m_SceneSystems.back().get() };
+		T* scenePtr{ m_SceneSystems.back().get() };
 		scenePtr->OnInitialize();
 		return static_cast<T*>(scenePtr);
 	}

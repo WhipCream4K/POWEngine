@@ -1,30 +1,28 @@
 
 #pragma once
 
-#include "Core/CustomTypes.h"
 #include <thread>
 #include <future>
 #include <queue>
 #include <functional>
 
-#include "Core/Application/Application.h"
+#include "Core/CustomTypes.h"
+#include "Utils/Service.h"
 
 namespace powe
 {
-	class SimpleThreadPool
+	class SimpleThreadPool : public IService<SimpleThreadPool>
 	{
 	public:
 
 		SimpleThreadPool(std::pmr::memory_resource* memResource, size_t threadCount = (size_t)std::thread::hardware_concurrency());
 		SimpleThreadPool(const SimpleThreadPool&) = delete;
 		SimpleThreadPool& operator=(const SimpleThreadPool&) = delete;
-		SimpleThreadPool(SimpleThreadPool&&) noexcept = delete;
-		SimpleThreadPool& operator=(SimpleThreadPool&&) noexcept = delete;
+		SimpleThreadPool(SimpleThreadPool&&) noexcept = default;
+		SimpleThreadPool& operator=(SimpleThreadPool&&) noexcept = default;
 		~SimpleThreadPool();
 
 	public:
-
-		std::string ServiceType() const { return "ThreadPool"; }
 
 		template<typename Func, typename ... Args, typename Ret = std::invoke_result_t<Func, Args...>>
 		constexpr std::future<Ret> EnqueueFuture(Func&& fn, Args&&... args)

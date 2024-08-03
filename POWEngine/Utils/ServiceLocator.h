@@ -1,17 +1,17 @@
 #pragma once
 
 #include <variant>
+#include <typeindex>
 
 #include "Core/CustomTypes.h"
 #include "Utils/Utils.h"
+#include "Service.h"
+
 
 namespace powe
 {
 	template<typename T>
-	concept ServiceConcept = requires(T t)
-	{
-		{ t.ServiceType() } -> std::convertible_to<std::string>;
-	};
+	concept ServiceConcept = std::is_base_of_v<IService<T>, T>;
 
 	template<ServiceConcept... IService>
 	class ServiceLocator final
@@ -31,22 +31,22 @@ namespace powe
 		ServiceLocator& operator=(ServiceLocator&&) noexcept = default;
 		~ServiceLocator() = default;
 
-		template<typename T> requires  is_one_of<T,IService...>
-		void RegisterService(T&& object)
+		template<typename T,typename... Args> requires is_one_of<T,IService...>
+		void RegisterService(Args&&... args)
 		{
-			auto service{AllocateUnique<T>(std::move(object), m_MemResource)};
-			const std::string serviceType{service->ServiceType()};
-			m_Services.try_emplace(serviceType,std::move(service));
+			std::pmr::polymorphic_allocator<T> alloc{m_MemResource};
+
+			SharedPtr<T> service{std::allocate_shared<T>(alloc,std::forward<Args>(args)...)};
+			m_Services[std::type_index(typeid(T))] = service;
 		}
 
 		template<typename T> requires is_one_of<T,IService...>
 		T* GetService()
 		{
-			const std::string serviceType{ std::declval<T>().ServiceType() };
-			const auto it{ m_Services.find(serviceType) };
+			const auto it{ m_Services.find(std::type_index(typeid(T))) };
 			if (it != m_Services.end())
 			{
-				return std::get<UniquePtr<T>>(it->second).get();
+				return std::get<SharedPtr<T>>(it->second).get();
 			}
 			return nullptr;
 		}
@@ -54,9 +54,9 @@ namespace powe
 
 	private:
 
-		using ServiceVariant = std::variant<UniquePtr<IService>...>;
+        using ServiceVariant = std::variant<SharedPtr<IService>...>;
 
-		UnOrderedMap<std::string, ServiceVariant> m_Services;
+		UnOrderedMap<std::type_index, ServiceVariant> m_Services;
 		std::pmr::memory_resource* m_MemResource;
 	};
 }

@@ -1,13 +1,13 @@
 #include "pch.h"
 #include "Application.h"
 #include "Core/WindowManager.h"
-#include "Core/Thread/SimpleThreadPool.h"
 #include "Core/Logger/Console/ConsoleLogger.h"
+#include "Core/Logger/LoggerUtils.h"
 
 powe::Application::Application(const AppDesc&)
 	: m_LayerStack{ &m_TrackAllocator }
 	, m_WindowManager{ AllocateUnique<WindowManager>(&m_TrackAllocator) }
-	, m_ServiceLocator{ AllocateUnique<ServiceLocatorT>(ServiceLocatorT(&m_TrackAllocator),&m_TrackAllocator) }
+	, m_ServiceLocator{ AllocateUnique<ServiceLocatorT>(&m_TrackAllocator,&m_TrackAllocator) }
 {
 	m_Instance = this;
 }
@@ -21,6 +21,10 @@ void powe::Application::PopLayer()
 
 void powe::Application::Run()
 {
-	m_ServiceLocator->RegisterService(ConsoleLogger(&m_TrackAllocator));
-	m_ServiceLocator->RegisterService(SimpleThreadPool(&m_TrackAllocator));
+	m_ServiceLocator->RegisterService<SimpleThreadPool>(&m_TrackAllocator);
+	m_ServiceLocator->RegisterService<ConsoleLogger>(&m_TrackAllocator);
+
+	POWE_LOG(LogSeverity::Info, "Application is running");
+
+
 }

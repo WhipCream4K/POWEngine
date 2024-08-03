@@ -10,7 +10,7 @@ powe::Window::~Window()
 {
 }
 
-void powe::Window::SetFullscreen(bool fullscreen)
+void powe::Window::SetFullscreen(bool)
 {
 	
 }

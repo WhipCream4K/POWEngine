@@ -2,7 +2,6 @@
 
 #include <memory_resource>
 
-#include "MemoryTracker.h"
 
 namespace powe
 {
@@ -73,6 +72,33 @@ namespace powe
 
 		std::pmr::memory_resource* m_Upstream{};
 
+	};
+
+	template<typename T>
+	struct AllocatorDeleter
+	{
+
+		std::pmr::memory_resource* allocator;
+
+		AllocatorDeleter(std::pmr::memory_resource* upStream)
+			: allocator(upStream)
+		{
+		}
+
+		AllocatorDeleter() = default;
+
+		void operator()(void* ptr)
+		{
+			if constexpr (!std::is_void_v<T>)
+			{
+				static_cast<T*>(ptr)->~T();
+				allocator->deallocate(ptr, sizeof(T), alignof(T));
+			}
+			else
+			{
+				allocator->deallocate(ptr, 0, alignof(std::max_align_t));
+			}
+		}
 	};
 
 }
