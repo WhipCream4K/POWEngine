@@ -22,7 +22,14 @@ powe::Window::~Window()
 
 void powe::Window::Initialize()
 {
+    glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_TRUE);
+    GLFWwindow* window{ glfwCreateWindow( m_Width, m_Height, m_Title.c_str(), glfwGetPrimaryMonitor(), nullptr) };
+    std::pmr::polymorphic_allocator<SharedPtr<GLFWwindow>> alloc(m_MemResource);
     
+    m_WindowHandle = std::allocate_shared<SharedPtr<GLFWwindow>>(alloc, window, [this](GLFWwindow* window)
+    {
+        glfwDestroyWindow(window);
+    });
 }
 
 void powe::Window::SetFullscreen(bool)
@@ -42,21 +49,12 @@ void powe::Window::InitializeLibrary()
         }
         throw std::runtime_error("Failed to initialize GLFW");
     }
+    
 }
 
 void powe::Window::TerminateLibrary()
 {
     glfwTerminate();
-}
-
-void powe::Window::CreateWindow()
-{
-    
-}
-
-void powe::Window::DestroyWindow()
-{
-    
 }
 
 #endif
