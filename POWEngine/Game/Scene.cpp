@@ -5,7 +5,7 @@
 #include "Utils/Utils.h"
 
 powe::Scene::Scene(EngineLayer* parent)
-	: m_EngineLayer{ parent }
+	: m_EngineLayer{ *parent }
 	, m_ECSManager{ AllocateUnique<ECSManager>(parent->GetAllocator(),parent->GetAllocator()) }
 {
 }
@@ -20,7 +20,12 @@ void powe::Scene::OnStart()
 
 void powe::Scene::OnExit()
 {
+	
+}
 
+void powe::Scene::OnWindowEvents(WindowManager::Events& events)
+{
+	
 }
 
 void powe::Scene::Update(float deltaTime)

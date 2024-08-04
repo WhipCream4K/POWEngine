@@ -26,5 +26,18 @@ void powe::Application::Run()
 
 	POWE_LOG(LogSeverity::Info, "Application is running");
 
-
+	while (!m_WindowManager->GetMainWindow().ShouldClose())
+	{
+		m_Clock.Start();
+		
+		WindowManager::Events windowEvents{ m_WindowManager->Update() };
+		
+		for (auto& layer : m_LayerStack)
+		{
+			layer->OnWindowEvents(windowEvents);
+			layer->OnUpdate(m_Clock.GetDeltaTime());
+		}
+		
+		m_Clock.End();
+	}
 }

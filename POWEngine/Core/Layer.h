@@ -2,6 +2,8 @@
 
 #include <concepts>
 
+#include "WIndowManager.h"
+
 namespace powe
 {
 	class Layer
@@ -17,6 +19,7 @@ namespace powe
 
 		virtual void OnAttach() = 0;
 		virtual void OnUpdate(float delta) = 0;
+		virtual void OnWindowEvents(WindowManager::Events& events) = 0;
 		virtual void OnDetach() = 0;
 		virtual void OnRender() = 0;
 	};

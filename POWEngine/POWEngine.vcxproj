@@ -197,9 +197,12 @@
     <ClInclude Include="Core\Memory\Allocator.h" />
     <ClInclude Include="Core\Application\AppDesc.h" />
     <ClInclude Include="Core\Application\Application.h" />
-    <ClInclude Include="Core\WIndowManager.h" />
+    <ClInclude Include="Core\WindowManager.h" />
     <ClInclude Include="ECS\ECSManager.h" />
     <ClInclude Include="ECS\EntityView.h" />
+    <ClInclude Include="Game\Input\GLFW\glfwInput.h" />
+    <ClInclude Include="Game\Input\InputImpl.h" />
+    <ClInclude Include="Game\Input\InputManager.h" />
     <ClInclude Include="Game\SceneSystem.h" />
     <ClInclude Include="LockFree\LFQueue.h" />
     <ClInclude Include="Parser\JSON\json.hpp" />
@@ -237,6 +240,8 @@
     <ClCompile Include="Core\WindowManager.cpp" />
     <ClCompile Include="ECS\ECSManager.cpp" />
     <ClCompile Include="ECS\EntityView.cpp" />
+    <ClCompile Include="Game\Input\GLFW\glfwInput.cpp" />
+    <ClCompile Include="Game\Input\InputImpl.cpp" />
     <ClCompile Include="Game\SceneSystem.cpp" />
     <ClCompile Include="Core\Memory\MemoryTracker.cpp" />
     <ClCompile Include="Core\Logger\Logger.cpp" />

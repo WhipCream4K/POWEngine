@@ -1,5 +1,7 @@
 ﻿#include "pch.h"
 
+#include <Windows.h>
+
 #ifdef USE_GLFW_WINDOW
 
 #include <GLFW/glfw3.h>
@@ -8,16 +10,12 @@
 #include "Core/Window/Window.h"
 
 powe::Window::Window(std::pmr::memory_resource* memResource, std::string_view title, int width, int height)
-    : m_MemResource(memResource)
+    : m_Title(title)
+    , m_MemResource(memResource)
     , m_Width(width)
     , m_Height(height)
     , m_Fullscreen(false)
 {
-}
-
-powe::Window::~Window()
-{
-    
 }
 
 void powe::Window::Initialize()
@@ -32,8 +30,31 @@ void powe::Window::Initialize()
     });
 }
 
-void powe::Window::SetFullscreen(bool)
+bool powe::Window::PollEvents(EventQueue& eventQueue)
 {
+    glfwPollEvents();
+}
+
+void powe::Window::SwapBuffers()
+{
+    
+}
+
+void powe::Window::SetFullscreen(bool fullscreen, bool borderless)
+{
+}
+
+void powe::Window::SetTitle(const std::string& title)
+{
+}
+
+void powe::Window::Resize(int width, int height)
+{
+}
+
+bool powe::Window::ShouldClose() const
+{
+    return glfwWindowShouldClose(GetWindowHandle<GLFWwindow>());
 }
 
 void powe::Window::InitializeLibrary()

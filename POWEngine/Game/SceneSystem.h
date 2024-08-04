@@ -1,4 +1,5 @@
 #pragma once
+#include "Core/WindowManager.h"
 
 namespace powe
 {

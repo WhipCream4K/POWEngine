@@ -31,3 +31,8 @@ void powe::EngineLayer::OnUpdate(float deltaTime)
 {
 	m_ActiveScene->Update(deltaTime);
 }
+
+void powe::EngineLayer::OnWindowEvents(WindowManager::Events& events)
+{
+	m_ActiveScene->OnWindowEvents(events);
+}

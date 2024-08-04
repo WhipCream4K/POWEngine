@@ -15,13 +15,14 @@ namespace powe
 
 		Scene& CreatScene(std::string_view sceneName);
 		void SetActiveScene(std::string_view sceneName) { m_ActiveScene = m_Scenes.at(sceneName.data()).get(); }
-		std::pmr::memory_resource* GetAllocator() { return &m_TrackAllocator; }
+		PMRResource* GetAllocator() { return &m_TrackAllocator; }
 
 	protected:
 
 		void OnAttach() override;
 		void OnDetach() override;
 		void OnUpdate(float deltaTime) override;
+		void OnWindowEvents(WindowManager::Events& events) override;
 
 	private:
 		TrackableAllocator m_TrackAllocator;

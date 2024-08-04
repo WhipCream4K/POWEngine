@@ -36,8 +36,7 @@ namespace powe
 		void PopLayer();
 
 		void Run();
-
-
+		
 		WindowManager& GetWindowManager() const { return *m_WindowManager; }
 
 		template<typename T>
@@ -52,6 +51,7 @@ namespace powe
 		Clock m_Clock;
 		UniquePtr<WindowManager> m_WindowManager;
 		UniquePtr<ServiceLocatorT> m_ServiceLocator;
+		AppDesc m_AppDesc;
 
 		static Application* m_Instance;
 	};

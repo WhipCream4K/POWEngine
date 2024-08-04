@@ -20,6 +20,7 @@ namespace powe
 
 		void OnStart();
 		void OnExit();
+		void OnWindowEvents(WindowManager::Events& events);
 		void Update(float deltaTime);
 
 		template<CSceneSystem T>
@@ -42,14 +43,14 @@ namespace powe
 		ECSManager& GetECSManager() const { return *m_ECSManager.get(); }
 
 		// EngineLayer is guaranteed to be valid as long as Scene Exists
-		EngineLayer& GetParentLayer() const { return *m_EngineLayer; }
+		EngineLayer& GetParentLayer() const { return m_EngineLayer.get(); }
 
 		
 
 	private:
 
 		UniquePtr<ECSManager> m_ECSManager;
-		EngineLayer* m_EngineLayer; // Scene doesn't own EngineLayer
+		RefWrap<EngineLayer> m_EngineLayer;
 		Vector<UniquePtr<SceneSystem>> m_SceneSystems;
 		UnOrderedMap<std::type_index, SharedPtr<void>> m_SubSystems;
 	};

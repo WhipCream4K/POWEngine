@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "Windowmanager.h"
+#include "WindowManager.h"
 #include "Utils/Utils.h"
 
 powe::WindowManager::WindowManager(PMRResource* memResource)
@@ -15,26 +15,36 @@ powe::WindowManager::~WindowManager()
     Window::TerminateLibrary();
 }
 
-powe::Window* powe::WindowManager::CreateWindow(std::string_view title, int width, int height)
+powe::Window& powe::WindowManager::CreateWindow(std::string_view title, int width, int height)
 {
-    auto window = AllocateUnique<Window>(m_MemResource, title, width, height);
-    window->Initialize();
-    
-    m_Windows.try_emplace(title.data(),std::move(window));
+    return m_Windows.emplace_back(m_MemResource, title, width, height);
+}
 
-    // Set main window for the first window created
-    if (!m_MainWindow)
+powe::Window& powe::WindowManager::GetWindow(std::string_view windowName)
+{
+    return *std::ranges::find_if(m_Windows, [windowName](const Window& window)
     {
-        m_MainWindow = m_Windows[title.data()].get();
-    }
-    
-    return m_Windows[title.data()].get();
+        return window.GetTitle() == windowName;
+    });
 }
 
 void powe::WindowManager::DestroyWindow(std::string_view windowName)
 {
-    if (auto it = m_Windows.find(windowName.data()); it != m_Windows.end())
+    std::erase_if(m_Windows, [windowName](const Window& window)
     {
-        m_Windows.erase(it);
+        return window.GetTitle() == windowName;
+    });
+}
+
+powe::WindowManager::Events powe::WindowManager::Update()
+{
+    std::pmr::monotonic_buffer_resource eventBufferResource(1024);
+    Events events{m_MemResource};
+    
+    for (auto& window : m_Windows)
+    {
+        window.PollEvents(events.eventQueue);
+        events.window = &window;
     }
+    return events;
 }
