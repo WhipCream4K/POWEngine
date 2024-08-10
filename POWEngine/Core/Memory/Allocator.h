@@ -15,12 +15,12 @@ namespace powe
 		{
 		}
 
-		TrackableAllocator(const TrackableAllocator&) = default;
-		TrackableAllocator& operator=(const TrackableAllocator&) = default;
-		TrackableAllocator(TrackableAllocator&&) noexcept = default;
-		TrackableAllocator& operator=(TrackableAllocator&&) noexcept = default;
+		TrackableAllocator(const TrackableAllocator&) = delete;
+		TrackableAllocator& operator=(const TrackableAllocator&) = delete;
+		TrackableAllocator(TrackableAllocator&&) noexcept = delete;
+		TrackableAllocator& operator=(TrackableAllocator&&) noexcept = delete;
 
-		virtual ~TrackableAllocator() = default;
+		virtual ~TrackableAllocator() override = default;
 
 	protected:
 

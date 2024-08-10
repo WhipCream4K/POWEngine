@@ -9,7 +9,7 @@ namespace powe
     {
     public:
 
-        using EventQueue = Vector<std::any>;
+        using EventQueue = std::pair<Window*,Vector<uint32_t>>;
         
         Window(PMRResource* memResource, std::string_view title, int width, int height);
 
@@ -26,6 +26,7 @@ namespace powe
         void SetFullscreen(bool fullscreen, bool borderless = false);
         void SetTitle(const std::string& title);
         void Resize(int width, int height);
+        bool IsFocused() const;
 
         template <typename T>
         T* GetWindowHandle() const
@@ -50,6 +51,7 @@ namespace powe
         int m_Width;
         int m_Height;
         bool m_Fullscreen;
+        bool m_IsFocused;
         
         SharedPtr<void> m_WindowHandle;
     };

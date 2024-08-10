@@ -15,10 +15,10 @@ namespace powe
 
 		[[nodiscard]] float GetTotalElapsedTime() const { return m_TotalElapsedTime; }
 		[[nodiscard]] float GetDeltaTime() const { return m_DeltaTime; }
+		void ResetTime();
 
 	private:
 
-		void ResetTime();
 
 		std::chrono::high_resolution_clock::time_point m_CurrentFrame;
 		std::chrono::high_resolution_clock::time_point m_EndFrame;

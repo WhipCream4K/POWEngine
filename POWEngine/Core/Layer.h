@@ -18,8 +18,8 @@ namespace powe
 		virtual ~Layer() = default;
 
 		virtual void OnAttach() = 0;
-		virtual void OnUpdate(float delta) = 0;
-		virtual void OnWindowEvents(WindowManager::Events& events) = 0;
+		virtual void OnUpdate(float) = 0;
+		virtual void OnWindowEvents(const Window::EventQueue&) = 0;
 		virtual void OnDetach() = 0;
 		virtual void OnRender() = 0;
 	};

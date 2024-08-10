@@ -22,7 +22,7 @@ namespace powe
 		void OnAttach() override;
 		void OnDetach() override;
 		void OnUpdate(float deltaTime) override;
-		void OnWindowEvents(WindowManager::Events& events) override;
+		void OnWindowEvents(const Window::EventQueue& events) override;
 
 	private:
 		TrackableAllocator m_TrackAllocator;

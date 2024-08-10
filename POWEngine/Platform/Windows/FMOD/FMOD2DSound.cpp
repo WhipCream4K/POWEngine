@@ -287,7 +287,7 @@ void powe::FMOD2DSound::FMODSoundImpl::RunMainPlaySound()
 
 			m_MainSoundThreadCV.wait(lock, [this]()
 				{
-					return !m_SoundQueue.Empty();
+					return !m_SoundQueue.empty();
 				});
 		}
 
@@ -306,7 +306,7 @@ void powe::FMOD2DSound::FMODSoundImpl::RunMainPlaySound()
 			}
 			catch (const std::exception& e)
 			{
-				POWLOGERROR(e.what());
+				POWE_LOGERROR(e.what());
 			}
 		}
 	}
@@ -334,7 +334,7 @@ void powe::FMOD2DSound::FMODSoundImpl::RunChannelChecking()
 		{
 			std::string name{};
 			name.append("FMOD -> " + std::to_string(eraseCount) + " channels were deleted");
-			POWLOGNORMAL(name);
+			POWE_LOG(name);
 		}
 
 	}

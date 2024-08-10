@@ -6,8 +6,7 @@
 
 #if defined(RELEASE_WITH_LOGINFO) || defined(_DEBUG)
 
-#define POWE_LOG(Severity,MSG)	Application::Get().GetAppService<Logger>()->LogLevel(Severity,MSG," at " __FUNCTION__)
-//#define POWE_LOGINFO(MSG)		powe::ServiceLocator::GetLogger().LogInfoMessage(MSG,"at " __FUNCTION__)
+#define POWE_LOG(MSG)	        Application::Get().GetAppService<Logger>()->LogLevel(LogSeverity::Info,MSG," at " __FUNCTION__)
 #define POWE_LOGERROR(MSG)		Application::Get().GetAppService<Logger>()->LogLevel(LogSeverity::Error,MSG," at " __FUNCTION__)
 #define POWE_LOGWARNING(MSG)	Application::Get().GetAppService<Logger>()->LogLevel(LogSeverity::Warning,MSG," at " __FUNCTION__)
 

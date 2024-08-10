@@ -1,26 +1,29 @@
 #pragma once
-#include "Core/WindowManager.h"
+
+#include "Scene.h"
 
 namespace powe
 {
-	class Scene;
-	class SceneSystem
-	{
-	public:
+    class Scene;
+    class IArchetype;
 
-		SceneSystem() = default;
-		SceneSystem(const SceneSystem&) = delete;
-		SceneSystem& operator=(const SceneSystem&) = delete;
-		SceneSystem(SceneSystem&&) = delete;
-		SceneSystem& operator=(SceneSystem&&) = delete;
-		virtual ~SceneSystem() = default;
+    class SceneSystem
+    {
+    public:
+        
+        SceneSystem() = default;
+        SceneSystem(const SceneSystem&) = delete;
+        SceneSystem& operator=(const SceneSystem&) = delete;
+        SceneSystem(SceneSystem&&) = delete;
+        SceneSystem& operator=(SceneSystem&&) = delete;
+        virtual ~SceneSystem() = default;
 
-		virtual void OnInitialize() = 0;
-		virtual void OnStart(Scene&) = 0;
-		virtual void OnUpdate(Scene&,float) = 0;
-		virtual void OnExit(Scene&) = 0;
-	};
+        virtual void OnInitialize() = 0;
+        virtual void OnStart(Scene&) = 0;
+        virtual void OnUpdate(Scene& scene, float) = 0;
+        virtual void OnExit(Scene&) = 0;
+    };
 
-	template<typename T>
-	concept CSceneSystem = std::is_base_of_v<SceneSystem, T>;
+    template <typename T>
+    concept CSceneSystem = std::is_base_of_v<SceneSystem, T>;
 }

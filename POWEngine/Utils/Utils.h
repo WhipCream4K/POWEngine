@@ -14,7 +14,7 @@ namespace powe
 	}
 
 	template<typename T>
-	inline constexpr UniquePtr<T,AllocatorDeleter<T>> AllocateUnique(T&& object, std::pmr::memory_resource* memResource)
+	constexpr UniquePtr<T,AllocatorDeleter<T>> AllocateUnique(T&& object, std::pmr::memory_resource* memResource)
 	{
         void* memory = memResource->allocate(sizeof(T), alignof(T));
 		T* ptr{ new (memory) T(std::move(object)) };

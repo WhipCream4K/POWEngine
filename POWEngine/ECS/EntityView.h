@@ -50,7 +50,7 @@ namespace powe
 
 	private:
 
-		Archetype<Args...>& m_Archetype;
+		RefWrap<Archetype<Args...>> m_Archetype;
 		ComponentBlock* m_OldAddress;
 		EntityID m_EntityID;
 	};

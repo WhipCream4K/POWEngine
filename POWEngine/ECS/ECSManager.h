@@ -2,66 +2,70 @@
 
 #include "ECSTypes.h"
 #include "Archetype.h"
-#include "EntityView.h"
+#include "ECSUtils.h"
+#include "Utils/Utils.h"
+
 
 namespace powe
 {
-	template<ComponentConcept... Args>
-	std::string GetArchetypeKey()
-	{
-		return (std::string(typeid(Args).name()) + ...);
-	}
-
+	class IArchetype;
 	class ECSManager final
 	{
 	public:
 
-		ECSManager(std::pmr::memory_resource* memResource);
-		ECSManager(ECSManager&&) noexcept = default;
-		ECSManager& operator=(ECSManager&&) noexcept = default;
-
+		ECSManager(PMRResource* memResource);
+		
 		EntityID CreateEntity() { return m_CurrentEntityID++; }
 
 		template<ComponentConcept... Args>
 		EntityID CreateEntity(Args&&... args)
 		{
-			Archetype<Args...>& archetype{ GetArchetype<Args...>() };
+			Archetype<Args...>& archetype{ GetOrCreateArchetype<Args...>() };
 			EntityID newID{m_CurrentEntityID++};
 			archetype.emplace_back(newID,std::forward<Args>(args)...);
 			return newID;
 		}
 
-		template<ComponentConcept T>
-		void AddComponent(EntityID entityID, T&& component)
-		{
-			
-		}
-		
-		
-		template<ComponentConcept... Args>
-		Archetype<Args...>& GetArchetype();
-		
+		void GetArchetypes(const Vector<ComponentID>& query,Vector<IArchetype*>& outArchetypes) const;
 
+		
+		/**
+		 * Return only the first match archetype of the given ids
+		 * Use this if want the exact match of the archetype of these ids
+		 * @param compIDs Component ID
+		 * @return The first match archetype of the given ids
+		 */
+		IArchetype* GetArchetype(const Vector<ComponentID>& compIDs) const;
+
+		template<typename ...Args> requires (ComponentConcept<Args> && ...)
+		IArchetype* GetOrCreateArchetype();
+
+		bool IsContainsArchetype(const Vector<ComponentID>& compIDs) const;
+	
 	private:
 
-		UnOrderedMap<std::string, UniquePtr<void>> m_Archetypes;
+		void InsertArchetype(const Vector<ComponentID>& compIDs,UniquePtr<IArchetype>&& archetype);
+
+		DynamicBitsetRange<UniquePtr<IArchetype>> m_Archetypes;
+		UnOrderedMap<EntityID,Vector<ComponentID>> m_EntityArchetypeMap;
+		PMRResource* m_MemResource;
 		std::atomic<EntityID> m_CurrentEntityID{};
 
 	};
 
-	template<ComponentConcept ...Args>
-	inline Archetype<Args...>& ECSManager::GetArchetype()
+	template <typename ... Args> requires (ComponentConcept<Args> && ...)
+	IArchetype* ECSManager::GetOrCreateArchetype()
 	{
-		const std::string archetypeKey{ GetArchetypeKey<Args...>()};
-		if (auto it = m_Archetypes.find(archetypeKey); it != m_Archetypes.end())
+		const Vector<ComponentID> componentRange{ MakeComponentRange<Args...>() };
+		
+		if(IsContainsArchetype(componentRange))
 		{
-			return *std::static_pointer_cast<Archetype<Args...>>(it->second);
+			return GetArchetype(componentRange);
 		}
 
-		Archetype<Args...>* archetype{ std::make_unique<Archetype<Args...>>() };
-		m_Archetypes[archetypeKey] = std::move(archetype);
-
-		return *m_Archetypes[archetypeKey];
+		auto archetype{AllocateUnique<Archetype<Args...>>(m_MemResource)};
+		InsertArchetype(componentRange,std::move(archetype));
+		return archetype.get();
 	}
 }
 

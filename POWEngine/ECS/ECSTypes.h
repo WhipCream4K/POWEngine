@@ -5,8 +5,7 @@
 
 namespace powe
 {
-	using ComponentTypeID = uint32_t;
-	using NormalIDType = ComponentTypeID; // This is for a normal use case of ID because I needed the same primitives as ComponentTypeID
+	using ComponentID = uint32_t;
 	using EntityID = uint32_t;
 	using SizeType = uint32_t;
 	using SparseHandle = uint32_t;
@@ -17,49 +16,51 @@ namespace powe
 	// https://ajmmertens.medium.com/building-an-ecs-1-types-hierarchies-and-prefabs-9f07666a1e9d
 	constexpr uint32_t SparseBitPos = 31;
 
-	enum class ComponentFlag : ComponentTypeID
+	enum class ComponentFlag : ComponentID
 	{
 		Default,
 		Sparse = (1u << 31u),
 
 		Count = Sparse
 	};
-
-	//class Archetype;
-	//// POD 
-	//struct GameObjectRecord
-	//{
-	//	WeakPtr<Archetype> Archetype{};
-	//	int IndexInArchetype{ -1 };
-	//};
-
-	struct ComponentTypeHasher
+	
+	struct SetHasher
 	{
-		size_t operator()(const ComponentTypeID& other) const
+		size_t operator()(const Set<ComponentID>& other) const
 		{
-			return std::hash<ComponentTypeID>()(other);
+			std::size_t hash{};
+			std::hash<uint32_t> hasher{};
+			for (const auto& elem : other) {
+				hash ^= hasher(elem) + 0x9e3779b9 + (hash << 6) + (hash >> 2);
+			}
+			return hash;
 		}
 	};
 
-	struct ComponentEqualOp
+	struct EqualOp
 	{
-		bool operator()(const ComponentTypeID& left, const ComponentTypeID& right) const
+		bool operator()(const Set<ComponentID>& left, const Set<ComponentID>& right) const
 		{
-			return (left == right) || (left & ~SizeType(ComponentFlag::Count)) == right
-				|| left == (right & ~SizeType(ComponentFlag::Count));
+			return std::ranges::all_of(right, [&left](const auto& elem) { return left.contains(elem); });
 		}
 	};
 
 	template<typename Val>
-	using ECSComponentMap = std::unordered_map<ComponentTypeID, Val, ComponentTypeHasher, ComponentEqualOp>;
+	using ECSComponentMap = std::pmr::unordered_map<Set<ComponentID>, Val, SetHasher, EqualOp>;
 
 	class BaseComponent;
 	struct PreArchetypeTrait
 	{
 		ECSComponentMap<SharedPtr<RawByte[]>> componentData{};
-		std::vector<ComponentTypeID> archetypeKey{};
+		std::vector<ComponentID> archetypeKey{};
 	};
 
 	template<typename T>
 	concept ComponentConcept = std::is_copy_constructible_v<T> && !std::is_pointer_v<T> && std::is_standard_layout_v<T>;
+
+	using DynamicBitSet = std::vector<bool>;
+
+	template<typename Val>
+	using DynamicBitsetRange = Vector<std::pair<DynamicBitSet,Val>>;
+	
 }

@@ -8,17 +8,7 @@ namespace powe
     class WindowManager final
     {
     public:
-        struct Events
-        {
-            Events(PMRResource* memResource)
-                : eventQueue(memResource), window(nullptr)
-            {
-            }
-
-            Window::EventQueue eventQueue;
-            Window* window;
-        };
-
+        
         WindowManager(PMRResource* memResource);
         WindowManager(const WindowManager&) = delete;
         WindowManager& operator=(const WindowManager&) = delete;
@@ -30,12 +20,13 @@ namespace powe
         Window& GetMainWindow() { return m_Windows.front(); }
         Window& GetWindow(std::string_view windowName);
         void DestroyWindow(std::string_view windowName);
+        
 
-        Events Update();
+        Window::EventQueue Update();
 
     private:
         Vector<Window> m_Windows;
-        Window* m_MainWindow;
+        Window* m_ActiveWindow;
         PMRResource* m_MemResource;
     };
 }

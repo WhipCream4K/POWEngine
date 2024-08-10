@@ -1,10 +1,8 @@
 #include "pch.h"
 #include "WindowManager.h"
-#include "Utils/Utils.h"
 
 powe::WindowManager::WindowManager(PMRResource* memResource)
     : m_Windows{memResource}
-      , m_MainWindow(nullptr)
       , m_MemResource(memResource)
 {
     Window::InitializeLibrary();
@@ -36,15 +34,20 @@ void powe::WindowManager::DestroyWindow(std::string_view windowName)
     });
 }
 
-powe::WindowManager::Events powe::WindowManager::Update()
+powe::Window::EventQueue powe::WindowManager::Update()
 {
-    std::pmr::monotonic_buffer_resource eventBufferResource(1024);
-    Events events{m_MemResource};
+    std::array<std::byte, 1024> buffer{};
+    std::pmr::monotonic_buffer_resource memResource(buffer.data(), buffer.size());
+
+    Window::EventQueue windowEvents{};
     
     for (auto& window : m_Windows)
     {
-        window.PollEvents(events.eventQueue);
-        events.window = &window;
+        if(window.IsFocused())
+        {
+            window.PollEvents(windowEvents);
+            break;
+        }
     }
-    return events;
+    return windowEvents;
 }

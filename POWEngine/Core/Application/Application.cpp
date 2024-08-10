@@ -4,40 +4,43 @@
 #include "Core/Logger/Console/ConsoleLogger.h"
 #include "Core/Logger/LoggerUtils.h"
 
-powe::Application::Application(const AppDesc&)
-	: m_LayerStack{ &m_TrackAllocator }
-	, m_WindowManager{ AllocateUnique<WindowManager>(&m_TrackAllocator) }
-	, m_ServiceLocator{ AllocateUnique<ServiceLocatorT>(&m_TrackAllocator,&m_TrackAllocator) }
+powe::Application::Application(const AppDesc& appDesc)
+    : m_LayerStack{&m_TrackAllocator}
+      , m_WindowManager{AllocateUnique<WindowManager>(&m_TrackAllocator, &m_TrackAllocator)}
+      , m_ServiceLocator{AllocateUnique<ServiceLocatorT>(&m_TrackAllocator, &m_TrackAllocator)}
+      , m_AppDesc(appDesc)
 {
-	m_Instance = this;
+    m_Instance = this;
 }
 
 void powe::Application::PopLayer()
 {
-	Layer* topLayer{ m_LayerStack.back().get() };
-	topLayer->OnDetach();
-	m_LayerStack.pop_back();
+    Layer* topLayer{m_LayerStack.back().get()};
+    topLayer->OnDetach();
+    m_LayerStack.pop_back();
 }
 
 void powe::Application::Run()
 {
-	m_ServiceLocator->RegisterService<SimpleThreadPool>(&m_TrackAllocator);
-	m_ServiceLocator->RegisterService<ConsoleLogger>(&m_TrackAllocator);
+    m_ServiceLocator->RegisterService<SimpleThreadPool>(&m_TrackAllocator);
+    m_ServiceLocator->RegisterService<ConsoleLogger>(&m_TrackAllocator);
 
-	POWE_LOG(LogSeverity::Info, "Application is running");
+    POWE_LOG("Application is running");
 
-	while (!m_WindowManager->GetMainWindow().ShouldClose())
-	{
-		m_Clock.Start();
-		
-		WindowManager::Events windowEvents{ m_WindowManager->Update() };
-		
-		for (auto& layer : m_LayerStack)
-		{
-			layer->OnWindowEvents(windowEvents);
-			layer->OnUpdate(m_Clock.GetDeltaTime());
-		}
-		
-		m_Clock.End();
-	}
+    m_Clock.ResetTime();
+
+    while (!m_WindowManager->GetMainWindow().ShouldClose())
+    {
+        m_Clock.Start();
+
+        auto windowEvents = m_WindowManager->Update();
+
+        for (auto& layer : m_LayerStack)
+        {
+            layer->OnWindowEvents(windowEvents);
+            layer->OnUpdate(m_Clock.GetDeltaTime());
+        }
+
+        m_Clock.End();
+    }
 }

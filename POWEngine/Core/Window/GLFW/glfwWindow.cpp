@@ -28,11 +28,21 @@ void powe::Window::Initialize()
     {
         glfwDestroyWindow(window);
     });
+
+    glfwSetWindowUserPointer(window,this);
+
+    glfwSetWindowFocusCallback(window, [](GLFWwindow* window, int focused)
+    {
+        Window* win{ static_cast<Window*>(glfwGetWindowUserPointer(window)) };
+        win->m_IsFocused = bool(focused);
+    });
 }
 
 bool powe::Window::PollEvents(EventQueue& eventQueue)
 {
     glfwPollEvents();
+    eventQueue = {this,{}};
+    return ShouldClose();
 }
 
 void powe::Window::SwapBuffers()
@@ -50,6 +60,11 @@ void powe::Window::SetTitle(const std::string& title)
 
 void powe::Window::Resize(int width, int height)
 {
+}
+
+bool powe::Window::IsFocused() const
+{
+    return m_IsFocused;
 }
 
 bool powe::Window::ShouldClose() const

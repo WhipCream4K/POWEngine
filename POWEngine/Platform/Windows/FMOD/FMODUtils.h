@@ -6,7 +6,7 @@
 
 namespace powe
 {
-	static void inline FMODErrorCheck(FMOD_RESULT result)
+	static void FMODErrorCheck(FMOD_RESULT result)
 	{
 		if (result != FMOD_OK)
 			throw std::runtime_error(FMOD_ErrorString(result));
