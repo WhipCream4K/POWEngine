@@ -5,7 +5,6 @@
 
 namespace powe
 {
-
     struct Input
     {
         enum State
@@ -39,6 +38,8 @@ namespace powe
          */
         void OnWindowEvents(const Window::EventQueue& events);
 
+
+        // TODO: Make binding tied to the lifetime of the attached object
         template<typename T> requires std::is_invocable_v<T>
         void AddKeyBinding(int key, Input::State state,T&& func);
         

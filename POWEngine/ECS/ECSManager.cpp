@@ -13,10 +13,7 @@ void powe::ECSManager::GetArchetypes(const Vector<ComponentID>& query, Vector<IA
 	{
 		if(IsArchetypeMatch(archetypeKey, query))
 		{
-			for(const auto& archetype : archetypes)
-			{
-				outArchetypes.emplace_back(archetype.get());
-			}
+			outArchetypes.emplace_back(archetypes.get());
 		}
 	}
 }
@@ -44,6 +41,6 @@ bool powe::ECSManager::IsContainsArchetype(const Vector<ComponentID>& compIDs) c
 
 void powe::ECSManager::InsertArchetype(const Vector<ComponentID>& compIDs, UniquePtr<IArchetype>&& archetype)
 {
-	const auto key{ MakeArchetypeKey(compIDs) };
+	const DynamicBitSet key{ MakeArchetypeKey(compIDs) };
 	m_Archetypes.emplace_back(std::make_pair(key, std::move(archetype)));
 }

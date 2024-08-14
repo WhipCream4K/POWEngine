@@ -24,6 +24,7 @@
 //#include "../Utils/MacroDef.h"
 
 #include "../POWEngine/Core/CustomTypes.h"
+#include "Core/Memory/Allocator.h"
 
 #define USE_GLFW_WINDOW 1
 

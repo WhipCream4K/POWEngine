@@ -27,7 +27,6 @@ namespace powe
 		}
 
 		void GetArchetypes(const Vector<ComponentID>& query,Vector<IArchetype*>& outArchetypes) const;
-
 		
 		/**
 		 * Return only the first match archetype of the given ids

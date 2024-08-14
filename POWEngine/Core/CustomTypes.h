@@ -11,8 +11,6 @@
 #include <memory_resource>
 #include <string>
 
-#include "Core/Memory/Allocator.h"
-
 template <typename FnType>
 struct FnTraits
 {
@@ -94,8 +92,10 @@ namespace powe
     template <typename UserClass>
     using WeakPtr = std::weak_ptr<UserClass>;
 
+    template<typename T>
+    struct AllocatorDeleter;
 
-    template <typename UserClass, typename Deleter = AllocatorDeleter<std::decay_t<UserClass>>>
+    template <typename UserClass, typename Deleter = AllocatorDeleter<UserClass>>
     using UniquePtr = std::unique_ptr<UserClass, Deleter>;
 
     template <typename T>
@@ -122,9 +122,9 @@ namespace powe
         {
         }
         
-        T* operator->() const
+        T* operator->()
         {
-            return &m_Ref;
+            return &m_Ref.get();
         }
 
         T& operator*() const

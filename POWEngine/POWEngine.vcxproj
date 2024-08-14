@@ -218,6 +218,9 @@
     <ClInclude Include="Core\CustomTypes.h" />
     <ClInclude Include="Core\Logger\LoggerUtils.h" />
     <ClInclude Include="Game\Scene.h" />
+    <ClInclude Include="Renderer\RenderStateIDGen.h" />
+    <ClInclude Include="Renderer\RenderSystem.h" />
+    <ClInclude Include="Renderer\Renderer.h" />
     <ClInclude Include="Sound\SoundInfo.h" />
     <ClInclude Include="Utils\MacroDef.h" />
     <ClInclude Include="Utils\Utils.h" />
@@ -233,6 +236,7 @@
     <ClCompile Include="Core\SubSystem.cpp" />
     <ClCompile Include="ECS\ComponentView.cpp" />
     <ClCompile Include="ECS\ComponentIDGen.cpp" />
+    <ClCompile Include="ECS\ECSUtils.cpp" />
     <ClCompile Include="Game\EngineLayer.cpp" />
     <ClCompile Include="Core\Layer.cpp" />
     <ClCompile Include="Core\Memory\Allocator.cpp" />
@@ -330,6 +334,9 @@
     </ClCompile>
     <ClCompile Include="Core\Thread\SimpleThreadPool.cpp" />
     <ClCompile Include="Game\Scene.cpp" />
+    <ClCompile Include="Renderer\RenderStateIDGen.cpp" />
+    <ClCompile Include="Renderer\RenderSystem.cpp" />
+    <ClCompile Include="Renderer\Renderer.cpp" />
     <ClCompile Include="Utils\ServiceLocator.cpp" />
     <ClCompile Include="Utils\Singleton.cpp" />
     <ClCompile Include="Core\Clock\Clock.cpp" />

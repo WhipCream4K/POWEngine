@@ -2,12 +2,11 @@
 
 #include <typeindex>
 
-#include "ECS/Archetype.h"
 #include "EngineLayer.h"
 #include "SceneSystem.h"
 #include "Utils/Utils.h"
-#include "InputManager.h"
 #include "SceneQuery.h"
+#include "InputManager.h"
 
 namespace powe
 {
@@ -17,14 +16,14 @@ namespace powe
     class Scene final
     {
     public:
-        Scene(EngineLayer* parent);
+        Scene(EngineLayer& parent);
 
         void OnStart();
         void OnExit();
         void OnWindowEvents(const Window::EventQueue& winEvents) const;
         void Update(float deltaTime);
 
-        template <CSceneSystem T>
+        template <typename T> requires CSceneSystem<T>
         T* AddSceneSystem(T&& system)
         {
             auto sceneSystem = AllocateUnique<T>(GetParentLayer().GetAllocator(), std::move(system));
@@ -44,8 +43,9 @@ namespace powe
 
         // EngineLayer is guaranteed to be valid as long as Scene Exists
         EngineLayer& GetParentLayer() const { return m_EngineLayer; }
-        InputManager& GetInputManager() const { return *m_InputManager.get(); }
+        InputManager& GetInputManager() const {return *m_InputManager.get();}
         ECSManager& GetECSManager() const { return *m_ECSManager.get(); }
+        const std::string& GetName() const { return m_SceneName; }
 
         /**
          * Query components from the scene that can be used to iterate over the components
@@ -53,7 +53,7 @@ namespace powe
          * @return iterator to the components
          */
         template<typename... Args> requires (ComponentConcept<Args> && ...)
-        constexpr ComponentView::Range<Args...> Query()
+        constexpr ComponentCollection<Args...> Query()
         {
             return SceneQuery::QueryComponents<Args...>(m_CachedComponentViews, m_CacheQueryIDs);
         }
@@ -69,6 +69,8 @@ namespace powe
         // For query caching
         DynamicBitsetRange<ComponentView> m_CachedComponentViews;
         Vector<ComponentID> m_CacheQueryIDs;
+
+        std::string m_SceneName;
         
     };
 }

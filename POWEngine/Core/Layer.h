@@ -1,8 +1,6 @@
 #pragma once
 
-#include <concepts>
-
-#include "WIndowManager.h"
+#include "WindowManager.h"
 
 namespace powe
 {
@@ -21,7 +19,6 @@ namespace powe
 		virtual void OnUpdate(float) = 0;
 		virtual void OnWindowEvents(const Window::EventQueue&) = 0;
 		virtual void OnDetach() = 0;
-		virtual void OnRender() = 0;
 	};
 
 	template<typename T>

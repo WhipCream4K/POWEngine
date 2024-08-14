@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Window/Window.h"
-#include "Core/CustomTypes.h"
 
 namespace powe
 {

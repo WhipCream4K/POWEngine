@@ -2,10 +2,11 @@
 
 #include <memory_resource>
 
+#include "Utils/Service.h"
+
 
 namespace powe
 {
-	class MemoryTracker;
 	class TrackableAllocator : public std::pmr::memory_resource
 	{
 	public:
@@ -73,11 +74,11 @@ namespace powe
 		std::pmr::memory_resource* m_Upstream{};
 
 	};
-
+	
 	template<typename T>
 	struct AllocatorDeleter
 	{
-
+		
 		std::pmr::memory_resource* allocator;
 
 		AllocatorDeleter(std::pmr::memory_resource* upStream)
@@ -86,12 +87,12 @@ namespace powe
 		}
 
 		AllocatorDeleter() = default;
-
-		void operator()(void* ptr)
+		
+		void operator()(T* ptr) const noexcept
 		{
 			if constexpr (!std::is_void_v<T>)
 			{
-				static_cast<T*>(ptr)->~T();
+				ptr->~T();
 				allocator->deallocate(ptr, sizeof(T), alignof(T));
 			}
 			else
@@ -99,6 +100,11 @@ namespace powe
 				allocator->deallocate(ptr, 0, alignof(std::max_align_t));
 			}
 		}
+	};
+
+	class Allocator : public IService<Allocator>, public std::pmr::memory_resource
+	{
+		
 	};
 
 }

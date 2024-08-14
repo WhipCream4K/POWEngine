@@ -19,17 +19,17 @@ namespace powe
         (key.emplace_back(ComponentIDGen::Get<Args>()), ...);
     }
 
-    static DynamicBitSet MakeArchetypeKey(const Vector<ComponentID>& compIDs)
+    inline DynamicBitSet MakeArchetypeKey(const Vector<ComponentID>& compIDs)
     {
-        DynamicBitSet key(compIDs.size());
-        for(const auto& id : compIDs)
+        DynamicBitSet key(ComponentIDGen::Size());
+        for (const auto& id : compIDs)
         {
             key[id] = true;
         }
         return key;
     }
-
-    static bool IsArchetypeMatch(const DynamicBitSet& archetypeKey, const Vector<ComponentID>& queryKey)
+    
+    inline bool IsArchetypeMatch(const DynamicBitSet& archetypeKey, const Vector<ComponentID>& queryKey)
     {
         return std::ranges::all_of(queryKey, [&archetypeKey](const ComponentID& id) { return archetypeKey[id]; });
     }

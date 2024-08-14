@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Scene.h"
-
 namespace powe
 {
     class Scene;
