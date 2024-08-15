@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Memory/Allocator.h"
 #include "Window/Window.h"
 
 namespace powe
@@ -8,11 +9,11 @@ namespace powe
     {
     public:
         
-        WindowManager(PMRResource* memResource);
+        WindowManager(PMRResource* memResource = DefaultAllocator::Application);
         WindowManager(const WindowManager&) = delete;
         WindowManager& operator=(const WindowManager&) = delete;
-        WindowManager(WindowManager&&) = delete;
-        WindowManager& operator=(WindowManager&&) = delete;
+        WindowManager(WindowManager&&) noexcept = delete;
+        WindowManager& operator=(WindowManager&&) noexcept = delete;
         ~WindowManager();
         
         Window& CreateWindow(std::string_view title, int width, int height);
@@ -24,6 +25,7 @@ namespace powe
         Window::EventQueue Update();
 
     private:
+        
         Vector<Window> m_Windows;
         Window* m_ActiveWindow;
         PMRResource* m_MemResource;

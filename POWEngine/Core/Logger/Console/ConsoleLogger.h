@@ -30,8 +30,8 @@ namespace powe
 		ConsoleLogger(std::pmr::memory_resource* memResource);
 		ConsoleLogger(const ConsoleLogger&) = delete;
 		ConsoleLogger& operator=(const ConsoleLogger&) = delete;
-		ConsoleLogger(ConsoleLogger&&) = default;
-		ConsoleLogger& operator=(ConsoleLogger&&) = default;
+		ConsoleLogger(ConsoleLogger&&) noexcept = delete;
+		ConsoleLogger& operator=(ConsoleLogger&&) noexcept = delete;
 		~ConsoleLogger() override;
 
 	public:

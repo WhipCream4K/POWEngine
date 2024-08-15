@@ -2,8 +2,6 @@
 
 #include <memory_resource>
 
-#include "Utils/Service.h"
-
 
 namespace powe
 {
@@ -102,10 +100,52 @@ namespace powe
 		}
 	};
 
-	class Allocator : public IService<Allocator>, public std::pmr::memory_resource
+	struct DefaultAllocator
 	{
-		
+		static PMRResource* Application;
+		static PMRResource* Engine;
+
+		static void ShutDown()
+		{
+			delete Application;
+			delete Engine;
+		}
 	};
+
+	
+
+	// class GlobalAllocator : public ThreadSafeSingleton<GlobalAllocator>
+	// {
+	// public:
+	//
+	// 	static void InitDefaultAllocator() noexcept
+	// 	{
+	// 		auto* instance{Get()};
+	// 		instance->CreateAllocator(DefaultAllocator::Application, new TrackableAllocator());
+	// 		instance->CreateAllocator(DefaultAllocator::Engine, new TrackableAllocator());
+	// 	}
+	// 	
+	// 	template<typename Alloc> requires std::is_base_of_v<PMRResource, std::decay_t<Alloc>>
+	// 	Alloc* CreateAllocator(const std::string& name, Alloc* alloc) noexcept
+	// 	{
+	// 		m_AllocatorMap.try_emplace(name, std::unique_ptr<Alloc>(alloc,std::default_delete<Alloc>{}));
+	// 		return m_AllocatorMap.at(name).get();
+	// 	}
+	//
+	// 	PMRResource* GetAllocator(std::string_view name) // should throw exception if not found
+	// 	{
+	// 		auto it = m_AllocatorMap.find(name.data());
+	// 		if (it != m_AllocatorMap.end())
+	// 		{
+	// 			return it->second.get();
+	// 		}
+	// 		return m_AllocatorMap.at(name.data()).get();
+	// 	}
+	// 	
+	// private:
+	//
+	// 	std::unordered_map<std::string,std::unique_ptr<PMRResource>> m_AllocatorMap;
+	// };
 
 }
 

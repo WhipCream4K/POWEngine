@@ -4,8 +4,11 @@ namespace powe
 {
     template <typename T>
     concept RenderState = std::is_standard_layout_v<T>;
+
+    template<typename T>
+    concept CGetRenderState = std::is_same_v<std::invoke_result_t<T>,void*>;
     
-    class RenderStateIDGen final
+    class RenderEntityIDGen final
     {
     public:
         

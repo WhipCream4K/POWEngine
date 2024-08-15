@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include <functional>
-#include "RenderStateIDGen.h"
+#include "RenderEntityIDGen.h"
 
 namespace powe
 {
@@ -18,7 +18,7 @@ namespace powe
         virtual ~BaseRenderSystem() = default;
 
         virtual void Render(Scene&,const std::function<void*()>&);
-        virtual uint32_t GetRenderStateID() const = 0;
+        virtual uint32_t GetRenderEntityID() const = 0;
     };
     
     template <RenderState T>
@@ -36,8 +36,7 @@ namespace powe
         void Render(Scene&, const std::function<void*()>&) override;
         virtual void OnRender(Scene& scene,const T& renderState) = 0;
         
-        uint32_t GetRenderStateID() const final;
-
+        uint32_t GetRenderEntityID() const final;
         
     };
 
@@ -49,8 +48,8 @@ namespace powe
     }
 
     template <RenderState T>
-    uint32_t RenderSystem<T>::GetRenderStateID() const
+    uint32_t RenderSystem<T>::GetRenderEntityID() const
     {
-        return RenderStateIDGen::Get<T>();
+        return RenderEntityIDGen::Get<T>();
     }
 }

@@ -7,6 +7,7 @@
 #include "Utils/Utils.h"
 #include "SceneQuery.h"
 #include "InputManager.h"
+#include "Renderer/RenderEntityIDGen.h"
 
 namespace powe
 {
@@ -26,7 +27,7 @@ namespace powe
         template <typename T> requires CSceneSystem<T>
         T* AddSceneSystem(T&& system)
         {
-            auto sceneSystem = AllocateUnique<T>(GetParentLayer().GetAllocator(), std::move(system));
+            auto sceneSystem = AllocateUnique<T>(GetParentLayer().GetAllocator(), std::forward<T>(system));
             m_SceneSystems.push_back(std::move(sceneSystem));
             return static_cast<T*>(m_SceneSystems.back().get());
         }
@@ -56,6 +57,12 @@ namespace powe
         constexpr ComponentCollection<Args...> Query()
         {
             return SceneQuery::QueryComponents<Args...>(m_CachedComponentViews, m_CacheQueryIDs);
+        }
+
+        template<CGetRenderState Callable>
+        void SubmitRenderEntity(Callable&& callable)
+        {
+            
         }
 
     private:

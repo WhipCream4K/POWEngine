@@ -18,8 +18,8 @@ namespace powe
 		SimpleThreadPool(std::pmr::memory_resource* memResource, size_t threadCount = (size_t)std::thread::hardware_concurrency());
 		SimpleThreadPool(const SimpleThreadPool&) = delete;
 		SimpleThreadPool& operator=(const SimpleThreadPool&) = delete;
-		SimpleThreadPool(SimpleThreadPool&&) noexcept = default;
-		SimpleThreadPool& operator=(SimpleThreadPool&&) noexcept = default;
+		SimpleThreadPool(SimpleThreadPool&&) noexcept = delete;
+		SimpleThreadPool& operator=(SimpleThreadPool&&) noexcept = delete;
 		~SimpleThreadPool();
 
 	public:

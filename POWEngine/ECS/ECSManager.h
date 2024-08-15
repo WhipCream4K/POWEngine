@@ -13,7 +13,7 @@ namespace powe
 	{
 	public:
 
-		ECSManager(PMRResource* memResource);
+		ECSManager(PMRResource* memResource = DefaultAllocator::Engine);
 		
 		EntityID CreateEntity() { return m_CurrentEntityID++; }
 

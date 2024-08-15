@@ -218,11 +218,12 @@
     <ClInclude Include="Core\CustomTypes.h" />
     <ClInclude Include="Core\Logger\LoggerUtils.h" />
     <ClInclude Include="Game\Scene.h" />
-    <ClInclude Include="Renderer\RenderStateIDGen.h" />
+    <ClInclude Include="Renderer\RenderEntityIDGen.h" />
     <ClInclude Include="Renderer\RenderSystem.h" />
     <ClInclude Include="Renderer\Renderer.h" />
     <ClInclude Include="Sound\SoundInfo.h" />
     <ClInclude Include="Utils\MacroDef.h" />
+    <ClInclude Include="Utils\ThreadSafeSingleton.h" />
     <ClInclude Include="Utils\Utils.h" />
     <ClInclude Include="Core\Thread\SimpleThreadPool.h" />
     <ClInclude Include="Utils\ServiceLocator.h" />
@@ -334,7 +335,7 @@
     </ClCompile>
     <ClCompile Include="Core\Thread\SimpleThreadPool.cpp" />
     <ClCompile Include="Game\Scene.cpp" />
-    <ClCompile Include="Renderer\RenderStateIDGen.cpp" />
+    <ClCompile Include="Renderer\RenderEntityIDGen.cpp" />
     <ClCompile Include="Renderer\RenderSystem.cpp" />
     <ClCompile Include="Renderer\Renderer.cpp" />
     <ClCompile Include="Utils\ServiceLocator.cpp" />
@@ -343,9 +344,11 @@
     <ClCompile Include="Utils\Service.cpp" />
     <ClCompile Include="Sound\SoundService.cpp" />
     <ClCompile Include="Random\Random.cpp" />
+    <ClCompile Include="Utils\ThreadSafeSingleton.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Platform\Windows\FMOD\" />
+    <Folder Include="Renderer\RenderEntity\" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -27,7 +27,7 @@ namespace powe
 		Application& operator=(const Application&) = delete;
 		Application(Application&&) = delete;
 		Application& operator=(Application&&) = delete;
-		~Application() = default;
+		~Application();
 		
 		static Application& Get() { return *m_Instance; }
 
@@ -38,14 +38,13 @@ namespace powe
 		void Run();
 		
 		WindowManager& GetWindowManager() const { return *m_WindowManager; }
-
+		
 		template<typename T>
 		T* GetAppService() { return m_ServiceLocator->GetService<T>(); }
 
 	private:
 
-		// Allocator need to initilize first
-		TrackableAllocator m_TrackAllocator;
+		// Allocator need to initialize first
 
 		Vector<UniquePtr<Layer>> m_LayerStack;
 		Clock m_Clock;
@@ -58,7 +57,7 @@ namespace powe
 	template<LayerConcept T>
 	inline Layer* Application::PushLayer(T&& layer)
 	{
-		auto layerPtr = AllocateUnique<T>(&m_TrackAllocator, std::forward<T>(layer));
+		auto layerPtr = AllocateUnique<T>(DefaultAllocator::Application, std::forward<T>(layer));
 		m_LayerStack.emplace_back(std::move(layerPtr));
 		m_LayerStack.back()->OnAttach();
 		return m_LayerStack.back().get();

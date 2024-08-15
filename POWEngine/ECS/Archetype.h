@@ -34,7 +34,7 @@ namespace powe
         using ComponentBlock = std::tuple<Args...>;
         using Iterator = typename Vector<ComponentBlock>::iterator;
 
-        Archetype(std::pmr::memory_resource* resource)
+        Archetype(PMRResource* resource = DefaultAllocator::Engine)
             : m_Components(resource)
               , m_EntityToIndex(resource)
               , m_OldCapacity(m_Components.capacity())

@@ -7,15 +7,19 @@
 namespace powe
 {
 	class Scene;
-	class EngineLayer : public Layer
+	class Renderer;
+	class EngineLayer final : public Layer
 	{
 	public:
 
-		EngineLayer();
+		EngineLayer(PMRResource* memResource = DefaultAllocator::Engine);
 
 		Scene& CreatScene(std::string_view sceneName);
 		void SetActiveScene(std::string_view sceneName) { m_ActiveScene = m_Scenes.at(sceneName.data()).get(); }
-		PMRResource* GetAllocator() { return &m_TrackAllocator; }
+
+		PMRResource* GetAllocator() const { return DefaultAllocator::Engine; }
+
+		Renderer& GetRenderer() const { return *m_Renderer; }
 
 	protected:
 
@@ -25,9 +29,9 @@ namespace powe
 		void OnWindowEvents(const Window::EventQueue& events) override;
 
 	private:
-		TrackableAllocator m_TrackAllocator;
 
 		UnOrderedMap<std::string,UniquePtr<Scene>> m_Scenes;
+		UniquePtr<Renderer> m_Renderer;
 		Scene* m_ActiveScene;
 	};
 }
