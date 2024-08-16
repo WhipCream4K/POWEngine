@@ -48,7 +48,7 @@ namespace powe
     RenderSystem<T>& Renderer::CreateRenderSystem(Args&&... args)
     {
         UniquePtr<BaseRenderSystem> renderSyste{AllocateUnique<T>(m_DefaultAllocator,std::forward<Args>(args)...)};
-        m_RenderSystems.emplace_back(std::make_pair(renderSyste->GetRenderEntityID(),std::move(renderSyste));
+        m_RenderSystems.emplace_back(std::make_pair(renderSyste->GetRenderEntityID(),std::move(renderSyste)));
         return *static_cast<RenderSystem<T>*>(m_RenderSystems.back().second.get());
     }
 

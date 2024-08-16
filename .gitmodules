@@ -1,12 +1,3 @@
-[submodule "3rdPartyLib/imgui-sfml"]
-	path = 3rdPartyLib/imgui-sfml
-	url = https://github.com/eliasdaler/imgui-sfml.git
-[submodule "3rdPartyLib/imgui"]
-	path = 3rdPartyLib/imgui
-	url = https://github.com/ocornut/imgui.git
-[submodule "POWEngine/POWEngine/Math/glm"]
-	path = POWEngine/POWEngine/Math/glm
-	url = https://github.com/g-truc/glm.git
 [submodule "3rdPartyLib/glfw"]
 	path = 3rdPartyLib/glfw
 	url = https://github.com/glfw/glfw.git
