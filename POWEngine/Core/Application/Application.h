@@ -55,7 +55,7 @@ namespace powe
 		static Application* m_Instance;
 	};
 	template<LayerConcept T>
-	inline Layer* Application::PushLayer(T&& layer)
+	Layer* Application::PushLayer(T&& layer)
 	{
 		auto layerPtr = AllocateUnique<T>(DefaultAllocator::Application, std::forward<T>(layer));
 		m_LayerStack.emplace_back(std::move(layerPtr));

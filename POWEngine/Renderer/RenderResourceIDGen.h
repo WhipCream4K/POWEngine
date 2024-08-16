@@ -3,16 +3,16 @@
 namespace powe
 {
     template <typename T>
-    concept RenderState = std::is_standard_layout_v<T>;
+    concept CRenderResource = std::is_standard_layout_v<T>;
 
     template<typename T>
-    concept CGetRenderState = std::is_same_v<std::invoke_result_t<T>,void*>;
+    concept CGetRenderResource = std::is_same_v<std::invoke_result_t<T>,void*>;
     
-    class RenderEntityIDGen final
+    class RenderResourceIDGen final
     {
     public:
         
-        template<RenderState state>
+        template<CRenderResource resource>
         static uint32_t Get()
         {
             static const uint32_t id{GenerateID()};

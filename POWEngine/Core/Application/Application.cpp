@@ -5,18 +5,15 @@
 #include "Core/Logger/LoggerUtils.h"
 
 powe::Application::Application(const AppDesc& appDesc)
-    : m_LayerStack{}
-      , m_WindowManager{}
-      , m_ServiceLocator{}
-      , m_AppDesc(appDesc)
+    : m_AppDesc(appDesc)
 {
     m_Instance = this;
-    
+
     auto* appResource{DefaultAllocator::Application};
-    
-    m_ServiceLocator = AllocateUnique<ServiceLocatorT>(appResource,appResource);
+
+    m_ServiceLocator = AllocateUnique<ServiceLocatorT>(appResource, appResource);
     m_LayerStack = Vector<UniquePtr<Layer>>{appResource};
-    m_WindowManager = AllocateUnique<WindowManager>(appResource,appResource);
+    m_WindowManager = AllocateUnique<WindowManager>(appResource, appResource);
 
     m_ServiceLocator->RegisterService<SimpleThreadPool>(appResource);
     m_ServiceLocator->RegisterService<ConsoleLogger>(appResource);
@@ -37,7 +34,7 @@ void powe::Application::PopLayer()
 void powe::Application::Run()
 {
     POWE_LOG("Application is running");
-    
+
     m_Clock.ResetTime();
 
     while (!m_WindowManager->GetMainWindow().ShouldClose())

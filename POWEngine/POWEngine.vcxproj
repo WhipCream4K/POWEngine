@@ -218,7 +218,8 @@
     <ClInclude Include="Core\CustomTypes.h" />
     <ClInclude Include="Core\Logger\LoggerUtils.h" />
     <ClInclude Include="Game\Scene.h" />
-    <ClInclude Include="Renderer\RenderEntityIDGen.h" />
+    <ClInclude Include="Renderer\Frame.h" />
+    <ClInclude Include="Renderer\RenderResourceIDGen.h" />
     <ClInclude Include="Renderer\RenderSystem.h" />
     <ClInclude Include="Renderer\Renderer.h" />
     <ClInclude Include="Sound\SoundInfo.h" />
@@ -335,7 +336,8 @@
     </ClCompile>
     <ClCompile Include="Core\Thread\SimpleThreadPool.cpp" />
     <ClCompile Include="Game\Scene.cpp" />
-    <ClCompile Include="Renderer\RenderEntityIDGen.cpp" />
+    <ClCompile Include="Renderer\Frame.cpp" />
+    <ClCompile Include="Renderer\RenderResourceIDGen.cpp" />
     <ClCompile Include="Renderer\RenderSystem.cpp" />
     <ClCompile Include="Renderer\Renderer.cpp" />
     <ClCompile Include="Utils\ServiceLocator.cpp" />
@@ -348,7 +350,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Platform\Windows\FMOD\" />
-    <Folder Include="Renderer\RenderEntity\" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

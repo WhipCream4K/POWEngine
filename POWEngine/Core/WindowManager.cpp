@@ -5,6 +5,7 @@
 
 powe::WindowManager::WindowManager(PMRResource* memResource)
     : m_Windows{memResource}
+      , m_EventBuffer()
       , m_ActiveWindow()
       , m_MemResource(memResource)
 {
@@ -39,19 +40,18 @@ void powe::WindowManager::DestroyWindow(std::string_view windowName)
 
 powe::Window::EventQueue powe::WindowManager::Update()
 {
-    std::array<std::byte, 1024> buffer{};
-    std::pmr::monotonic_buffer_resource memResource(buffer.data(), buffer.size());
-
-    Window::EventQueue windowEvents{};
-
+    std::pmr::monotonic_buffer_resource eventResource{m_EventBuffer.data(),m_EventBuffer.size()};
+    m_CurrentWindowEvents = std::make_pair(nullptr,Vector<uint32_t>(&eventResource));
+    
     for (auto& window : m_Windows)
     {
         if (window.IsFocused())
         {
             m_ActiveWindow = &window;
-            window.PollEvents(windowEvents);
+            window.PollEvents(m_CurrentWindowEvents);
             break;
         }
     }
-    return windowEvents;
+    
+    return m_CurrentWindowEvents;
 }

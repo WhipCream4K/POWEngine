@@ -7,7 +7,6 @@
 #include "Utils/Utils.h"
 #include "SceneQuery.h"
 #include "InputManager.h"
-#include "Renderer/RenderEntityIDGen.h"
 
 namespace powe
 {
@@ -17,7 +16,8 @@ namespace powe
     class Scene final
     {
     public:
-        Scene(EngineLayer& parent);
+        
+        Scene(PMRResource* memResource = DefaultAllocator::Engine);
 
         void OnStart();
         void OnExit();
@@ -27,7 +27,7 @@ namespace powe
         template <typename T> requires CSceneSystem<T>
         T* AddSceneSystem(T&& system)
         {
-            auto sceneSystem = AllocateUnique<T>(GetParentLayer().GetAllocator(), std::forward<T>(system));
+            auto sceneSystem = AllocateUnique<T>(m_DefaultAllocator, std::forward<T>(system));
             m_SceneSystems.push_back(std::move(sceneSystem));
             return static_cast<T*>(m_SceneSystems.back().get());
         }
@@ -43,7 +43,6 @@ namespace powe
 
 
         // EngineLayer is guaranteed to be valid as long as Scene Exists
-        EngineLayer& GetParentLayer() const { return m_EngineLayer; }
         InputManager& GetInputManager() const {return *m_InputManager.get();}
         ECSManager& GetECSManager() const { return *m_ECSManager.get(); }
         const std::string& GetName() const { return m_SceneName; }
@@ -59,25 +58,19 @@ namespace powe
             return SceneQuery::QueryComponents<Args...>(m_CachedComponentViews, m_CacheQueryIDs);
         }
 
-        template<CGetRenderState Callable>
-        void SubmitRenderEntity(Callable&& callable)
-        {
-            
-        }
-
     private:
         
         UniquePtr<ECSManager> m_ECSManager;
         UniquePtr<InputManager> m_InputManager;
-        RefWrap<EngineLayer> m_EngineLayer;
         Vector<UniquePtr<SceneSystem>> m_SceneSystems;
-        UnOrderedMap<std::type_index, SharedPtr<void>> m_SubSystems;
         
         // For query caching
         DynamicBitsetRange<ComponentView> m_CachedComponentViews;
         Vector<ComponentID> m_CacheQueryIDs;
 
         std::string m_SceneName;
+
+        PMRResource* m_DefaultAllocator;
         
     };
 }

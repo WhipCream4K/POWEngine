@@ -4,10 +4,9 @@
 #include "ECS/ECSManager.h"
 #include "Utils/Utils.h"
 
-powe::Scene::Scene(EngineLayer& parent)
-	: m_ECSManager{AllocateUnique<ECSManager>(parent.GetAllocator(), parent.GetAllocator())}
-	  , m_InputManager{AllocateUnique<InputManager>(parent.GetAllocator(), parent.GetAllocator())}
-	  , m_EngineLayer{parent}
+powe::Scene::Scene(PMRResource* memResource)
+	: m_ECSManager{AllocateUnique<ECSManager>(memResource, memResource)}
+	  , m_InputManager{AllocateUnique<InputManager>(memResource, memResource)}
 {
 }
 

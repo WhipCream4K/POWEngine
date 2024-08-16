@@ -9,10 +9,10 @@ namespace powe
 	public:
 		
 		Layer() = default;
-		Layer(const Layer&) = delete;
-		Layer& operator=(const Layer&) = delete;
-		Layer(Layer&&) = delete;
-		Layer& operator=(Layer&&) = delete;
+		Layer(const Layer&) = default;
+		Layer& operator=(const Layer&) = default;
+		Layer(Layer&&) = default;
+		Layer& operator=(Layer&&) = default;
 		virtual ~Layer() = default;
 
 		virtual void OnAttach() = 0;

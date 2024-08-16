@@ -32,6 +32,7 @@ namespace powe
 
 		UnOrderedMap<std::string,UniquePtr<Scene>> m_Scenes;
 		UniquePtr<Renderer> m_Renderer;
+		PMRResource* m_DefaultAllocator;
 		Scene* m_ActiveScene;
 	};
 }
