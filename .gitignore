@@ -363,3 +363,5 @@ MigrationBackup/
 FodyWeavers.xsd
 /BurgerTime/Resources/Sound/Pao_sound.rar
 .idea/
+
+.vscode/
