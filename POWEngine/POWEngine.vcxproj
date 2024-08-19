@@ -204,6 +204,7 @@
     <ClInclude Include="ECS\ECSManager.h" />
     <ClInclude Include="ECS\EntityView.h" />
     <ClInclude Include="Game\InputManager.h" />
+    <ClInclude Include="Game\SceneManager.h" />
     <ClInclude Include="Game\SceneQuery.h" />
     <ClInclude Include="Game\SceneSystem.h" />
     <ClInclude Include="LockFree\LFQueue.h" />
@@ -247,6 +248,7 @@
     <ClCompile Include="ECS\ECSManager.cpp" />
     <ClCompile Include="ECS\EntityView.cpp" />
     <ClCompile Include="Game\InputManager.cpp" />
+    <ClCompile Include="Game\SceneManager.cpp" />
     <ClCompile Include="Game\SceneQuery.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -350,6 +352,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Platform\Windows\FMOD\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="POWMinimal.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
