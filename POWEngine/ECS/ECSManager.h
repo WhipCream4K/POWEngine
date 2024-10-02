@@ -39,7 +39,7 @@ namespace powe
 		template<typename ...Args> requires (ComponentConcept<Args> && ...)
 		IArchetype* GetOrCreateArchetype();
 
-		bool IsContainsArchetype(const Vector<ComponentID>& compIDs) const;
+		bool ContainsArchetype(const Vector<ComponentID>& compIDs) const;
 	
 	private:
 
@@ -57,7 +57,7 @@ namespace powe
 	{
 		const Vector<ComponentID> componentRange{ MakeComponentRange<Args...>() };
 		
-		if(IsContainsArchetype(componentRange))
+		if(ContainsArchetype(componentRange))
 		{
 			return GetArchetype(componentRange);
 		}

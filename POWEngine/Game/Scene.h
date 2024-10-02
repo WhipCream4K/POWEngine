@@ -17,7 +17,7 @@ namespace powe
     {
     public:
         
-        Scene(PMRResource* memResource = DefaultAllocator::Engine);
+        Scene(PMRResource* memResource);
 
         void OnStart();
         void OnExit();
@@ -55,7 +55,7 @@ namespace powe
         template<typename... Args> requires (ComponentConcept<Args> && ...)
         constexpr ComponentCollection<Args...> Query()
         {
-            return SceneQuery::QueryComponents<Args...>(m_CachedComponentViews, m_CacheQueryIDs);
+            return m_SceneQuery.QueryComponents<Args...>();
         }
 
     private:
@@ -64,9 +64,7 @@ namespace powe
         UniquePtr<InputManager> m_InputManager;
         Vector<UniquePtr<SceneSystem>> m_SceneSystems;
         
-        // For query caching
-        DynamicBitsetRange<ComponentView> m_CachedComponentViews;
-        Vector<ComponentID> m_CacheQueryIDs;
+        SceneQuery m_SceneQuery;
 
         std::string m_SceneName;
 

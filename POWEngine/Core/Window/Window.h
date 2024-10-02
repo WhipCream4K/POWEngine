@@ -5,6 +5,7 @@
 
 namespace powe
 {
+    class Viewport;
     class Window final
     {
     public:

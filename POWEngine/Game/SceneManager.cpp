@@ -6,12 +6,13 @@
 
 powe::SceneManager::SceneManager(PMRResource* memResource)
     : m_Scenes(memResource)
+    , m_DefaultAllocator(memResource)
 {
 }
 
 powe::Scene& powe::SceneManager::CreatScene(std::string_view sceneName) noexcept
 {
-    UniquePtr<Scene> scene = AllocateUnique<Scene>(DefaultAllocator::Engine);
+    UniquePtr<Scene> scene = AllocateUnique<Scene>(m_DefaultAllocator,m_DefaultAllocator);
     m_Scenes[std::string(sceneName)] = std::move(scene);
     return *m_Scenes[sceneName.data()];
 }

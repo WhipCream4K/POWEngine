@@ -31,7 +31,7 @@ powe::IArchetype* powe::ECSManager::GetArchetype(const Vector<ComponentID>& comp
 	return nullptr;
 }
 
-bool powe::ECSManager::IsContainsArchetype(const Vector<ComponentID>& compIDs) const
+bool powe::ECSManager::ContainsArchetype(const Vector<ComponentID>& compIDs) const
 {
 	return std::ranges::any_of(m_Archetypes, [&compIDs](const auto& pair)
 	{

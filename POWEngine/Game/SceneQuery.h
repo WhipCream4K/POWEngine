@@ -11,21 +11,24 @@ namespace powe
         
         // Query System
         template <typename... Args> requires (ComponentConcept<Args> && ...)
-        static ComponentCollection<Args...> QueryComponents(DynamicBitsetRange<ComponentView>& views,Vector<ComponentID>& idCache)
+        ComponentCollection<Args...> QueryComponents()
         {
-            idCache = MakeComponentRange<Args...>();
-            const auto targetView{ FindComponentView(views,idCache) };
+            m_CacheQueryIDs = MakeComponentRange<Args...>();
+            const auto targetView{ FindComponentView(m_CacheQueryIDs) };
             return ComponentCollection<Args...>{&targetView};
         }
 
-        static ComponentView& FindComponentView(DynamicBitsetRange<ComponentView>& views,const Vector<ComponentID>& compIDs)
+    private:
+        
+        ComponentView& FindComponentView(const Vector<ComponentID>& compIDs)
         {
-            return std::ranges::find_if(views,[&compIDs](auto& view)
+            return std::ranges::find_if(m_CachedComponentViews,[&compIDs](auto& view)
             {
                 return  IsArchetypeMatch(view.first,compIDs);
             })->second;
         }
 
-        
+        DynamicBitsetRange<ComponentView> m_CachedComponentViews;
+        Vector<ComponentID> m_CacheQueryIDs;
     };
 }

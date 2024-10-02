@@ -1,12 +1,14 @@
 #include "pch.h"
 #include "EngineLayer.h"
 
+#include <immintrin.h>
+
 #include "Utils/Utils.h"
 #include "Scene.h"
 
-powe::EngineLayer::EngineLayer(PMRResource* memResource)
-	: m_Scenes(memResource)
-	, m_DefaultAllocator(memResource)
+powe::EngineLayer::EngineLayer()
+	: m_Scenes(GetAllocator())
+	, m_DefaultAllocator(GetAllocator())
 	, m_ActiveScene(nullptr)
 {
 }
@@ -32,7 +34,6 @@ void powe::EngineLayer::OnUpdate(float deltaTime)
 	// Double buffer rendering
 	
 	m_ActiveScene->Update(deltaTime);
-	
 }
 
 void powe::EngineLayer::OnWindowEvents(const Window::EventQueue&)

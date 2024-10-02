@@ -31,6 +31,7 @@ namespace powe
     
     inline bool IsArchetypeMatch(const DynamicBitSet& archetypeKey, const Vector<ComponentID>& queryKey)
     {
+        // might throw watch out
         return std::ranges::all_of(queryKey, [&archetypeKey](const ComponentID& id) { return archetypeKey[id]; });
     }
 

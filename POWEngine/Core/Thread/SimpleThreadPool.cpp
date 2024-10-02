@@ -2,11 +2,11 @@
 #include "SimpleThreadPool.h"
 
 powe::SimpleThreadPool::SimpleThreadPool(std::pmr::memory_resource* memResource, size_t threadCount)
-	: m_Workers(memResource)
-	, m_MemResource(memResource)
-	, m_Stop(false)
+	: m_MemResource(memResource)
+	, m_Workers(memResource)
 	, m_ThreadCV()
 	, m_Mutex()
+	, m_Stop(false)
 {
 	for (size_t i = 0; i < threadCount; ++i) {
 		m_Workers.emplace_back([this] { Run(); });

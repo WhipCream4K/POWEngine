@@ -12,12 +12,12 @@ namespace powe
 	{
 	public:
 
-		EngineLayer(PMRResource* memResource = DefaultAllocator::Engine);
+		EngineLayer();
 
 		Scene& CreatScene(std::string_view sceneName);
 		void SetActiveScene(std::string_view sceneName) { m_ActiveScene = m_Scenes.at(sceneName.data()).get(); }
 
-		PMRResource* GetAllocator() const { return DefaultAllocator::Engine; }
+		static PMRResource* GetAllocator() { return DefaultAllocator::Engine; }
 
 		Renderer& GetRenderer() const { return *m_Renderer; }
 
