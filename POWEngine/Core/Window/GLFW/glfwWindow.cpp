@@ -45,11 +45,6 @@ bool powe::Window::PollEvents(EventQueue& eventQueue)
     return ShouldClose();
 }
 
-void powe::Window::SwapBuffers()
-{
-    
-}
-
 void powe::Window::SetFullscreen(bool fullscreen, bool borderless)
 {
 }

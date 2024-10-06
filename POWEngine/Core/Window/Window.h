@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-// #include "Core/CustomTypes.h"
+#include "Renderer/Viewport.h"
 
 namespace powe
 {
@@ -21,9 +21,7 @@ namespace powe
          * It's using the stack allocated event queue of the window.
          */
         bool PollEvents(EventQueue& eventQueue);
-
-
-        void SwapBuffers();
+        
         void SetFullscreen(bool fullscreen, bool borderless = false);
         void SetTitle(const std::string& title);
         void Resize(int width, int height);
@@ -47,12 +45,14 @@ namespace powe
     private:
 
         std::string m_Title;
+        Viewport m_Viewport;
         std::pmr::memory_resource* m_MemResource;
 
         int m_Width;
         int m_Height;
         bool m_Fullscreen;
         bool m_IsFocused;
+
         
         SharedPtr<void> m_WindowHandle;
     };

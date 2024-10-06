@@ -26,7 +26,7 @@ void powe::EngineLayer::OnAttach()
 
 void powe::EngineLayer::OnDetach()
 {
-
+	
 }
 
 void powe::EngineLayer::OnUpdate(float deltaTime)

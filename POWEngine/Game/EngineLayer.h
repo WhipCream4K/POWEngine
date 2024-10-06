@@ -7,7 +7,7 @@
 namespace powe
 {
 	class Scene;
-	class Renderer;
+	class SceneRenderer;
 	class EngineLayer final : public Layer
 	{
 	public:
@@ -19,7 +19,7 @@ namespace powe
 
 		static PMRResource* GetAllocator() { return DefaultAllocator::Engine; }
 
-		Renderer& GetRenderer() const { return *m_Renderer; }
+		SceneRenderer& GetRenderer() const { return *m_Renderer; }
 
 	protected:
 
@@ -31,7 +31,7 @@ namespace powe
 	private:
 
 		UnOrderedMap<std::string,UniquePtr<Scene>> m_Scenes;
-		UniquePtr<Renderer> m_Renderer;
+		UniquePtr<SceneRenderer> m_Renderer;
 		PMRResource* m_DefaultAllocator;
 		Scene* m_ActiveScene;
 	};

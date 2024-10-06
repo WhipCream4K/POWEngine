@@ -7,7 +7,7 @@
 #include "RenderPass.h"
 #include "Viewport.h"
 #include "Utils/Utils.h"
-
+#include "Core/IModule.h"
 
 namespace powe
 {
@@ -15,16 +15,19 @@ namespace powe
     class RenderContext;
     class Window;
     class BaseRenderSystem;
-    
-    class Renderer
+    class WindowManager;
+
+    class SceneRenderer : public IModule
     {
         
     public:
 
-        Renderer(size_t renderBufferCount = 2,PMRResource* memResource);
-        ~Renderer();
+        SceneRenderer(size_t renderBufferCount = 2,PMRResource* memResource);
+        ~SceneRenderer() override;
+
+        void OnStartUp(ModulesManager* manager) override;
         
-        void Render(Window* window);
+        void OnUpdate(float deltaTime) override;
         
         void AddPass(std::string_view passName,std::function<void(RenderContext&)> func,
             Vector<std::string> dependencies = {}, Viewport::Flag flag = Viewport::Flag::None);
@@ -43,11 +46,8 @@ namespace powe
         Vector<SharedPtr<RenderContext>> m_RenderContexts;
         uint8_t m_ActiveContextIndex;
 
-        // TODO: Maybe we should have a render system for each window
-        Window* m_ActiveWindow;
+        Viewport* m_SceneViewport;
         
-        std::mutex m_RenderQueueMutex;
-        std::condition_variable m_RenderCV;
         std::atomic_flag m_RenderFlag;
         std::jthread m_RenderThread;
         std::atomic_bool m_ThreadStop;

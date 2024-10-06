@@ -43,6 +43,8 @@ void powe::Application::Run()
 
         auto windowEvents = m_WindowManager->Update();
 
+        // TODO: Change to module dependency based update
+        
         for (auto& layer : m_LayerStack)
         {
             layer->OnWindowEvents(windowEvents);

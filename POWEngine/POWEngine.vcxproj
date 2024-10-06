@@ -189,6 +189,8 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Core\IModule.h" />
+    <ClInclude Include="Core\ModulesManager.h" />
     <ClInclude Include="Core\SubSystem.h" />
     <ClInclude Include="Core\Window\GLFW\glfwWindow.cpp" />
     <ClInclude Include="Core\Window\Window.h" />
@@ -220,8 +222,9 @@
     <ClInclude Include="Core\Logger\LoggerUtils.h" />
     <ClInclude Include="Game\Scene.h" />
     <ClInclude Include="Renderer\RenderContext.h" />
-    <ClInclude Include="Renderer\Renderer.h" />
+    <ClInclude Include="Renderer\SceneRenderer.h" />
     <ClInclude Include="Renderer\RenderPass.h" />
+    <ClInclude Include="Renderer\RenderTarget.h" />
     <ClInclude Include="Renderer\Viewport.h" />
     <ClInclude Include="Sound\SoundInfo.h" />
     <ClInclude Include="Utils\MacroDef.h" />
@@ -236,6 +239,8 @@
     <ClInclude Include="Random\Random.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Core\IModule.cpp" />
+    <ClCompile Include="Core\ModulesManager.cpp" />
     <ClCompile Include="Core\SubSystem.cpp" />
     <ClCompile Include="ECS\ComponentView.cpp" />
     <ClCompile Include="ECS\ComponentIDGen.cpp" />
@@ -339,8 +344,9 @@
     <ClCompile Include="Core\Thread\SimpleThreadPool.cpp" />
     <ClCompile Include="Game\Scene.cpp" />
     <ClCompile Include="Renderer\RenderContext.cpp" />
-    <ClCompile Include="Renderer\Renderer.cpp" />
+    <ClCompile Include="Renderer\SceneRenderer.cpp" />
     <ClCompile Include="Renderer\RenderPass.cpp" />
+    <ClCompile Include="Renderer\RenderTarget.cpp" />
     <ClCompile Include="Renderer\Viewport.cpp" />
     <ClCompile Include="Utils\ServiceLocator.cpp" />
     <ClCompile Include="Utils\Singleton.cpp" />
