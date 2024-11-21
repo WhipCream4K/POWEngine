@@ -1,15 +1,23 @@
 #include "pch.h"
+#include "Core/Application/Application.h"
 #include "SimpleThreadPool.h"
 
-powe::SimpleThreadPool::SimpleThreadPool(std::pmr::memory_resource* memResource, size_t threadCount)
-	: m_MemResource(memResource)
-	, m_Workers(memResource)
-	, m_ThreadCV()
+powe::SimpleThreadPool::SimpleThreadPool(size_t threadCount)
+	: m_ThreadCV()
 	, m_Mutex()
 	, m_Stop(false)
 {
-	for (size_t i = 0; i < threadCount; ++i) {
-		m_Workers.emplace_back([this] { Run(); });
+	
+	MemoryManager* memManager{ Application::GetAppService<MemoryManager>() };
+	if(memManager)
+	{
+		PMRResource* appResource{memManager->GetAllocator("Application")};;
+
+		m_Workers = Vector<std::jthread>{appResource};
+
+		for (size_t i = 0; i < threadCount; ++i) {
+			m_Workers.emplace_back([this] { Run(); });
+		}
 	}
 }
 
@@ -44,4 +52,10 @@ void powe::SimpleThreadPool::Run()
 
 		task();
 	}
+}
+
+powe::PMRResource* powe::SimpleThreadPool::GetResource() const
+{
+	// Warning could throw
+	return Application::GetAppService<MemoryManager>()->GetAllocator("Application");
 }

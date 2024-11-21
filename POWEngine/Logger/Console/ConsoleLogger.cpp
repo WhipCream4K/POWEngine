@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "ConsoleLogger.h"
+#include "Core/Application/Application.h"
 
 
 #include <iostream>
@@ -12,8 +13,8 @@
 
 #endif
 
-powe::ConsoleLogger::ConsoleLogger(std::pmr::memory_resource* memResource)
-	: m_MessageQueue(memResource)
+powe::ConsoleLogger::ConsoleLogger()
+	: m_MessageQueue(GetResource())
 	, m_Stop(false)
 {
 	m_MessageThread = std::jthread(&ConsoleLogger::Run, this);
@@ -104,4 +105,15 @@ void powe::ConsoleLogger::Run()
 
 #endif
 	}
+}
+
+powe::PMRResource* powe::ConsoleLogger::GetResource() const
+{
+	MemoryManager* memManager{ Application::GetAppService<MemoryManager>() };
+	if(memManager)
+	{
+		return memManager->GetAllocator("Application");
+	}
+
+	return std::pmr::get_default_resource();
 }

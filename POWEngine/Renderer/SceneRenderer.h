@@ -1,12 +1,9 @@
 ﻿#pragma once
 
 #include <functional>
-#include <queue>
-#include <semaphore>
 
 #include "RenderPass.h"
 #include "Viewport.h"
-#include "Utils/Utils.h"
 #include "Core/IModule.h"
 
 namespace powe
@@ -22,7 +19,8 @@ namespace powe
         
     public:
 
-        SceneRenderer(size_t renderBufferCount = 2,PMRResource* memResource);
+        SceneRenderer(size_t renderBufferCount = 2);
+        
         ~SceneRenderer() override;
 
         void OnStartUp(ModulesManager* manager) override;
@@ -30,7 +28,7 @@ namespace powe
         void OnUpdate(float deltaTime) override;
         
         void AddPass(std::string_view passName,std::function<void(RenderContext&)> func,
-            Vector<std::string> dependencies = {}, Viewport::Flag flag = Viewport::Flag::None);
+            Vector<std::string> dependencies = {}, RenderTarget::Flag = RenderTarget::None);
 
         void RemovePass(std::string_view passName);
         
@@ -51,8 +49,6 @@ namespace powe
         std::atomic_flag m_RenderFlag;
         std::jthread m_RenderThread;
         std::atomic_bool m_ThreadStop;
-        
-        PMRResource* m_DefaultAllocator;
         
     };
 }

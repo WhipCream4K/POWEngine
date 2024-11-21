@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Core/CustomTypes.h"
-#include "Core/Logger/Logger.h"
+#include "Logger/Logger.h"
 #include "LockFree/LFQueue.h"
 
 namespace powe
@@ -27,7 +27,7 @@ namespace powe
 	public:
 
 
-		ConsoleLogger(std::pmr::memory_resource* memResource);
+		ConsoleLogger();
 		ConsoleLogger(const ConsoleLogger&) = delete;
 		ConsoleLogger& operator=(const ConsoleLogger&) = delete;
 		ConsoleLogger(ConsoleLogger&&) noexcept = delete;
@@ -42,6 +42,7 @@ namespace powe
 	private:
 
 		void Run();
+		PMRResource* GetResource() const;
 
 		LFQueue<LogMsg> m_MessageQueue;
 		std::jthread m_MessageThread;

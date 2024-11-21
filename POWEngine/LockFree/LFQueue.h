@@ -26,7 +26,7 @@ namespace powe
 
 	public:
 
-		LFQueue(std::pmr::memory_resource* memResource)
+		LFQueue(std::pmr::memory_resource* memResource = std::pmr::new_delete_resource())
 			: m_MemResource(memResource)
 		{
 			static_assert(std::atomic<Node*>::is_always_lock_free, "Atomic Node is not lock free");

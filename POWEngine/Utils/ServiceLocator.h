@@ -18,10 +18,15 @@ namespace powe
 
 	public:
 
-		ServiceLocator(PMRResource* memResource)
-			: m_Services(memResource)
-			, m_MemResource(memResource)
-		{	
+		// ServiceLocator(PMRResource* memResource)
+		// 	: m_Services(memResource)
+		// 	, m_MemResource(memResource)
+		// {	
+		// }
+
+		ServiceLocator(SharedPtr<PMRResource> memResource)
+			: m_Services(memResource.get())
+		{
 		}
 
 		ServiceLocator(const ServiceLocator&) = delete;
@@ -33,7 +38,7 @@ namespace powe
 		template<typename T,typename... Args> requires is_one_of<T,IService...>
 		T* RegisterService(Args&&... args)
 		{
-			std::pmr::polymorphic_allocator<T> alloc{m_MemResource};
+			std::pmr::polymorphic_allocator<T> alloc(m_MemResource.get());
 			SharedPtr<T> service{std::allocate_shared<T>(alloc,std::forward<Args>(args)...)};
 			m_Services[std::type_index(typeid(T))] = service;
 			return service.get();
@@ -53,10 +58,13 @@ namespace powe
 
 	private:
 
+
         using ServiceVariant = std::variant<SharedPtr<IService>...>;
 
+		SharedPtr<PMRResource> m_MemResource;
 		UnOrderedMap<std::type_index, ServiceVariant> m_Services;
-		std::pmr::memory_resource* m_MemResource;
+
+		// std::pmr::memory_resource* m_MemResource;
 	};
 }
 

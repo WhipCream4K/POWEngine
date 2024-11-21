@@ -1,11 +1,9 @@
 ﻿#pragma once
 
-
 namespace powe
 {
     class RenderTarget;
     class RenderContext;
-
     class Viewport
     {
     public:
@@ -13,8 +11,7 @@ namespace powe
         void SetRenderTarget(const SharedPtr<RenderTarget>& renderTarget) {m_RenderTarget = renderTarget;}
         RenderTarget* GetRenderTarget() const { return m_RenderTarget.get(); }
         void Present(RenderContext& context) const;
-        void Clear(RenderContext& ctx) const;
-        
+        void Clear(RenderContext& ctx) const;        
 
     private:
 

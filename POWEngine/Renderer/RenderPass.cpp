@@ -1,7 +1,7 @@
 ﻿#include "pch.h"
 #include "RenderPass.h"
 
-powe::RenderPass::RenderPass(std::string_view passName, RenderFunction func, Viewport::Flag requireFlag)
+powe::RenderPass::RenderPass(std::string_view passName, RenderFunction func, RenderTarget::Flag requireFlag)
     : m_Name(passName)
       , m_ExecuteFunction(std::move(func))
       , m_RequireFlag(requireFlag)

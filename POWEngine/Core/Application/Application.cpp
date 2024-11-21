@@ -1,27 +1,34 @@
 #include "pch.h"
 #include "Application.h"
 #include "Core/WindowManager.h"
-#include "Core/Logger/Console/ConsoleLogger.h"
-#include "Core/Logger/LoggerUtils.h"
+#include "Logger/Console/ConsoleLogger.h"
+#include "Core/Memory/MemoryManager.h"
+#include "Core/Memory/Allocator.h"
+#include "Logger/LoggerUtils.h"
 
 powe::Application::Application(const AppDesc& appDesc)
     : m_AppDesc(appDesc)
 {
     m_Instance = this;
 
-    auto* appResource{DefaultAllocator::Application};
+    // Initilaize Application memory resource
+    SharedPtr<TrackableAllocator> appResource{std::make_shared<TrackableAllocator>()};
+    m_AppAllocator = appResource.get();
 
-    m_ServiceLocator = AllocateUnique<ServiceLocatorT>(appResource, appResource);
-    m_LayerStack = Vector<UniquePtr<Layer>>{appResource};
-    m_WindowManager = AllocateUnique<WindowManager>(appResource, appResource);
+    m_ServiceLocator = AllocateUnique<ServiceLocatorT>(m_AppAllocator, appResource);
+    m_LayerStack = Vector<UniquePtr<Layer>>{m_AppAllocator};
+    m_WindowManager = AllocateUnique<WindowManager>(m_AppAllocator, m_AppAllocator);
 
-    m_ServiceLocator->RegisterService<SimpleThreadPool>(appResource);
-    m_ServiceLocator->RegisterService<ConsoleLogger>(appResource);
+    // Register Application memory resource
+    MemoryManager* memManager{ m_ServiceLocator->RegisterService<MemoryManager>() };
+    memManager->RegisterAllocator("Application", m_AppAllocator);    
+    
+    m_ServiceLocator->RegisterService<SimpleThreadPool>();
+    m_ServiceLocator->RegisterService<ConsoleLogger>();
 }
 
 powe::Application::~Application()
 {
-    DefaultAllocator::ShutDown();
 }
 
 void powe::Application::PopLayer()

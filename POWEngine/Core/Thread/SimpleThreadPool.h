@@ -4,7 +4,6 @@
 #include <thread>
 #include <future>
 #include <queue>
-#include <functional>
 
 #include "Core/CustomTypes.h"
 #include "Utils/Service.h"
@@ -15,7 +14,7 @@ namespace powe
 	{
 	public:
 
-		SimpleThreadPool(std::pmr::memory_resource* memResource, size_t threadCount = (size_t)std::thread::hardware_concurrency());
+		SimpleThreadPool(size_t threadCount = (size_t)std::thread::hardware_concurrency());
 		SimpleThreadPool(const SimpleThreadPool&) = delete;
 		SimpleThreadPool& operator=(const SimpleThreadPool&) = delete;
 		SimpleThreadPool(SimpleThreadPool&&) noexcept = delete;
@@ -25,10 +24,10 @@ namespace powe
 	public:
 
 		template<typename Func, typename ... Args, typename Ret = std::invoke_result_t<Func, Args...>>
-		constexpr std::future<Ret> EnqueueFuture(Func&& fn, Args&&... args)
+		std::future<Ret> EnqueueFuture(Func&& fn, Args&&... args)
 		{
 
-			std::pmr::polymorphic_allocator<std::packaged_task<Ret(Args...)>> allocator{ m_MemResource };
+			std::pmr::polymorphic_allocator<std::packaged_task<Ret(Args...)>> allocator{ GetResource() };
 
 			auto task = std::allocate_shared<std::packaged_task<Ret(Args...)>>(allocator, [func = std::forward<Func>(fn), ...args = std::forward<Args>(args)]() mutable {
 				return func(std::forward<Args>(args)...);
@@ -52,9 +51,9 @@ namespace powe
 		}
 
 		template<typename Func, typename ... Args>
-		constexpr void Enqueue(Func&& fn, Args&&... args)
+		void Enqueue(Func&& fn, Args&&... args)
 		{
-			std::pmr::polymorphic_allocator<std::packaged_task<void()>> allocator{ m_MemResource };
+			std::pmr::polymorphic_allocator<std::packaged_task<void()>> allocator{ GetResource() };
 
 			auto task = std::allocate_shared<std::packaged_task<void()>>(allocator, [func = std::forward<Func>(fn), ...args = std::forward<Args>(args)]() mutable {
 				func(std::forward<Args>(args)...);
@@ -79,8 +78,9 @@ namespace powe
 	private:
 
 		void Run();
+	
+		PMRResource* GetResource() const;
 
-		std::pmr::memory_resource* m_MemResource;
 		Vector<std::jthread> m_Workers;
 		std::queue<std::packaged_task<void()>> m_Tasks;
 		std::condition_variable m_ThreadCV;

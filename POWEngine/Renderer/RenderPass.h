@@ -2,6 +2,7 @@
 #include <functional>
 
 #include "Viewport.h"
+#include "RenderTarget.h"
 
 
 namespace powe
@@ -13,7 +14,7 @@ namespace powe
         
     public:
         
-        RenderPass(std::string_view passName, RenderFunction func, Viewport::Flag requireFlag = Viewport::Flag::None);
+        RenderPass(std::string_view passName, RenderFunction func, RenderTarget::Flag requireFlag = RenderTarget::Flag::None);
 
         std::string_view GetName() const { return m_Name; }
         const Vector<std::string>& GetDependencies() const { return m_Dependencies; }
@@ -27,6 +28,6 @@ namespace powe
         // This needs dependencies pass to exist
         Vector<std::string> m_Dependencies;
         std::function<void(RenderContext&)> m_ExecuteFunction;
-        Viewport::Flag m_RequireFlag;
+        RenderTarget::Flag m_RequireFlag;
     };
 }

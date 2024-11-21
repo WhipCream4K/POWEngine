@@ -8,7 +8,14 @@ namespace powe
     {
     public:
 
-        virtual void Present(RenderContext& context);
+        enum Flag
+        {
+            None,
+            Color,
+            Depth
+        };
+
+        virtual void Present(RenderContext& renderContext,RenderTarget& other);
         virtual void Clear(RenderContext& context);
         virtual ~RenderTarget() = default;
     };

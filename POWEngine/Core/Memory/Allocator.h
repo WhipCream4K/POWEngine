@@ -27,7 +27,6 @@ namespace powe
 		{
 			void* ptr = m_Upstream->allocate(bytes, alignment);
 
-#ifdef _DEBUG
 
 			{
 				std::scoped_lock lock(m_Mutex);
@@ -35,7 +34,6 @@ namespace powe
 			}
 
 			m_TotalAllocateMemory.fetch_add(bytes);
-#endif
 
 
 			return ptr;
@@ -43,7 +41,6 @@ namespace powe
 
 		virtual void do_deallocate(void* ptr, std::size_t bytes, std::size_t alignment) override
 		{
-#ifdef _DEBUG
 
 			{
 				std::scoped_lock lock(m_Mutex);
@@ -55,7 +52,7 @@ namespace powe
 			}
 
 			m_TotalAllocateMemory.fetch_sub(bytes);
-#endif
+
 			m_Upstream->deallocate(ptr, bytes, alignment);
 		}
 

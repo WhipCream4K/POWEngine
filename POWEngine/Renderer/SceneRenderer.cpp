@@ -8,15 +8,14 @@
 #include "Core/WindowManager.h"
 #include "Core/Application/Application.h"
 
-powe::SceneRenderer::SceneRenderer(size_t renderBufferCount, PMRResource* memResource)
+powe::SceneRenderer::SceneRenderer(size_t renderBufferCount)
     : IModule("SceneRenderer")
-      , m_RenderPasses(memResource)
+      , m_RenderPasses()
       , m_ActiveContext(nullptr)
-      , m_RenderContexts(memResource)
+      , m_RenderContexts()
       , m_ActiveContextIndex(0)
-      , m_RenderFlag(ATOMIC_FLAG_INIT)
+      , m_RenderFlag()
       , m_ThreadStop(false)
-      , m_DefaultAllocator(memResource)
 {
     m_RenderContexts.reserve(renderBufferCount);
 }
@@ -42,7 +41,7 @@ void powe::SceneRenderer::OnUpdate(float)
 }
 
 void powe::SceneRenderer::AddPass(std::string_view passName, std::function<void(RenderContext&)> func,
-                                  Vector<std::string> dependencies, Viewport::Flag flag)
+                                  Vector<std::string> dependencies, RenderTarget::Flag flag)
 {
     // Resolve dependencies of viewport render pass
     // for example, if we have a pass that requires a depth buffer, depth buffer has to finished rendering before

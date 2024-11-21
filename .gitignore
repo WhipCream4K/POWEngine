@@ -361,7 +361,11 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
 /BurgerTime/Resources/Sound/Pao_sound.rar
 .idea/
 
 .vscode/
+CMakePresets.json
+build/
+compile_commands.json

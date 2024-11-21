@@ -74,6 +74,12 @@ namespace powe
 {
     using RawByte = std::byte;
 
+    template<typename T>
+    concept is_tuple = requires
+    {
+        typename std::tuple_size<T>::type;
+    };
+    
     template <typename UserClass>
     using SharedPtr = std::shared_ptr<UserClass>;
 
