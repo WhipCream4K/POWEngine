@@ -1,9 +1,0 @@
-[submodule "3rdPartyLib/glfw"]
-	path = 3rdPartyLib/glfw
-	url = https://github.com/glfw/glfw.git
-[submodule "3rdPartyLib/glm"]
-	path = 3rdPartyLib/glm
-	url = https://github.com/WhipCream4K/glm.git
-[submodule "3rdPartyLib/imgui"]
-	path = 3rdPartyLib/imgui
-	url = https://github.com/WhipCream4K/imgui.git
