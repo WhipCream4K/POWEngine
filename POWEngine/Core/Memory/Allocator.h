@@ -70,30 +70,41 @@ namespace powe
 
 	};
 	
+	struct PolyMorphicDeleter
+	{
+		std::pmr::memory_resource* resource;
+
+		PolyMorphicDeleter(std::pmr::memory_resource* upStream = std::pmr::get_default_resource())
+			: resource(upStream)
+		{
+		}
+
+		template<typename T>
+		void operator()(T* ptr) const noexcept
+		{
+			ptr->~T();
+			resource->deallocate(ptr, sizeof(T), alignof(T));
+		}
+	};
+
 	template<typename T>
 	struct AllocatorDeleter
 	{
 		
-		std::pmr::memory_resource* allocator;
+		std::pmr::memory_resource* resource;
 
 		AllocatorDeleter(std::pmr::memory_resource* upStream)
-			: allocator(upStream)
+			: resource(upStream)
 		{
 		}
 
 		AllocatorDeleter() = default;
 		
-		void operator()(T* ptr) const noexcept
+		template<typename U>
+		void operator()(U* ptr) const noexcept
 		{
-			if constexpr (!std::is_void_v<T>)
-			{
-				ptr->~T();
-				allocator->deallocate(ptr, sizeof(T), alignof(T));
-			}
-			else
-			{
-				allocator->deallocate(ptr, 0, alignof(std::max_align_t));
-			}
+			ptr->~U();
+			resource->deallocate(ptr, sizeof(U), alignof(U));
 		}
 	};
 

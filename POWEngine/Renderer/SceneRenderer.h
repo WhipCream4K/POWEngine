@@ -1,10 +1,11 @@
 ﻿#pragma once
 
-#include <functional>
+#include <future>
 
 #include "RenderPass.h"
 #include "Viewport.h"
 #include "Core/IModule.h"
+#include "RenderGraph.h"
 
 namespace powe
 {
@@ -13,7 +14,7 @@ namespace powe
     class Window;
     class BaseRenderSystem;
     class WindowManager;
-
+    class SceneRenderGraph;
     class SceneRenderer : public IModule
     {
         
@@ -25,29 +26,21 @@ namespace powe
 
         void OnStartUp(ModulesManager* manager) override;
         
-        void OnUpdate(float deltaTime) override;
-        
-        void AddPass(std::string_view passName,std::function<void(RenderContext&)> func,
-            Vector<std::string> dependencies = {}, RenderTarget::Flag = RenderTarget::None);
+        SceneRenderGraph& GetSceneRenderGraph() { return m_SceneRenderGraph; }
 
-        void RemovePass(std::string_view passName);
+        std::future<void> Render();
         
     private:
 
         void Run();
-
-        void PassResolve(RenderPass* pass);
-
-        Vector<RenderPass> m_RenderPasses;
-
-        RenderContext* m_ActiveContext;
-        Vector<SharedPtr<RenderContext>> m_RenderContexts;
-        uint8_t m_ActiveContextIndex;
-
-        Viewport* m_SceneViewport;
+        
+        // SceneRender needs render interface to exist for it to function hence shared ptr
+        SharedPtr<RenderContext> m_RenderContext;
+        SceneRenderGraph m_SceneRenderGraph;
         
         std::atomic_flag m_RenderFlag;
         std::jthread m_RenderThread;
+        std::promise<void> m_RenderPromise;
         std::atomic_bool m_ThreadStop;
         
     };

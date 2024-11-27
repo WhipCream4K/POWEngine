@@ -18,12 +18,6 @@ namespace powe
 
 	public:
 
-		// ServiceLocator(PMRResource* memResource)
-		// 	: m_Services(memResource)
-		// 	, m_MemResource(memResource)
-		// {	
-		// }
-
 		ServiceLocator(SharedPtr<PMRResource> memResource)
 			: m_Services(memResource.get())
 		{
@@ -63,8 +57,6 @@ namespace powe
 
 		SharedPtr<PMRResource> m_MemResource;
 		UnOrderedMap<std::type_index, ServiceVariant> m_Services;
-
-		// std::pmr::memory_resource* m_MemResource;
 	};
 }
 

@@ -2,6 +2,7 @@
 
 namespace powe
 {
+
     class ModulesManager;
     class IModule
     {
@@ -16,15 +17,24 @@ namespace powe
 
         virtual void OnStartUp(ModulesManager*) = 0;
         virtual void OnExit(ModulesManager*) = 0;
-        virtual void OnUpdate(float deltaTime) = 0;
-        virtual bool ShouldUpdate() const { return true; }
         
-        const std::string& GetName() const { return m_Name; }
+        std::string_view GetName() const { return m_Name; }
+
+        template<typename T> requires std::is_base_of_v<IModule, T>
+        static uint32_t GetID() 
+        { 
+            static const uint32_t id{m_ModulesID++};
+            return id;
+        }
         
     private:
 
+        static std::atomic_uint32_t m_ModulesID;
+
         std::string m_Name;
-        std::vector<std::string> m_Dependencies;
     };
+
+    template<typename T>
+    concept ModuleConcept = std::is_base_of_v<IModule, T>;
 }
 

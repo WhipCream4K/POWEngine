@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Core/CustomTypes.h"
-#include "Logger/Logger.h"
+#include "Logger/BaseLogger.h"
 #include "LockFree/LFQueue.h"
 
 namespace powe
@@ -15,13 +15,13 @@ namespace powe
 #define RedText				"\033[38;2;255;0;0m"
 #define ResetText			"\033[0m"
 
-	class ConsoleLogger : public Logger
+	class ConsoleLogger : public BaseLogger
 	{
 
 		struct LogMsg
 		{
 			LogSeverity severity;
-			std::string message;
+			std::function<std::string()> format;
 		};
 
 	public:
@@ -34,20 +34,18 @@ namespace powe
 		ConsoleLogger& operator=(ConsoleLogger&&) noexcept = delete;
 		~ConsoleLogger() override;
 
-	public:
-
-		void LogLevel(LogSeverity severity, const std::string& message, const std::string& fromWhere = "") override;
-		void Log(const std::string& message) override;
+		void LogLevel(LogSeverity severity, const std::function<std::string()>& format) override;
 
 	private:
 
 		void Run();
-		PMRResource* GetResource() const;
+		SharedPtr<PMRResource> GetResource() const;
 
 		LFQueue<LogMsg> m_MessageQueue;
 		std::jthread m_MessageThread;
 		std::mutex m_Mutex;
 		std::condition_variable m_ThreadCV;
+
 		bool m_Stop;
 
 	};

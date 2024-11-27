@@ -1,7 +1,6 @@
 ﻿#pragma once
-#include "Core/WindowManager.h"
+
 #include <functional>
-#include <variant>
 
 namespace powe
 {
@@ -36,7 +35,7 @@ namespace powe
          * using glfw to get the state of the keys
          * @param events injection events from window manager
          */
-        void OnWindowEvents(const Window::EventQueue& events);
+        // void OnWindowEvents(const Window::EventQueue& events);
 
 
         // TODO: Make binding tied to the lifetime of the attached object

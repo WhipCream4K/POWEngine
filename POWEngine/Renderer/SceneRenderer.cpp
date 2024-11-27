@@ -4,20 +4,14 @@
 #include "RenderContext.h"
 #include "RenderPass.h"
 #include "Core/ModulesManager.h"
-#include "Utils/Utils.h"
-#include "Core/WindowManager.h"
-#include "Core/Application/Application.h"
 
 powe::SceneRenderer::SceneRenderer(size_t renderBufferCount)
     : IModule("SceneRenderer")
-      , m_RenderPasses()
-      , m_ActiveContext(nullptr)
-      , m_RenderContexts()
-      , m_ActiveContextIndex(0)
-      , m_RenderFlag()
-      , m_ThreadStop(false)
+    , m_RenderContext()
+    , m_SceneRenderGraph(renderBufferCount)
+    , m_RenderFlag()
+    , m_ThreadStop(false)
 {
-    m_RenderContexts.reserve(renderBufferCount);
 }
 
 powe::SceneRenderer::~SceneRenderer()
@@ -27,35 +21,14 @@ powe::SceneRenderer::~SceneRenderer()
     m_RenderFlag.notify_one();
 }
 
-void powe::SceneRenderer::OnStartUp(ModulesManager* manager)
+void powe::SceneRenderer::OnStartUp(ModulesManager*)
 {
-    manager->AddModuleDependencies("Renderer", {"CoreEngine"});
 }
 
-void powe::SceneRenderer::OnUpdate(float)
+std::future<void> powe::SceneRenderer::Render()
 {
-    m_ActiveContextIndex = (m_ActiveContextIndex + 1) % m_RenderContexts.size();
-    m_ActiveContext = m_RenderContexts[m_ActiveContextIndex].get();
     m_RenderFlag.test_and_set(std::memory_order_acquire);
-    m_RenderFlag.notify_one();
-}
-
-void powe::SceneRenderer::AddPass(std::string_view passName, std::function<void(RenderContext&)> func,
-                                  Vector<std::string> dependencies, RenderTarget::Flag flag)
-{
-    // Resolve dependencies of viewport render pass
-    // for example, if we have a pass that requires a depth buffer, depth buffer has to finished rendering before
-    // this pass can start rendering
-}
-
-void powe::SceneRenderer::RemovePass(std::string_view passName)
-{
-    auto findItr = std::ranges::find_if(m_RenderPasses,
-                                        [passName](const auto& pass) { return pass.GetName() == passName; });
-    if (findItr != m_RenderPasses.end())
-    {
-        m_RenderPasses.erase(findItr);
-    }
+    return m_RenderPromise.get_future();
 }
 
 void powe::SceneRenderer::Run()
@@ -66,21 +39,10 @@ void powe::SceneRenderer::Run()
 
         if (m_ThreadStop) break;
 
-        // Is Able to Render
-
+        m_SceneRenderGraph.Execute(*m_RenderContext);
         
-
-        for (auto& pass : m_RenderPasses)
-        {
-            pass.Execute(*m_ActiveContext);
-        }
-
-        m_SceneViewport->Present(*m_ActiveContext);
+        m_RenderPromise.set_value();
 
         m_RenderFlag.clear(std::memory_order_release);
     }
-}
-
-void powe::SceneRenderer::PassResolve(RenderPass* pass)
-{
 }

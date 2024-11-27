@@ -1,7 +1,6 @@
 #pragma once
 
 #include <vector>
-#include <variant>
 #include <functional>
 
 #include "ComponentIDGen.h"
@@ -20,9 +19,10 @@ namespace powe
         IArchetype& operator=(IArchetype&&) = default;
         virtual ~IArchetype() = default;
 
-        virtual void GetComponents(const Vector<ComponentID>& compIDs, Vector<void*>& outAddress) const = 0;
-        virtual void* GetFrontComponentAddress() const = 0;
-        virtual void InsertInvalidCallback(std::function<void(IArchetype*)> callback) = 0;
+        virtual void GetComponents(const Vector<ComponentID>& compIDs, Vector<CompAddress>& outAddress) const = 0;
+        virtual Vector<ComponentID> GetComponentIDs() const = 0;
+        virtual CompAddress GetFrontComponentAddress() const = 0;
+        virtual void AddArchetypeInvalidCallback(std::function<void(IArchetype*)> callback) = 0;
     };
 
     template <ComponentConcept... Args>
@@ -59,7 +59,7 @@ namespace powe
         constexpr auto crbegin() const { return m_Components.crbegin(); }
         constexpr auto crend() const { return m_Components.crend(); }
 
-        void GetComponents(const Vector<ComponentID>& compIDs, Vector<void*>& outAddress) const override
+        void GetComponents(const Vector<ComponentID>& compIDs, Vector<CompAddress>& outAddress) const override
         {
             for (const auto& compID : compIDs)
             {
@@ -69,7 +69,7 @@ namespace powe
                     {
                         if (compID == ComponentIDGen::Get<std::decay_t<U>...>())
                         {
-                            outAddress.emplace_back(&components);
+                            ((outAddress.emplace_back(&components)), ...);
                         }
                     }, componentBlock);
                 }

@@ -1,23 +1,17 @@
 #pragma once
 
 #include "AppDesc.h"
-#include "Utils/Utils.h"
-#include "Logger/Logger.h"
-#include "Utils/ServiceLocator.h"
-#include "Core/Thread/SimpleThreadPool.h"
-#include "Core/Memory/MemoryManager.h"
-#include "Core/Layer.h"
+#include "Core/ModulesManager.h"
 #include "Core/Clock/Clock.h"
 
 
 namespace powe
 {
 	class Core;
-	class Layer;
 	class WindowManager;
-
-	using ServiceLocatorT = ServiceLocator<Logger,SimpleThreadPool,MemoryManager>;
-
+	class AppEvent;
+	class Window;
+	class InputManager;
 	class Application final
 	{
 	public:
@@ -31,40 +25,38 @@ namespace powe
 		
 		static Application& Get() { return *m_Instance; }
 
-		template<LayerConcept T>
-		Layer* PushLayer(T&& layer);
-		void PopLayer();
+		template<ModuleConcept T>
+		static SharedPtr<T> GetModule() 
+		{ 
+			return m_Instance->m_AppModules->GetModule<T>();
+		}
 
 		void Run();
-		
-		WindowManager& GetWindowManager() const { return *m_WindowManager; }
-		
-		template<typename T>
-		static T* GetAppService() 
-		{ 
-			return m_Instance->GetAppService<T>();
-		}
+		ModulesManager& GetModulesManager() const { return *m_AppModules; }
+	
+		void RegisterAppEvent(const SharedPtr<AppEvent>& appEvent) { m_AppEvents.emplace_back(appEvent); }
+		void RemoveAppEvent(const SharedPtr<AppEvent>& appEvent);
+
+		bool IsInMainThread() const { return std::this_thread::get_id() == m_AppThreadID; }
 
 	private:
 
-		// Allocator need to initialize first
+		Vector<SharedPtr<AppEvent>> m_AppEvents;
+		uint32_t m_CurrentActiveEvents;
 
-		Vector<UniquePtr<Layer>> m_LayerStack;
+		// Core components
 		Clock m_Clock;
 		UniquePtr<WindowManager> m_WindowManager;
-		UniquePtr<ServiceLocatorT> m_ServiceLocator;
+		UniquePtr<InputManager> m_InputManager;
+		UniquePtr<ModulesManager> m_AppModules;
+
+
+		Window* m_AppWindow;
 		AppDesc m_AppDesc;
 		PMRResource* m_AppAllocator;
+		std::thread::id m_AppThreadID;
 
 		static Application* m_Instance;
 	};
-	template<LayerConcept T>
-	Layer* Application::PushLayer(T&& layer)
-	{
-		auto layerPtr = AllocateUnique<T>(m_AppAllocator, std::forward<T>(layer));
-		m_LayerStack.emplace_back(std::move(layerPtr));
-		m_LayerStack.back()->OnAttach();
-		return m_LayerStack.back().get();
-	}
 
 }

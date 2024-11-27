@@ -8,14 +8,11 @@ namespace powe
     {
     public:
 
-        void SetRenderTarget(const SharedPtr<RenderTarget>& renderTarget) {m_RenderTarget = renderTarget;}
-        RenderTarget* GetRenderTarget() const { return m_RenderTarget.get(); }
-        void Present(RenderContext& context) const;
-        void Clear(RenderContext& ctx) const;        
+        Viewport(PMRResource* memResource);
+        virtual ~Viewport() = default;
 
-    private:
-
-        SharedPtr<RenderTarget> m_RenderTarget;
+        virtual void Init(RenderContext& ctx) = 0;
+        virtual void* GetSubSystem() = 0;
     };
 }
 

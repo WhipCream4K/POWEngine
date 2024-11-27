@@ -3,20 +3,19 @@
 
 
 powe::ComponentView::ComponentView(PMRResource* memResource, ECSManager& manager, const Vector<ComponentID>& compIDs)
-    : m_ECSManager{manager}
-      , m_ComponentsAddresses{memResource}
+      : m_ComponentsAddresses{memResource}
 {
-    Vector<IArchetype*> outArchetype{};
+    Vector<IArchetype*> outArchetype(memResource);
 
-    m_ECSManager->GetArchetypes(compIDs, outArchetype);
+    manager.GetArchetypes(compIDs, outArchetype);
     for (auto& archetype : outArchetype)
     {
-        Vector<void*> componentAddresses{memResource};
+        Vector<void*> componentAddresses(memResource);
         archetype->GetComponents(compIDs, componentAddresses);
         m_ComponentsAddresses.try_emplace(archetype, componentAddresses);
-        archetype->InsertInvalidCallback([this](IArchetype* archetype)
+        archetype->AddArchetypeInvalidCallback([this](IArchetype* archetype)
         {
-            ResetComponentAddresses(archetype);
+            this->ResetComponentAddresses(archetype);
         });
     }
 }

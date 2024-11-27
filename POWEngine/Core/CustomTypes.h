@@ -9,7 +9,7 @@
 #include <unordered_set>
 #include <unordered_map>
 #include <memory_resource>
-#include <string>
+#include <functional>
 
 template <typename FnType>
 struct FnTraits
@@ -98,11 +98,8 @@ namespace powe
     template <typename UserClass>
     using WeakPtr = std::weak_ptr<UserClass>;
 
-    template<typename T>
-    struct AllocatorDeleter;
-
-    template <typename UserClass, typename Deleter = AllocatorDeleter<UserClass>>
-    using UniquePtr = std::unique_ptr<UserClass, Deleter>;
+    template <typename UserClass,typename Deleter = PolyMorphicDeleter>
+    using UniquePtr = std::unique_ptr<UserClass,Deleter>;
 
     template <typename T>
     using AlignedStorageT = std::aligned_storage_t<sizeof(T), alignof(T)>;

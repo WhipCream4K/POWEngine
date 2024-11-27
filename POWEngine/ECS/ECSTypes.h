@@ -62,5 +62,7 @@ namespace powe
 
 	template<typename Val>
 	using DynamicBitsetRange = Vector<std::pair<DynamicBitSet,Val>>;
+
+	using CompAddress = void*;
 	
 }

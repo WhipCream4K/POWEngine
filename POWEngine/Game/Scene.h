@@ -40,28 +40,13 @@ namespace powe
                 return typeid(*sceneSystem.get()) == typeid(T);
             });
         }
-
-
-        // EngineLayer is guaranteed to be valid as long as Scene Exists
-        InputManager& GetInputManager() const {return *m_InputManager.get();}
+        
         ECSManager& GetECSManager() const { return *m_ECSManager.get(); }
         const std::string& GetName() const { return m_SceneName; }
-
-        /**
-         * Query components from the scene that can be used to iterate over the components
-         * @tparam Args Components to query
-         * @return iterator to the components
-         */
-        template<typename... Args> requires (ComponentConcept<Args> && ...)
-        constexpr ComponentCollection<Args...> Query()
-        {
-            return m_SceneQuery.QueryComponents<Args...>();
-        }
 
     private:
         
         UniquePtr<ECSManager> m_ECSManager;
-        UniquePtr<InputManager> m_InputManager;
         Vector<UniquePtr<SceneSystem>> m_SceneSystems;
         
         SceneQuery m_SceneQuery;

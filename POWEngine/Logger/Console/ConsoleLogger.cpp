@@ -1,7 +1,8 @@
 #include "pch.h"
 #include "ConsoleLogger.h"
 #include "Core/Application/Application.h"
-
+#include "Utils/Utils.h"
+#include "Logger/Logger.h"
 
 #include <iostream>
 
@@ -14,8 +15,7 @@
 #endif
 
 powe::ConsoleLogger::ConsoleLogger()
-	: m_MessageQueue(GetResource())
-	, m_Stop(false)
+	: m_Stop(false)
 {
 	m_MessageThread = std::jthread(&ConsoleLogger::Run, this);
 }
@@ -31,32 +31,9 @@ powe::ConsoleLogger::~ConsoleLogger()
 	m_MessageThread.join();
 }
 
-void powe::ConsoleLogger::LogLevel(LogSeverity severity, const std::string& message, const std::string& fromWhere)
+void powe::ConsoleLogger::LogLevel(LogSeverity severity, const std::function<std::string()>& format)
 {
-	std::string log{};
-
-	switch (severity)
-	{
-	case LogSeverity::Info:
-		log.append(LogInfo + message + " " + fromWhere);
-		break;
-	case LogSeverity::Warning:
-		log.append(LogWarning + message + " " + fromWhere);
-		break;
-	case LogSeverity::Error:
-		log.append(LogError + message + " " + fromWhere);
-		break;
-	default:
-		break;
-	}
-
-	m_MessageQueue.push(LogMsg(severity, log));
-	m_ThreadCV.notify_one();
-}
-
-void powe::ConsoleLogger::Log(const std::string& message)
-{
-	m_MessageQueue.push(LogMsg(LogSeverity::Info, message));
+	m_MessageQueue.push(LogMsg(severity, std::ref(format)));
 	m_ThreadCV.notify_one();
 }
 
@@ -64,11 +41,11 @@ void powe::ConsoleLogger::Run()
 {
 	while (true)
 	{
-		LogMsg msg;
+		LogMsg msg{};
 
 		{
 			std::unique_lock lock(m_Mutex);
-			m_ThreadCV.wait(lock, [this] {return m_Stop || !m_MessageQueue.empty(); });
+			m_ThreadCV.wait(lock, [this] {return m_Stop || !m_MessageQueue.empty();});
 
 			if (m_Stop && m_MessageQueue.empty())
 				return;
@@ -97,7 +74,9 @@ void powe::ConsoleLogger::Run()
 
 #endif
 
-		std::cout << msg.message << '\n';
+		const std::string fullmsg{ std::string(LogInfo )+ " " + msg.format() };
+
+		std::clog << fullmsg << '\n';
 
 #ifdef _WIN32
 
@@ -107,13 +86,11 @@ void powe::ConsoleLogger::Run()
 	}
 }
 
-powe::PMRResource* powe::ConsoleLogger::GetResource() const
+powe::SharedPtr<powe::PMRResource> powe::ConsoleLogger::GetResource() const
 {
-	MemoryManager* memManager{ Application::GetAppService<MemoryManager>() };
-	if(memManager)
+	if(const auto logger{ Application::GetModule<powe::Logger>() })
 	{
-		return memManager->GetAllocator("Application");
+		return logger->GetResource();
 	}
-
-	return std::pmr::get_default_resource();
+	return GetAppResource();
 }

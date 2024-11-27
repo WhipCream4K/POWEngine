@@ -1,18 +1,17 @@
 #pragma once
 
 #include <mutex>
-
-#include "Utils/Service.h"
+#include "Utils/ThreadSafeSingleton.h"
 
 namespace powe
 {
 	class TrackableAllocator;
 
-	class MemoryManager : public IService<MemoryManager>
+	class MemoryManager : public ThreadSafeSingleton<MemoryManager>
 	{
 	public:
 
-		MemoryManager() = default;
+		MemoryManager(); 
 		MemoryManager(const MemoryManager&) = delete;
 		MemoryManager& operator=(const MemoryManager&) = delete;
 		MemoryManager(MemoryManager&&) = delete;
@@ -20,15 +19,20 @@ namespace powe
 
 		virtual ~MemoryManager() = default;
 
-		PMRResource* GetAllocator(std::string_view name) const;
-		SharedPtr<PMRResource> GetSharedAllocator(std::string_view name) const;
+		// Pretty much just register the allocator that will use for creating new allocator 
+		static void Init(const SharedPtr<PMRResource>& memResource);
+
+		SharedPtr<PMRResource> GetAllocator(std::string_view name) const;
 		void RegisterAllocator(std::string_view name, PMRResource* allocator);
 		void RegisterAllocator(std::string_view name, SharedPtr<PMRResource> allocator);
-		PMRResource* NewAllocator(std::string_view name);
+
+		// Provide a default allocator when called
+		SharedPtr<PMRResource> NewAllocator(std::string_view name);
 	
 	private:
 
 		UnOrderedMap<std::string, SharedPtr<PMRResource>> m_AllocatorMap;
+		SharedPtr<PMRResource> m_DefaultAllocator;
 	};
 
 }

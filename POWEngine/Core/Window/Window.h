@@ -1,59 +1,36 @@
 #pragma once
 
-#include <string>
-#include "Renderer/Viewport.h"
 
 namespace powe
 {
-    class Viewport;
-    class Window final
+    // Interface for Window Subsystem
+    class Window
     {
-    public:
-
-        using EventQueue = std::pair<Window*,Vector<uint32_t>>;
+    public:    
         
-        Window(PMRResource* memResource, std::string_view title, int width, int height);
-
-        void Initialize();
+        Window() = default;
+        Window(const Window&) = default;
+        Window& operator=(const Window&) = default;
+        Window(Window&&) = default;
+        Window& operator=(Window&&) = default;
+        virtual ~Window() = default;
 
         /**
          * Poll events will fill the event queue with events that have occurred since the last time it was called.
          * It's using the stack allocated event queue of the window.
          */
-        bool PollEvents(EventQueue& eventQueue);
+        // bool PollEvents(EventQueue& eventQueue);
         
-        void SetFullscreen(bool fullscreen, bool borderless = false);
-        void SetTitle(const std::string& title);
-        void Resize(int width, int height);
-        bool IsFocused() const;
-
-        template <typename T>
-        T* GetWindowHandle() const
-        {
-            return static_cast<T*>(m_WindowHandle.get());
-        }
-
-        bool ShouldClose() const;
-        int GetWidth() const { return m_Width; }
-        int GetHeight() const { return m_Height; }
-        bool IsFullscreen() const { return m_Fullscreen; }
-        const std::string& GetTitle() const { return m_Title; }
-
-        static void InitializeLibrary();
-        static void TerminateLibrary();
-
-    private:
-
-        std::string m_Title;
-        Viewport m_Viewport;
-        std::pmr::memory_resource* m_MemResource;
-
-        int m_Width;
-        int m_Height;
-        bool m_Fullscreen;
-        bool m_IsFocused;
-
+        virtual void SetFullscreen(bool fullscreen, bool borderless) = 0;
+        virtual void SetTitle(std::string_view title)= 0;
+        virtual void Resize(uint32_t width, uint32_t height) = 0;
         
-        SharedPtr<void> m_WindowHandle;
+        virtual bool IsClosed() const noexcept = 0;
+        virtual bool IsFocused() const noexcept = 0;
+        virtual uint32_t GetWidth() const noexcept = 0;
+        virtual uint32_t GetHeight() const noexcept = 0;
+        virtual bool IsFullscreen() const noexcept = 0;
+        virtual std::string_view GetTitle() const noexcept = 0;
+
     };
 }

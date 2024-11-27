@@ -1,14 +1,7 @@
 ﻿#pragma once
 
 #include "Core/IModule.h"
-
-namespace powe
-{
-
-    template<typename T>
-    concept ModuleConcept = std::is_base_of_v<IModule, T>;
-}
-
+#include "Utils/Utils.h"
 
 namespace powe
 {
@@ -16,28 +9,56 @@ namespace powe
     {
     public:
 
-        void AddModule(UniquePtr<IModule>&& module);
-        void RemoveModule(std::string_view moduleName);
+        // Adding modules independently so others can manage the modules outside before adding to the modules map
+        template<ModuleConcept T>
+        void AddModule(const SharedPtr<T>& module)
+        {
+            const uint32_t moduleID{ IModule::GetID<T>() };
+            m_Modules.try_emplace(moduleID, module);
+        }
 
-        void AddModuleDependencies(std::string_view moduleName, const Vector<std::string>& dependencies);
+        void RemoveModule(uint32_t id);
 
         template<ModuleConcept T>
-        T* GetModule(std::string_view moduleName)
+        SharedPtr<T> GetModule() // User should save as WeakPtr because modules can be unloaded any time
         {
-            for (auto& module : m_Modules)
+            const uint32_t moduleID{ IModule::GetID<T>() };
+            const auto it{ m_Modules.find(moduleID) };
+            if (it != m_Modules.end())
             {
-                if (module->GetName() == moduleName)
-                {
-                    return static_cast<T*>(module.get());
-                }
+                return std::static_pointer_cast<T>(it->second);
+            }
+            return nullptr;
+        }
+
+        SharedPtr<IModule> GetModule(uint32_t id);
+
+        template<ModuleConcept T,typename ...Args>
+        SharedPtr<T> CreateModule(const SharedPtr<PMRResource>& memResource = nullptr,Args&&... args)
+        {
+            const uint32_t moduleID{ IModule::GetID<T>() };
+            const auto it{ m_Modules.find(moduleID) };
+            if (it != m_Modules.end())
+            {
+                return std::static_pointer_cast<T>(it->second);
             }
 
-            return nullptr;
+            SharedPtr<PMRResource> resc{ memResource }; // Copy the resource
+
+            if(resc == nullptr)
+            {
+                resc = GetAppResource();
+            }
+
+            SharedPtr<T> module{ std::allocate_shared<T>(resc, std::forward<Args>(args)...) };
+            m_Modules.try_emplace(moduleID, module);
+            return module;
         }
         
     private:
 
-        Vector<UniquePtr<IModule>> m_Modules;
+        UnOrderedMap<uint32_t,SharedPtr<IModule>> m_Modules;
+        uint32_t m_CurrentActiveModules;
     };
 }
 

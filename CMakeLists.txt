@@ -12,28 +12,14 @@ else()
     set(ARCHITECTURE "Win32")
 endif()
 
-# adding sources files 
-function(CollectSources dir out_var)
-    file(GLOB entries "${dir}/*")
-
-    foreach(entry ${entries})
-        if(IS_DIRECTORY ${entry})
-            CollectSources(${entry} files)
-            list(APPEND ${out_var} ${files})
-        elseif(entry MATCHES "\\.(cpp)$")
-            list(APPEND ${out_var} ${entry})
-        endif()
-    endforeach()
-
-    set(${out_var} ${${out_var}} PARENT_SCOPE)
-endfunction()
-
-CollectSources(${CMAKE_CURRENT_SOURCE_DIR}/POWEngine SRCS)
+# gather source files
+include(collect_sources.cmake)
+GetPOWSources(SRCS)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/POWEngine ${CMAKE_CURRENT_SOURCE_DIR}/POWEngine/PCH)
 
 # set output directory
-set(OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/bin/${PROJECT_NAME}/${CMAKE_BUILD_TYPE}/${ARCHITECTURE})
+set(OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/bin/${PROJECT_NAME}/${ARCHITECTURE}/${CMAKE_BUILD_TYPE})
 
 add_library(${PROJECT_NAME} STATIC ${SRCS})
 
@@ -47,8 +33,5 @@ target_precompile_headers(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/POWEngine/PCH/pch.h
 )
 
-
-
-
-
-
+# dependencies
+include(dependencies.cmake)
