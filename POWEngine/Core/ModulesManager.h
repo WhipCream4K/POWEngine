@@ -51,13 +51,24 @@ namespace powe
             }
 
             SharedPtr<T> module{ std::allocate_shared<T>(resc, std::forward<Args>(args)...) };
-            m_Modules.try_emplace(moduleID, module);
+            m_Modules.try_emplace(moduleID, std::make_pair(module, resc));
             return module;
+        }
+
+        SharedPtr<PMRResource> GetModuleResource(uint32_t id);
+
+        template<ModuleConcept T>
+        SharedPtr<PMRResource> GetModuleResource() 
+        { 
+            return GetModuleResource(IModule::GetID<T>()); 
         }
         
     private:
 
-        UnOrderedMap<uint32_t,SharedPtr<IModule>> m_Modules;
+        using ModulePair = std::pair<SharedPtr<IModule>, SharedPtr<PMRResource>>;
+
+        UnOrderedMap<uint32_t,ModulePair> m_Modules;
+        // UnOrderedMap<uint32_t,SharedPtr<IModule>> m_UnloadedModules>
         uint32_t m_CurrentActiveModules;
     };
 }

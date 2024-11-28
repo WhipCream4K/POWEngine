@@ -1,27 +1,29 @@
 #include "pch.h"
 #include "Core/Application/Application.h"
+#include "Core/ModulesManager.h"
 #include "SimpleThreadPool.h"
 
-powe::SimpleThreadPool::SimpleThreadPool(size_t threadCount)
-	: m_ThreadCV()
+using namespace powe;
+
+SimpleThreadPool::SimpleThreadPool(size_t threadCount)
+	: IModule("SimepleThreadPool")
+	, m_ThreadCount(threadCount)
+	, m_ThreadCV()
 	, m_Mutex()
 	, m_Stop(false)
 {
-	
-	MemoryManager* memManager{ Application::GetAppService<MemoryManager>() };
-	if(memManager)
-	{
-		PMRResource* appResource{memManager->GetAllocator("Application")};;
+}
 
-		m_Workers = Vector<std::jthread>{appResource};
+void SimpleThreadPool::OnStartUp(ModulesManager* modulesManager)
+{
+	m_Workers = Vector<std::jthread>{GetResource().get()};
 
-		for (size_t i = 0; i < threadCount; ++i) {
-			m_Workers.emplace_back([this] { Run(); });
-		}
+	for (uint32_t i = 0; i < m_ThreadCount; ++i) {
+		m_Workers.emplace_back([this] { Run(); });
 	}
 }
 
-powe::SimpleThreadPool::~SimpleThreadPool()
+SimpleThreadPool::~SimpleThreadPool()
 {
 	{
 		std::scoped_lock lock(m_Mutex);
@@ -34,11 +36,11 @@ powe::SimpleThreadPool::~SimpleThreadPool()
 	}
 }
 
-void powe::SimpleThreadPool::Run()
+void SimpleThreadPool::Run()
 {
 	while (true) {
 
-		std::packaged_task<void()> task;
+		std::packaged_task<void()> task{};
 
 		{
 			std::unique_lock lock(m_Mutex);
@@ -54,8 +56,7 @@ void powe::SimpleThreadPool::Run()
 	}
 }
 
-powe::PMRResource* powe::SimpleThreadPool::GetResource() const
+SharedPtr<PMRResource> SimpleThreadPool::GetResource() const
 {
-	// Warning could throw
-	return Application::GetAppService<MemoryManager>()->GetAllocator("Application");
+	return Application::Get().GetModulesManager().GetModuleResource<SimpleThreadPool>();
 }

@@ -6,11 +6,11 @@
 #include <queue>
 
 #include "Core/CustomTypes.h"
-#include "Utils/Service.h"
+#include "Core/IModule.h"
 
 namespace powe
 {
-	class SimpleThreadPool : public IService<SimpleThreadPool>
+	class SimpleThreadPool : IModule
 	{
 	public:
 
@@ -21,27 +21,27 @@ namespace powe
 		SimpleThreadPool& operator=(SimpleThreadPool&&) noexcept = delete;
 		~SimpleThreadPool();
 
+		void OnStartUp(ModulesManager*) override;
+		void OnExit(ModulesManager*) override { }
+
 	public:
 
-		template<typename Func, typename ... Args, typename Ret = std::invoke_result_t<Func, Args...>>
-		std::future<Ret> EnqueueFuture(Func&& fn, Args&&... args)
+		template<typename Func, typename ... Args>
+		auto EnqueueReturn(Func&& fn, Args&&... args) -> std::future<decltype(fn(args...))>
 		{
+			using Ret = std::invoke_result_t<Func, Args...>;
 
-			std::pmr::polymorphic_allocator<std::packaged_task<Ret(Args...)>> allocator{ GetResource() };
+			if(m_Stop)
+				return;
 
-			auto task = std::allocate_shared<std::packaged_task<Ret(Args...)>>(allocator, [func = std::forward<Func>(fn), ...args = std::forward<Args>(args)]() mutable {
-				return func(std::forward<Args>(args)...);
+			auto task = std::allocate_shared<std::packaged_task<Ret()>>(GetResource(), [func = std::forward<Func>(fn), ...iArgs = std::forward<Args>(args)]() mutable {
+				return func(iArgs...);
 				});
 
 			std::future<Ret> res = task->get_future();
 
 			{
 				std::scoped_lock lock(m_Mutex);
-
-				// Don't allow enqueueing after stopping the pool
-				if (m_Stop)
-					throw std::runtime_error("enqueue on stopped ThreadPool");
-
 				m_Tasks.emplace([task] { (*task)(); });
 			}
 
@@ -51,21 +51,18 @@ namespace powe
 		}
 
 		template<typename Func, typename ... Args>
-		void Enqueue(Func&& fn, Args&&... args)
+		void EnqueueDetach(Func&& fn, Args&&... args)
 		{
-			std::pmr::polymorphic_allocator<std::packaged_task<void()>> allocator{ GetResource() };
 
-			auto task = std::allocate_shared<std::packaged_task<void()>>(allocator, [func = std::forward<Func>(fn), ...args = std::forward<Args>(args)]() mutable {
-				func(std::forward<Args>(args)...);
+			if (m_Stop)
+				return;
+
+			auto task = std::allocate_shared<std::packaged_task<void()>>(GetResource(), [func = std::forward<Func>(fn), ...iArgs = std::forward<Args>(args)]() mutable {
+				func(iArgs...);
 				});
 
 			{
 				std::scoped_lock lock(m_Mutex);
-
-				// Don't allow enqueueing after stopping the pool
-				if (m_Stop)
-					throw std::runtime_error("enqueue on stopped ThreadPool");
-
 				m_Tasks.emplace([task] { (*task)(); });
 			}
 
@@ -79,9 +76,10 @@ namespace powe
 
 		void Run();
 	
-		PMRResource* GetResource() const;
+		SharedPtr<PMRResource> GetResource() const;
 
 		Vector<std::jthread> m_Workers;
+		uint32_t m_ThreadCount;
 		std::queue<std::packaged_task<void()>> m_Tasks;
 		std::condition_variable m_ThreadCV;
 		std::mutex m_Mutex;
