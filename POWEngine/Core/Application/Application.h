@@ -3,7 +3,7 @@
 #include "AppDesc.h"
 #include "Core/ModulesManager.h"
 #include "Core/Clock/Clock.h"
-
+#include "AppEventSetup.h"
 
 namespace powe
 {
@@ -33,23 +33,25 @@ namespace powe
 
 		void Run();
 		ModulesManager& GetModulesManager() const { return *m_AppModules; }
-	
-		void RegisterAppEvent(const SharedPtr<AppEvent>& appEvent) { m_AppEvents.emplace_back(appEvent); }
-		void RemoveAppEvent(const SharedPtr<AppEvent>& appEvent);
+
+		void SetAppEventSetup(const std::function<void(AppEventSetup&)>& setup) { m_AppEventSetupLogic = setup; }
+
+		void RegisterAppEvent(const SharedPtr<AppEvent>& appEvent);
 
 		bool IsInMainThread() const { return std::this_thread::get_id() == m_AppThreadID; }
 
 	private:
 
+		// App Events
 		Vector<SharedPtr<AppEvent>> m_AppEvents;
-		uint32_t m_CurrentActiveEvents;
+		AppEventSetup m_AppEventSetup;
+		std::function<void(AppEventSetup&)> m_AppEventSetupLogic;
 
 		// Core components
 		Clock m_Clock;
 		UniquePtr<WindowManager> m_WindowManager;
 		UniquePtr<InputManager> m_InputManager;
 		UniquePtr<ModulesManager> m_AppModules;
-
 
 		Window* m_AppWindow;
 		AppDesc m_AppDesc;

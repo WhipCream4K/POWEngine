@@ -25,34 +25,14 @@ namespace powe
 
 		virtual void* do_allocate(std::size_t bytes, std::size_t alignment) override
 		{
-			void* ptr = m_Upstream->allocate(bytes, alignment);
-
-
-			{
-				std::scoped_lock lock(m_Mutex);
-				m_AllocatedMemoryMap.try_emplace(ptr, bytes);
-			}
-
 			m_TotalAllocateMemory.fetch_add(bytes);
-
-
+			void* ptr = m_Upstream->allocate(bytes, alignment);
 			return ptr;
 		}
 
 		virtual void do_deallocate(void* ptr, std::size_t bytes, std::size_t alignment) override
 		{
-
-			{
-				std::scoped_lock lock(m_Mutex);
-				auto it = m_AllocatedMemoryMap.find(ptr);
-				if (it != m_AllocatedMemoryMap.end())
-				{
-					m_AllocatedMemoryMap.erase(it);
-				}
-			}
-
 			m_TotalAllocateMemory.fetch_sub(bytes);
-
 			m_Upstream->deallocate(ptr, bytes, alignment);
 		}
 
@@ -62,7 +42,6 @@ namespace powe
 		}
 
 
-		std::unordered_map<void*, size_t> m_AllocatedMemoryMap;
 		std::atomic_size_t m_TotalAllocateMemory{ 0 };
 		std::mutex m_Mutex; // for thread safety
 

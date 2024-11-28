@@ -6,7 +6,7 @@
 void powe::MemoryManager::Init(const SharedPtr<PMRResource>& memResource)
 {
     auto* instance{ MemoryManager::Get() };
-    instance->m_DefaultAllocator = memResource;
+    instance->m_DefaultResource = memResource;
     instance->m_AllocatorMap = UnOrderedMap<std::string, SharedPtr<PMRResource>>(memResource.get());
 }
 
@@ -26,7 +26,7 @@ powe::SharedPtr<powe::PMRResource> powe::MemoryManager::NewAllocator(std::string
         return m_AllocatorMap.at(name.data());
     }
 
-    SharedPtr<PMRResource> allocator{std::allocate_shared<TrackableAllocator>(m_DefaultAllocator)};
+    SharedPtr<PMRResource> allocator{std::allocate_shared<TrackableAllocator>(m_DefaultResource)};
     m_AllocatorMap[name.data()] = allocator;
     return allocator;
 }

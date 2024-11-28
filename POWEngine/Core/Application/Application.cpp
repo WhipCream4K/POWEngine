@@ -7,9 +7,11 @@
 #include "Utils/Utils.h"
 #include "Core/ModulesManager.h"
 #include "Core/Application/AppEvent.h"
+#include "Core/Thread/SimpleThreadPool.h"
 
 powe::Application::Application(const AppDesc& appDesc)
-    : m_AppDesc(appDesc)
+    : m_AppEventSetup(m_AppEvents)
+    , m_AppDesc(appDesc)
 {
     m_Instance = this;
 
@@ -25,8 +27,13 @@ powe::Application::Application(const AppDesc& appDesc)
     // Init Modules
     m_AppModules = AllocateUnique<ModulesManager>( m_AppAllocator);
 
+    // Logger
     const auto loggerResource{MemoryManager::Get()->NewAllocator("Logger")};
     m_AppModules->CreateModule<Logger>(loggerResource);
+
+    // SimpleThreadPool
+    const auto simeleThreadPoolResource{MemoryManager::Get()->NewAllocator("SimpleThreadPool")};
+    m_AppModules->CreateModule<SimpleThreadPool>(simeleThreadPoolResource);
 
     // Assign Thread ID
     m_AppThreadID = std::this_thread::get_id();
@@ -48,6 +55,9 @@ void powe::Application::Run()
         m_AppWindow = m_WindowManager->CreateWindow(m_AppDesc.Name, m_AppDesc.Width, m_AppDesc.Height);
     }
 
+    // Initialize AppEvent
+
+
     while (!m_AppWindow->IsClosed())
     {
         m_Clock.Start();
@@ -60,24 +70,5 @@ void powe::Application::Run()
         }
 
         m_Clock.End();
-    }
-}
-
-void powe::Application::RemoveAppEvent(const SharedPtr<AppEvent>& appEvent)
-{
-    if(!IsInMainThread())
-    {
-        powe::Warning("RemoveAppEvent can only be called from main thread");
-        return;
-    }
-
-    auto findItr = std::ranges::find_if(m_AppEvents, [appEvent](const SharedPtr<AppEvent>& event)
-    {
-        return event == appEvent;
-    });
-
-    if (findItr != m_AppEvents.end())
-    {
-        m_AppEvents.erase(findItr);
     }
 }

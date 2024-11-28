@@ -33,7 +33,7 @@ powe::ConsoleLogger::~ConsoleLogger()
 
 void powe::ConsoleLogger::LogLevel(LogSeverity severity, const std::function<std::string()>& format)
 {
-	m_MessageQueue.push(LogMsg(severity, std::ref(format)));
+	m_MessageQueue.push(LogMsg(severity, format));
 	m_ThreadCV.notify_one();
 }
 

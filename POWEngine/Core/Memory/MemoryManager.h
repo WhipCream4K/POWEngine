@@ -32,7 +32,7 @@ namespace powe
 	private:
 
 		UnOrderedMap<std::string, SharedPtr<PMRResource>> m_AllocatorMap;
-		SharedPtr<PMRResource> m_DefaultAllocator;
+		SharedPtr<PMRResource> m_DefaultResource;
 	};
 
 }

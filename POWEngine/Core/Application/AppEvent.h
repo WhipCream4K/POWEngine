@@ -9,6 +9,7 @@ namespace powe
         AppEvent() = default;
         virtual ~AppEvent() = default;
 
+        virtual void OnCreate() = 0;
         virtual void OnUpdate(float) = 0;
     };
 }

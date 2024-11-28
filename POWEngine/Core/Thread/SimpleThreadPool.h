@@ -10,7 +10,7 @@
 
 namespace powe
 {
-	class SimpleThreadPool : IModule
+	class SimpleThreadPool : public IModule
 	{
 	public:
 
