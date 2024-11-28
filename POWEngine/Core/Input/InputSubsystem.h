@@ -8,8 +8,6 @@ namespace powe
 
         InputSubsystem() = default;
         virtual ~InputSubsystem() = default;
-
-        virtual void Update(float) = 0;
     };
 
 }

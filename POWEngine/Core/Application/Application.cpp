@@ -10,8 +10,7 @@
 #include "Core/Thread/SimpleThreadPool.h"
 
 powe::Application::Application(const AppDesc& appDesc)
-    : m_AppEventSetup(m_AppEvents)
-    , m_AppDesc(appDesc)
+    : m_AppDesc(appDesc)
 {
     m_Instance = this;
 
@@ -56,7 +55,9 @@ void powe::Application::Run()
     }
 
     // Initialize AppEvent
-
+    powe::AppEventSetup m_AppEventSetup{m_AppEvents};
+    m_AppEventSetupLogic(m_AppEventSetup);
+    m_AppEventSetup.Sort();
 
     while (!m_AppWindow->IsClosed())
     {

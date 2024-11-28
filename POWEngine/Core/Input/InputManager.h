@@ -27,17 +27,14 @@ namespace powe
 
         InputManager(const SharedPtr<PMRResource>& memResource);
         
-
-    // private:
         
-        // Vector<Input::KeyBinding> m_KeyBindings;
-    };
 
-    // template <typename T> requires std::is_invocable_v<T>
-    // void InputManager::AddKeyBinding(int key, Input::State state, T&& func)
-    // {
-    //     m_KeyBindings.emplace_back({key,state,std::forward<T>(func)});
-    // }
+
+    private:
+
+
+        SharedPtr<PMRResource> m_DefaultResource;
+    };
 }
 
 

@@ -44,7 +44,6 @@ namespace powe
 
 		// App Events
 		Vector<SharedPtr<AppEvent>> m_AppEvents;
-		AppEventSetup m_AppEventSetup;
 		std::function<void(AppEventSetup&)> m_AppEventSetupLogic;
 
 		// Core components
