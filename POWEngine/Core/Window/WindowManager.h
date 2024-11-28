@@ -32,11 +32,7 @@ namespace powe
     private:
 
         SharedPtr<PMRResource> GetResource() const noexcept;
-        
-        // From testing polling window events, 1024 bytes is enough to store all events
-        // of windows happening in a single frame
-        // std::array<std::byte,1024> m_EventBuffer;
-        
+    
         UniquePtr<Window> m_MainWindow;
         std::unique_ptr<Window,PolyMorphicDeleter> m_Some;
         Vector<UniquePtr<Window>> m_ChildWindows;

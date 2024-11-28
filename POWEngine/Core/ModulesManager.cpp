@@ -25,3 +25,12 @@ SharedPtr<PMRResource> ModulesManager::GetModuleResource(uint32_t id)
     return nullptr;
 }
 
+void ModulesManager::Clear()
+{
+    for (auto& module : m_Modules)
+    {
+        module.second.first->OnExit(this);
+    }
+
+}
+

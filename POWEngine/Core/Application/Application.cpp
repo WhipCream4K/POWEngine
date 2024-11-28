@@ -9,6 +9,8 @@
 #include "Core/Application/AppEvent.h"
 #include "Core/Thread/SimpleThreadPool.h"
 
+#include "Platform/common/glfwModule.h"
+
 powe::Application::Application(const AppDesc& appDesc)
     : m_AppDesc(appDesc)
 {
@@ -33,6 +35,14 @@ powe::Application::Application(const AppDesc& appDesc)
     // SimpleThreadPool
     const auto simeleThreadPoolResource{MemoryManager::Get()->NewAllocator("SimpleThreadPool")};
     m_AppModules->CreateModule<SimpleThreadPool>(simeleThreadPoolResource);
+
+    // GLFW module
+    m_AppModules->CreateModule<glfwModule>();
+
+    // Default AppEvent setup
+    m_AppEventSetupLogic = [](powe::AppEventSetup& appEventSetup){
+        appEventSetup.Add<glfwEvent>();
+    };
 
     // Assign Thread ID
     m_AppThreadID = std::this_thread::get_id();
@@ -59,11 +69,14 @@ void powe::Application::Run()
     m_AppEventSetupLogic(m_AppEventSetup);
     m_AppEventSetup.Sort();
 
+    for(auto& appEvent : m_AppEvents)
+    {
+        appEvent->OnSetup();
+    }
+
     while (!m_AppWindow->IsClosed())
     {
         m_Clock.Start();
-
-        m_WindowManager->Update();
         
         for(auto& appEvent : m_AppEvents)
         {
@@ -72,4 +85,6 @@ void powe::Application::Run()
 
         m_Clock.End();
     }
+
+    m_AppModules->Clear();
 }

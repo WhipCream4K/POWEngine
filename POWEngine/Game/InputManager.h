@@ -27,12 +27,12 @@ namespace powe
 
         InputManager(const SharedPtr<PMRResource>& memResource);
         
-        
+        void RegisterKeyBinding(int key, std::function<void()> callback);
 
 
     private:
 
-
+        
         SharedPtr<PMRResource> m_DefaultResource;
     };
 }

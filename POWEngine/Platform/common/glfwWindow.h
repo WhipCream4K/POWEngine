@@ -1,6 +1,5 @@
 #pragma once
 
-#include <functional>
 
 #include "Core/Window/Window.h"
 #include "GLFW/glfw3.h"
@@ -13,11 +12,6 @@ namespace powe
 
         glfwWindow(std::string_view title, int width, int height);
         ~glfwWindow();
-
-        static void Init();
-        static void Shutdown();
-        // this is unique to glfw
-        static void Update();
 
         virtual void SetFullscreen(bool fullscreen, bool borderless = false) override;
         virtual void SetTitle(std::string_view title) override;

@@ -17,8 +17,6 @@ namespace powe
             m_Modules.try_emplace(moduleID, module);
         }
 
-        void RemoveModule(uint32_t id);
-
         template<ModuleConcept T>
         SharedPtr<T> GetModule() // User should save as WeakPtr because modules can be unloaded any time
         {
@@ -50,7 +48,10 @@ namespace powe
                 resc = GetAppResource();
             }
 
-            SharedPtr<T> module{ std::allocate_shared<T>(resc, std::forward<Args>(args)...) };
+            SharedPtr<IModule> module{ std::allocate_shared<T>(resc, std::forward<Args>(args)...) };
+
+            module->OnCreate(this);
+
             m_Modules.try_emplace(moduleID, std::make_pair(module, resc));
             return module;
         }
@@ -62,13 +63,14 @@ namespace powe
         { 
             return GetModuleResource(IModule::GetID<T>()); 
         }
+
+        void Clear();
         
     private:
 
         using ModulePair = std::pair<SharedPtr<IModule>, SharedPtr<PMRResource>>;
 
         UnOrderedMap<uint32_t,ModulePair> m_Modules;
-        // UnOrderedMap<uint32_t,SharedPtr<IModule>> m_UnloadedModules>
         uint32_t m_CurrentActiveModules;
     };
 }

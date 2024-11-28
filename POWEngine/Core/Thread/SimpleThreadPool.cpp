@@ -14,7 +14,7 @@ SimpleThreadPool::SimpleThreadPool(size_t threadCount)
 {
 }
 
-void SimpleThreadPool::OnStartUp(ModulesManager* modulesManager)
+void SimpleThreadPool::OnCreate(ModulesManager* modulesManager)
 {
 	m_Workers = Vector<std::jthread>{GetResource().get()};
 

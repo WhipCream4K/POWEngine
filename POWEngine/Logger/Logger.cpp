@@ -12,7 +12,7 @@ Logger::Logger()
 {
 }
 
-void Logger::OnStartUp(ModulesManager*)
+void Logger::OnCreate(ModulesManager*)
 {
 }
 

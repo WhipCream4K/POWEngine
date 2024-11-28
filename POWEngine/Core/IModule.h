@@ -15,7 +15,7 @@ namespace powe
         
         virtual ~IModule() = default;
 
-        virtual void OnStartUp(ModulesManager*) = 0;
+        virtual void OnCreate(ModulesManager*) = 0;
         virtual void OnExit(ModulesManager*) = 0;
         
         std::string_view GetName() const { return m_Name; }

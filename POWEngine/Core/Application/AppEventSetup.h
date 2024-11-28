@@ -9,7 +9,7 @@ namespace powe
 
     private:
 
-        void Sort();
+        void Sort() const noexcept;
 
     public:
 

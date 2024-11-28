@@ -21,7 +21,7 @@ namespace powe
 
         void OnStart();
         void OnExit();
-        void OnWindowEvents(const Window::EventQueue& winEvents) const;
+        // void OnWindowEvents(const Window::EventQueue& winEvents) const;
         void Update(float deltaTime);
 
         template <typename T> requires CSceneSystem<T>
@@ -46,12 +46,13 @@ namespace powe
 
     private:
         
+        std::string m_SceneName;
         UniquePtr<ECSManager> m_ECSManager;
+        
         Vector<UniquePtr<SceneSystem>> m_SceneSystems;
         
         SceneQuery m_SceneQuery;
 
-        std::string m_SceneName;
 
         PMRResource* m_DefaultAllocator;
         

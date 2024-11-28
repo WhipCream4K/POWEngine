@@ -8,7 +8,7 @@ AppEventSetup::AppEventSetup(Vector<SharedPtr<AppEvent>>& events)
 {
 }
 
-void AppEventSetup::Sort()
+void AppEventSetup::Sort() const noexcept
 {
     auto& appEvents{*m_AppEvents};
 

@@ -26,10 +26,10 @@ void powe::Scene::OnExit()
 	}
 }
 
-void powe::Scene::OnWindowEvents(const Window::EventQueue& winEvents) const
-{
-	m_InputManager->OnWindowEvents(winEvents);
-}
+// void powe::Scene::OnWindowEvents(const Window::EventQueue& winEvents) const
+// {
+// 	m_InputManager->OnWindowEvents(winEvents);
+// }
 
 void powe::Scene::Update(float deltaTime)
 {

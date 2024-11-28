@@ -21,7 +21,7 @@ namespace powe
 		SimpleThreadPool& operator=(SimpleThreadPool&&) noexcept = delete;
 		~SimpleThreadPool();
 
-		void OnStartUp(ModulesManager*) override;
+		void OnCreate(ModulesManager*) override;
 		void OnExit(ModulesManager*) override { }
 
 	public:

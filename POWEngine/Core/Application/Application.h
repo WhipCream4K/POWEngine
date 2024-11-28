@@ -32,6 +32,7 @@ namespace powe
 		}
 
 		void Run();
+		
 		ModulesManager& GetModulesManager() const { return *m_AppModules; }
 
 		void SetAppEventSetup(const std::function<void(AppEventSetup&)>& setup) { m_AppEventSetupLogic = setup; }

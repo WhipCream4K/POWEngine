@@ -22,7 +22,7 @@ namespace powe
         Logger& operator=(Logger&&) noexcept = default;
         ~Logger() override = default;
 
-        void OnStartUp(ModulesManager*) override;
+        void OnCreate(ModulesManager*) override;
         void OnExit(ModulesManager*) override;
 
         SharedPtr<PMRResource> GetResource() const noexcept;
