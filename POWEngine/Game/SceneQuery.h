@@ -5,6 +5,7 @@
 
 namespace powe
 {
+    // Manages all the queries happening in the scene during update
     class SceneQuery
     {
     public:

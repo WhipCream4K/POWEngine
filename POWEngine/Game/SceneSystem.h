@@ -20,6 +20,10 @@ namespace powe
         virtual void OnStart(Scene&) = 0;
         virtual void OnUpdate(Scene& scene, float) = 0;
         virtual void OnExit(Scene&) = 0;
+
+    private:
+    
+        
     };
 
     template <typename T>
