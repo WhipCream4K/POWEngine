@@ -1,30 +1,26 @@
 #pragma once
 
-#include <typeindex>
 
-#include "EngineLayer.h"
 #include "SceneSystem.h"
 #include "Utils/Utils.h"
-#include "SceneQuery.h"
-#include "InputManager.h"
+// #include "SceneQuery.h"
+#include "Game/Input/InputManager.h"
 
 namespace powe
 {
     class ECSManager;
     class EngineLayer;
-
     class Scene final
     {
     public:
         
-        Scene(PMRResource* memResource);
+        Scene(const SharedPtr<PMRResource>& resource);
 
-        void OnStart();
-        void OnExit();
-        // void OnWindowEvents(const Window::EventQueue& winEvents) const;
+        void Start();
+        void Exit();
         void Update(float deltaTime);
 
-        template <typename T> requires CSceneSystem<T>
+        template <CSceneSystem T>
         T* AddSceneSystem(T&& system)
         {
             auto sceneSystem = AllocateUnique<T>(m_DefaultAllocator, std::forward<T>(system));
@@ -32,7 +28,7 @@ namespace powe
             return static_cast<T*>(m_SceneSystems.back().get());
         }
 
-        template <typename T> requires CSceneSystem<T>
+        template <CSceneSystem T> 
         void RemoveSceneSystem()
         {
             std::erase_if(m_SceneSystems, [](const UniquePtr<SceneSystem>& sceneSystem)
@@ -42,18 +38,13 @@ namespace powe
         }
         
         ECSManager& GetECSManager() const { return *m_ECSManager.get(); }
-        const std::string& GetName() const { return m_SceneName; }
+        std::string_view GetName() const noexcept;
 
     private:
         
-        std::string m_SceneName;
         UniquePtr<ECSManager> m_ECSManager;
-        
+        InputManager m_InputManager;
         Vector<UniquePtr<SceneSystem>> m_SceneSystems;
-        
-        SceneQuery m_SceneQuery;
-
-
         PMRResource* m_DefaultAllocator;
         
     };
