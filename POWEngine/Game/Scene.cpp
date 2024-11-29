@@ -4,8 +4,9 @@
 #include "ECS/ECSManager.h"
 #include "Utils/Utils.h"
 
-powe::Scene::Scene(const SharedPtr<PMRResource>& resource)
-	: m_InputManager(*this)
+powe::Scene::Scene(Game& game)
+	: m_Game(game)
+	, m_InputManager(*this)
 {
 }
 

@@ -53,6 +53,11 @@ powe::Application::~Application()
 {
 }
 
+powe::SharedPtr<powe::Window> powe::Application::GetAppWindow() const noexcept
+{
+    return m_WindowManager->GetMainWindow();
+}
+
 void powe::Application::Run()
 {
     powe::Info("Application is running");
@@ -61,7 +66,7 @@ void powe::Application::Run()
 
     if(m_WindowManager)
     {
-        m_AppWindow = m_WindowManager->CreateWindow(m_AppDesc.Name, m_AppDesc.Width, m_AppDesc.Height);
+        m_AppWindow = m_WindowManager->CreateWindow(m_AppDesc.name, m_AppDesc.width, m_AppDesc.height).get();
     }
 
     // Initialize AppEvent

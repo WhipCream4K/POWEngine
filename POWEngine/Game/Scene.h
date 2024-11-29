@@ -10,11 +10,12 @@ namespace powe
 {
     class ECSManager;
     class EngineLayer;
+    class Game;
     class Scene final
     {
     public:
         
-        Scene(const SharedPtr<PMRResource>& resource);
+        Scene(Game& game);
 
         void Start();
         void Exit();
@@ -38,14 +39,15 @@ namespace powe
         }
         
         ECSManager& GetECSManager() const { return *m_ECSManager.get(); }
+        Game& GetGameModule() const noexcept { return m_Game; }
         std::string_view GetName() const noexcept;
 
     private:
         
         UniquePtr<ECSManager> m_ECSManager;
+        RefWrap<Game> m_Game;
         InputManager m_InputManager;
         Vector<UniquePtr<SceneSystem>> m_SceneSystems;
-        PMRResource* m_DefaultAllocator;
         
     };
 }

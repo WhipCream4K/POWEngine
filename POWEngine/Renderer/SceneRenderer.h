@@ -24,7 +24,7 @@ namespace powe
         
         ~SceneRenderer() override;
 
-        void OnStartUp(ModulesManager* manager) override;
+        void OnCreate(ModulesManager* manager) override;
         
         SceneRenderGraph& GetSceneRenderGraph() { return m_SceneRenderGraph; }
 

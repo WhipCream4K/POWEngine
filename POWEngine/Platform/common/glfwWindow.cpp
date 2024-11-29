@@ -50,6 +50,7 @@ bool powe::glfwWindow::IsClosed() const noexcept
 powe::glfwWindow::~glfwWindow()
 {
     glfwDestroyWindow(m_WindowHandle);
+    m_WindowHandle = nullptr;
 }
 
 // #endif

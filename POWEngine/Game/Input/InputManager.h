@@ -8,7 +8,7 @@ namespace powe
 
     struct Input
     {
-        enum State
+        enum State : uint8_t
         {
             Pressed,
             Released,
@@ -18,8 +18,10 @@ namespace powe
         struct KeyBinding
         {
             int key;
+            uint8_t modifiers;
             State state;
             std::function<void(Scene&)> callback;
+            bool isValid;
         };
     };
     
@@ -36,8 +38,13 @@ namespace powe
         /// @param state The state of the key
         /// @param callback The function to call
         /// @return
-        void AddKeyBinding(int key, Input::State state, std::function<void(Scene&)> callback, int modifiers = 0) noexcept;
+        void AddKeyBinding(int key, Input::State state, std::function<void(Scene&)> callback, uint8_t modifiers = 0) noexcept;
 
+
+        const Vector<Input::KeyBinding>& GetKeyBindings() const noexcept { return m_KeyBindings; }
+        Scene& GetScene() const noexcept { return *m_Scene; }
+
+        // TODO: Also do the key binding detach
 
     private:
 

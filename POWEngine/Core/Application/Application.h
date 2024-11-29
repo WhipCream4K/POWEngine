@@ -33,13 +33,15 @@ namespace powe
 
 		void Run();
 		
-		ModulesManager& GetModulesManager() const { return *m_AppModules; }
+		ModulesManager& GetModulesManager() const noexcept { return *m_AppModules; }
 
-		void SetAppEventSetup(const std::function<void(AppEventSetup&)>& setup) { m_AppEventSetupLogic = setup; }
+		SharedPtr<Window> GetAppWindow() const noexcept;
 
-		void RegisterAppEvent(const SharedPtr<AppEvent>& appEvent);
+		void SetAppEventSetup(const std::function<void(AppEventSetup&)>& setup) noexcept { m_AppEventSetupLogic = setup; }
 
-		bool IsInMainThread() const { return std::this_thread::get_id() == m_AppThreadID; }
+		void RegisterAppEvent(const SharedPtr<AppEvent>& appEvent) noexcept;
+
+		bool IsInMainThread() const noexcept { return std::this_thread::get_id() == m_AppThreadID; }
 
 	private:
 
