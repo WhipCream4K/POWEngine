@@ -35,7 +35,7 @@ namespace powe
 		
 		ModulesManager& GetModulesManager() const noexcept { return *m_AppModules; }
 
-		SharedPtr<Window> GetAppWindow() const noexcept;
+		Window* GetAppWindow() const noexcept { return m_AppWindow; }
 
 		void SetAppEventSetup(const std::function<void(AppEventSetup&)>& setup) noexcept { m_AppEventSetupLogic = setup; }
 

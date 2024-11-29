@@ -23,9 +23,8 @@ glfwInput::glfwInput(InputManager &inputManager)
     : InputSubsystem(inputManager)
 {
     auto bindWindow{inputManager.GetScene().GetGameModule().GetBindWindow()};
-    if (auto glfwWindowPtr{std::dynamic_pointer_cast<glfwWindow>(bindWindow)}; glfwWindowPtr)
+    if (auto glfwWindowPtr{dynamic_cast<glfwWindow*>(bindWindow)}; glfwWindowPtr)
     {
-        m_BindWindow = glfwWindowPtr;
         m_WindowHandle = glfwWindowPtr->GetHandle();
 
         KeyCallback = [this](GLFWwindow* window, int key, int scancode, int action, int mods)

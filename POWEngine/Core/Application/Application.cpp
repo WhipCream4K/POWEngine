@@ -9,7 +9,7 @@
 #include "Core/Application/AppEvent.h"
 #include "Core/Thread/SimpleThreadPool.h"
 
-#include "Platform/common/glfwModule.h"
+#include "Platform/common/GLFW/glfwModule.h"
 
 powe::Application::Application(const AppDesc& appDesc)
     : m_AppDesc(appDesc)
@@ -49,14 +49,7 @@ powe::Application::Application(const AppDesc& appDesc)
 
 }
 
-powe::Application::~Application()
-{
-}
-
-powe::SharedPtr<powe::Window> powe::Application::GetAppWindow() const noexcept
-{
-    return m_WindowManager->GetMainWindow();
-}
+powe::Application::~Application() = default;
 
 void powe::Application::Run()
 {

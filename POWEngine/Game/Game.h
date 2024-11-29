@@ -21,7 +21,10 @@ namespace powe
         void RemoveScene(std::string_view sceneName) noexcept;
 
         Scene* GetActiveScene() const noexcept { return m_Scenes.back().get(); }
-        SharedPtr<Window> GetBindWindow() const noexcept { return m_BindWindow.lock(); }
+
+        void SetBindWindow(Window* window) noexcept { m_BindWindow = window; }
+        Window* GetBindWindow() const noexcept { return m_BindWindow; }
+
         SharedPtr<PMRResource> GetResource() const noexcept;
 
     private:
@@ -30,6 +33,7 @@ namespace powe
         SharedPtr<GameEvent> m_GameEvent;
 
         // The window that the scene is bound to
-        WeakPtr<Window> m_BindWindow;
+        Window* m_BindWindow;
+
     };
 }

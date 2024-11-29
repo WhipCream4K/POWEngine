@@ -2,8 +2,6 @@
 
 
 #include "SceneSystem.h"
-#include "Utils/Utils.h"
-// #include "SceneQuery.h"
 #include "Game/Input/InputManager.h"
 
 namespace powe
@@ -38,6 +36,7 @@ namespace powe
             });
         }
         
+        InputManager& GetInputManager() noexcept { return m_InputManager; }
         ECSManager& GetECSManager() const { return *m_ECSManager.get(); }
         Game& GetGameModule() const noexcept { return m_Game; }
         std::string_view GetName() const noexcept;

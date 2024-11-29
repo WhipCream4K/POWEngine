@@ -2,7 +2,6 @@
 #include "Scene.h"
 
 #include "ECS/ECSManager.h"
-#include "Utils/Utils.h"
 
 powe::Scene::Scene(Game& game)
 	: m_Game(game)

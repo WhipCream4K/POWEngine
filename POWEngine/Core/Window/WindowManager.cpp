@@ -5,7 +5,6 @@
 #include "Core/Window/Window.h"
 #include "Logger/Logger.h"
 
-#include "Platform/common/glfwWindow.h"
 
 powe::WindowManager::WindowManager(const SharedPtr<PMRResource>& memResource)
     : m_DefaultRescource(memResource)
@@ -31,34 +30,34 @@ void powe::WindowManager::Shutdown() noexcept
     m_ChildWindows.clear();
 }
 
-powe::SharedPtr<powe::Window> powe::WindowManager::CreateWindow(std::string_view windowName, uint32_t width, uint32_t height)
+powe::Window* powe::WindowManager::CreateWindow(std::string_view windowName, uint32_t width, uint32_t height)
 {
     // Using glfw module
-    auto window{ AllocateUnique<glfwWindow>(GetResource().get(), windowName, width, height) };
+    auto window{Window::Create(GetResource(), windowName, width, height)};
     
     if(!m_MainWindow)
     {
         m_MainWindow = std::move(window);
 
-        return m_MainWindow;
+        return m_MainWindow.get();
     }
 
     const auto& last { m_ChildWindows.emplace_back(std::move(window)) };
     
-    return last;
+    return last.get();
 }
 
-powe::SharedPtr<powe::Window> powe::WindowManager::GetWindow(std::string_view windowName) noexcept
+powe::Window* powe::WindowManager::GetWindow(std::string_view windowName) noexcept
 {
     if(m_MainWindow && m_MainWindow->GetTitle() == windowName)
     {
-        return m_MainWindow;
+        return m_MainWindow.get();
     }
 
-    return *std::ranges::find_if(m_ChildWindows, [windowName](const SharedPtr<Window>& window)
+    return std::ranges::find_if(m_ChildWindows, [windowName](const UniquePtr<Window>& window)
     {
         return window->GetTitle() == windowName;
-    });
+    })->get();
 }
 
 void powe::WindowManager::DestroyWindow(std::string_view windowName)
@@ -68,7 +67,7 @@ void powe::WindowManager::DestroyWindow(std::string_view windowName)
         powe::Warning("Main window can only be deleted when calling application exit");
     }
 
-    m_ChildWindows.erase(std::ranges::find_if(m_ChildWindows, [windowName](const SharedPtr<Window>& window)
+    m_ChildWindows.erase(std::ranges::find_if(m_ChildWindows, [windowName](const UniquePtr<Window>& window)
     {
         return window->GetTitle() == windowName;
     }));

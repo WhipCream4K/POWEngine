@@ -2,7 +2,6 @@
 
 #include "Game/Input/InputSubsystem.h"
 
-// #include "glfwWindow.h"
 
 class GLFWwindow;
 
@@ -20,7 +19,6 @@ namespace powe
 
     private:
 
-        WeakPtr<glfwWindow> m_BindWindow;
         GLFWwindow* m_WindowHandle;
     };
 }

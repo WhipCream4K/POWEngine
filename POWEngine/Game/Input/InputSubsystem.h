@@ -14,6 +14,8 @@ namespace powe
 
         virtual void Update(Vector<Input::KeyBinding>& keyBindings) noexcept {}
 
+        static UniquePtr<InputSubsystem> Create(InputManager& inputManager);
+
     protected:
 
         RefWrap<InputManager> m_InputManager;

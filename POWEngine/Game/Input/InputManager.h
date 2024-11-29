@@ -41,6 +41,7 @@ namespace powe
         void AddKeyBinding(int key, Input::State state, std::function<void(Scene&)> callback, uint8_t modifiers = 0) noexcept;
 
 
+        void Update() noexcept;
         const Vector<Input::KeyBinding>& GetKeyBindings() const noexcept { return m_KeyBindings; }
         Scene& GetScene() const noexcept { return *m_Scene; }
 
