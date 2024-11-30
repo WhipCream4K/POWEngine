@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 3.24)
 
-
-
 macro(my_dependencies_provider method package_name)
 
     # glfw

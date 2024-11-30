@@ -9,6 +9,7 @@ namespace powe
     class ECSManager;
     class EngineLayer;
     class Game;
+    class SceneEvent;
     class Scene final
     {
     public:
@@ -19,22 +20,22 @@ namespace powe
         void Exit();
         void Update(float deltaTime);
 
-        template <CSceneSystem T>
-        T* AddSceneSystem(T&& system)
-        {
-            auto sceneSystem = AllocateUnique<T>(m_DefaultAllocator, std::forward<T>(system));
-            m_SceneSystems.push_back(std::move(sceneSystem));
-            return static_cast<T*>(m_SceneSystems.back().get());
-        }
+        // template <CSceneSystem T>
+        // T* AddSceneSystem(T&& system)
+        // {
+        //     auto sceneSystem = AllocateUnique<T>(m_DefaultAllocator, std::forward<T>(system));
+        //     m_SceneSystems.push_back(std::move(sceneSystem));
+        //     return static_cast<T*>(m_SceneSystems.back().get());
+        // }
 
-        template <CSceneSystem T> 
-        void RemoveSceneSystem()
-        {
-            std::erase_if(m_SceneSystems, [](const UniquePtr<SceneSystem>& sceneSystem)
-            {
-                return typeid(*sceneSystem.get()) == typeid(T);
-            });
-        }
+        // template <CSceneSystem T> 
+        // void RemoveSceneSystem()
+        // {
+        //     std::erase_if(m_SceneSystems, [](const UniquePtr<SceneSystem>& sceneSystem)
+        //     {
+        //         return typeid(*sceneSystem.get()) == typeid(T);
+        //     });
+        // }
         
         InputManager& GetInputManager() noexcept { return m_InputManager; }
         ECSManager& GetECSManager() const { return *m_ECSManager.get(); }
@@ -46,7 +47,8 @@ namespace powe
         UniquePtr<ECSManager> m_ECSManager;
         RefWrap<Game> m_Game;
         InputManager m_InputManager;
-        Vector<UniquePtr<SceneSystem>> m_SceneSystems;
+        UniquePtr<SceneEvent> m_SceneEvent;
+        // Vector<UniquePtr<SceneSystem>> m_SceneSystems;
         
     };
 }

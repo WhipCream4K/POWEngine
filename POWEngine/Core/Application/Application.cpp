@@ -59,7 +59,7 @@ void powe::Application::Run()
 
     if(m_WindowManager)
     {
-        m_AppWindow = m_WindowManager->CreateWindow(m_AppDesc.name, m_AppDesc.width, m_AppDesc.height).get();
+        m_AppWindow = m_WindowManager->CreateWindow(m_AppDesc.name, m_AppDesc.width, m_AppDesc.height);
     }
 
     // Initialize AppEvent
