@@ -11,5 +11,5 @@ using namespace powe;
 
 UniquePtr<InputSubsystem> InputSubsystem::Create(InputManager& inputManager)
 {
-    return AllocateUnique<glfwInput>(inputManager.GetScene().GetGameModule().GetResource().get(),inputManager);
+    return AllocateUnique<glfwInput>(inputManager.GetScene().GetResource(),inputManager);
 }

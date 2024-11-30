@@ -20,7 +20,8 @@ namespace powe
         Scene* CreateScene(std::string_view sceneName) noexcept;
         void RemoveScene(std::string_view sceneName) noexcept;
 
-        Scene* GetActiveScene() const noexcept { return m_ActiveScene; }
+        void SetActiveScene(Scene* scene) noexcept;
+        Scene* GetActiveScene() const noexcept;
 
         std::string_view GetSceneName(const Scene* scene) const noexcept;
 
@@ -32,7 +33,6 @@ namespace powe
     private:
 
         UnOrderedMap<std::string, UniquePtr<Scene>> m_SceneMap;
-        Scene* m_ActiveScene;
         SharedPtr<GameEvent> m_GameEvent;
 
         // The window that the scene is bound to

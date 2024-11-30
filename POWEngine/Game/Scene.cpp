@@ -39,5 +39,5 @@ SharedPtr<PMRResource> Scene::GetResource() const noexcept
 
 std::string_view Scene::GetName() const noexcept
 {
-	
+	return m_Game->GetSceneName(this);
 }

@@ -19,7 +19,7 @@ void Game::OnCreate(ModulesManager* modulesManager)
     // m_Scenes = Vector<SharedPtr<Scene>>{ resource.get() };
     m_SceneMap = UnOrderedMap<std::string, UniquePtr<Scene>>{ resource.get() };
     
-    m_GameEvent = std::allocate_shared<GameEvent>(resource);
+    m_GameEvent = std::allocate_shared<GameEvent>(resource, *this);
 
     auto& app{Application::Get()};
     app.RegisterAppEvent(m_GameEvent);
@@ -42,8 +42,10 @@ Scene* Game::CreateScene(std::string_view sceneName) noexcept
 
     UniquePtr<Scene> scene{ AllocateUnique<Scene>(GetResource(), *this) };
     
-    if(m_ActiveScene == nullptr)
-        m_ActiveScene = scene.get();
+    if(m_GameEvent->GetActiveScene() == nullptr)
+    {
+        m_GameEvent->SetActiveScene(scene.get());
+    }
 
     m_SceneMap[std::string(sceneName)] = std::move(scene);
 
@@ -56,6 +58,16 @@ std::string_view Game::GetSceneName(const Scene* scene) const noexcept
     {
         return pair.second.get() == scene;
     })->first;
+}
+
+void Game::SetActiveScene(Scene* scene) noexcept
+{
+    m_GameEvent->SetActiveScene(scene);
+}
+
+Scene* Game::GetActiveScene() const noexcept
+{
+    return m_GameEvent->GetActiveScene();
 }
 
 void Game::OnExit(ModulesManager* modulesManager)

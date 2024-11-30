@@ -23,10 +23,10 @@
 //#include "../Math/Math.h"
 //#include "../Utils/MacroDef.h"
 
-#include "../POWEngine/Core/CustomTypes.h"
+#include "Core/CustomTypes.h"
 #include "Core/Memory/Allocator.h"
 
-#define USE_GLFW_WINDOW 1
+// #define USE_GLFW_WINDOW 1
 
 // enum
 // {
