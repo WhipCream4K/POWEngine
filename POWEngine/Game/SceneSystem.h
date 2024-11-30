@@ -16,13 +16,14 @@ namespace powe
         SceneSystem& operator=(SceneSystem&&) = delete;
         virtual ~SceneSystem() = default;
 
-        virtual void OnInitialize() = 0;
-        virtual void OnStart(Scene&) = 0;
+        virtual void OnCreate(Scene&) {}
+        virtual void OnStart(Scene&) {}
         virtual void OnUpdate(Scene& scene, float) = 0;
         virtual void OnExit(Scene&) = 0;
 
-    private:
-    
+    protected:
+
+            
         
     };
 

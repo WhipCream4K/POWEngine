@@ -31,6 +31,10 @@ namespace powe
     public:
 
         InputManager(Scene& scene);
+        InputManager(const InputManager&) = delete;
+        InputManager& operator=(const InputManager&) = delete;
+        InputManager(InputManager&&) = default;
+        InputManager& operator=(InputManager&&) = default;
         ~InputManager();
 
         /// @brief Registers a key binding

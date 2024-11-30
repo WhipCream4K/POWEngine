@@ -43,7 +43,6 @@ namespace powe
 
 
 		std::atomic_size_t m_TotalAllocateMemory{ 0 };
-		std::mutex m_Mutex; // for thread safety
 
 		std::pmr::memory_resource* m_Upstream{};
 

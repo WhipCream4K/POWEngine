@@ -8,6 +8,7 @@
 #include "Core/ModulesManager.h"
 #include "Core/Application/AppEvent.h"
 #include "Core/Thread/SimpleThreadPool.h"
+#include "Game/Game.h"
 
 #include "Platform/common/GLFW/glfwModule.h"
 
@@ -38,6 +39,10 @@ powe::Application::Application(const AppDesc& appDesc)
 
     // GLFW module
     m_AppModules->CreateModule<glfwModule>();
+
+    // Game module
+    const auto gameResource{MemoryManager::Get()->NewAllocator("Game")};
+    m_AppModules->CreateModule<Game>(gameResource);
 
     // Default AppEvent setup
     m_AppEventSetupLogic = [](powe::AppEventSetup& appEventSetup){

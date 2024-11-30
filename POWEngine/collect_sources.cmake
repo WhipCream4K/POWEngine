@@ -1,6 +1,6 @@
 # Collect Sources file for POWEngine
 
-set(POW_SOURCES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/POWEngine)
+set(POW_SOURCES_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 function(CollectSources dir out_var)
     file(GLOB entries "${dir}/*")
