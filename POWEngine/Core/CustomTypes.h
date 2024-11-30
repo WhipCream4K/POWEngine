@@ -130,6 +130,11 @@ namespace powe
             return &m_Ref.get();
         }
 
+        T* operator->() const
+        {
+            return &m_Ref.get();
+        }
+
         T& operator*() const
         {
             return m_Ref;

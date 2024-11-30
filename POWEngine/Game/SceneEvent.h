@@ -10,6 +10,8 @@ namespace powe
         virtual ~SceneEvent() = default;
 
         virtual void OnCreate(Scene&) {}
+        virtual void OnStart(Scene&) {}
         virtual void OnUpdate(Scene&) {}
+        virtual void OnExit(Scene&) {}
     };
 }

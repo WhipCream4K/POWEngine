@@ -17,10 +17,12 @@ namespace powe
         virtual void OnCreate(ModulesManager* modulesManager) override;
         virtual void OnExit(ModulesManager* modulesManager) override;
 
-        SharedPtr<Scene> CreateScene(std::string_view sceneName) noexcept;
+        Scene* CreateScene(std::string_view sceneName) noexcept;
         void RemoveScene(std::string_view sceneName) noexcept;
 
-        Scene* GetActiveScene() const noexcept { return m_Scenes.back().get(); }
+        Scene* GetActiveScene() const noexcept { return m_ActiveScene; }
+
+        std::string_view GetSceneName(const Scene* scene) const noexcept;
 
         void SetBindWindow(Window* window) noexcept { m_BindWindow = window; }
         Window* GetBindWindow() const noexcept { return m_BindWindow; }
@@ -29,7 +31,8 @@ namespace powe
 
     private:
 
-        Vector<SharedPtr<Scene>> m_Scenes;
+        UnOrderedMap<std::string, UniquePtr<Scene>> m_SceneMap;
+        Scene* m_ActiveScene;
         SharedPtr<GameEvent> m_GameEvent;
 
         // The window that the scene is bound to

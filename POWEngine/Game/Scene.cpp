@@ -1,34 +1,43 @@
 #include "pch.h"
+
 #include "Scene.h"
+#include "Game.h"
+#include "SceneEvent.h"
 
-#include "ECS/ECSManager.h"
+using namespace powe;
 
-powe::Scene::Scene(Game& game)
+Scene::Scene(Game& game)
 	: m_Game(game)
 	, m_InputManager(*this)
 {
 }
 
-void powe::Scene::Start()
+void Scene::Start()
 {
-	for (auto& sceneSystem : m_SceneSystems)
-	{
-		sceneSystem->OnStart(*this);
-	}
+	m_SceneEvent->OnStart(*this);
 }
 
-void powe::Scene::Exit()
+void Scene::Exit()
 {
-	for (auto& sceneSystem : m_SceneSystems)
-	{
-		sceneSystem->OnExit(*this);
-	}
+	m_SceneEvent->OnExit(*this);
 }
 
-void powe::Scene::Update(float deltaTime)
+void Scene::Update(float deltaTime)
 {
-	for (auto& sceneSystem : m_SceneSystems)
-	{
-		sceneSystem->OnUpdate(*this, deltaTime);
-	}
+	m_SceneEvent->OnUpdate(*this);
+}
+
+void Scene::CallCreateSceneEvent(SceneEvent* sceneEvent)
+{
+	sceneEvent->OnCreate(*this);
+}
+
+SharedPtr<PMRResource> Scene::GetResource() const noexcept
+{
+	return m_Game->GetResource();
+}
+
+std::string_view Scene::GetName() const noexcept
+{
+	
 }
