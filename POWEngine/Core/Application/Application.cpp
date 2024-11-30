@@ -9,7 +9,7 @@
 #include "Core/Application/AppEvent.h"
 #include "Core/Thread/SimpleThreadPool.h"
 
-#include "Platform/common/glfwModule.h"
+#include "Platform/common/GLFW/glfwModule.h"
 
 powe::Application::Application(const AppDesc& appDesc)
     : m_AppDesc(appDesc)
@@ -49,9 +49,7 @@ powe::Application::Application(const AppDesc& appDesc)
 
 }
 
-powe::Application::~Application()
-{
-}
+powe::Application::~Application() = default;
 
 void powe::Application::Run()
 {
@@ -61,7 +59,7 @@ void powe::Application::Run()
 
     if(m_WindowManager)
     {
-        m_AppWindow = m_WindowManager->CreateWindow(m_AppDesc.Name, m_AppDesc.Width, m_AppDesc.Height);
+        m_AppWindow = m_WindowManager->CreateWindow(m_AppDesc.name, m_AppDesc.width, m_AppDesc.height).get();
     }
 
     // Initialize AppEvent

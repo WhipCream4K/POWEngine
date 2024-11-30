@@ -14,7 +14,7 @@ SharedPtr<IModule> ModulesManager::GetModule(uint32_t id)
     return nullptr;
 }
 
-SharedPtr<PMRResource> ModulesManager::GetModuleResource(uint32_t id)
+SharedPtr<PMRResource> ModulesManager::GetModuleResource(uint32_t id) const noexcept
 {
     const auto it{ m_Modules.find(id) };
     if (it != m_Modules.end())

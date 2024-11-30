@@ -56,10 +56,10 @@ namespace powe
             return module;
         }
 
-        SharedPtr<PMRResource> GetModuleResource(uint32_t id);
+        SharedPtr<PMRResource> GetModuleResource(uint32_t id) const noexcept;
 
         template<ModuleConcept T>
-        SharedPtr<PMRResource> GetModuleResource() 
+        SharedPtr<PMRResource> GetModuleResource() const noexcept
         { 
             return GetModuleResource(IModule::GetID<T>()); 
         }

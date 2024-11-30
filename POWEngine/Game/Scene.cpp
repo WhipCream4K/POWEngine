@@ -2,15 +2,14 @@
 #include "Scene.h"
 
 #include "ECS/ECSManager.h"
-#include "Utils/Utils.h"
 
-powe::Scene::Scene(PMRResource* memResource)
-	: m_ECSManager{AllocateUnique<ECSManager>(memResource, memResource)}
-	  , m_InputManager{AllocateUnique<InputManager>(memResource, memResource)}
+powe::Scene::Scene(Game& game)
+	: m_Game(game)
+	, m_InputManager(*this)
 {
 }
 
-void powe::Scene::OnStart()
+void powe::Scene::Start()
 {
 	for (auto& sceneSystem : m_SceneSystems)
 	{
@@ -18,18 +17,13 @@ void powe::Scene::OnStart()
 	}
 }
 
-void powe::Scene::OnExit()
+void powe::Scene::Exit()
 {
 	for (auto& sceneSystem : m_SceneSystems)
 	{
 		sceneSystem->OnExit(*this);
 	}
 }
-
-// void powe::Scene::OnWindowEvents(const Window::EventQueue& winEvents) const
-// {
-// 	m_InputManager->OnWindowEvents(winEvents);
-// }
 
 void powe::Scene::Update(float deltaTime)
 {

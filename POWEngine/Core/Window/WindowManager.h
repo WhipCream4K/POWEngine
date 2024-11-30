@@ -1,8 +1,5 @@
 #pragma once
 
-#include <functional>
-
-#include "Core/Memory/Allocator.h"
 #include "Window.h"
 namespace powe
 {
@@ -34,7 +31,6 @@ namespace powe
         SharedPtr<PMRResource> GetResource() const noexcept;
     
         UniquePtr<Window> m_MainWindow;
-        std::unique_ptr<Window,PolyMorphicDeleter> m_Some;
         Vector<UniquePtr<Window>> m_ChildWindows;
         SharedPtr<PMRResource> m_DefaultRescource;
     };

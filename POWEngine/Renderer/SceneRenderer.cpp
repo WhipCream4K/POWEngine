@@ -21,7 +21,7 @@ powe::SceneRenderer::~SceneRenderer()
     m_RenderFlag.notify_one();
 }
 
-void powe::SceneRenderer::OnStartUp(ModulesManager*)
+void powe::SceneRenderer::OnCreate(ModulesManager*)
 {
 }
 

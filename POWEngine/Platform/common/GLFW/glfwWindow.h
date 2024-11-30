@@ -2,7 +2,7 @@
 
 
 #include "Core/Window/Window.h"
-#include "GLFW/glfw3.h"
+#include <GLFW/glfw3.h>
 
 namespace powe
 {
@@ -23,6 +23,8 @@ namespace powe
         virtual uint32_t GetHeight() const noexcept override;
         virtual bool IsFullscreen() const noexcept override;
         virtual std::string_view GetTitle() const noexcept override { return m_Title; }
+
+        GLFWwindow* GetHandle() const noexcept { return m_WindowHandle; }
 
     private:
 

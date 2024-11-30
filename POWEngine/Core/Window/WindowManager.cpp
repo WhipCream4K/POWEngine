@@ -5,7 +5,6 @@
 #include "Core/Window/Window.h"
 #include "Logger/Logger.h"
 
-#include "Platform/common/glfwWindow.h"
 
 powe::WindowManager::WindowManager(const SharedPtr<PMRResource>& memResource)
     : m_DefaultRescource(memResource)
@@ -34,7 +33,7 @@ void powe::WindowManager::Shutdown() noexcept
 powe::Window* powe::WindowManager::CreateWindow(std::string_view windowName, uint32_t width, uint32_t height)
 {
     // Using glfw module
-    auto window{ AllocateUnique<glfwWindow>(GetResource().get(), windowName, width, height) };
+    auto window{Window::Create(GetResource(), windowName, width, height)};
     
     if(!m_MainWindow)
     {
