@@ -3,7 +3,7 @@
 #include "Core/Application/Application.h"
 
 #include "Logger/Logger.h"
-#include "GLFW/glfw3.h"
+#include <GLFW/glfw3.h>
 
 using namespace powe;
 

@@ -1,4 +1,7 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.24)
+
+# dependencies provider
+set(CMAKE_PROJECT_TOP_LEVEL_INCLUDES dependencies_provider.cmake)
 
 project(POW)
 
@@ -19,7 +22,7 @@ GetPOWSources(SRCS)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/POWEngine ${CMAKE_CURRENT_SOURCE_DIR}/POWEngine/PCH)
 
 # set output directory
-set(OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/bin/${PROJECT_NAME}/${ARCHITECTURE}/${CMAKE_BUILD_TYPE})
+set(OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/bin/${PROJECT_NAME}/${CMAKE_BUILD_TYPE})
 
 add_library(${PROJECT_NAME} STATIC ${SRCS})
 
@@ -33,5 +36,4 @@ target_precompile_headers(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/POWEngine/PCH/pch.h
 )
 
-# dependencies
 include(dependencies.cmake)
