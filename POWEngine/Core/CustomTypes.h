@@ -11,6 +11,8 @@
 #include <memory_resource>
 #include <functional>
 
+#include "Core/Memory/Allocator.h"
+
 template <typename FnType>
 struct FnTraits
 {

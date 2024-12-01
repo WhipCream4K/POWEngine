@@ -86,18 +86,6 @@ namespace powe
 		}
 	};
 
-	struct DefaultAllocator
-	{
-		static PMRResource* Application;
-		static PMRResource* Engine;
-
-		static void ShutDown()
-		{
-			delete Application;
-			delete Engine;
-		}
-	};
-
 	
 
 	// class GlobalAllocator : public ThreadSafeSingleton<GlobalAllocator>

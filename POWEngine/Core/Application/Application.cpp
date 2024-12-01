@@ -19,6 +19,7 @@ powe::Application::Application(const AppDesc& appDesc)
 
     // Initilaize Application memory resource
     SharedPtr<TrackableAllocator> appResource{std::make_shared<TrackableAllocator>()};
+    SharedPtr<PMRResource> some{};
     m_AppAllocator = appResource.get();
 
     MemoryManager::Init(appResource);
