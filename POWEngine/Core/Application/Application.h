@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Core/CustomTypes.h"
 #include "AppDesc.h"
+#include "Core/CustomTypes.h"
 #include "Core/ModulesManager.h"
 #include "Core/Clock/Clock.h"
 #include "AppEventSetup.h"

@@ -10,6 +10,8 @@ namespace powe
     class Game : public IModule
     {
     public:
+        
+        using SceneItem = std::pair<std::string, UniquePtr<Scene>>;
 
         Game();
         ~Game();

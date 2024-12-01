@@ -10,7 +10,7 @@ namespace powe
     {
     public:
 
-        GameEvent(Game& game);
+        GameEvent() = default;
         virtual ~GameEvent() = default;
 
         Scene* GetActiveScene() const noexcept { return m_ActiveScene; }
@@ -21,7 +21,6 @@ namespace powe
 
     private:
 
-        RefWrap<Game> m_Game;
         Scene* m_ActiveScene;
     };
 }

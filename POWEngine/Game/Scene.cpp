@@ -1,35 +1,32 @@
 #include "pch.h"
 
+#include <execution>
+
 #include "Scene.h"
 #include "Game.h"
-#include "SceneEvent.h"
+#include "SceneSystem.h"
 
 using namespace powe;
 
 Scene::Scene(Game& game)
 	: m_Game(game)
-	, m_InputManager(*this)
 {
 }
 
 void Scene::Start()
 {
-	m_SceneEvent->OnStart(*this);
 }
 
 void Scene::Exit()
 {
-	m_SceneEvent->OnExit(*this);
 }
 
 void Scene::Update(float deltaTime)
 {
-	m_SceneEvent->OnUpdate(*this);
-}
-
-void Scene::CallCreateSceneEvent(SceneEvent* sceneEvent)
-{
-	sceneEvent->OnCreate(*this);
+	std::for_each(std::execution::par_unseq, m_UnsequenceSystems.begin(), m_UnsequenceSystems.end(), [&](SharedPtr<SceneSystem> system)
+	{
+		system->OnUpdate(*this, deltaTime);
+	})
 }
 
 SharedPtr<PMRResource> Scene::GetResource() const noexcept

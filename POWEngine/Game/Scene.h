@@ -10,6 +10,14 @@ namespace powe
     class Game;
     class SceneEvent;
     class SceneSystem;
+
+    enum class SchedulePolicy : uint8_t
+    {
+        Sequence,
+        Unsequence,
+        Detach
+    };
+
     class Scene final
     {
     public:
@@ -25,18 +33,10 @@ namespace powe
         void Exit();
         void Update(float deltaTime);
 
-        // template<typename T,typename... Args>
-        // requires std::is_base_of_v<SceneEvent, T>
-        // void SetSceneEvent(Args&&... args)
-        // {
-        //     const auto gameResource{GetResource()};
-        //     m_SceneEvent = AllocateUnique<T>(gameResource,std::forward<Args>(args)...);
-        //     CallCreateSceneEvent(m_SceneEvent.get());
-        // }
-
+        void SceduleSystem(const SharedPtr<SceneSystem>& system, 
+        SchedulePolicy policy = SchedulePolicy::Sequence) noexcept;
         
 
-        InputManager& GetInputManager() noexcept { return m_InputManager; }
         ECSManager& GetECSManager() const { return *m_ECSManager.get(); }
         Game& GetGameModule() const noexcept { return m_Game; }
         std::string_view GetName() const noexcept;
@@ -44,15 +44,17 @@ namespace powe
 
     private:
 
-        void CallCreateSceneEvent(SceneEvent* sceneEvent);
         
-        Vector<UniquePtr<SceneSystem>> m_Systems;
+        Vector<SharedPtr<SceneSystem>> m_SequenceSystems;
+        Vector<SharedPtr<SceneSystem>> m_UnsequenceSystems;
+        Vector<SharedPtr<SceneSystem>> m_DetachSystem;
+
         UniquePtr<ECSManager> m_ECSManager;
         RefWrap<Game> m_Game;
-        InputManager m_InputManager;
+        // InputManager m_InputManager;
 
         // TODO: Really can't use this scene event because we need run-time update manipulation
-        UniquePtr<SceneEvent> m_SceneEvent;
+        // UniquePtr<SceneEvent> m_SceneEvent;
         
     };
 }

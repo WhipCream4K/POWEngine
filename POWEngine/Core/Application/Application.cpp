@@ -1,4 +1,5 @@
 #include "pch.h"
+
 #include "Application.h"
 #include "Core/Window/WindowManager.h"
 #include "Core/Memory/MemoryManager.h"
@@ -9,6 +10,7 @@
 #include "Core/Application/AppEvent.h"
 #include "Core/Thread/SimpleThreadPool.h"
 #include "Game/Game.h"
+#include "Game/GameEvent.h"
 
 #include "Platform/common/GLFW/glfwModule.h"
 
@@ -19,7 +21,6 @@ powe::Application::Application(const AppDesc& appDesc)
 
     // Initilaize Application memory resource
     SharedPtr<TrackableAllocator> appResource{std::make_shared<TrackableAllocator>()};
-    SharedPtr<PMRResource> some{};
     m_AppAllocator = appResource.get();
 
     MemoryManager::Init(appResource);
@@ -48,6 +49,7 @@ powe::Application::Application(const AppDesc& appDesc)
     // Default AppEvent setup
     m_AppEventSetupLogic = [](powe::AppEventSetup& appEventSetup){
         appEventSetup.Add<glfwEvent>();
+        appEventSetup.Add<GameEvent>();
     };
 
     // Assign Thread ID

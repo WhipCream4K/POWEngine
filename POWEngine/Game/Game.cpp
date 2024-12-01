@@ -16,9 +16,9 @@ Game::Game()
 void Game::OnCreate(ModulesManager* modulesManager)
 {
     const auto resource{ modulesManager->GetModuleResource<Game>() };
-    // m_Scenes = Vector<SharedPtr<Scene>>{ resource.get() };
+
     m_SceneMap = UnOrderedMap<std::string, UniquePtr<Scene>>{ resource.get() };
-    
+
     m_GameEvent = std::allocate_shared<GameEvent>(resource, *this);
 
     auto& app{Application::Get()};
@@ -50,6 +50,18 @@ Scene* Game::CreateScene(std::string_view sceneName) noexcept
     m_SceneMap[std::string(sceneName)] = std::move(scene);
 
     return m_SceneMap[sceneName.data()].get();
+}
+
+void Game::RemoveScene(std::string_view sceneName) noexcept
+{
+    if(IsInAppMainThread())
+    {
+        if (m_SceneMap.find(sceneName.data()) != m_SceneMap.end())
+        {
+            m_SceneMap.erase(sceneName.data());
+        }
+    }
+
 }
 
 std::string_view Game::GetSceneName(const Scene* scene) const noexcept

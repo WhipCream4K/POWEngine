@@ -1,4 +1,4 @@
-    // pch.h: This is a precompiled header file.
+// pch.h: This is a precompiled header file.
 // Files listed below are compiled only once, improving build performance for future builds.
 // This also affects IntelliSense performance, including code completion and many code browsing features.
 // However, files listed here are ALL re-compiled if any one of them is updated between builds.
@@ -19,22 +19,13 @@
 #include <stdexcept>
 #include <ranges>
 
-//#include "../Core/CustomTypes.h"
-//#include "../Math/Math.h"
-//#include "../Utils/MacroDef.h"
-
 #include "Core/CustomTypes.h"
+#include "Core/Application/Application.h"
+#include "Core/Window/WindowManager.h"
+#include "Core/Window/Window.h"
+#include "Core/ModulesManager.h"
+#include "Core/Memory/MemoryManager.h"
 #include "Core/Memory/Allocator.h"
-
-// #define USE_GLFW_WINDOW 1
-
-// enum
-// {
-//     USE_GLFW_WINDOW = 1,
-//     // USE_SFML_WINDOW = 1,
-//     // USE_SFML_RENDERER = 1,
-//     RELEASE_WITH_LOGINFO = 1,
-//     USE_IMGUI = 1
-// };
+#include "Logger/Logger.h"
 
 #endif //PCH_H
