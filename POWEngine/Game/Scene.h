@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Utils/Utils.h"
+#include <future>
+
 #include "Game/Input/InputManager.h"
 
 namespace powe
@@ -18,6 +19,7 @@ namespace powe
         Detach
     };
 
+    class SimpleThreadPool;
     class Scene final
     {
     public:
@@ -46,12 +48,13 @@ namespace powe
 
         
         Vector<SharedPtr<SceneSystem>> m_SequenceSystems;
+
         Vector<SharedPtr<SceneSystem>> m_UnsequenceSystems;
-        Vector<SharedPtr<SceneSystem>> m_DetachSystem;
+        std::future<void> m_SysytemFuture;
 
         UniquePtr<ECSManager> m_ECSManager;
+        WeakPtr<SimpleThreadPool> m_ThreadPoolModule;
         RefWrap<Game> m_Game;
-        // InputManager m_InputManager;
         
     };
 }

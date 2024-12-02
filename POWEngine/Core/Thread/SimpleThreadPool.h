@@ -27,7 +27,7 @@ namespace powe
 	public:
 
 		template<typename Func, typename ... Args>
-		auto EnqueueReturn(Func&& fn, Args&&... args) -> std::future<decltype(fn(args...))>
+		[[nodiscard]] auto EnqueueReturn(Func&& fn, Args&&... args) -> std::future<decltype(fn(args...))>
 		{
 			using Ret = std::invoke_result_t<Func, Args...>;
 

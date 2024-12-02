@@ -23,7 +23,12 @@ namespace powe
 
     protected:
 
-            
+        template<typename T>
+        requires std::is_base_of_v<SceneSystem, T>
+        void RunAfter()
+        {
+            // TODO: Finish this function
+        }
         
     };
 

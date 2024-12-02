@@ -82,7 +82,7 @@ Scene* Game::GetActiveScene() const noexcept
     return m_GameEvent->GetActiveScene();
 }
 
-void Game::OnExit(ModulesManager* modulesManager)
+void Game::OnExit(ModulesManager*)
 {
     m_SceneMap.clear();
 }
