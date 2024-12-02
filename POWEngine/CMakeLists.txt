@@ -18,17 +18,25 @@ GetPOWSources(SRCS)
 
 add_library(${ENGINE_NAME} STATIC ${SRCS})
 
+target_compile_features(${ENGINE_NAME} PRIVATE cxx_std_20)
+
 target_include_directories(${ENGINE_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/PCH)
 
 # set output directory
-# set(OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/bin/${PROJECT_NAME}/${ARCHITECTURE}/${CMAKE_BUILD_TYPE})
+set(OUTPUT ${PROJECT_SOURCE_DIR}/bin/${ENGINE_NAME}/${ARCHITECTURE}/$<IF:$<CONFIG:Debug>,Debug,Release>)
 
 
 set_target_properties(${ENGINE_NAME} PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin/${ENGINE_NAME}
-    LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin/${ENGINE_NAME}
-    ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin/${ENGINE_NAME}
+    RUNTIME_OUTPUT_DIRECTORY ${OUTPUT}
+    LIBRARY_OUTPUT_DIRECTORY ${OUTPUT}
+    ARCHIVE_OUTPUT_DIRECTORY ${OUTPUT}
 )
+
+if(MSVC)
+    target_compile_options(${ENGINE_NAME} PRIVATE /W4 /WX)
+else()
+    target_compile_options(${ENGINE_NAME} PRIVATE -Wall -Wextra -pedantic -Werror)
+endif()
 
 target_precompile_headers(${ENGINE_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/PCH/pch.h

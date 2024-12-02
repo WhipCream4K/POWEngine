@@ -52,9 +52,6 @@ namespace powe
         UniquePtr<ECSManager> m_ECSManager;
         RefWrap<Game> m_Game;
         // InputManager m_InputManager;
-
-        // TODO: Really can't use this scene event because we need run-time update manipulation
-        // UniquePtr<SceneEvent> m_SceneEvent;
         
     };
 }

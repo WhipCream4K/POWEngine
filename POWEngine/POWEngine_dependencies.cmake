@@ -6,7 +6,7 @@ target_include_directories(${ENGINE_NAME} PRIVATE ${GLM_DIR})
 # glfw
 set(GLFW_DIR ${PROJECT_SOURCE_DIR}/vendor/glfw)
 
-find_package(glfw3 CONFIG HINTS ${GLFW_DIR}/bin/lib QUIET)
+find_package(glfw3 HINTS ${GLFW_DIR}/bin QUIET)
 target_include_directories(${ENGINE_NAME} PRIVATE ${GLFW_DIR}/bin/include)
 target_link_libraries(${ENGINE_NAME} glfw3)
 

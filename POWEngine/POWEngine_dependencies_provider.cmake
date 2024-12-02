@@ -1,8 +1,64 @@
 cmake_minimum_required(VERSION 3.24)
 
-macro(my_dependencies_provider method package_name)
+function(BuildDependencies Dir Options)
 
-    # glfw
+    if(GENERATOR_IS_MULTI_CONFIG)
+        set(CONFIG_ARGS "-DCMAKE_CONFIGURATION_TYPES=${CMAKE_CONFIGURATION_TYPES}")
+    else()
+        set(CONFIG_ARGS -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE})
+    endif()
+
+    if(NOT EXISTS ${Dir}/bin)
+        execute_process(
+            COMMAND ${CMAKE_COMMAND} ${Options} ${CONFIG_ARGS} -S ${Dir} -B ${Dir}/build -G ${CMAKE_GENERATOR}
+            RESULT_VARIABLE result
+        )
+
+        if(result EQUAL 0)
+
+            if(GENERATOR_IS_MULTI_CONFIG)
+                execute_process(
+                    COMMAND ${CMAKE_COMMAND} --build ${Dir}/build --config Release
+                    COMMAND ${CMAKE_COMMAND} --build ${Dir}/build --config Debug
+                    RESULT_VARIABLE result
+                )
+            else()
+                execute_process(
+                    COMMAND ${CMAKE_COMMAND} --build ${Dir}/build
+                    RESULT_VARIABLE result
+                )
+            endif()
+
+        endif()
+
+        if(result EQUAL 0)
+
+            if(GENERATOR_IS_MULTI_CONFIG)
+                execute_process(
+                    COMMAND ${CMAKE_COMMAND} --install ${Dir}/build --prefix ${Dir}/bin/Release --config Release
+                    COMMAND ${CMAKE_COMMAND} --install ${Dir}/build --prefix ${Dir}/bin/Debug --config Debug
+                )
+
+            else()
+                execute_process(
+                    COMMAND ${CMAKE_COMMAND} --install ${Dir}/build --prefix ${Dir}/bin/${CMAKE_BUILD_TYPE}
+                )
+            endif()
+
+
+        endif()
+
+        if(NOT result EQUAL 0)
+            message(FATAL_ERROR "Failed to build ${Dir}")
+        endif()
+
+    endif()
+
+endfunction() 
+
+# GLFW
+function(Build_GLFW)
+    
     set(GLFW_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vendor/glfw)
 
     set(GLFW_OPTIONS 
@@ -11,17 +67,14 @@ macro(my_dependencies_provider method package_name)
         -DGLFW_BUILD_TESTS=OFF
         -DGLFW_BUILD_DOCS=OFF
         -DGLFW_INSTALL=ON
-        -DCMAKE_INSTALL_PREFIX=${GLFW_DIR}/bin
     )
 
-    if(NOT EXISTS ${GLFW_DIR}/bin/lib)
-        execute_process(
-            COMMAND ${CMAKE_COMMAND} ${GLFW_OPTIONS} -S ${GLFW_DIR} -B ${GLFW_DIR}/build -G ${CMAKE_GENERATOR}
-            COMMAND ${CMAKE_COMMAND} --build ${GLFW_DIR}/build --config ${CMAKE_BUILD_TYPE} --target install
-        )
-    endif()
+    BuildDependencies(${GLFW_DIR} "${GLFW_OPTIONS}")
 
+endfunction()
 
+macro(my_dependencies_provider method package_name)
+    Build_GLFW()
 endmacro()
 
 cmake_language(
