@@ -2,15 +2,16 @@
 #include "ComponentView.h"
 
 
-powe::ComponentView::ComponentView(PMRResource* memResource, ECSManager& manager, const Vector<ComponentID>& compIDs)
-      : m_ComponentsAddresses{memResource}
+powe::ComponentView::ComponentView(ECSManager& manager, const Vector<ComponentID>& compIDs)
+      : m_ComponentsAddresses{manager.GetResource().get()}
 {
-    Vector<IArchetype*> outArchetype(memResource);
+    auto resc{manager.GetResource()};
+    Vector<IArchetype*> outArchetype(resc.get());
 
     manager.GetArchetypes(compIDs, outArchetype);
     for (auto& archetype : outArchetype)
     {
-        Vector<void*> componentAddresses(memResource);
+        Vector<void*> componentAddresses(resc.get());
         archetype->GetComponents(compIDs, componentAddresses);
         m_ComponentsAddresses.try_emplace(archetype, componentAddresses);
         archetype->AddArchetypeInvalidCallback([this](IArchetype* archetype)
