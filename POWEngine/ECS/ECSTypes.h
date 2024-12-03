@@ -55,8 +55,45 @@ namespace powe
 		std::vector<ComponentID> archetypeKey{};
 	};
 
+	// Check if a single type satisfies the conditions
+	template <typename T>
+	constexpr bool ComponentConditions = 
+	    std::is_copy_constructible_v<T> &&
+	    !std::is_pointer_v<T> &&
+	    std::is_standard_layout_v<T>;
+
+	// Check if all types in a parameter pack satisfy the conditions
+	template <typename... Args>
+	struct check_conditions_pack : std::conjunction<std::bool_constant<ComponentConditions<Args>>...> {};
+
+	// Specialization for std::tuple
+	template <typename Tuple>
+	struct check_conditions_tuple;
+
+	template <typename... Ts>
+	struct check_conditions_tuple<std::tuple<Ts...>> : check_conditions_pack<Ts...> {};
+
+	// Generic interface for both variadic arguments and tuples
+	template <typename T>
+	struct check_conditions;
+
+	// For parameter packs (wrapped in tuple)
+	template <typename... Args>
+	struct check_conditions<std::tuple<Args...>> : check_conditions_pack<Args...> {};
+
+	// For raw tuples
+	template <typename T>
+	struct check_conditions : check_conditions_tuple<T> {};
+
+	// Helper variable template
+	template <typename T>
+	constexpr bool check_conditions_v = check_conditions<T>::value;
+
+
+	// Component concept accepts type and also tuple packs
 	template<typename T>
-	concept ComponentConcept = std::is_copy_constructible_v<T> && !std::is_pointer_v<T> && std::is_standard_layout_v<T>;
+	concept ComponentConcept = check_conditions_v<std::decay_t<T>>;
+
 
 	using DynamicBitSet = std::vector<bool>;
 

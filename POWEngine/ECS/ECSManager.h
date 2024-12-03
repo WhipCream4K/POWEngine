@@ -13,7 +13,7 @@ namespace powe
 	{
 	public:
 
-		ECSManager(PMRResource* memResource = DefaultAllocator::Engine);
+		ECSManager(const SharedPtr<PMRResource>& memResource);
 		
 		EntityID CreateEntity() { return m_CurrentEntityID++; }
 
@@ -36,6 +36,8 @@ namespace powe
 		 */
 		IArchetype* GetArchetype(const Vector<ComponentID>& compIDs) const;
 
+		SharedPtr<PMRResource> GetResource() const noexcept { return m_MemResource; }
+
 		template<typename ...Args> requires (ComponentConcept<Args> && ...)
 		IArchetype* GetOrCreateArchetype();
 
@@ -47,7 +49,7 @@ namespace powe
 
 		DynamicBitsetRange<UniquePtr<IArchetype>> m_Archetypes;
 		UnOrderedMap<EntityID,Vector<ComponentID>> m_EntityArchetypeMap;
-		PMRResource* m_MemResource;
+		SharedPtr<PMRResource> m_MemResource;
 		std::atomic<EntityID> m_CurrentEntityID{};
 
 	};

@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "ECSManager.h"
 
-powe::ECSManager::ECSManager(std::pmr::memory_resource* memResource)
+powe::ECSManager::ECSManager(const SharedPtr<PMRResource>& memResource)
 	: m_Archetypes{ memResource }
 	, m_MemResource(memResource)
 {

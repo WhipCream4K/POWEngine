@@ -45,6 +45,18 @@ void Scene::Update(float deltaTime)
     }
 }
 
+void Scene::SceduleSystem(const SharedPtr<SceneSystem> &system, SchedulePolicy policy) noexcept
+{
+	if (policy == SchedulePolicy::Sequence)
+	{
+		m_SequenceSystems.emplace_back(system);
+	}
+	else
+	{
+		m_UnsequenceSystems.emplace_back(system);
+	}
+}
+
 SharedPtr<PMRResource> Scene::GetResource() const noexcept
 {
     return m_Game->GetResource();

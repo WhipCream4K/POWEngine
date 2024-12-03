@@ -13,41 +13,41 @@
 
 #include "Core/Memory/Allocator.h"
 
-template <typename FnType>
-struct FnTraits
-{
-};
+// template <typename FnType>
+// struct FnTraits
+// {
+// };
 
-template <typename Ret, typename... Args>
-struct FnTraits<Ret(*)(Args...)> : FnTraits<Ret(Args...)>
-{
-};
+// template <typename Ret, typename... Args>
+// struct FnTraits<Ret(*)(Args...)> : FnTraits<Ret(Args...)>
+// {
+// };
 
-template <typename Ret, typename... Args>
-struct FnTraits<Ret(Args...)>
-{
-    using return_type = Ret;
-    using fn_type = Ret(Args...);
-    using tuple_args = std::tuple<Args...>;
-};
+// template <typename Ret, typename... Args>
+// struct FnTraits<Ret(Args...)>
+// {
+//     using return_type = Ret;
+//     using fn_type = Ret(Args...);
+//     using tuple_args = std::tuple<Args...>;
+// };
 
-template <typename Ret, typename UserClass, typename... Args>
-struct FnTraits<Ret(UserClass::*)(Args...)> : FnTraits<Ret(UserClass&, Args...)>
-{
-    using return_type = Ret;
-    using fn_type = Ret(Args...);
-    using tuple_args = std::tuple<Args...>;
-    using class_type = UserClass;
-};
+// template <typename Ret, typename UserClass, typename... Args>
+// struct FnTraits<Ret(UserClass::*)(Args...)> : FnTraits<Ret(UserClass&, Args...)>
+// {
+//     using return_type = Ret;
+//     using fn_type = Ret(Args...);
+//     using tuple_args = std::tuple<Args...>;
+//     using class_type = UserClass;
+// };
 
-template <typename Ret, typename UserClass, typename... Args>
-struct FnTraits<Ret(UserClass::*)(Args...) const> : FnTraits<Ret(UserClass&, Args...)>
-{
-    using return_type = Ret;
-    using fn_type = Ret(Args...);
-    using tuple_args = std::tuple<Args...>;
-    using class_type = UserClass;
-};
+// template <typename Ret, typename UserClass, typename... Args>
+// struct FnTraits<Ret(UserClass::*)(Args...) const> : FnTraits<Ret(UserClass&, Args...)>
+// {
+//     using return_type = Ret;
+//     using fn_type = Ret(Args...);
+//     using tuple_args = std::tuple<Args...>;
+//     using class_type = UserClass;
+// };
 
 template <typename T, typename... Ts>
 concept is_one_of = (std::is_same_v<T, Ts> || ...) || (std::is_base_of_v<Ts, T> || ...);
@@ -74,6 +74,25 @@ inline constexpr std::size_t tuple_index_v{tuple_index<T, Tuple>::value};
 
 namespace powe
 {
+    //These two use a member function pointer type to deduce types for a callable (lambdas, mainly)
+    template<typename T>
+    struct MemFuncType
+    {
+        using type = void;
+    };
+    template<typename Ret, typename Class, typename... Args>
+    struct MemFuncType<Ret (Class::*)(Args...) const>
+    {
+        using fn_type = std::function<Ret(Args...)>;
+        using return_type = Ret;
+        using arg_types = std::tuple<Args...>;
+    };
+
+    //Clean template to get the type info of a callable type (lambdas mainly)
+    template<typename F>
+    using FuncInfo = MemFuncType<decltype(&F::operator())>;
+
+
     using RawByte = std::byte;
 
     template<typename T>
