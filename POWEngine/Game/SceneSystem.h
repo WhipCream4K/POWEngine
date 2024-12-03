@@ -39,8 +39,6 @@ namespace powe
         template<typename Func,typename Tuple = FuncInfo<Func>::arg_types>
         void ForEach(Func&& func)
         {
-            using FI = FuncInfo<Func>;
-            using ArgumentTypes = FI::arg_types;
 
             std::function<void(ComponentView&)> task{[f = std::forward<Func>(func)](ComponentView& view){
                 view.Visit(f);

@@ -87,7 +87,9 @@ namespace powe
             }
         }
 
-    public:
+        constexpr bool empty() const { return m_ComponentsAddresses.empty(); }
+
+    private:
 
         template<typename... Args>
         Iterator<Args...> begin()
@@ -105,12 +107,8 @@ namespace powe
 
     private:
 
-        
-
         void ResetComponentAddresses(IArchetype* archetype);
 
-
-        // RefWrap<ECSManager> m_ECSManager;
         Vector<ComponentID> m_ComponentIDs;
         ArchetypeComponentHandle m_ComponentsAddresses;
     };

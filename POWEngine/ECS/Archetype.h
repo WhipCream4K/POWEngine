@@ -34,10 +34,10 @@ namespace powe
         using ComponentBlock = std::tuple<Args...>;
         using Iterator = typename Vector<ComponentBlock>::iterator;
 
-        Archetype(PMRResource* resource = DefaultAllocator::Engine)
-            : m_Components(resource)
-              , m_EntityToIndex(resource)
-              , m_OldCapacity(m_Components.capacity())
+        Archetype(const SharedPtr<PMRResource>& memResource)
+            : m_Components(memResource.get())
+            , m_EntityToIndex(memResource.get())
+            , m_OldCapacity(m_Components.capacity())
         {
         }
 
@@ -93,7 +93,7 @@ namespace powe
 
         void emplace_back(EntityID id, Args&&... components)
         {
-            m_Components.emplace_back(std::make_tuple<ComponentBlock>(std::move(components)));
+            m_Components.emplace_back(std::tie(std::forward<Args>(components)...));
             m_EntityToIndex[id] = m_Components.size() - 1;
 
             // Detect which index of this type is being emplace and store it
@@ -119,7 +119,7 @@ namespace powe
             return m_Components.end();
         }
 
-        typename Iterator erase(typename Iterator begin, typename Iterator end)
+        Iterator erase(Iterator begin, Iterator end)
         {
             for (auto it = m_EntityToIndex.begin(); it != m_EntityToIndex.end();)
             {
@@ -138,7 +138,7 @@ namespace powe
             return m_Components.erase(begin, end);
         }
 
-        typename Iterator erase(typename Iterator pos)
+        Iterator erase(Iterator pos)
         {
             for (auto it = m_EntityToIndex.begin(); it != m_EntityToIndex.end();)
             {
@@ -159,6 +159,7 @@ namespace powe
         }
 
     private:
+    
         Vector<ComponentBlock> m_Components;
         UnOrderedMap<ComponentID, uint32_t> m_ComponentToIndex;
         UnOrderedMap<EntityID, size_t> m_EntityToIndex;
