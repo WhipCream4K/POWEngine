@@ -75,6 +75,18 @@ namespace powe
             ArchetypeComponentHandle::iterator m_ArchetypeIterator;
         };
 
+
+        template<typename Visitor>
+        constexpr void Visit(Visitor&& visitor)
+        {
+            using FI = FuncInfo<Visitor>;
+            using TupleArgsTypes = FI::arg_types;
+            for(auto it = begin<TupleArgsTypes>(); it != end<TupleArgsTypes>(); ++it)
+            {
+                std::apply(visitor, *it);
+            }
+        }
+
     public:
 
         template<typename... Args>
@@ -89,17 +101,7 @@ namespace powe
             return Iterator<Args...>(m_ComponentsAddresses.end());
         }
 
-        template<typename Visitor>
-        constexpr void Visit(Visitor&& visitor)
-        {
-            using FI = FuncInfo<Visitor>;
-            using TupleArgsTypes = FI::arg_types;
 
-            for(auto it = begin<TupleArgsTypes>(); it != end<TupleArgsTypes>(); ++it)
-            {
-                std::apply(visitor, *it);
-            }
-        }
 
     private:
 

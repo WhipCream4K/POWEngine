@@ -19,6 +19,25 @@ namespace powe
         (key.emplace_back(ComponentIDGen::Get<Args>()), ...);
     }
 
+
+    template<is_tuple Tuple,size_t ...Is>
+    Vector<ComponentID> MakeComponentRange(std::index_sequence<Is...>)
+    {
+        Vector<ComponentID> key{};
+        // (key.emplace_back(std::tuple_element_t<Is, std::decay_t<Tuple>>(tuple)>), ...);
+        (key.emplace_back(ComponentIDGen::Get<std::tuple_element_t<Is,Tuple>>()), ...);
+        return key;
+    }
+    
+    template<is_tuple Tuple>
+    void MakeComponentRange()
+    {
+        return MakeComponentRange(std::make_index_sequence<std::tuple_size_v<std::decay_t<Tuple>>>{});
+    }
+    
+
+
+
     inline DynamicBitSet MakeArchetypeKey(const Vector<ComponentID>& compIDs)
     {
         DynamicBitSet key(ComponentIDGen::Size());

@@ -20,7 +20,7 @@ namespace powe
 
     public:
         
-        SceneSystem() = default;
+        SceneSystem(Scene& sceneRef);
         SceneSystem(const SceneSystem&) = delete;
         SceneSystem& operator=(const SceneSystem&) = delete;
         SceneSystem(SceneSystem&&) = delete;
@@ -34,8 +34,9 @@ namespace powe
 
     protected:
 
-        template<typename Func,typename ArgsTypes = FuncInfo<Func>::arg_types>
-        // requires ComponentConcept<std::tuple_element_t<0,ArgsTypes>>
+        ECSManager& GetECSManager() const noexcept;
+
+        template<typename Func,typename Tuple = FuncInfo<Func>::arg_types>
         void ForEach(Func&& func)
         {
             using FI = FuncInfo<Func>;
@@ -46,9 +47,12 @@ namespace powe
              }};
 
             // Create ComponentView for this
+            auto& ecsManager{GetECSManager()};
+            auto compIDs{MakeComponentRange<Tuple>()};
+            ComponentView view{ecsManager,compIDs};
 
-
-            // m_UpdateTasks.emplace_back(task);
+            // TODO: Seperate Create, Start, Update, Exit task
+            m_UpdateTasks.emplace_back(std::make_pair(task,view));
         }
 
         template<typename T>
@@ -59,6 +63,8 @@ namespace powe
         }
 
     private:
+
+        RefWrap<Scene> m_Scene;
 
         Vector<ComponentTask> m_CreateTasks;
         Vector<ComponentTask> m_StartTasks;

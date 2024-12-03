@@ -11,10 +11,10 @@ namespace powe
 	using SparseHandle = uint32_t;
 
 	//constexpr ComponentTypeID ChildOf = (1u << 31u);
-	constexpr EntityID INVALID_GAMEOBJECT_ID{ UINT32_MAX };
+	// constexpr EntityID INVALID_GAMEOBJECT_ID{ UINT32_MAX };
 
-	// https://ajmmertens.medium.com/building-an-ecs-1-types-hierarchies-and-prefabs-9f07666a1e9d
-	constexpr uint32_t SparseBitPos = 31;
+	// // https://ajmmertens.medium.com/building-an-ecs-1-types-hierarchies-and-prefabs-9f07666a1e9d
+	// constexpr uint32_t SparseBitPos = 31;
 
 	enum class ComponentFlag : ComponentID
 	{
@@ -86,8 +86,8 @@ namespace powe
 	struct check_conditions : check_conditions_tuple<T> {};
 
 	// Helper variable template
-	template <typename T>
-	constexpr bool check_conditions_v = check_conditions<T>::value;
+	template <typename... Args>
+	constexpr bool check_conditions_v = check_conditions<Args...>::value;
 
 
 	// Component concept accepts type and also tuple packs
