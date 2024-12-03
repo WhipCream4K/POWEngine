@@ -6,50 +6,36 @@
 namespace powe
 {
     template<ComponentConcept... Args>
-    Vector<ComponentID> MakeComponentRange()
+    [[nodiscard]] Set<ComponentID> MakeComponentSet()
     {
-        Vector<ComponentID> key{};
-        (key.emplace_back(ComponentIDGen::Get<Args>()), ...);
+        Set<ComponentID> key{};
+        (key.emplace(ComponentIDGen::Get<Args>()), ...);
         return key;
     }
 
     template<ComponentConcept... Args>
-    void MakeComponentRange(Vector<ComponentID>& key)
+    constexpr void MakeComponentSet(Set<ComponentID>& key)
     {
-        (key.emplace_back(ComponentIDGen::Get<Args>()), ...);
+        (key.emplace(ComponentIDGen::Get<Args>()), ...);
     }
 
-
     template<is_tuple Tuple,size_t ...Is>
-    Vector<ComponentID> MakeComponentRange(std::index_sequence<Is...>)
+    [[nodiscard]] Set<ComponentID> MakeComponentSet(std::index_sequence<Is...>)
     {
-        Vector<ComponentID> key{};
-        (key.emplace_back(ComponentIDGen::Get<std::tuple_element_t<Is,Tuple>>()), ...);
+        Set<ComponentID> key{};
+        (key.emplace(ComponentIDGen::Get<std::tuple_element_t<Is,Tuple>>()), ...);
         return key;
     }
     
     template<is_tuple Tuple>
-    Vector<ComponentID> MakeComponentRange()
+    [[nodiscard]] Set<ComponentID> MakeComponentSet()
     {
-        return MakeComponentRange(std::make_index_sequence<std::tuple_size_v<std::decay_t<Tuple>>>{});
-    }
-    
-
-    inline DynamicBitSet MakeArchetypeKey(const Vector<ComponentID>& compIDs)
-    {
-        DynamicBitSet key(ComponentIDGen::Size());
-        for (const auto& id : compIDs)
-        {
-            key[id] = true;
-        }
-        return key;
-    }
-    
-    inline bool IsArchetypeMatch(const DynamicBitSet& archetypeKey, const Vector<ComponentID>& queryKey)
-    {
-        // might throw watch out
-        return std::ranges::all_of(queryKey, [&archetypeKey](const ComponentID& id) { return archetypeKey[id]; });
+        return MakeComponentSet(std::make_index_sequence<std::tuple_size_v<std::decay_t<Tuple>>>{});
     }
 
 
+    [[maybe_unused]] static inline bool IsArchetypeMatch(const Set<ComponentID>& archetypeKey, const Set<ComponentID>& queryKey)
+    {
+       return std::includes(queryKey.begin(), queryKey.end(), archetypeKey.begin(), archetypeKey.end());
+    }    
 }

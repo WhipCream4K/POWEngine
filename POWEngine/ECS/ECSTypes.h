@@ -41,19 +41,12 @@ namespace powe
 	{
 		bool operator()(const Set<ComponentID>& left, const Set<ComponentID>& right) const
 		{
-			return std::ranges::all_of(right, [&left](const auto& elem) { return left.contains(elem); });
+        	return std::includes(left.begin(), left.end(), right.begin(), right.end());
 		}
 	};
 
 	template<typename Val>
-	using ECSComponentMap = std::pmr::unordered_map<Set<ComponentID>, Val, SetHasher, EqualOp>;
-
-	class BaseComponent;
-	struct PreArchetypeTrait
-	{
-		ECSComponentMap<SharedPtr<RawByte[]>> componentData{};
-		std::vector<ComponentID> archetypeKey{};
-	};
+	using IndexedMultimap = std::pmr::multimap<Set<ComponentID>, Val, EqualOp>;
 
 	// Check if a single type satisfies the conditions
 	template <typename T>
@@ -86,19 +79,13 @@ namespace powe
 	struct check_conditions : check_conditions_tuple<T> {};
 
 	// Helper variable template
-	template <typename... Args>
-	constexpr bool check_conditions_v = check_conditions<Args...>::value;
+	template <typename T>
+	constexpr bool check_conditions_v = check_conditions<T>::value;
 
 
 	// Component concept accepts type and also tuple packs
 	template<typename T>
 	concept ComponentConcept = check_conditions_v<std::decay_t<T>>;
-
-
-	using DynamicBitSet = std::vector<bool>;
-
-	template<typename Val>
-	using DynamicBitsetRange = Vector<std::pair<DynamicBitSet,Val>>;
 
 	using CompAddress = void*;
 	

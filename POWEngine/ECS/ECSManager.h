@@ -1,30 +1,33 @@
 #pragma once
 
 #include "ECSTypes.h"
+#include "ECS/ECSUtils.h"
 #include "Archetype.h"
-#include "ECSUtils.h"
-#include "Utils/Utils.h"
 
 
 namespace powe
 {
 	class IArchetype;
+	class Entity;
 	class ECSManager final
 	{
 	public:
 
 		ECSManager(const SharedPtr<PMRResource>& memResource);
-		
-		EntityID CreateEntity() { return m_CurrentEntityID++; }
 
-		template<ComponentConcept... Args>
-		EntityID CreateEntity(Args&&... args)
-		{
-			Archetype<Args...>& archetype{ GetOrCreateArchetype<Args...>() };
-			EntityID newID{m_CurrentEntityID++};
-			archetype.emplace_back(newID,std::forward<Args>(args)...);
-			return newID;
-		}
+		EntityID MakeNewEntityID() { return m_CurrentEntityID++; }
+		Entity CreateEntity() noexcept;
+		
+		// EntityID CreateEntity() { return m_CurrentEntityID++; }
+
+		// template<typename... Args> requires (ComponentConcept<Args> && ...)
+		// EntityID CreateEntity(Args&&... args)
+		// {
+		// 	Archetype<Args...>& archetype{ GetOrCreateArchetype<Args...>() };
+		// 	EntityID newID{m_CurrentEntityID++};
+		// 	archetype.emplace_back(newID,std::forward<Args>(args)...);
+		// 	return newID;
+		// }
 
 		void GetArchetypes(const Vector<ComponentID>& query,Vector<IArchetype*>& outArchetypes) const;
 		
@@ -34,39 +37,40 @@ namespace powe
 		 * @param compIDs Component ID
 		 * @return The first match archetype of the given ids
 		 */
-		IArchetype* GetArchetype(const Vector<ComponentID>& compIDs) const;
+		IArchetype* GetArchetype(const Vector<ComponentID>& query) const noexcept;
+		IArchetype* GetArchetype(const Set<ComponentID>& query) const noexcept;
 
 		SharedPtr<PMRResource> GetResource() const noexcept { return m_MemResource; }
 
-		template<typename ...Args> requires (ComponentConcept<Args> && ...)
-		IArchetype* GetOrCreateArchetype();
+		bool ContainsArchetype(const Vector<ComponentID>& query) const noexcept;
+		bool ContainsArchetype(const Set<ComponentID>& query) const noexcept;
 
-		bool ContainsArchetype(const Vector<ComponentID>& compIDs) const;
+		template <typename ... Args> requires (ComponentConcept<Args> && ...)
+		SharedPtr<Archetype<Args...>> GetOrCreateArchetype()
+		{
+			const Set<ComponentID> componentRange{ MakeComponentSet<Args...>() };
+			
+			if(ContainsArchetype(componentRange))
+			{
+				return GetArchetype(componentRange);
+			}
+	
+			const SharedPtr<Archetype<Args...>> archetype{std::allocate_shared<Archetype<Args...>>(m_MemResource,m_MemResource)};
+			InsertArchetype(componentRange,archetype);
+			return archetype;
+		}
 	
 	private:
 
-		void InsertArchetype(const Vector<ComponentID>& compIDs,UniquePtr<IArchetype>&& archetype);
+		void InsertArchetype(const Set<ComponentID>& compIDs,const SharedPtr<IArchetype> archetype);
+		// void InsertArchetype(const Vector<ComponentID>& compIDs,UniquePtr<IArchetype>&& archetype);
 
-		DynamicBitsetRange<UniquePtr<IArchetype>> m_Archetypes;
-		UnOrderedMap<EntityID,Vector<ComponentID>> m_EntityArchetypeMap;
+		IndexedMultimap<SharedPtr<IArchetype>> m_Archetypes;
 		SharedPtr<PMRResource> m_MemResource;
 		std::atomic<EntityID> m_CurrentEntityID{};
 
 	};
 
-	template <typename ... Args> requires (ComponentConcept<Args> && ...)
-	IArchetype* ECSManager::GetOrCreateArchetype()
-	{
-		const Vector<ComponentID> componentRange{ MakeComponentRange<Args...>() };
-		
-		if(ContainsArchetype(componentRange))
-		{
-			return GetArchetype(componentRange);
-		}
 
-		auto archetype{AllocateUnique<Archetype<Args...>>(m_MemResource)};
-		InsertArchetype(componentRange,std::move(archetype));
-		return archetype.get();
-	}
 }
 

@@ -1,28 +1,42 @@
 #include "pch.h"
+
+#include "ECSUtils.h"
 #include "ECSManager.h"
+#include "Entity.h"
+
+using namespace powe;
 
 powe::ECSManager::ECSManager(const SharedPtr<PMRResource>& memResource)
-	: m_Archetypes{ memResource }
+	: m_Archetypes{ memResource.get() }
 	, m_MemResource(memResource)
 {
 }
 
+Entity ECSManager::CreateEntity() noexcept
+{
+	return Entity{ *this };
+}
+
 void powe::ECSManager::GetArchetypes(const Vector<ComponentID>& query, Vector<IArchetype*>& outArchetypes) const
 {
+	const Set<ComponentID> querySet{ query.begin(), query.end() };
+
 	for(const auto& [archetypeKey, archetypes] : m_Archetypes)
 	{
-		if(IsArchetypeMatch(archetypeKey, query))
+		if(IsArchetypeMatch(archetypeKey, querySet))
 		{
 			outArchetypes.emplace_back(archetypes.get());
 		}
 	}
 }
 
-powe::IArchetype* powe::ECSManager::GetArchetype(const Vector<ComponentID>& compIDs) const
+powe::IArchetype* powe::ECSManager::GetArchetype(const Vector<ComponentID>& query) const noexcept
 {
+	const Set<ComponentID> queryKey{ query.begin(), query.end() };
+
 	for(const auto& [archetypeKey, archetypes] : m_Archetypes)
 	{
-		if(IsArchetypeMatch(archetypeKey, compIDs))
+		if(IsArchetypeMatch(archetypeKey, queryKey))
 		{
 			return archetypes.get();
 		}
@@ -31,16 +45,43 @@ powe::IArchetype* powe::ECSManager::GetArchetype(const Vector<ComponentID>& comp
 	return nullptr;
 }
 
-bool powe::ECSManager::ContainsArchetype(const Vector<ComponentID>& compIDs) const
+IArchetype* ECSManager::GetArchetype(const Set<ComponentID>& query) const noexcept
 {
-	return std::ranges::any_of(m_Archetypes, [&compIDs](const auto& pair)
+	for(const auto& [archetypeKey, archetypes] : m_Archetypes)
 	{
-		return IsArchetypeMatch(pair.first, compIDs);
-	});
+		if(IsArchetypeMatch(archetypeKey, query))
+		{
+			return archetypes.get();
+		}
+	}
+
+	return nullptr;
 }
 
-void powe::ECSManager::InsertArchetype(const Vector<ComponentID>& compIDs, UniquePtr<IArchetype>&& archetype)
+bool powe::ECSManager::ContainsArchetype(const Vector<ComponentID>& query) const noexcept
 {
-	const DynamicBitSet key{ MakeArchetypeKey(compIDs) };
-	m_Archetypes.emplace_back(std::make_pair(key, std::move(archetype)));
+	const Set<ComponentID> queryKey{ query.begin(), query.end() };
+
+	for(const auto& [archetypeKey, archetypes] : m_Archetypes)
+	{
+		if(IsArchetypeMatch(archetypeKey, queryKey))
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool ECSManager::ContainsArchetype(const Set<ComponentID>& query) const noexcept
+{
+	for(const auto& [archetypeKey, archetypes] : m_Archetypes)
+	{
+		if(IsArchetypeMatch(archetypeKey, query))
+		{
+			return true;
+		}
+	}
+
+	return false;
 }
