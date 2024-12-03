@@ -16,7 +16,7 @@ namespace powe
         template<typename... Args> requires (ComponentConcept<Args> && ...)
         constexpr void Add(Args&&... args) const noexcept
         {
-                              
+            
         }
 
         EntityID GetID() const noexcept;
