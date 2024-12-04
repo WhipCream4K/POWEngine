@@ -88,5 +88,6 @@ namespace powe
 	concept ComponentConcept = check_conditions_v<std::decay_t<T>>;
 
 	using CompAddress = void*;
-	
+
+	using ComponentStorage = Vector<std::pair<ComponentID,SharedPtr<void>>>;
 }

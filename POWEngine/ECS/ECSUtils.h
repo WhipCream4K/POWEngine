@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "ECSTypes.h"
-#include "ComponentIDGen.h"
+#include "ComponentInfo.h"
 
 namespace powe
 {
@@ -9,21 +9,21 @@ namespace powe
     [[nodiscard]] Set<ComponentID> MakeComponentSet()
     {
         Set<ComponentID> key{};
-        (key.emplace(ComponentIDGen::Get<Args>()), ...);
+        (key.emplace(ComponentInfo::GetID<Args>()), ...);
         return key;
     }
 
     template<ComponentConcept... Args>
     constexpr void MakeComponentSet(Set<ComponentID>& key)
     {
-        (key.emplace(ComponentIDGen::Get<Args>()), ...);
+        (key.emplace(ComponentInfo::GetID<Args>()), ...);
     }
 
     template<is_tuple Tuple,size_t ...Is>
     [[nodiscard]] Set<ComponentID> MakeComponentSet(std::index_sequence<Is...>)
     {
         Set<ComponentID> key{};
-        (key.emplace(ComponentIDGen::Get<std::tuple_element_t<Is,Tuple>>()), ...);
+        (key.emplace(ComponentInfo::GetID<std::tuple_element_t<Is,Tuple>>()), ...);
         return key;
     }
     
@@ -37,7 +37,7 @@ namespace powe
     [[nodiscard]] Vector<ComponentID> MakeComponentVec()
     {
         Vector<ComponentID> key{};
-        (key.emplace_back(ComponentIDGen::Get<Args>()), ...);
+        (key.emplace_back(ComponentInfo::GetID<Args>()), ...);
         return key;
     }
 

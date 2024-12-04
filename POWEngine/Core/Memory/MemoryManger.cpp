@@ -8,17 +8,18 @@ using namespace powe;
 void powe::MemoryManager::Init(const SharedPtr<PMRResource>& memResource)
 {   
     auto* instance{ MemoryManager::Get() };
-    instance->m_DefaultResource = memResource;
+    instance->m_Allocator = memResource;
     instance->m_AllocatorMap = UnOrderedMap<std::string, SharedPtr<PMRResource>>(memResource.get());
 }
 
-powe::SharedPtr<powe::PMRResource> powe::MemoryManager::GetAllocator(std::string_view name) const
+PMRResource* powe::MemoryManager::GetAllocator(std::string_view name) const noexcept
 {
     if (m_AllocatorMap.find(name.data()) != m_AllocatorMap.end())
     {
-        return m_AllocatorMap.at(name.data());
+        return m_AllocatorMap.at(name.data()).get();
     }
-    return nullptr;
+
+    return std::pmr::get_default_resource();
 }
 
 powe::SharedPtr<powe::PMRResource> powe::MemoryManager::NewAllocator(std::string_view name)
@@ -28,7 +29,7 @@ powe::SharedPtr<powe::PMRResource> powe::MemoryManager::NewAllocator(std::string
         return m_AllocatorMap.at(name.data());
     }
 
-    SharedPtr<PMRResource> allocator{std::allocate_shared<TrackableAllocator>(m_DefaultResource)};
+    SharedPtr<PMRResource> allocator{std::allocate_shared<TrackableAllocator>(m_Allocator)};
     m_AllocatorMap[name.data()] = allocator;
     return allocator;
 }

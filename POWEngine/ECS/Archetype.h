@@ -3,9 +3,10 @@
 #include <vector>
 #include <functional>
 
-#include "ComponentIDGen.h"
+#include "ComponentInfo.h"
 #include "ECSTypes.h"
 #include "Core/CustomTypes.h"
+#include "Core/Memory/AllocatorContext.h"
 
 namespace powe
 {
@@ -29,8 +30,8 @@ namespace powe
 
         // Remove entity from archetype and return the tuple of removed components
         // Useful for moving entities to another archetype
-        // virtual constexpr UniquePtr<void,std::function<void(void*)>> Remove(EntityID entityID) noexcept = 0;
-        virtual constexpr void Remove(EntityID id, UniqueBlockPtr&& outBlock) noexcept = 0;
+        virtual constexpr void Remove(EntityID id, UniqueBlockPtr& outBlock) noexcept = 0;
+        virtual constexpr void Remove(EntityID id, ComponentStorage& outComponents) noexcept = 0;
 
         virtual constexpr void Move(EntityID id,const Vector<std::pair<ComponentID,CompAddress>>& movedComponents) noexcept = 0;
         virtual constexpr bool HasComponent(const Vector<ComponentID>& query) const noexcept = 0;
@@ -54,7 +55,7 @@ namespace powe
         void CreateTupleIndex(Vector<ComponentID>& tupleIndex) const
         {
             tupleIndex.reserve(sizeof...(Args));
-            ((tupleIndex.emplace_back(ComponentIDGen::Get<std::decay_t<Args>>()), ...));
+            ((tupleIndex.emplace_back(ComponentInfo::GetIDID<Args>()), ...));
         }
 
         Vector<std::pair<ComponentID,CompAddress>> SortMoveBlock(const Vector<std::pair<ComponentID,CompAddress>>& movedComponents) const
@@ -83,11 +84,16 @@ namespace powe
 
     public:
 
-        Archetype(const SharedPtr<PMRResource>& memResource)
-            : m_Components(memResource.get())
-            , m_EntityToIndex(memResource.get())
-            , m_ComponentToTupleIndex(memResource.get())
+        Archetype()
         {
+            const AllocatorContext context{ AllocatorScope::Game };
+            auto* upStream{ context.GetResource() };
+            
+            m_ComponentToTupleIndex = Vector<ComponentID>(upStream);
+            m_Components = Vector<ComponentBlock>(upStream);
+            m_EntityToIndex = UnOrderedMap<EntityID, uint32_t>(upStream);
+            m_InvalidCallbacks = Vector<InvalidCallback>(upStream);
+
             CreateTupleIndex(m_ComponentToTupleIndex);
         }
 
@@ -101,7 +107,7 @@ namespace powe
                 std::apply([&outAddress, &query, blockIdx](auto&&... components) {
                     for (size_t i = 0; i < query.size(); ++i) {
                         size_t outIdx = blockIdx * query.size() + i;
-                        ((ComponentIDGen::Get<std::decay_t<decltype(components)>>() == query[i] ? 
+                        ((ComponentInfo::GetID<decltype(components)>() == query[i] ? 
                           outAddress[outIdx] = &components : nullptr), ...);
                     }
                 }, block);
@@ -129,7 +135,7 @@ namespace powe
             // TODO: Add call_back invalidation
         }
 
-        void Remove(EntityID id, UniqueBlockPtr&& outBlock) noexcept override
+        void Remove(EntityID id, UniqueBlockPtr& outBlock) noexcept override
         {
             if(auto findItr{ m_EntityToIndex.find(id)}; findItr != m_EntityToIndex.end())
             {
@@ -152,6 +158,29 @@ namespace powe
                 // TODO: Add call_back invalidation
             }
 
+        }
+
+        void Remove(EntityID id, ComponentStorage &outComponents) noexcept override
+        {
+            if(auto findItr{ m_EntityToIndex.find(id)}; findItr != m_EntityToIndex.end())
+            {
+                // pre allocate memory for emplacement
+                outComponents.resize(sizeof...(Args));
+
+                ComponentBlock& block = m_Components[findItr->second];
+
+                std::apply([&outComponents](auto&&... component) {
+
+                    
+                    
+
+                }, block);
+
+                m_Components.erase(m_Components.begin() + findItr->second);
+                m_EntityToIndex.erase(findItr);
+            }
+
+            // TODO: Add call_back invalidation
         }
 
         bool HasComponent(const Vector<ComponentID> &query) const override

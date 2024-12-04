@@ -10,9 +10,9 @@ namespace powe
     {
     public:
 
-        Entity(ECSManager& manager);
+        Entity(ECSManager& manager) noexcept;
 
-        ~Entity() = default;
+        ~Entity();
 
         template<typename... Args> requires (ComponentConcept<Args> && ...)
         void Add(Args&&... args) const noexcept
@@ -21,10 +21,12 @@ namespace powe
             const auto archetype{ m_ECS->GetArchetypeFrom(m_ID) };
             if(archetype == nullptr)
             {
-                // If not, create a new archetype with this component
-                const auto newArchetype{ m_ECS->CreateArchetype<Args...>() };
-                newArchetype->emplace_back(m_ID, std::forward<Args>(args)...);
-                m_ECS->ScheduleAdd(newArchetype);
+                auto addedArchetype{[id = m_ID, ...cArgs = std::forward<Args>(args)](ECSManager& manager) -> void {
+                
+                    
+                }};
+
+                m_ECS->SumbitLateAction(std::move(addedArchetype));
             }
             else
             {
@@ -33,7 +35,7 @@ namespace powe
             }
         }
 
-        EntityID GetID() const noexcept;
+        EntityID GetID() const noexcept { return m_ID; }
 
     private:
 

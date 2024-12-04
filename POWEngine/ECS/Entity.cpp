@@ -5,8 +5,13 @@
 
 using namespace powe;
 
-Entity::Entity(ECSManager& manager)
+Entity::Entity(ECSManager& manager) noexcept
     : m_ECS(manager)
 {
     m_ID = manager.MakeNewEntityID();
+}
+
+Entity::~Entity()
+{
+    m_ECS->Remove(m_ID);
 }
