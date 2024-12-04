@@ -17,6 +17,19 @@ Entity ECSManager::CreateEntity() noexcept
 	return Entity{ *this };
 }
 
+SharedPtr<IArchetype> ECSManager::GetArchetypeFrom(EntityID entityID) const noexcept
+{
+	for(const auto& [archetypeKey, archetypes] : m_Archetypes)
+	{
+		if(archetypes->contains(entityID))
+		{
+			return archetypes;
+		}
+	}
+
+	return nullptr;
+}
+
 void powe::ECSManager::GetArchetypes(const Vector<ComponentID>& query, Vector<IArchetype*>& outArchetypes) const
 {
 	const Set<ComponentID> querySet{ query.begin(), query.end() };

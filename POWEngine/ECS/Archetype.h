@@ -32,7 +32,12 @@ namespace powe
         virtual constexpr void Remove(EntityID id, UniqueBlockPtr&& outBlock) noexcept = 0;
 
         virtual constexpr void Move(EntityID id,const Vector<std::pair<ComponentID,CompAddress>>& movedComponents) noexcept = 0;
+        virtual constexpr bool HasComponent(const Vector<ComponentID>& query) const noexcept = 0;
+
         virtual constexpr size_t size() const noexcept = 0;
+        virtual constexpr bool contains(EntityID id) const noexcept = 0;
+        virtual constexpr bool empty() const noexcept = 0;
+
 
         virtual void AddArchetypeInvalidCallback(std::function<void(IArchetype*)> callback) = 0;
     };
@@ -114,10 +119,10 @@ namespace powe
             auto sortedMovedComponents{ SortMoveBlock(movedComponents)};
             auto newBlock{ MakeBlockFrom(sortedMovedComponents, std::make_index_sequence<sizeof...(Args)>{}) };
 
-            emplace_block(id, std::move(newBlock));
+            emplace_back(id, std::move(newBlock));
         }
 
-        void emplace_block(EntityID id, ComponentBlock&& block)
+        void emplace_back(EntityID id, ComponentBlock&& block)
         {
             m_Components.emplace_back(std::move(block));
             m_EntityToIndex[id] = m_Components.size() - 1;
@@ -150,9 +155,24 @@ namespace powe
 
         }
 
+        bool HasComponent(const Vector<ComponentID> &query) const override
+        {
+            // TODO: Finish this function
+        }
+
         size_t size() const noexcept override
         {
             return m_Components.size();
+        }
+
+        bool contains(EntityID id) const noexcept override
+        {
+            return m_EntityToIndex.contains(id);
+        }
+
+        bool empty() const noexcept override
+        {
+            return m_Components.empty();
         }
 
     private:

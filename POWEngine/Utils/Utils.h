@@ -31,7 +31,6 @@ namespace powe
     }
 
 	
-
 	bool IsInAppMainThread() noexcept;
 	SharedPtr<PMRResource> GetAppResource() noexcept;
 }

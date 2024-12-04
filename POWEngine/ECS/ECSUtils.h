@@ -33,6 +33,14 @@ namespace powe
         return MakeComponentSet(std::make_index_sequence<std::tuple_size_v<std::decay_t<Tuple>>>{});
     }
 
+    template<typename... Args>
+    [[nodiscard]] Vector<ComponentID> MakeComponentVec()
+    {
+        Vector<ComponentID> key{};
+        (key.emplace_back(ComponentIDGen::Get<Args>()), ...);
+        return key;
+    }
+
 
     [[maybe_unused]] static inline bool IsArchetypeMatch(const Set<ComponentID>& archetypeKey, const Set<ComponentID>& queryKey)
     {

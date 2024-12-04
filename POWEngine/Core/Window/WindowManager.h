@@ -1,15 +1,17 @@
 #pragma once
 
 #include "Window.h"
+#include "Core/Memory/UsePMR.h"
+
 namespace powe
 {
     class WindowEvent;
     class WindowSubsystem;
-    class WindowManager final
+    class WindowManager final : public UsePMR
     {
     public:
         
-        WindowManager(const SharedPtr<PMRResource>& memResource);
+        WindowManager();
         WindowManager(const WindowManager&) = delete;
         WindowManager& operator=(const WindowManager&) = delete;
         WindowManager(WindowManager&&) noexcept = default;

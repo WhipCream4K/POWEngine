@@ -17,17 +17,12 @@ namespace powe
 
 		EntityID MakeNewEntityID() { return m_CurrentEntityID++; }
 		Entity CreateEntity() noexcept;
-		
-		// EntityID CreateEntity() { return m_CurrentEntityID++; }
 
-		// template<typename... Args> requires (ComponentConcept<Args> && ...)
-		// EntityID CreateEntity(Args&&... args)
-		// {
-		// 	Archetype<Args...>& archetype{ GetOrCreateArchetype<Args...>() };
-		// 	EntityID newID{m_CurrentEntityID++};
-		// 	archetype.emplace_back(newID,std::forward<Args>(args)...);
-		// 	return newID;
-		// }
+		SharedPtr<IArchetype> GetArchetypeFrom(EntityID entityID) const noexcept;
+		
+		// Add New Archetype or Add component to existing archetype
+		void ScheduleAdd(EntityID entityID,const SharedPtr<IArchetype>& newArchetype) noexcept;
+		void ScheduleAdd(EntityID entityID,const Vector<std::pair<ComponentID,SharedPtr<void>>>&) noexcept;
 
 		void GetArchetypes(const Vector<ComponentID>& query,Vector<IArchetype*>& outArchetypes) const;
 		
@@ -44,6 +39,16 @@ namespace powe
 
 		bool ContainsArchetype(const Vector<ComponentID>& query) const noexcept;
 		bool ContainsArchetype(const Set<ComponentID>& query) const noexcept;
+
+		template<typename ... Args> requires (ComponentConcept<Args> && ...)
+	 	bool HasComponent(EntityID entityID) const noexcept
+		{
+			const auto archetype{ GetArchetypeFrom(entityID) };
+			if(archetype == nullptr)
+				return false;
+			
+			return archetype->HasComponent(MakeComponentVec<Args...>());
+		}
 
 		template <typename ... Args> requires (ComponentConcept<Args> && ...)
 		SharedPtr<Archetype<Args...>> GetOrCreateArchetype()
@@ -66,6 +71,7 @@ namespace powe
 		// void InsertArchetype(const Vector<ComponentID>& compIDs,UniquePtr<IArchetype>&& archetype);
 
 		IndexedMultimap<SharedPtr<IArchetype>> m_Archetypes;
+		UnOrderedMap<EntityID, SharedPtr<IArchetype>> m_EntityToArchetype;
 		SharedPtr<PMRResource> m_MemResource;
 		std::atomic<EntityID> m_CurrentEntityID{};
 
