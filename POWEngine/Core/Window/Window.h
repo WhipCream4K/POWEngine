@@ -21,7 +21,7 @@ namespace powe
          */
         // bool PollEvents(EventQueue& eventQueue);
         
-        static UniquePtr<Window> Create(const SharedPtr<PMRResource>& resc,std::string_view windowName, uint32_t width, uint32_t height);
+        static UniquePtr<Window> Create(const SharedPtr<PMRResource>& allocator,std::string_view windowName, uint32_t width, uint32_t height);
 
         virtual void SetFullscreen(bool fullscreen, bool borderless) = 0;
         virtual void SetTitle(std::string_view title)= 0;

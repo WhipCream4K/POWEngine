@@ -1,13 +1,12 @@
 #pragma once
 
 #include "Window.h"
-#include "Core/Memory/UsePMR.h"
 
 namespace powe
 {
     class WindowEvent;
     class WindowSubsystem;
-    class WindowManager final : public UsePMR
+    class WindowManager final
     {
     public:
         
@@ -20,7 +19,6 @@ namespace powe
 
         void Init();
         void Shutdown() noexcept;
-
     
         Window* CreateWindow(std::string_view windowName, uint32_t width, uint32_t height);
         Window* GetWindow(std::string_view windowName) noexcept;
@@ -34,6 +32,5 @@ namespace powe
     
         UniquePtr<Window> m_MainWindow;
         Vector<UniquePtr<Window>> m_ChildWindows;
-        SharedPtr<PMRResource> m_DefaultRescource;
     };
 }

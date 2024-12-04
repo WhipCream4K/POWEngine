@@ -26,7 +26,7 @@ powe::Application::Application(const AppDesc& appDesc)
     MemoryManager::Init(appResource);
 
     // Init WindowManager
-    m_WindowManager = AllocateUnique<WindowManager>(m_AppAllocator,appResource);
+    m_WindowManager = AllocateUnique<WindowManager>(appResource);
 
     // Init Modules
     m_AppModules = AllocateUnique<ModulesManager>( m_AppAllocator);
@@ -36,7 +36,7 @@ powe::Application::Application(const AppDesc& appDesc)
     m_AppModules->CreateModule<Logger>(loggerResource);
 
     // SimpleThreadPool
-    const auto simeleThreadPoolResource{MemoryManager::Get()->NewAllocator("SimpleThreadPool")};
+    const auto simeleThreadPoolResource{MemoryManager::Get()->NewAllocator("ThreadPool")};
     m_AppModules->CreateModule<SimpleThreadPool>(simeleThreadPoolResource);
 
     // GLFW module

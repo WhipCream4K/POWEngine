@@ -7,7 +7,7 @@
 using namespace powe;
 
 
-UniquePtr<Window> Window::Create(const SharedPtr<PMRResource>& resc,std::string_view windowName, uint32_t width, uint32_t height)
+UniquePtr<Window> Window::Create(const SharedPtr<PMRResource>& allocator,std::string_view windowName, uint32_t width, uint32_t height)
 {   
-    return AllocateUnique<glfwWindow>(resc,windowName, width, height);
+    return AllocateUnique<glfwWindow>(allocator,windowName, width, height);
 }

@@ -7,8 +7,9 @@
 using namespace powe;
 
 powe::ECSManager::ECSManager(const SharedPtr<PMRResource>& memResource)
-	: m_Archetypes{ memResource.get() }
-	, m_MemResource(memResource)
+	: m_UpStream(memResource)
+	, m_Archetypes{ memResource.get() }
+	, m_EntityToArchetype(memResource.get())
 {
 }
 

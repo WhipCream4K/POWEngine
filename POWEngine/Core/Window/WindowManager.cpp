@@ -6,8 +6,7 @@
 #include "Logger/Logger.h"
 
 
-powe::WindowManager::WindowManager(const SharedPtr<PMRResource>& memResource)
-    : m_DefaultRescource(memResource)
+powe::WindowManager::WindowManager()
 {
 }
 

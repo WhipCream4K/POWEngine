@@ -6,19 +6,19 @@ namespace powe
 {
 
 	template<typename T, typename... Args>
-	constexpr UniquePtr<T> AllocateUnique(std::pmr::memory_resource* memResource, Args&&... args)
+	constexpr UniquePtr<T> AllocateUnique(std::pmr::memory_resource* allocator, Args&&... args)
 	{
-		void* memory = memResource->allocate(sizeof(T), alignof(T));
+		void* memory = allocator->allocate(sizeof(T), alignof(T));
 		T* ptr = new (memory) T(std::forward<Args>(args)...);
-		return UniquePtr<T,PolyMorphicDeleter>(ptr, memResource);
+		return UniquePtr<T,PolyMorphicDeleter>(ptr, allocator);
 	}
 
 	template<typename T, typename... Args>
-	constexpr UniquePtr<T> AllocateUnique(const SharedPtr<PMRResource>& memResource, Args&&... args)
+	constexpr UniquePtr<T> AllocateUnique(const SharedPtr<PMRResource>& allocator, Args&&... args)
 	{
-		void* memory = memResource->allocate(sizeof(T), alignof(T));
+		void* memory = allocator->allocate(sizeof(T), alignof(T));
 		T* ptr = new (memory) T(std::forward<Args>(args)...);
-		return UniquePtr<T,PolyMorphicDeleter>(ptr, memResource.get());
+		return UniquePtr<T,PolyMorphicDeleter>(ptr, allocator.get());
 	}
 
 	template<typename T>

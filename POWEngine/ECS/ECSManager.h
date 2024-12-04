@@ -13,7 +13,8 @@ namespace powe
 	{
 	public:
 
-		ECSManager(const SharedPtr<PMRResource>& memResource);
+		ECSManager() = default;
+		ECSManager(const SharedPtr<PMRResource>& upStream);
 
 		EntityID MakeNewEntityID() { return m_CurrentEntityID++; }
 		Entity CreateEntity() noexcept;
@@ -21,8 +22,14 @@ namespace powe
 		SharedPtr<IArchetype> GetArchetypeFrom(EntityID entityID) const noexcept;
 		
 		// Add New Archetype or Add component to existing archetype
-		void ScheduleAdd(EntityID entityID,const SharedPtr<IArchetype>& newArchetype) noexcept;
+		void ScheduleAdd(const SharedPtr<IArchetype>& newArchetype) noexcept;
 		void ScheduleAdd(EntityID entityID,const Vector<std::pair<ComponentID,SharedPtr<void>>>&) noexcept;
+
+		template<typename... Args>
+		void ScheduleAdd(EntityID entityID,Args&&... args) noexcept
+		{
+			
+		}
 
 		void GetArchetypes(const Vector<ComponentID>& query,Vector<IArchetype*>& outArchetypes) const;
 		
@@ -34,8 +41,6 @@ namespace powe
 		 */
 		IArchetype* GetArchetype(const Vector<ComponentID>& query) const noexcept;
 		IArchetype* GetArchetype(const Set<ComponentID>& query) const noexcept;
-
-		SharedPtr<PMRResource> GetResource() const noexcept { return m_MemResource; }
 
 		bool ContainsArchetype(const Vector<ComponentID>& query) const noexcept;
 		bool ContainsArchetype(const Set<ComponentID>& query) const noexcept;
@@ -51,7 +56,7 @@ namespace powe
 		}
 
 		template <typename ... Args> requires (ComponentConcept<Args> && ...)
-		SharedPtr<Archetype<Args...>> GetOrCreateArchetype()
+		SharedPtr<Archetype<Args...>> CreateArchetype()
 		{
 			const Set<ComponentID> componentRange{ MakeComponentSet<Args...>() };
 			
@@ -59,20 +64,21 @@ namespace powe
 			{
 				return GetArchetype(componentRange);
 			}
-	
-			const SharedPtr<Archetype<Args...>> archetype{std::allocate_shared<Archetype<Args...>>(m_MemResource,m_MemResource)};
-			InsertArchetype(componentRange,archetype);
+			const SharedPtr<Archetype<Args...>> archetype{std::allocate_shared<Archetype<Args...>>(m_UpStream,m_UpStream)};
 			return archetype;
 		}
 	
 	private:
 
 		void InsertArchetype(const Set<ComponentID>& compIDs,const SharedPtr<IArchetype> archetype);
-		// void InsertArchetype(const Vector<ComponentID>& compIDs,UniquePtr<IArchetype>&& archetype);
+
+		SharedPtr<PMRResource> m_UpStream;
 
 		IndexedMultimap<SharedPtr<IArchetype>> m_Archetypes;
+		Vector<SharedPtr<IArchetype>> m_ToBeAddedArchetypes;
+
+
 		UnOrderedMap<EntityID, SharedPtr<IArchetype>> m_EntityToArchetype;
-		SharedPtr<PMRResource> m_MemResource;
 		std::atomic<EntityID> m_CurrentEntityID{};
 
 	};

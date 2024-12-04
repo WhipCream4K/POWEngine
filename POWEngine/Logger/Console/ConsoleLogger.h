@@ -39,7 +39,7 @@ namespace powe
 	private:
 
 		void Run();
-		SharedPtr<PMRResource> GetResource() const;
+		SharedPtr<PMRResource> GetUpStream() const noexcept;
 
 		LFQueue<LogMsg> m_MessageQueue;
 		std::jthread m_MessageThread;

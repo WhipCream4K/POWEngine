@@ -17,6 +17,9 @@
 powe::ConsoleLogger::ConsoleLogger()
 	: m_Stop(false)
 {
+	// Because LFQueue is not copy constructable
+	new (&m_MessageQueue) LFQueue<LogMsg>(GetUpStream().get());
+	
 	m_MessageThread = std::jthread(&ConsoleLogger::Run, this);
 }
 
@@ -86,7 +89,7 @@ void powe::ConsoleLogger::Run()
 	}
 }
 
-powe::SharedPtr<powe::PMRResource> powe::ConsoleLogger::GetResource() const
+powe::SharedPtr<powe::PMRResource> powe::ConsoleLogger::GetUpStream() const noexcept
 {
 	if(const auto logger{ Application::GetModule<powe::Logger>() })
 	{

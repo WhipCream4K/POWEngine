@@ -3,8 +3,10 @@
 
 #include "Core/Memory/Allocator.h"
 
+using namespace powe;
+
 void powe::MemoryManager::Init(const SharedPtr<PMRResource>& memResource)
-{
+{   
     auto* instance{ MemoryManager::Get() };
     instance->m_DefaultResource = memResource;
     instance->m_AllocatorMap = UnOrderedMap<std::string, SharedPtr<PMRResource>>(memResource.get());

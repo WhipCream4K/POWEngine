@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 namespace powe
-{
+{   
     template<typename T>
     class ThreadSafeSingleton
     {

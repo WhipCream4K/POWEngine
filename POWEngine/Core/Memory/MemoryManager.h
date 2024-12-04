@@ -1,6 +1,5 @@
 #pragma once
 
-#include <mutex>
 #include "Utils/ThreadSafeSingleton.h"
 
 namespace powe

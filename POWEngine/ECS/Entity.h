@@ -22,12 +22,14 @@ namespace powe
             if(archetype == nullptr)
             {
                 // If not, create a new archetype with this component
-                const auto newArchetype{ m_ECS->GetOrCreateArchetype<Args...>() };
+                const auto newArchetype{ m_ECS->CreateArchetype<Args...>() };
                 newArchetype->emplace_back(m_ID, std::forward<Args>(args)...);
+                m_ECS->ScheduleAdd(newArchetype);
             }
             else
             {
                 // If so, add this component to the existing archetype
+                
             }
         }
 

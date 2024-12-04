@@ -14,6 +14,7 @@ namespace powe
     class IArchetype
     {
     public:
+    
         IArchetype() = default;
         IArchetype(const IArchetype&) = default;
         IArchetype& operator=(const IArchetype&) = default;
@@ -80,9 +81,7 @@ namespace powe
             return std::make_tuple(*static_cast<Args*>(movedComponents[Is].second)...);
         }
 
-    protected:
-
-
+    public:
 
         Archetype(const SharedPtr<PMRResource>& memResource)
             : m_Components(memResource.get())
