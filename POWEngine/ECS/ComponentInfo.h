@@ -11,24 +11,32 @@ namespace powe
     public:
 
         template<ComponentConcept Component>
-        static ComponentID GetID()
+        static ComponentID GetID() noexcept
         {
             static const ComponentID id{GenerateID()};
 
             // thread unsafe
-            if(m_IDToComponentSize.find(id) == m_IDToComponentSize.end())
-            {
-                m_IDToComponentSize[id] = sizeof(Component);
-            }
+            if(!IsRegistered(id))
+                Register<Component>(id);
 
             return id;
         }
 
-        template<ComponentConcept Component>
-        static size_t GetSize()
+        // Will throw exception if component is not call by GetID first, which is unlikely
+        static size_t GetSize(ComponentID id)
         {
-            return m_IDToComponentSize.at(GetID<Component>());
-        }   
+            return m_IDToComponentSize.at(id);
+        }  
+
+        static std::function<void(void*,void*)> GetMoveOp(ComponentID id)
+        {
+            return m_IDToMoveOp.at(id);
+        }
+
+        static std::function<void(void*)> GetDestroyOp(ComponentID id)
+        {
+            return m_IDToDestroyOp.at(id);
+        }
 
         static size_t Size()
         {
@@ -42,8 +50,29 @@ namespace powe
             return m_Counter++;
         }
 
+        static bool IsRegistered(ComponentID id) noexcept
+        {
+            return m_IDToComponentSize.find(id) != m_IDToComponentSize.end();
+        }
+
+        template<ComponentConcept Component>
+        static void Register(ComponentID id)
+        {
+            m_IDToComponentSize[id] = sizeof(Component);
+        
+            m_IDToMoveOp[id] = [](void* src, void* dst) { 
+                new (dst) Component(std::move(*static_cast<Component*>(src)));
+                 };
+        
+            m_IDToDestroyOp[id] = [](void* ptr) {
+                static_cast<Component*>(ptr)->~Component();
+            };
+        }
+
         static std::atomic<ComponentID> m_Counter;
         static UnOrderedMap<ComponentID,size_t> m_IDToComponentSize;
+        static UnOrderedMap<ComponentID,std::function<void(void*,void*)>> m_IDToMoveOp;
+        static UnOrderedMap<ComponentID,std::function<void(void*)>> m_IDToDestroyOp;
         
     };    
 }

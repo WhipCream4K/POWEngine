@@ -6,7 +6,7 @@ powe::ComponentView::ComponentView(ECSManager& manager, const Vector<ComponentID
       : m_ComponentsAddresses{manager.GetResource().get()}
 {
     auto resc{manager.GetResource()};
-    Vector<IArchetype*> outArchetype(resc.get());
+    Vector<Archetype*> outArchetype(resc.get());
 
     manager.GetArchetypes(compIDs, outArchetype);
     for (auto& archetype : outArchetype)
@@ -14,14 +14,14 @@ powe::ComponentView::ComponentView(ECSManager& manager, const Vector<ComponentID
         Vector<void*> componentAddresses(resc.get());
         archetype->GetComponents(compIDs, componentAddresses);
         m_ComponentsAddresses.try_emplace(archetype, componentAddresses);
-        archetype->AddArchetypeInvalidCallback([this](IArchetype* archetype)
+        archetype->AddArchetypeInvalidCallback([this](Archetype* archetype)
         {
             this->ResetComponentAddresses(archetype);
         });
     }
 }
 
-void powe::ComponentView::ResetComponentAddresses(IArchetype* archetype)
+void powe::ComponentView::ResetComponentAddresses(Archetype* archetype)
 {
     if(auto it = m_ComponentsAddresses.find(archetype); it != m_ComponentsAddresses.end())
     {

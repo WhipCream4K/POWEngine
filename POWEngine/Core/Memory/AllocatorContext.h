@@ -9,8 +9,17 @@ namespace powe
     {
     public:
 
-        constexpr AllocatorContext(std::string_view allocatorName) noexcept;
-        constexpr AllocatorContext(AllocatorScope name) noexcept;
+        constexpr AllocatorContext(std::string_view allocatorName) noexcept
+            : m_PreviosContext(m_CurrentContext)
+        {
+            m_CurrentContext = allocatorName.data();
+        }
+
+        constexpr AllocatorContext(AllocatorScope name) noexcept
+            : m_PreviosContext(m_CurrentContext)
+        {
+            m_CurrentContext = GetAllocatorName(name);
+        }
 
         ~AllocatorContext();
 

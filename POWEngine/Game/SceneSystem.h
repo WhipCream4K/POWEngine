@@ -8,7 +8,6 @@
 namespace powe
 {
     class Scene;
-    class IArchetype;
 
     template<typename F,typename ...Args>
     concept TaskConcept = std::is_invocable_v<F, ComponentView&>;

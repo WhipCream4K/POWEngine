@@ -1,121 +1,136 @@
 #include "pch.h"
 #include "Archetype.h"
 
-//
-//#include "POWEngine/Core/Components/BaseComponent.h"
-//#include "POWEngine/Core/WorldEntity/WorldEntity.h"
-//
-//powe::Archetype::Archetype()
-//	: Types()
-//	, GameObjectIds()
-//	, ComponentData()
-//	, SizeOfComponentsBlock()
-//	, TotalAllocatedData(64)
-//{
-//	ComponentData = SharedPtr<RawByte[]>{ new RawByte[TotalAllocatedData]{} };
-//}
-//
-//SharedPtr<powe::Archetype> powe::Archetype::Create(const WorldEntity& world, const std::vector<ComponentTypeID>& types)
-//{
-//	SharedPtr<Archetype> archetype{ std::make_shared<Archetype>() };
-//
-//	SizeType offset{};
-//	for (const ComponentTypeID componentTypeId : types)
-//	{
-//		const SharedPtr<BaseComponent> thisComponent{ world.GetComponentTrait(componentTypeId) };
-//		const SizeType componentSize{ thisComponent->GetSize() };
-//		archetype->Types.emplace_back(componentTypeId);
-//		archetype->ComponentOffsets.try_emplace(componentTypeId, offset);
-//		archetype->SizeOfComponentsBlock += componentSize;
-//		offset += componentSize;
-//	}
-//
-//	return archetype;
-//}
-//
-//powe::RawByte* powe::Archetype::GetPointer(int pointerDiff) const
-//{
-//	return &ComponentData[pointerDiff];
-//}
-//
-//SharedPtr<powe::RawByte[]> powe::Archetype::CopyComponentData(const Archetype& other, const WorldEntity& world) const
-//{
-//
-//	SharedPtr<RawByte[]> newComponentData{ SharedPtr<RawByte[]>{new RawByte[other.TotalAllocatedData]{}} };
-//
-//	for (int i = 0; i < int(GameObjectIds.size()); ++i)
-//	{
-//		RawByte* startAddress{ &other.ComponentData[int(i * SizeOfComponentsBlock)] };
-//		RawByte* endAddress{ &newComponentData[int(i * SizeOfComponentsBlock)] };
-//
-//		//SizeType accumulateOffset{};
-//		for (const auto& compID : Types)
-//		{
-//			const SharedPtr<BaseComponent> thisComponent{ world.GetComponentTrait(compID) };
-//			const SizeType componentOffset{ ComponentOffsets.at(compID) };
-//			thisComponent->MoveData(startAddress + componentOffset, endAddress + componentOffset);
-//		}
-//	}
-//
-//	return newComponentData;
-//}
-//
-//void powe::Archetype::BuryBlock(WorldEntity& world,int index) const
-//{
-//	for (int i = index; i < int(GameObjectIds.size() - 1); ++i)
-//	{
-//		RawByte* fromAddress{ &ComponentData[int((i + 1) * SizeOfComponentsBlock)] };
-//		RawByte* toAddress{ &ComponentData[int(i * SizeOfComponentsBlock)] };
-//
-//		for (const ComponentTypeID componentTypeId : Types)
-//		{
-//			const SizeType offset{ComponentOffsets.at(componentTypeId)};
-//			const SharedPtr<BaseComponent> thisComponent{ world.GetComponentTrait(componentTypeId) };
-//			thisComponent->MoveData(fromAddress + offset, toAddress + offset);
-//		}
-//
-//		// A little bit unsafe
-//		--world.GetRefGameObjectRecord(GameObjectIds[i + 1]).IndexInArchetype;
-//	}
-//}
-//
-//void powe::Archetype::CleanUp(const WorldEntity& world) const
-//{
-//	for (const GameObjectID gameObjectId : GameObjectIds)
-//	{
-//		GameObjectRecord gbRecord{};
-//		if(world.GetGameObjectRecords(gameObjectId, gbRecord))
-//		{
-//			RawByte* sourceAddress{ &ComponentData[int(gbRecord.IndexInArchetype * SizeOfComponentsBlock)] };
-//			for (const ComponentTypeID componentTypeId : Types)
-//			{
-//				const SizeType offset{ ComponentOffsets.at(componentTypeId) };
-//				const SharedPtr<BaseComponent> thisComponent{ world.GetComponentTrait(componentTypeId) };
-//				thisComponent->DestroyData(sourceAddress + offset);
-//			}
-//		}
-//	}
-//}
-//
-//
-//void powe::Archetype::AllocateComponentData(SizeType newSize,const WorldEntity& world)
-//{
-//	const SharedPtr<RawByte[]> newComponentData{ SharedPtr<RawByte[]>{new RawByte[newSize]{}} };
-//
-//	for (int i = 0; i < int(GameObjectIds.size()); ++i)
-//	{
-//		RawByte* startAddress{ &ComponentData[int(i * SizeOfComponentsBlock)] };
-//		RawByte* endAddress{ &newComponentData[int(i * SizeOfComponentsBlock)] };
-//
-//		//SizeType accumulateOffset{};
-//		for (const auto& compID : Types)
-//		{
-//			const SharedPtr<BaseComponent> thisComponent{ world.GetComponentTrait(compID) };
-//			const SizeType componentOffset{ComponentOffsets.at(compID)};
-//			thisComponent->MoveData(startAddress + componentOffset, endAddress + componentOffset);
-//		}
-//	}
-//
-//	ComponentData = newComponentData;
-//	TotalAllocatedData = newSize;
-//}
+#include "ComponentInfo.h"
+#include "Core/Memory/AllocatorContext.h"
+
+#include <numeric>
+
+
+using namespace powe;
+
+Archetype::Archetype(const Vector<ComponentID>& components) noexcept
+{
+    const AllocatorContext context{AllocatorScope::Game};
+    auto *upStream{context.GetResource()};
+
+    m_ComponentData = Vector<std::byte>(upStream);
+    m_ComponentIDs = Vector<ComponentID>(upStream);
+    m_EntityToIndex = UnOrderedMap<EntityID, uint32_t>(upStream);
+
+    m_ComponentBlockSize = std::accumulate(components.begin(), components.end(), size_t(0), 
+    [](size_t acc, ComponentID id)
+    { 
+        return acc + ComponentInfo::GetSize(id);
+    });
+}
+
+Archetype::Archetype(const Set<ComponentID>& components) noexcept
+    : Archetype{Vector<ComponentID>{components.begin(), components.end()}}
+{
+}
+
+const std::byte* Archetype::GetComponentPos(EntityID id) const noexcept
+{
+    return &m_ComponentData[m_EntityToIndex.at(id) * m_ComponentBlockSize];
+}
+
+std::byte* Archetype::GetComponentPos(EntityID id) noexcept
+{
+    return &m_ComponentData[m_EntityToIndex.at(id) * m_ComponentBlockSize];
+}
+
+Set<ComponentID> Archetype::GetComponentIDs() const noexcept
+{
+    return Set<ComponentID>{m_ComponentIDs.begin(), m_ComponentIDs.end()};
+}
+
+bool Archetype::GetComponents(const Set<ComponentID>& query, Vector<CompAddress>& outAddress) noexcept
+{
+    const Set<ComponentID> compIDs{GetComponentIDs()};
+
+    const bool result{std::includes(query.begin(), query.end(), compIDs.begin(), compIDs.end())};
+    if(!result)
+        return false;
+    
+    const Vector<ComponentID> queryVec{query.begin(), query.end()};
+
+    // query all the components in the archetype that match with the query
+    for(const auto& [id,idx] : m_EntityToIndex)
+    {
+        std::byte* src{ GetComponentPos(idx) };
+
+        for(size_t i = 0; i < m_ComponentIDs.size(); ++i)
+        {
+            const auto compID{ m_ComponentIDs[i] };
+
+            if(std::find(queryVec.begin(), queryVec.end(), compID) == queryVec.end())
+            {
+                src += ComponentInfo::GetSize(compID);
+                continue;
+            }
+
+            outAddress.emplace_back(src);
+        }
+
+    }
+
+    return true;
+}
+
+void Archetype::Remove(EntityID id, ComponentStorage &outComponents, PMRResource *stackAllocator) noexcept
+{
+    if (auto findItr{m_EntityToIndex.find(id)}; findItr != m_EntityToIndex.end())
+    {
+        std::byte* src = GetComponentPos(findItr->second);
+        
+        for(size_t i = 0; i < m_ComponentIDs.size(); ++i)
+        {
+            const auto compID{ m_ComponentIDs[i] };
+            const size_t compSize{ ComponentInfo::GetSize(compID) };
+
+            void* dest{stackAllocator->allocate(compSize)};
+            
+            const auto moveOp{ComponentInfo::GetMoveOp(compID)};
+            moveOp(src, dest);
+            src += compSize;
+
+            const SharedPtr<void> managedComponent{dest, ComponentInfo::GetDestroyOp(compID)};
+            outComponents.emplace_back(std::make_pair(compID,managedComponent));
+        }
+
+        m_EntityToIndex.erase(findItr);
+
+        m_ComponentData.erase(
+            m_ComponentData.begin() + (findItr->second * m_ComponentBlockSize), // first pos
+            m_ComponentData.begin() + ((findItr->second + 1) * m_ComponentBlockSize)); // last pos
+    }
+}
+
+void Archetype::Insert(EntityID id, ComponentStorage &&inComponents) noexcept
+{
+    // sort the block to match the order of the components of this archetype
+    if(inComponents.size() != m_ComponentIDs.size())
+        return;
+    
+    SortBlock(inComponents);
+
+    InsertNoSort(id, std::move(inComponents));
+}
+
+void Archetype::InsertNoSort(EntityID id, ComponentStorage &&inComponents) noexcept
+{
+    m_EntityToIndex.try_emplace(id, m_ComponentData.size() / m_ComponentBlockSize);
+    m_ComponentData.insert(m_ComponentData.end(), m_ComponentBlockSize, std::byte(0));
+
+    std::byte* dest{&m_ComponentData.back() - m_ComponentBlockSize};
+
+    for(size_t i = 0; i < m_ComponentIDs.size(); ++i)
+    {
+        const auto compID{ m_ComponentIDs[i] };
+
+        const auto moveOp{ComponentInfo::GetMoveOp(compID)};
+        moveOp(inComponents[i].second.get(), dest);
+        dest += ComponentInfo::GetSize(compID);
+    }
+}

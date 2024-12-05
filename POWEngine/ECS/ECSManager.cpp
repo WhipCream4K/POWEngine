@@ -20,7 +20,7 @@ std::unique_ptr<Entity> ECSManager::CreateEntity() noexcept
 }
 
 
-SharedPtr<IArchetype> ECSManager::GetArchetypeFrom(EntityID entityID) const noexcept
+SharedPtr<Archetype> ECSManager::GetArchetypeFrom(EntityID entityID) const noexcept
 {
 	for(const auto& [archetypeKey, archetypes] : m_Archetypes)
 	{
@@ -33,9 +33,28 @@ SharedPtr<IArchetype> ECSManager::GetArchetypeFrom(EntityID entityID) const noex
 	return nullptr;
 }
 
+SharedPtr<Archetype> ECSManager::GetArchetypeFrom(const Set<ComponentID>& components) const noexcept
+{
+	for(const auto& [archetypeKey, archetypes] : m_Archetypes)
+	{
+		if(archetypes->HasComponent(components))
+		{
+			return archetypes;
+		}
+	}
+
+	return nullptr;
+}
+
+SharedPtr<Archetype> ECSManager::GetArchetypeFrom(const Vector<ComponentID>& components) const noexcept
+{
+	Set<ComponentID> compSet{ components.begin(), components.end() };
+	return GetArchetypeFrom(compSet);
+}
 
 
-// void powe::ECSManager::GetArchetypes(const Vector<ComponentID>& query, Vector<IArchetype*>& outArchetypes) const
+
+// void powe::ECSManager::GetArchetypes(const Vector<ComponentID>& query, Vector<Archetype*>& outArchetypes) const
 // {
 // 	const Set<ComponentID> querySet{ query.begin(), query.end() };
 
@@ -48,7 +67,7 @@ SharedPtr<IArchetype> ECSManager::GetArchetypeFrom(EntityID entityID) const noex
 // 	}
 // }
 
-// powe::IArchetype* powe::ECSManager::GetArchetype(const Vector<ComponentID>& query) const noexcept
+// powe::Archetype* powe::ECSManager::GetArchetype(const Vector<ComponentID>& query) const noexcept
 // {
 // 	const Set<ComponentID> queryKey{ query.begin(), query.end() };
 
@@ -63,7 +82,7 @@ SharedPtr<IArchetype> ECSManager::GetArchetypeFrom(EntityID entityID) const noex
 // 	return nullptr;
 // }
 
-// IArchetype* ECSManager::GetArchetype(const Set<ComponentID>& query) const noexcept
+// Archetype* ECSManager::GetArchetype(const Set<ComponentID>& query) const noexcept
 // {
 // 	for(const auto& [archetypeKey, archetypes] : m_Archetypes)
 // 	{

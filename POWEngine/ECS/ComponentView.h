@@ -4,12 +4,11 @@
 
 namespace powe
 {
-
     class ComponentView final
     {
     public:
 
-        using ArchetypeComponentHandle = UnOrderedMap<IArchetype*, Vector<CompAddress>>;
+        using ArchetypeComponentHandle = UnOrderedMap<Archetype*, Vector<CompAddress>>;
 
         ComponentView(ECSManager& manager,
                       const Vector<ComponentID>& compIDs);
@@ -107,7 +106,7 @@ namespace powe
 
     private:
 
-        void ResetComponentAddresses(IArchetype* archetype);
+        void ResetComponentAddresses(Archetype* archetype);
 
         Vector<ComponentID> m_ComponentIDs;
         ArchetypeComponentHandle m_ComponentsAddresses;

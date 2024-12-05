@@ -12,12 +12,6 @@ std::pmr::memory_resource* powe::AllocatorContext::GetResource() const noexcept
     return MemoryManager::Get()->GetAllocator(m_CurrentContext);
 }
 
-constexpr AllocatorContext::AllocatorContext(std::string_view allocatorName) noexcept
-{
-    m_PreviosContext = m_CurrentContext;
-    m_CurrentContext = allocatorName;
-}
-
 constexpr AllocatorContext::AllocatorContext(AllocatorScope name) noexcept
 {
     m_PreviosContext = m_CurrentContext;

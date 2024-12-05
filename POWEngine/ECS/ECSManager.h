@@ -1,14 +1,16 @@
 #pragma once
 
+#include <numeric>
+
 #include "ECSTypes.h"
 #include "ECS/ECSUtils.h"
 #include "Archetype.h"
-
 #include "Core/Memory/AllocatorContext.h"
+
 
 namespace powe
 {
-	class IArchetype;
+	class Archetype;
 	class Entity;
 	class ECSManager final
 	{
@@ -22,11 +24,13 @@ namespace powe
 		EntityID MakeNewEntityID() { return m_CurrentEntityID++; }
 		std::unique_ptr<Entity> CreateEntity() noexcept;
 
-		SharedPtr<IArchetype> GetArchetypeFrom(EntityID entityID) const noexcept;
-		SharedPtr<IArchetype> GetArchetypeFrom(const Set<ComponentID>& components) const noexcept;
-		void GetArchetypes(const Set<ComponentID>& query,Vector<SharedPtr<IArchetype>>& outArchetypes) const noexcept;
+		SharedPtr<Archetype> GetArchetypeFrom(EntityID entityID) const noexcept;
+		SharedPtr<Archetype> GetArchetypeFrom(const Set<ComponentID>& components) const noexcept;
+		SharedPtr<Archetype> GetArchetypeFrom(const Vector<ComponentID>& components) const noexcept;
+		void GetArchetypes(const Set<ComponentID>& query,Vector<SharedPtr<Archetype>>& outArchetypes) const noexcept;
 	
 		bool Contains(const Set<ComponentID>& query) const noexcept;
+		bool Contains(const Vector<ComponentID>& query) const noexcept;
 		bool Contains(EntityID entityID) const noexcept;
 
 		/// Sumbits a function to be run at the next update loop
@@ -41,7 +45,7 @@ namespace powe
 			if(archetype == nullptr)
 				return false;
 			
-			return archetype->HasComponent(MakeComponentVec<Args...>());
+			return archetype->HasComponent(MakeComponentSet<Args...>());
 		}
 
 		template<typename... Args>
@@ -50,7 +54,7 @@ namespace powe
 			if(!IsUpdating())
 			{
 				// 1. Check if this entity already in an archetype
-				const auto archetype{GetArchetypeFrom(entityID)};
+				auto archetype{GetArchetypeFrom(entityID)};
 				if(archetype == nullptr)
 				{
 					// 2. If not, create archetype and add component, this is easy
@@ -62,27 +66,54 @@ namespace powe
 				{
 					// 3. If yes, remove this entity from the archetype
 					// 4. Combine the components from old archetype together with the new components
-					// 5. Create or get archetype with the combined components and add this entity
-					const Set<ComponentID> oldIDs{ archetype->GetComponentIDSet() };
+					// 5. Create or get the archetype,add the combined components to it
+					const Set<ComponentID> oldIDs{ archetype->GetComponentIDs() };
 					Set<ComponentID> newIDs{ MakeComponentSet<Args...>() };
 
 					newIDs.insert(oldIDs.begin(), oldIDs.end());
-					std::pmr::monotonic_buffer_resource tempResource{};
-					
+
+					// Calculate the required size
+					const size_t requiredSize = std::accumulate(newIDs.begin(), newIDs.end(), size_t(0),
+					    [](std::size_t sum, const ComponentID& id) {
+					        return sum + ComponentInfo::GetSize(id);
+					    });
+
+					// Create the temporary resource
+					std::pmr::monotonic_buffer_resource tempResource(requiredSize);
+
+					ComponentStorage combinedComponents(newIDs.size());
+					archetype->Remove(entityID, combinedComponents, &tempResource);
+
+					// Combine the components
+					auto addComponents = [&combinedComponents,&tempResource](auto&& arg) {
+						using ComponentType = decltype(arg);
+						void* memoryBlock{ std::allocate_shared<ComponentType>(tempResource, std::forward<ComponentType>(arg)) };
+
+						combinedComponents.emplace_back(std::make_pair(
+							ComponentInfo::GetID<ComponentType>(), 
+							std::static_pointer_cast<void>(memoryBlock)));
+					};
+
+					(addComponents(std::forward<Args>(args)), ...);
+
+					// Create or get the archetype,add the combined components to it
+					archetype = CreateArchetype(Vector<ComponentID>(newIDs.begin(), newIDs.end()));
+					archetype->InsertNoSort(entityID, std::move(combinedComponents));
+
 				}
 				
 				return;				
 			}
 
 			// add to await collection. At later stage, all entities will be assigned to the archetype correctly anyway
-			auto addComponent = [&awaitCollection = m_AwaitCollection](auto&& arg) {
+			auto addComponent = [&awaitCollection = m_AwaitEntitiesCollection,&entityID](auto&& arg) {
 				
 				const AllocatorContext context{ AllocatorScope::Game };
 				auto* upStream{ context.GetResource() };
 				using ComponentType = decltype(arg);
-    		    const ComponentID id{ GetComponentID<ComponentType>() };
+    		    const ComponentID id{ ComponentInfo::GetID<ComponentType>() };
 				auto memoryBlock{std::allocate_shared<ComponentType>(upStream, std::forward<decltype(arg)>(arg))};
-				awaitCollection[id].emplace_back(std::static_pointer_cast<void>(memoryBlock));
+				awaitCollection[entityID].emplace_back(std::make_pair(id, std::static_pointer_cast<void>(memoryBlock)));
     		};
 
 			(addComponent(std::forward<Args>(args)), ...);
@@ -97,22 +128,39 @@ namespace powe
 		void Remove(EntityID entityID) noexcept;
 
 		template <typename ... Args> requires (ComponentConcept<Args> && ...)
-		SharedPtr<Archetype<Args...>> CreateArchetype()
+		SharedPtr<Archetype> CreateArchetype()
 		{
-			const Set<ComponentID> componentRange{ MakeComponentSet<Args...>() };
+			const Vector<ComponentID> componentRange{ MakeComponentVec<Args...>() };
 			
 			if(Contains(componentRange))
 			{
-				return GetArchetype(componentRange);
+				return GetArchetypeFrom(componentRange);
 			}
 
 			const AllocatorContext context{ AllocatorScope::Game };
 
 			auto* upStream{ context.GetResource() };
 
-			const SharedPtr<Archetype<Args...>> archetype{
-				std::allocate_shared<Archetype<Args...>>(upStream)};
+			const SharedPtr<Archetype> archetype{
+				std::allocate_shared<Archetype>(upStream, componentRange)};
 
+
+			return archetype;
+		}
+
+		SharedPtr<Archetype> CreateArchetype(const Vector<ComponentID>& components)
+		{
+			if(Contains(components))
+			{
+				return GetArchetypeFrom(components);
+			}
+
+			const AllocatorContext context{ AllocatorScope::Game };
+
+			auto* upStream{ context.GetResource() };
+
+			const SharedPtr<Archetype> archetype{
+				std::allocate_shared<Archetype>(upStream, components)};
 
 			return archetype;
 		}
@@ -122,14 +170,14 @@ namespace powe
 	
 	private:
 
-		void InsertArchetype(const SharedPtr<IArchetype>& archetype);
+		void InsertArchetype(const SharedPtr<Archetype>& archetype);
 
-		IndexedMultimap<SharedPtr<IArchetype>> m_Archetypes;
+		IndexedMultimap<SharedPtr<Archetype>> m_Archetypes;
  
 		Vector<std::function<void(ECSManager&)>> m_AwaitActions;
-		UnOrderedMap<EntityID, ComponentStorage> m_AwaitCollection;
+		UnOrderedMap<EntityID, ComponentStorage> m_AwaitEntitiesCollection;
 
-		UnOrderedMap<EntityID, SharedPtr<IArchetype>> m_EntityToArchetype;
+		UnOrderedMap<EntityID, SharedPtr<Archetype>> m_EntityToArchetype;
 		std::atomic<EntityID> m_CurrentEntityID{};
 		bool m_IsUpdating{};
 
