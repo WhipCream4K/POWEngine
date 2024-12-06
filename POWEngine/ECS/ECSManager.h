@@ -45,7 +45,7 @@ namespace powe
 			if(archetype == nullptr)
 				return false;
 			
-			return archetype->HasComponent(MakeComponentSet<Args...>());
+			return archetype->HasComponents(MakeComponentSet<Args...>());
 		}
 
 		template<typename... Args>

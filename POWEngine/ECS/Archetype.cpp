@@ -78,6 +78,12 @@ bool Archetype::GetComponents(const Set<ComponentID>& query, Vector<CompAddress>
     return true;
 }
 
+bool Archetype::HasComponents(const Set<ComponentID>& query) const noexcept
+{
+    const Set<ComponentID> compIDs{GetComponentIDs()};
+    return std::includes(query.begin(), query.end(), compIDs.begin(), compIDs.end());
+}
+
 void Archetype::Remove(EntityID id, ComponentStorage &outComponents, PMRResource *stackAllocator) noexcept
 {
     if (auto findItr{m_EntityToIndex.find(id)}; findItr != m_EntityToIndex.end())

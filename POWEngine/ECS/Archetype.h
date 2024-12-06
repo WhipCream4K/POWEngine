@@ -32,12 +32,9 @@ namespace powe
         void Insert(EntityID id, ComponentStorage&& inComponents) noexcept;
         void InsertNoSort(EntityID id, ComponentStorage&& inComponents) noexcept;
         
-        constexpr bool HasComponent(const Set<ComponentID>&) const noexcept
-        {
-            return false;
-        }
+        bool HasComponents(const Set<ComponentID>& query) const noexcept;
 
-        template<typename... Args> requires (ComponentConcept<Args> && ...)
+        template<ComponentConcept T>
         constexpr bool HasComponent() const noexcept
         {
             return false;
