@@ -11,7 +11,7 @@ using namespace powe;
 
 Archetype::Archetype(const Vector<ComponentID>& components) noexcept
 {
-    const AllocatorContext context{AllocatorScope::Game};
+    const AllocatorContext context{};
     auto *upStream{context.GetResource()};
 
     m_ComponentData = Vector<std::byte>(upStream);
@@ -110,6 +110,17 @@ void Archetype::Remove(EntityID id, ComponentStorage &outComponents, PMRResource
         m_ComponentData.erase(
             m_ComponentData.begin() + (findItr->second * m_ComponentBlockSize), // first pos
             m_ComponentData.begin() + ((findItr->second + 1) * m_ComponentBlockSize)); // last pos
+    }
+}
+
+void Archetype::Remove(EntityID id) noexcept
+{
+    if (auto findItr{m_EntityToIndex.find(id)}; findItr != m_EntityToIndex.end())
+    {
+        m_EntityToIndex.erase(findItr);
+        m_ComponentData.erase(
+            m_ComponentData.begin() + (findItr->second * m_ComponentBlockSize),
+            m_ComponentData.begin() + ((findItr->second + 1) * m_ComponentBlockSize));
     }
 }
 

@@ -49,7 +49,7 @@ namespace powe
 		}
 
 		template<typename... Args>
-		void AddComponent(EntityID entityID, Args&&... args) noexcept
+		void AddComponents(EntityID entityID, Args&&... args) noexcept
 		{
 			if(!IsUpdating())
 			{
@@ -119,10 +119,75 @@ namespace powe
 			(addComponent(std::forward<Args>(args)), ...);
 		}
 
-		template<typename ... Args> requires (ComponentConcept<Args> && ...)
-		void RemoveComponent(EntityID entityID) noexcept
+		template<typename... Args> requires (ComponentConcept<Args> && ...)
+		void RemoveComponents(EntityID entityID) noexcept
 		{
-			
+			auto removeFunc = [entityID](ECSManager& manager) {
+				
+				auto archetype{manager.GetArchetypeFrom(entityID)};
+				if(archetype == nullptr)
+					return;
+
+				Set<ComponentID> compIDs{ MakeComponentSet<Args...>() };
+
+				const size_t requiredSize{std::accumulate(compIDs.begin(), compIDs.end(), size_t(0),
+					[](std::size_t sum, const ComponentID& id) {
+						return sum + ComponentInfo::GetSize(id);
+				})};
+				
+				std::pmr::monotonic_buffer_resource tempResource(requiredSize);
+				
+				ComponentStorage outComponents{};
+				archetype->Remove(entityID,outComponents,&tempResource);
+
+				// remove the old component
+				for(auto itr = outComponents.begin(); itr != outComponents.end(); )
+				{
+					if(compIDs.contains(itr->first))
+					{
+						itr = outComponents.erase(itr);
+						compIDs.erase(itr->first);
+					}
+					else {
+						++itr;
+					}
+				}
+
+				// find this entity new home
+				archetype = manager.CreateArchetype(Vector<ComponentID>(compIDs.begin(), compIDs.end()));
+				archetype->InsertNoSort(entityID, std::move(outComponents));
+
+				manager.m_EntityToArchetype[entityID] = archetype;
+			};
+
+			// If not update just remove from archetype
+			if(!IsUpdating())
+			{
+				removeFunc(*this);
+				return;
+			}
+
+			// else find if this entity is in the await collection, if so then remove it
+			if(auto awaitItr{ m_AwaitEntitiesCollection.find(entityID) }; awaitItr != m_AwaitEntitiesCollection.end())
+			{
+				const auto compIDs{ MakeComponentSet<Args...>() };
+				for(auto itr = awaitItr->second.begin(); itr != awaitItr->second.end(); )
+				{
+					if(compIDs.contains(itr->first))
+					{
+						itr = awaitItr->second.erase(itr);
+						compIDs.erase(itr->first);
+					}
+					else {
+						++itr;
+					}
+				}
+
+				return;
+			}
+
+			// else add to await actions for late remove
+			m_AwaitActions.emplace_back(std::move(removeFunc));
 		}
 
 		void Remove(EntityID entityID) noexcept;
@@ -169,6 +234,8 @@ namespace powe
 
 	
 	private:
+
+		// void MoveEntitityToArchetype(EntityID id,ComponentStorage& fromComponents,const Set<ComponentID> newIDs,const SharedPtr<Archetype>& fromArchetype) noexcept;
 
 		void InsertArchetype(const SharedPtr<Archetype>& archetype);
 

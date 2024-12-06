@@ -5,7 +5,7 @@
 
 namespace powe
 {
-    template<ComponentConcept... Args>
+    template<typename... Args> requires (ComponentConcept<Args> && ...)
     [[nodiscard]] Set<ComponentID> MakeComponentSet()
     {
         Set<ComponentID> key{};
@@ -13,7 +13,7 @@ namespace powe
         return key;
     }
 
-    template<ComponentConcept... Args>
+    template<typename... Args> requires (ComponentConcept<Args> && ...)
     constexpr void MakeComponentSet(Set<ComponentID>& key)
     {
         (key.emplace(ComponentInfo::GetID<Args>()), ...);
@@ -33,7 +33,21 @@ namespace powe
         return MakeComponentSet(std::make_index_sequence<std::tuple_size_v<std::decay_t<Tuple>>>{});
     }
 
-    template<typename... Args>
+    template<is_tuple Tuple,size_t ...Is>
+    [[nodiscard]] Vector<ComponentID> MakeComponentVec(std::index_sequence<Is...>)
+    {
+        Vector<ComponentID> key{};
+        (key.emplace_back(ComponentInfo::GetID<std::tuple_element_t<Is,Tuple>>()), ...);
+        return key;
+    }
+
+    template<is_tuple Tuple>
+    [[nodiscard]] Vector<ComponentID> MakeComponentVec()
+    {
+        return MakeComponentVec(std::make_index_sequence<std::tuple_size_v<std::decay_t<Tuple>>>{});
+    }
+
+    template<typename... Args> requires (ComponentConcept<Args> && ...)
     [[nodiscard]] Vector<ComponentID> MakeComponentVec()
     {
         Vector<ComponentID> key{};

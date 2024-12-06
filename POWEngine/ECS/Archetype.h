@@ -8,6 +8,9 @@
 #include "Core/CustomTypes.h"
 #include "Core/Memory/AllocatorContext.h"
 
+#include <algorithm>
+#include <ranges>
+
 namespace powe
 {
     using UniqueBlockPtr = UniquePtr<void, std::function<void(void*)>>;
@@ -26,9 +29,11 @@ namespace powe
 
         bool GetComponents(const Set<ComponentID>& query, Vector<CompAddress>& outAddress) noexcept;
         Set<ComponentID> GetComponentIDs() const noexcept;
+        constexpr const Vector<ComponentID>& GetComponentVec() const noexcept { return m_ComponentIDs; }
 
         // Remove entity from archetype and return the tuple of removed components
         void Remove(EntityID id, ComponentStorage& outComponents,PMRResource* stackAllocator) noexcept;
+        void Remove(EntityID id) noexcept;
         void Insert(EntityID id, ComponentStorage&& inComponents) noexcept;
         void InsertNoSort(EntityID id, ComponentStorage&& inComponents) noexcept;
         
@@ -37,7 +42,7 @@ namespace powe
         template<ComponentConcept T>
         constexpr bool HasComponent() const noexcept
         {
-            return false;
+            return std::ranges::find(m_ComponentIDs, ComponentInfo::GetID<T>()) != m_ComponentIDs.end();
         }
 
         // return size of elements in archetype

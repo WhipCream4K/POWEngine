@@ -5,13 +5,14 @@ namespace powe
     // The name of the allocator that will be registered to memory manager
     enum class AllocatorScope
     {
+        Local,
         Application,
         Game,
         Logger,
         ThreadPool
     };
 
-    inline std::string_view GetAllocatorName(AllocatorScope name)
+    inline std::string GetAllocatorName(AllocatorScope name)
     {
         switch (name)
         {
@@ -24,7 +25,7 @@ namespace powe
         case AllocatorScope::ThreadPool:
             return "ThreadPool";
         default:
-            return "Unknown";
+            return "";
         }
     }
 

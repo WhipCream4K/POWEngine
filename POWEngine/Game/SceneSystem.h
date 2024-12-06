@@ -40,13 +40,22 @@ namespace powe
         {
 
             std::function<void(ComponentView&)> task{[f = std::forward<Func>(func)](ComponentView& view){
-                view.Visit(f);
+                
+                // the component type is std::tuple<Args&...>
+                std::for_each(view.begin<Tuple>(),view.end<Tuple>(),[&f](auto& comp)
+                {
+                    // expand the tuple to arguments pack
+                    ForEachTuple(
+                        std::forward<Func>(f),std::forward<Tuple>(comp),
+                    std::make_index_sequence<std::tuple_size_v<Tuple>>{});
+                });
+
              }};
 
             // Create ComponentView for this
             auto& ecsManager{GetECSManager()};
-            auto compIDs{MakeComponentRange<Tuple>()};
-            ComponentView view{ecsManager,compIDs};
+            constexpr auto compIDs{MakeComponentVec<Tuple>()};
+            const ComponentView view{ecsManager,compIDs};
 
             // TODO: Seperate Create, Start, Update, Exit task
             m_UpdateTasks.emplace_back(std::make_pair(task,view));
@@ -60,6 +69,12 @@ namespace powe
         }
 
     private:
+
+        template<typename Func,typename Tuple,std::size_t... Is>
+        static void ForEachTuple(Func&& func, Tuple&& tuple, std::index_sequence<Is...>)
+        {
+            func(std::get<Is>(tuple)...);
+        }
 
         RefWrap<Scene> m_Scene;
 

@@ -12,13 +12,13 @@ namespace powe
         constexpr AllocatorContext(std::string_view allocatorName) noexcept
             : m_PreviosContext(m_CurrentContext)
         {
-            m_CurrentContext = allocatorName.data();
+            if(!allocatorName.empty())
+                m_CurrentContext = allocatorName;
         }
 
-        constexpr AllocatorContext(AllocatorScope name) noexcept
-            : m_PreviosContext(m_CurrentContext)
+        constexpr AllocatorContext(AllocatorScope name = AllocatorScope::Local) noexcept
+            : AllocatorContext(GetAllocatorName(name))
         {
-            m_CurrentContext = GetAllocatorName(name);
         }
 
         ~AllocatorContext();

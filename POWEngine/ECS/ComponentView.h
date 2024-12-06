@@ -88,8 +88,6 @@ namespace powe
 
         constexpr bool empty() const { return m_ComponentsAddresses.empty(); }
 
-    private:
-
         template<typename... Args>
         Iterator<Args...> begin()
         {
