@@ -28,7 +28,7 @@ namespace powe
 
     private:
 
-        SharedPtr<PMRResource> GetResource() const noexcept;
+        // SharedPtr<PMRResource> GetResource() const noexcept;
     
         UniquePtr<Window> m_MainWindow;
         Vector<UniquePtr<Window>> m_ChildWindows;

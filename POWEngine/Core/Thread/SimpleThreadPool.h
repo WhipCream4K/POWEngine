@@ -7,6 +7,7 @@
 
 #include "Core/CustomTypes.h"
 #include "Core/IModule.h"
+#include "Core/Memory/AllocatorContext.h"
 
 namespace powe
 {
@@ -34,7 +35,10 @@ namespace powe
 			if(m_Stop)
 				return;
 
-			auto task = std::allocate_shared<std::packaged_task<Ret()>>(GetResource(), [func = std::forward<Func>(fn), ...iArgs = std::forward<Args>(args)]() mutable {
+			const AllocatorContext context{AllocatorScope::ThreadPool};
+			auto* upStream{context.GetResource()};
+
+			auto task = std::allocate_shared<std::packaged_task<Ret()>>(upStream, [func = std::forward<Func>(fn), ...iArgs = std::forward<Args>(args)]() mutable {
 				return func(iArgs...);
 				});
 
@@ -57,7 +61,10 @@ namespace powe
 			if (m_Stop)
 				return;
 
-			auto task = std::allocate_shared<std::packaged_task<void()>>(GetResource(), [func = std::forward<Func>(fn), ...iArgs = std::forward<Args>(args)]() mutable {
+			const AllocatorContext context{AllocatorScope::ThreadPool};
+			auto* upStream{context.GetResource()};
+
+			auto task = std::allocate_shared<std::packaged_task<void()>>(upStream, [func = std::forward<Func>(fn), ...iArgs = std::forward<Args>(args)]() mutable {
 				func(iArgs...);
 				});
 
@@ -76,8 +83,6 @@ namespace powe
 
 		void Run();
 	
-		SharedPtr<PMRResource> GetResource() const;
-
 		Vector<std::jthread> m_Workers;
 		uint32_t m_ThreadCount;
 		std::queue<std::packaged_task<void()>> m_Tasks;

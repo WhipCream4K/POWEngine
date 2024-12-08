@@ -1,8 +1,6 @@
 #include "pch.h"
 #include "ConsoleLogger.h"
-#include "Core/Application/Application.h"
-#include "Utils/Utils.h"
-#include "Logger/Logger.h"
+#include "Core/Memory/AllocatorContext.h"
 
 #include <iostream>
 
@@ -17,8 +15,12 @@
 powe::ConsoleLogger::ConsoleLogger()
 	: m_Stop(false)
 {
+
+	const AllocatorContext context{AllocatorScope::Logger};
+	auto* upStream{context.GetResource()};
+
 	// Because LFQueue is not copy constructable
-	new (&m_MessageQueue) LFQueue<LogMsg>(GetUpStream().get());
+	new (&m_MessageQueue) LFQueue<LogMsg>(upStream);
 	
 	m_MessageThread = std::jthread(&ConsoleLogger::Run, this);
 }
@@ -87,13 +89,4 @@ void powe::ConsoleLogger::Run()
 
 #endif
 	}
-}
-
-powe::SharedPtr<powe::PMRResource> powe::ConsoleLogger::GetUpStream() const noexcept
-{
-	if(const auto logger{ Application::GetModule<powe::Logger>() })
-	{
-		return logger->GetResource();
-	}
-	return GetAppResource();
 }

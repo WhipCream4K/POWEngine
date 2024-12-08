@@ -21,7 +21,10 @@ namespace powe
         {
         }
 
-        ~AllocatorContext();
+        constexpr ~AllocatorContext() noexcept
+        {
+            m_CurrentContext = m_PreviosContext;
+        }
 
         // Only read operation so thread-safe
         std::pmr::memory_resource* GetResource() const noexcept;

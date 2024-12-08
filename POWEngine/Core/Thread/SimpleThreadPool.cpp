@@ -12,12 +12,14 @@ SimpleThreadPool::SimpleThreadPool(size_t threadCount)
 	, m_Mutex()
 	, m_Stop(false)
 {
+	const AllocatorContext context{AllocatorScope::ThreadPool};
+	auto* upStream{context.GetResource()};
+	
+	m_Workers = Vector<std::jthread>{upStream};
 }
 
-void SimpleThreadPool::OnCreate(ModulesManager* modulesManager)
+void SimpleThreadPool::OnCreate(ModulesManager*)
 {
-	m_Workers = Vector<std::jthread>{GetResource().get()};
-
 	for (uint32_t i = 0; i < m_ThreadCount; ++i) {
 		m_Workers.emplace_back([this] { Run(); });
 	}
@@ -54,9 +56,4 @@ void SimpleThreadPool::Run()
 
 		task();
 	}
-}
-
-SharedPtr<PMRResource> SimpleThreadPool::GetResource() const
-{
-	return Application::Get().GetModulesManager().GetModuleResource<SimpleThreadPool>();
 }

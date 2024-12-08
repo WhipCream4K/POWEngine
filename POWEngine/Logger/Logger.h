@@ -25,7 +25,6 @@ namespace powe
         void OnCreate(ModulesManager*) override;
         void OnExit(ModulesManager*) override;
 
-        SharedPtr<PMRResource> GetResource() const noexcept;
         BaseLogger* GetLogSubsystem() const { return m_LogSubsystem.get(); }
     
     private:

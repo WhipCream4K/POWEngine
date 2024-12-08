@@ -4,10 +4,13 @@
 #include "WindowManager.h"
 #include "Core/Window/Window.h"
 #include "Logger/Logger.h"
-
+#include "Core/Memory/AllocatorContext.h"
 
 powe::WindowManager::WindowManager()
 {
+    const AllocatorContext context{};
+    auto* upStream{context.GetResource()};
+    m_ChildWindows = Vector<UniquePtr<Window>>{upStream};
 }
 
 powe::WindowManager::~WindowManager()
@@ -32,7 +35,10 @@ void powe::WindowManager::Shutdown() noexcept
 powe::Window* powe::WindowManager::CreateWindow(std::string_view windowName, uint32_t width, uint32_t height)
 {
     // Using glfw module
-    auto window{Window::Create(GetResource(), windowName, width, height)};
+    const AllocatorContext context{};
+    auto* upStream{context.GetResource()};
+
+    auto window{Window::Create(upStream, windowName, width, height)};
     
     if(!m_MainWindow)
     {
@@ -70,11 +76,6 @@ void powe::WindowManager::DestroyWindow(std::string_view windowName)
     {
         return window->GetTitle() == windowName;
     }));
-}
-
-powe::SharedPtr<powe::PMRResource> powe::WindowManager::GetResource() const noexcept
-{
-    return GetAppResource();
 }
 
 void powe::WindowManager::Update()
