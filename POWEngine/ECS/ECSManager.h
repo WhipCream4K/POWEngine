@@ -23,6 +23,7 @@ namespace powe
 
 		EntityID MakeNewEntityID() { return m_CurrentEntityID++; }
 		std::unique_ptr<Entity> CreateEntity() noexcept;
+		UniquePtr<Entity> CreateEntity(std::pmr::memory_resource* allocator) noexcept;
 
 		SharedPtr<Archetype> GetArchetypeFrom(EntityID entityID) const noexcept;
 		SharedPtr<Archetype> GetArchetypeFrom(const Set<ComponentID>& components) const noexcept;
@@ -47,6 +48,8 @@ namespace powe
 			
 			return archetype->HasComponents(MakeComponentSet<Args...>());
 		}
+
+		void Step(float deltaTime);
 
 		template<typename... Args>
 		void AddComponents(EntityID entityID, Args&&... args) noexcept
@@ -87,11 +90,12 @@ namespace powe
 					// Combine the components
 					auto addComponents = [&combinedComponents,&tempResource](auto&& arg) {
 						using ComponentType = decltype(arg);
-						void* memoryBlock{ std::allocate_shared<ComponentType>(tempResource, std::forward<ComponentType>(arg)) };
+						SharedPtr<ComponentType> managedMemory{ std::allocate_shared<ComponentType>(tempResource, 
+						std::forward<decltype(arg)>(arg)) };
 
 						combinedComponents.emplace_back(std::make_pair(
 							ComponentInfo::GetID<ComponentType>(), 
-							std::static_pointer_cast<void>(memoryBlock)));
+							std::static_pointer_cast<void>(managedMemory)));
 					};
 
 					(addComponents(std::forward<Args>(args)), ...);
@@ -234,9 +238,7 @@ namespace powe
 
 	
 	private:
-
-		// void MoveEntitityToArchetype(EntityID id,ComponentStorage& fromComponents,const Set<ComponentID> newIDs,const SharedPtr<Archetype>& fromArchetype) noexcept;
-
+	
 		void InsertArchetype(const SharedPtr<Archetype>& archetype);
 
 		IndexedMultimap<SharedPtr<Archetype>> m_Archetypes;

@@ -17,22 +17,7 @@ namespace powe
         template<typename... Args> requires (ComponentConcept<Args> && ...)
         void Add(Args&&... args) const noexcept
         {
-            // Check if this entity already has this component
-            const auto archetype{ m_ECS->GetArchetypeFrom(m_ID) };
-            if(archetype == nullptr)
-            {
-                auto addedArchetype{[id = m_ID, ...cArgs = std::forward<Args>(args)](ECSManager& manager) -> void {
-                
-                    
-                }};
-
-                m_ECS->SumbitLateAction(std::move(addedArchetype));
-            }
-            else
-            {
-                // If so, add this component to the existing archetype
-                
-            }
+            m_ECS->AddComponents(m_ID, std::forward<Args>(args)...);
         }
 
         EntityID GetID() const noexcept { return m_ID; }

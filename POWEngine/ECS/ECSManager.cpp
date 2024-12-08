@@ -8,13 +8,22 @@ using namespace powe;
 
 powe::ECSManager::ECSManager()
 {
-    const AllocatorContext context{AllocatorScope::Game};
-    // auto *upStream{context.GetResource()};
+    const AllocatorContext context{};
+    auto *upStream{context.GetResource()};
+
+    m_Archetypes = IndexedMultimap<SharedPtr<Archetype>>(upStream);
+    m_AwaitActions = Vector<std::function<void(ECSManager&)>>{upStream};
+    m_AwaitEntitiesCollection = UnOrderedMap<EntityID, ComponentStorage>(upStream);
 }
 
 std::unique_ptr<Entity> ECSManager::CreateEntity() noexcept
 {
     return std::make_unique<Entity>(*this);
+}
+
+UniquePtr<Entity> ECSManager::CreateEntity(std::pmr::memory_resource* allocator) noexcept
+{
+    return AllocateUnique<Entity>(*this, allocator);
 }
 
 SharedPtr<Archetype> ECSManager::GetArchetypeFrom(EntityID entityID) const noexcept
@@ -78,71 +87,28 @@ void ECSManager::Remove(EntityID entityID) noexcept
 	m_EntityToArchetype.erase(entityID);
 }
 
-// void powe::ECSManager::GetArchetypes(const Vector<ComponentID>& query, Vector<Archetype*>& outArchetypes) const
-// {
-// 	const Set<ComponentID> querySet{ query.begin(), query.end() };
+void ECSManager::GetArchetypes(const Set<ComponentID>& query, Vector<SharedPtr<Archetype>>& outArchetypes) const noexcept
+{
+    for (const auto &[archetypeKey, archetypes] : m_Archetypes)
+    {
+        if (archetypes->HasComponents(query))
+        {
+            outArchetypes.emplace_back(archetypes);
+        }
+    }
+}
 
-// 	for(const auto& [archetypeKey, archetypes] : m_Archetypes)
-// 	{
-// 		if(IsArchetypeMatch(archetypeKey, querySet))
-// 		{
-// 			outArchetypes.emplace_back(archetypes.get());
-// 		}
-// 	}
-// }
+bool ECSManager::Contains(const Set<ComponentID>& query) const noexcept
+{
+    return GetArchetypeFrom(query) != nullptr;
+}
 
-// powe::Archetype* powe::ECSManager::GetArchetype(const Vector<ComponentID>& query) const noexcept
-// {
-// 	const Set<ComponentID> queryKey{ query.begin(), query.end() };
+bool ECSManager::Contains(const Vector<ComponentID>& query) const noexcept
+{
+    return GetArchetypeFrom(query) != nullptr;
+}
 
-// 	for(const auto& [archetypeKey, archetypes] : m_Archetypes)
-// 	{
-// 		if(IsArchetypeMatch(archetypeKey, queryKey))
-// 		{
-// 			return archetypes.get();
-// 		}
-// 	}
-
-// 	return nullptr;
-// }
-
-// Archetype* ECSManager::GetArchetype(const Set<ComponentID>& query) const noexcept
-// {
-// 	for(const auto& [archetypeKey, archetypes] : m_Archetypes)
-// 	{
-// 		if(IsArchetypeMatch(archetypeKey, query))
-// 		{
-// 			return archetypes.get();
-// 		}
-// 	}
-
-// 	return nullptr;
-// }
-
-// bool powe::ECSManager::ContainsArchetype(const Vector<ComponentID>& query) const noexcept
-// {
-// 	const Set<ComponentID> queryKey{ query.begin(), query.end() };
-
-// 	for(const auto& [archetypeKey, archetypes] : m_Archetypes)
-// 	{
-// 		if(IsArchetypeMatch(archetypeKey, queryKey))
-// 		{
-// 			return true;
-// 		}
-// 	}
-
-// 	return false;
-// }
-
-// bool ECSManager::ContainsArchetype(const Set<ComponentID>& query) const noexcept
-// {
-// 	for(const auto& [archetypeKey, archetypes] : m_Archetypes)
-// 	{
-// 		if(IsArchetypeMatch(archetypeKey, query))
-// 		{
-// 			return true;
-// 		}
-// 	}
-
-// 	return false;
-// }
+bool ECSManager::Contains(EntityID entityID) const noexcept
+{
+    return GetArchetypeFrom(entityID) != nullptr;
+}
