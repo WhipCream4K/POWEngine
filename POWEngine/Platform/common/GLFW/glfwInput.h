@@ -3,7 +3,7 @@
 #include "Game/Input/InputSubsystem.h"
 
 
-class GLFWwindow;
+struct GLFWwindow;
 
 namespace powe
 {

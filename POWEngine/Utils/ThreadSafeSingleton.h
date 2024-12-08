@@ -8,7 +8,7 @@ namespace powe
         // Implements DCLP (Double-Checked Locking Pattern)
     public:
 
-        static T* Get()
+        static SharedPtr<T> Get()
         {
             if (!m_Instance)
             {
@@ -21,7 +21,7 @@ namespace powe
                     }
                 }
 
-                return m_Instance.get();
+                return m_Instance;
 
             }
             return m_Instance;

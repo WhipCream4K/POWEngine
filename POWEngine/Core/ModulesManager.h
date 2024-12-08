@@ -24,7 +24,7 @@ namespace powe
             const auto it{ m_Modules.find(moduleID) };
             if (it != m_Modules.end())
             {
-                return std::static_pointer_cast<T>(it->second);
+                return std::static_pointer_cast<T>(it->second.first);
             }
             return nullptr;
         }
@@ -38,17 +38,19 @@ namespace powe
             const auto it{ m_Modules.find(moduleID) };
             if (it != m_Modules.end())
             {
-                return std::static_pointer_cast<T>(it->second);
+                return std::static_pointer_cast<T>(it->second.first);
             }
 
             SharedPtr<PMRResource> resc{ memResource }; // Copy the resource
+            // PMRResource* resc{memResource.get()};
 
             if(resc == nullptr)
             {
-                resc = GetAppResource();
+                resc.reset(GetAppResource());
             }
 
-            SharedPtr<IModule> module{ std::allocate_shared<T>(resc, std::forward<Args>(args)...) };
+            // SharedPtr<IModule> module{ std::allocate_shared<T>(resc, std::forward<Args>(args)...) };
+            SharedPtr<T> module{AllocateShared<T>(resc.get(), std::forward<Args>(args)...)};
 
             module->OnCreate(this);
 

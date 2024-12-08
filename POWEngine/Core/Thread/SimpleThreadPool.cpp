@@ -5,7 +5,7 @@
 
 using namespace powe;
 
-SimpleThreadPool::SimpleThreadPool(size_t threadCount)
+SimpleThreadPool::SimpleThreadPool(uint32_t threadCount)
 	: IModule("SimepleThreadPool")
 	, m_ThreadCount(threadCount)
 	, m_ThreadCV()

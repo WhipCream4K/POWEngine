@@ -24,7 +24,6 @@ namespace powe
         Window* GetWindow(std::string_view windowName) noexcept;
         Window* GetMainWindow() noexcept { return m_MainWindow.get(); }
         void DestroyWindow(std::string_view windowName);
-        void Update();
 
     private:
 

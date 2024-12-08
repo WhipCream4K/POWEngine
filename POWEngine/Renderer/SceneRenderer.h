@@ -20,15 +20,15 @@ namespace powe
         
     public:
 
-        SceneRenderer(size_t renderBufferCount = 2);
+        SceneRenderer();
         
         ~SceneRenderer() override;
 
         void OnCreate(ModulesManager* manager) override;
         
         SceneRenderGraph& GetSceneRenderGraph() { return m_SceneRenderGraph; }
-
-        std::future<void> Render();
+        
+        void Render();
         
     private:
 

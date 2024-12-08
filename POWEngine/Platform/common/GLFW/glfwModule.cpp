@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "glfwModule.h"
 #include "Core/Application/Application.h"
-
+#include "Utils/Utils.h"
 #include "Logger/Logger.h"
 #include <GLFW/glfw3.h>
 
@@ -26,12 +26,13 @@ glfwModule::glfwModule()
 void glfwModule::OnCreate(ModulesManager* modulesManager)
 {
     auto appResource{ modulesManager->GetModuleResource<glfwModule>() };
-    m_GlfwEvent = std::allocate_shared<glfwEvent>(appResource);
-    
+
+    m_GlfwEvent = AllocateShared<glfwEvent>(appResource.get());
+        
     Application::Get().RegisterAppEvent(m_GlfwEvent);
 }
 
-void glfwModule::OnExit(ModulesManager* modulesManager)
+void glfwModule::OnExit(ModulesManager*)
 {
     glfwTerminate();
 }

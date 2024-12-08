@@ -13,11 +13,7 @@ powe::WindowManager::WindowManager()
     m_ChildWindows = Vector<UniquePtr<Window>>{upStream};
 }
 
-powe::WindowManager::~WindowManager()
-{
-    // glfw Window Subsystem
-    // glfwWindow::Shutdown();
-}
+powe::WindowManager::~WindowManager() = default;
 
 void powe::WindowManager::Init()
 {
@@ -76,10 +72,4 @@ void powe::WindowManager::DestroyWindow(std::string_view windowName)
     {
         return window->GetTitle() == windowName;
     }));
-}
-
-void powe::WindowManager::Update()
-{
-    // glfw Window Subsystem
-    // glfwWindow::Update();
 }

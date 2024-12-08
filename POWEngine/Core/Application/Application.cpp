@@ -94,3 +94,8 @@ void powe::Application::Run()
 
     m_AppModules->Clear();
 }
+
+void powe::Application::RegisterAppEvent(const SharedPtr<AppEvent>& appEvent) noexcept
+{
+    m_AppEvents.emplace_back(appEvent);
+}

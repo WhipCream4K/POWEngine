@@ -20,7 +20,8 @@ void Game::OnCreate(ModulesManager* modulesManager)
 
     m_SceneMap = UnOrderedMap<std::string, UniquePtr<Scene>>{ resource.get() };
 
-    m_GameEvent = std::allocate_shared<GameEvent>(resource, *this);
+    // m_GameEvent = std::allocate_shared<GameEvent>(resource, *this);
+    m_GameEvent = AllocateShared<GameEvent>(resource.get());
 
     auto& app{Application::Get()};
     app.RegisterAppEvent(m_GameEvent);

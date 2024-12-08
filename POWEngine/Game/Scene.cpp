@@ -5,6 +5,7 @@
 #include "Game.h"
 #include "Scene.h"
 #include "SceneSystem.h"
+#include "ECS/ECSManager.h"
 
 #include "Core/Thread/SimpleThreadPool.h"
 
@@ -21,6 +22,8 @@ Scene::Scene(Game &game) : m_Game(game)
     m_SequenceSystems = Vector<SharedPtr<SceneSystem>>(upStream);
     m_UnsequenceSystems = Vector<SharedPtr<SceneSystem>>(upStream);
 }
+
+Scene::~Scene() = default;
 
 void Scene::Start()
 {

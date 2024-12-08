@@ -5,10 +5,10 @@
 #include "RenderPass.h"
 #include "Core/ModulesManager.h"
 
-powe::SceneRenderer::SceneRenderer(size_t renderBufferCount)
+powe::SceneRenderer::SceneRenderer()
     : IModule("SceneRenderer")
     , m_RenderContext()
-    , m_SceneRenderGraph(renderBufferCount)
+    , m_SceneRenderGraph(2)
     , m_RenderFlag()
     , m_ThreadStop(false)
 {
@@ -25,10 +25,9 @@ void powe::SceneRenderer::OnCreate(ModulesManager*)
 {
 }
 
-std::future<void> powe::SceneRenderer::Render()
+void powe::SceneRenderer::Render()
 {
     m_RenderFlag.test_and_set(std::memory_order_acquire);
-    return m_RenderPromise.get_future();
 }
 
 void powe::SceneRenderer::Run()
@@ -41,8 +40,6 @@ void powe::SceneRenderer::Run()
 
         m_SceneRenderGraph.Execute(*m_RenderContext);
         
-        m_RenderPromise.set_value();
-
         m_RenderFlag.clear(std::memory_order_release);
     }
 }

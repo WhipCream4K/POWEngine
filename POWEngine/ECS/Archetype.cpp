@@ -137,7 +137,7 @@ void Archetype::Insert(EntityID id, ComponentStorage &&inComponents) noexcept
 
 void Archetype::InsertNoSort(EntityID id, ComponentStorage &&inComponents) noexcept
 {
-    m_EntityToIndex.try_emplace(id, m_ComponentData.size() / m_ComponentBlockSize);
+    m_EntityToIndex.try_emplace(id, uint32_t(m_ComponentData.size() / m_ComponentBlockSize));
     m_ComponentData.insert(m_ComponentData.end(), m_ComponentBlockSize, std::byte(0));
 
     std::byte* dest{&m_ComponentData.back() - m_ComponentBlockSize};

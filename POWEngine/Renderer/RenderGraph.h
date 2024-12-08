@@ -17,13 +17,14 @@ namespace powe
 
         void AddPass(UniquePtr<RenderPass>&& pass);
 
-        WeakPtr<Scene> Scene;
-        WeakPtr<Viewport> Viewport;
+        SharedPtr<Scene> GetScene() const noexcept { return m_Scene.lock(); }
+        void SetScene(const SharedPtr<Scene>& scene) { m_Scene = scene; }
 
     private:
 
         void ResolvePass();
 
         Vector<UniquePtr<RenderPass>> m_RenderPasses;
+        WeakPtr<Scene> m_Scene;
     };
 }

@@ -46,12 +46,12 @@ namespace powe
         }
 
         // return size of elements in archetype
-        constexpr size_t size() const noexcept
+        size_t size() const noexcept
         {
             return m_EntityToIndex.size();
         }
-
-        constexpr bool contains(EntityID id) const noexcept
+        
+        bool contains(EntityID id) const noexcept
         {
             return m_EntityToIndex.contains(id);
         }

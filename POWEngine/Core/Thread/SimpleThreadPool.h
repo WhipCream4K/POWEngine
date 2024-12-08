@@ -15,7 +15,7 @@ namespace powe
 	{
 	public:
 
-		SimpleThreadPool(size_t threadCount = (size_t)std::thread::hardware_concurrency());
+		SimpleThreadPool(uint32_t threadCount = std::thread::hardware_concurrency());
 		SimpleThreadPool(const SimpleThreadPool&) = delete;
 		SimpleThreadPool& operator=(const SimpleThreadPool&) = delete;
 		SimpleThreadPool(SimpleThreadPool&&) noexcept = delete;
@@ -28,19 +28,19 @@ namespace powe
 	public:
 
 		template<typename Func, typename ... Args>
-		[[nodiscard]] auto EnqueueReturn(Func&& fn, Args&&... args) -> std::future<decltype(fn(args...))>
+		[[nodiscard]] auto EnqueueReturn(Func&& fn, Args&&... args) -> std::future<std::invoke_result_t<Func,Args...>>
 		{
 			using Ret = std::invoke_result_t<Func, Args...>;
 
 			if(m_Stop)
-				return;
+				return {};
 
 			const AllocatorContext context{AllocatorScope::ThreadPool};
 			auto* upStream{context.GetResource()};
 
-			auto task = std::allocate_shared<std::packaged_task<Ret()>>(upStream, [func = std::forward<Func>(fn), ...iArgs = std::forward<Args>(args)]() mutable {
+			auto task{ AllocateShared<std::packaged_task<Ret()>>(upStream, [func = std::forward<Func>(fn), ...iArgs = std::forward<Args>(args)]() mutable {
 				return func(iArgs...);
-				});
+			})};
 
 			std::future<Ret> res = task->get_future();
 

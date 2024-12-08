@@ -8,7 +8,7 @@ namespace powe
     {
     public:
 
-        using ArchetypeComponentHandle = UnOrderedMap<Archetype*, Vector<CompAddress>>;
+        using ArchetypeComponentHandle = UnOrderedMap<WeakPtr<Archetype>, Vector<CompAddress>>;
 
         ComponentView(ECSManager& manager,
                       const Vector<ComponentID>& compIDs);
@@ -86,16 +86,19 @@ namespace powe
             }
         }
 
-        constexpr bool empty() const { return m_ComponentsAddresses.empty(); }
+        bool empty() const noexcept
+        { 
+            return m_ComponentsAddresses.empty(); 
+        }
 
         template<typename... Args>
-        Iterator<Args...> begin()
+        Iterator<Args...> begin() noexcept
         {
             return Iterator<Args...>(m_ComponentsAddresses.begin());
         }
 
         template<typename... Args>
-        Iterator<Args...> end()
+        Iterator<Args...> end() noexcept
         {
             return Iterator<Args...>(m_ComponentsAddresses.end());
         }

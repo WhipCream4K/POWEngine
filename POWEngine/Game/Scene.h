@@ -2,7 +2,6 @@
 
 #include <future>
 
-#include "Game/Input/InputManager.h"
 
 namespace powe
 {
@@ -29,7 +28,7 @@ namespace powe
         Scene& operator=(const Scene&) = delete;
         Scene(Scene&&) = default;
         Scene& operator=(Scene&&) = default;
-        ~Scene() = default;
+        ~Scene();
 
         void Start();
         void Exit();

@@ -30,7 +30,13 @@ namespace powe
 		return UniquePtr<T>(ptr, memResource);
     }
 
-	
+	template<typename T, typename... Args>
+	constexpr SharedPtr<T> AllocateShared(std::pmr::memory_resource* memResource, Args&&... args)
+	{
+		std::pmr::polymorphic_allocator<T> allocator(memResource);
+		return std::allocate_shared<T>(allocator, std::forward<Args>(args)...);
+	}
+
 	bool IsInAppMainThread() noexcept;
-	SharedPtr<PMRResource> GetAppResource() noexcept;
+	PMRResource* GetAppResource() noexcept;
 }

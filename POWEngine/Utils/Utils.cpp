@@ -9,7 +9,7 @@ bool powe::IsInAppMainThread() noexcept
     return Application::Get().IsInMainThread();
 }
 
-powe::SharedPtr<powe::PMRResource> powe::GetAppResource() noexcept
+powe::PMRResource* powe::GetAppResource() noexcept
 {
     return MemoryManager::Get()->GetAllocator("Application");
 }

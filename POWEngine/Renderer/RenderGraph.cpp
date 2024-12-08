@@ -2,7 +2,7 @@
 #include "RenderGraph.h"
 #include "RenderPass.h"
 
-powe::SceneRenderGraph::SceneRenderGraph(uint32_t renderBufferCount)
+powe::SceneRenderGraph::SceneRenderGraph(uint32_t)
 {
 }
 

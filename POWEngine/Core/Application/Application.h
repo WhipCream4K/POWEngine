@@ -53,7 +53,6 @@ namespace powe
 		// Core components
 		Clock m_Clock;
 		UniquePtr<WindowManager> m_WindowManager;
-		UniquePtr<InputManager> m_InputManager;
 		UniquePtr<ModulesManager> m_AppModules;
 
 		Window* m_AppWindow;

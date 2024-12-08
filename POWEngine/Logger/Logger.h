@@ -10,7 +10,7 @@
 
 namespace powe
 {
-    class BaseLogger;
+    // class BaseLogger;
     class Logger : public IModule
     {
     public:
@@ -29,21 +29,23 @@ namespace powe
     
     private:
 
-        template<typename... Args>
-		static inline std::function<std::string()> LogFromWhere(std::string_view message,const std::source_location& loc, Args&&... args)
-		{
-            std::function<std::string()> fullMessage = [message, loc, ...args = std::forward<Args>(args)]() 
-            { 
-			    return std::vformat(message, std::make_format_args(std::forward<Args>(args)...)) + 
-                " from: " + loc.file_name() + 
-                " at: " + loc.function_name();
-            };
-            return fullMessage;
-		}
+
 
         UniquePtr<BaseLogger> m_LogSubsystem;
 
     };
+
+    template<typename... Args>
+	static inline std::function<std::string()> LogFromWhere(std::string_view message,const std::source_location& loc, Args&&... args)
+	{
+        std::function<std::string()> fullMessage = [message, loc, ...args = std::forward<Args>(args)]() 
+        { 
+		    return std::vformat(message, std::make_format_args(std::forward<Args>(args)...)) + 
+            " from: " + loc.file_name() + 
+            " at: " + loc.function_name();
+        };
+        return fullMessage;
+	}
 
     template<typename... Args>
     static inline void Info(const std::string& message, Args&&... args)
@@ -53,7 +55,7 @@ namespace powe
             return;
 
         logModule->GetLogSubsystem()->LogLevel(LogSeverity::Info, 
-         Logger::LogFromWhere(message, std::source_location::current(), std::forward<Args>(args)...));
+         LogFromWhere(message, std::source_location::current(), std::forward<Args>(args)...));
     }
 
     template<typename... Args>
@@ -64,7 +66,7 @@ namespace powe
             return;
 
         logModule->GetLogSubsystem()->LogLevel(LogSeverity::Warning,    
-         Logger::LogFromWhere(message, std::source_location::current(), std::forward<Args>(args)...));
+         LogFromWhere(message, std::source_location::current(), std::forward<Args>(args)...));
     }
 
     template<typename... Args>
@@ -75,7 +77,7 @@ namespace powe
             return;
 
         logModule->GetLogSubsystem()->LogLevel(LogSeverity::Error,
-         Logger::LogFromWhere(message, std::source_location::current(), std::forward<Args>(args)...));
+         LogFromWhere(message, std::source_location::current(), std::forward<Args>(args)...));
     }
 
 }

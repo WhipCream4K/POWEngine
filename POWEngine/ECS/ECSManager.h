@@ -228,8 +228,10 @@ namespace powe
 
 			auto* upStream{ context.GetResource() };
 
-			const SharedPtr<Archetype> archetype{
-				std::allocate_shared<Archetype>(upStream, components)};
+			// const SharedPtr<Archetype> archetype{
+			// 	std::allocate_shared<Archetype>(upStream, components)};
+
+			const SharedPtr<Archetype> archetype{AllocateShared<Archetype>(upStream,components)};
 
 			return archetype;
 		}
