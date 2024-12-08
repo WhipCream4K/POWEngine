@@ -12,7 +12,7 @@ namespace powe
     
         virtual ~InputSubsystem() = default;
 
-        virtual void Update(Vector<Input::KeyBinding>& keyBindings) noexcept {}
+        virtual void Update(Vector<Input::KeyBinding>&) noexcept {}
 
         static UniquePtr<InputSubsystem> Create(InputManager& inputManager);
 

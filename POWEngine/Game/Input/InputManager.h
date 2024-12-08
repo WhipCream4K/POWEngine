@@ -26,16 +26,19 @@ namespace powe
     };
     
     class InputSubsystem;
+    class Game;
     class InputManager
     {
     public:
 
-        InputManager(Scene& scene);
+        InputManager(Game& gameModule);
         InputManager(const InputManager&) = delete;
         InputManager& operator=(const InputManager&) = delete;
         InputManager(InputManager&&) = default;
         InputManager& operator=(InputManager&&) = default;
-        ~InputManager();
+        ~InputManager() = default;
+
+        Game& GetGameModule() const noexcept { return *m_GameModule; }
 
         /// @brief Registers a key binding
         /// @param key The key to bind normally uses GLFW keys value
@@ -47,13 +50,12 @@ namespace powe
 
         void Update() noexcept;
         const Vector<Input::KeyBinding>& GetKeyBindings() const noexcept { return m_KeyBindings; }
-        Scene& GetScene() const noexcept { return *m_Scene; }
 
         // TODO: Also do the key binding detach
 
     private:
 
-        RefWrap<Scene> m_Scene;
+        RefWrap<Game> m_GameModule;
         Vector<Input::KeyBinding> m_KeyBindings;
         UniquePtr<InputSubsystem> m_InputSubsystem;
     };

@@ -6,7 +6,6 @@
 #include "glfwWindow.h"
 
 
-#include <execution>
 #include <GLFW/glfw3.h>
 
 
@@ -22,12 +21,12 @@ static void glfwKeyCallback(GLFWwindow* window, int key, int scancode, int actio
 glfwInput::glfwInput(InputManager &inputManager) 
     : InputSubsystem(inputManager)
 {
-    auto bindWindow{inputManager.GetScene().GetGameModule().GetBindWindow()};
+    auto bindWindow{inputManager.GetGameModule().GetBindWindow()};
     if (auto glfwWindowPtr{dynamic_cast<glfwWindow*>(bindWindow)}; glfwWindowPtr)
     {
         m_WindowHandle = glfwWindowPtr->GetHandle();
 
-        KeyCallback = [this](GLFWwindow* window, int key, int scancode, int action, int mods)
+        KeyCallback = [this](GLFWwindow* window, int key, int , int action, int mods)
         {
             if(window == m_WindowHandle)
             {
@@ -38,7 +37,7 @@ glfwInput::glfwInput(InputManager &inputManager)
                 {
                     if (keyBinding.key == key && keyBinding.state == action && keyBinding.modifiers == mods)
                     {
-                        keyBinding.callback(m_InputManager->GetScene());
+                        keyBinding.callback(*m_InputManager->GetGameModule().GetActiveScene());
                         return;
                     }
                 }

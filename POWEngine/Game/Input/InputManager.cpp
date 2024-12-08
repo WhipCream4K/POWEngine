@@ -6,13 +6,12 @@
 
 using namespace powe;
 
-InputManager::InputManager(Scene& scene)
-    : m_Scene{scene}
+InputManager::InputManager(Game& gameModule)
+    : m_GameModule(gameModule)
 {
     m_InputSubsystem = InputSubsystem::Create(*this);
 }
 
-InputManager::~InputManager() = default;
 
 void InputManager::AddKeyBinding(int key, Input::State state, std::function<void(Scene&)> callback, uint8_t modifiers) noexcept
 {

@@ -12,15 +12,30 @@ using namespace powe;
 
 Scene::Scene(Game &game) : m_Game(game)
 {
+    const AllocatorContext context{};
+    auto* upStream{context.GetResource()};
+    
+    m_ECSManager = AllocateUnique<ECSManager>(upStream);
+
     m_ThreadPoolModule = Application::GetModule<SimpleThreadPool>();
+    m_SequenceSystems = Vector<SharedPtr<SceneSystem>>(upStream);
+    m_UnsequenceSystems = Vector<SharedPtr<SceneSystem>>(upStream);
 }
 
 void Scene::Start()
 {
+    for (auto &system : m_SequenceSystems)
+    {
+        system->OnStart(*this);
+    }
 }
 
 void Scene::Exit()
 {
+    for (auto &system : m_SequenceSystems)
+    {
+        system->OnExit(*this);
+    }
 }
 
 void Scene::Update(float deltaTime)

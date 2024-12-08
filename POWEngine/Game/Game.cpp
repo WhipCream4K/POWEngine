@@ -5,6 +5,7 @@
 #include "Scene.h"
 #include "Core/Application/Application.h"
 #include "Core/ModulesManager.h"
+#include "Core/Memory/AllocatorContext.h"
 
 using namespace powe;
 
@@ -40,7 +41,10 @@ Scene* Game::CreateScene(std::string_view sceneName) noexcept
         return m_SceneMap[sceneName.data()].get();
     }
 
-    UniquePtr<Scene> scene{ AllocateUnique<Scene>(GetResource(), *this) };
+    const AllocatorContext context{AllocatorScope::Game};
+    auto* upStream{context.GetResource()};
+
+    UniquePtr<Scene> scene{ AllocateUnique<Scene>(upStream, *this) };
     
     if(m_GameEvent->GetActiveScene() == nullptr)
     {
