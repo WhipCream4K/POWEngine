@@ -11,9 +11,6 @@ namespace powe
 {
     class RenderPass;
     class RenderContext;
-    class Window;
-    class BaseRenderSystem;
-    class WindowManager;
     class SceneRenderGraph;
     class SceneRenderer : public IModule
     {
@@ -28,7 +25,7 @@ namespace powe
         
         SceneRenderGraph& GetSceneRenderGraph() { return m_SceneRenderGraph; }
         
-        void Render();
+        void Draw();
         
     private:
 

@@ -8,7 +8,7 @@
 powe::SceneRenderer::SceneRenderer()
     : IModule("SceneRenderer")
     , m_RenderContext()
-    , m_SceneRenderGraph(2)
+    , m_SceneRenderGraph()
     , m_RenderFlag()
     , m_ThreadStop(false)
 {
@@ -25,7 +25,7 @@ void powe::SceneRenderer::OnCreate(ModulesManager*)
 {
 }
 
-void powe::SceneRenderer::Render()
+void powe::SceneRenderer::Draw()
 {
     m_RenderFlag.test_and_set(std::memory_order_acquire);
 }

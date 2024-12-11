@@ -13,7 +13,7 @@ namespace powe
         // TODO: Add a way to draw geometries on viewport
         virtual void DrawGeometries() = 0;
         virtual void SetViewport(const Viewport&) = 0;
-        virtual void ClearViewport() = 0;
+        virtual void ClearDrawBuffers() = 0;
     };
 }
 

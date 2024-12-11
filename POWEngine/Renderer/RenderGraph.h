@@ -11,10 +11,9 @@ namespace powe
     {
     public:
 
-        SceneRenderGraph(uint32_t renderBufferCount = 2);
-
+        SceneRenderGraph() = default;
+        
         void Execute(RenderContext& ctx);
-
         void AddPass(UniquePtr<RenderPass>&& pass);
 
         SharedPtr<Scene> GetScene() const noexcept { return m_Scene.lock(); }

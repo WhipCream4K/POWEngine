@@ -17,10 +17,7 @@ namespace powe
         const Vector<ComponentID>& GetComponentIDs() const { return m_ComponentIDs; }
 
         template<typename... Args>
-        class Iterator;
-
-        template<typename... Args>
-        class Iterator<std::tuple<Args...>>
+        class Iterator
         {
         public:
 

@@ -11,7 +11,7 @@ powe::ECSManager::ECSManager()
     auto *upStream{context.GetResource()};
 
     m_Archetypes = IndexedMultimap<SharedPtr<Archetype>>(upStream);
-    m_AwaitActions = Vector<std::function<void(ECSManager&)>>{upStream};
+    m_AwaitActions = Vector<std::function<void(ECSManager &)>>{upStream};
     m_AwaitEntitiesCollection = UnOrderedMap<EntityID, ComponentStorage>(upStream);
 }
 
@@ -20,7 +20,7 @@ std::unique_ptr<Entity> ECSManager::CreateEntity() noexcept
     return std::make_unique<Entity>(*this);
 }
 
-UniquePtr<Entity> ECSManager::CreateEntity(std::pmr::memory_resource* allocator) noexcept
+UniquePtr<Entity> ECSManager::CreateEntity(std::pmr::memory_resource *allocator) noexcept
 {
     return AllocateUnique<Entity>(*this, allocator);
 }
@@ -59,34 +59,33 @@ SharedPtr<Archetype> ECSManager::GetArchetypeFrom(const Vector<ComponentID> &com
 
 void ECSManager::Remove(EntityID entityID) noexcept
 {
-	auto removeFunc = [entityID](ECSManager& manager) {
+    auto removeFunc = [entityID](ECSManager &manager) {
+        const auto archetype(manager.GetArchetypeFrom(entityID));
+        archetype->Remove(entityID);
+    };
 
-		const auto archetype(manager.GetArchetypeFrom(entityID));
-		archetype->Remove(entityID);
-	};
+    if (!IsUpdating())
+    {
+        removeFunc(*this);
+    }
+    else
+    {
+        if (auto findItr{m_AwaitEntitiesCollection.find(entityID)}; findItr != m_AwaitEntitiesCollection.end())
+        {
+            m_AwaitEntitiesCollection.erase(findItr);
+        }
+        else
+        {
 
-	if(!IsUpdating())
-	{
-		removeFunc(*this);
-	}
-	else 
-	{
-		if(auto findItr{m_AwaitEntitiesCollection.find(entityID)}; 
-			findItr != m_AwaitEntitiesCollection.end())
-		{
-			m_AwaitEntitiesCollection.erase(findItr);
-		}
-		else {
+            m_AwaitActions.emplace_back(std::move(removeFunc));
+        }
+    }
 
-			m_AwaitActions.emplace_back(std::move(removeFunc));
-		}
-	}
-
-
-	m_EntityToArchetype.erase(entityID);
+    m_EntityToArchetype.erase(entityID);
 }
 
-void ECSManager::GetArchetypes(const Set<ComponentID>& query, Vector<SharedPtr<Archetype>>& outArchetypes) const noexcept
+void ECSManager::GetArchetypes(const Set<ComponentID> &query,
+                               Vector<SharedPtr<Archetype>> &outArchetypes) const noexcept
 {
     for (const auto &[archetypeKey, archetypes] : m_Archetypes)
     {
@@ -97,12 +96,12 @@ void ECSManager::GetArchetypes(const Set<ComponentID>& query, Vector<SharedPtr<A
     }
 }
 
-bool ECSManager::Contains(const Set<ComponentID>& query) const noexcept
+bool ECSManager::Contains(const Set<ComponentID> &query) const noexcept
 {
     return GetArchetypeFrom(query) != nullptr;
 }
 
-bool ECSManager::Contains(const Vector<ComponentID>& query) const noexcept
+bool ECSManager::Contains(const Vector<ComponentID> &query) const noexcept
 {
     return GetArchetypeFrom(query) != nullptr;
 }
@@ -110,4 +109,67 @@ bool ECSManager::Contains(const Vector<ComponentID>& query) const noexcept
 bool ECSManager::Contains(EntityID entityID) const noexcept
 {
     return GetArchetypeFrom(entityID) != nullptr;
+}
+
+void ECSManager::CalculateMemoryForResolve(EntityID id,const Vector<ComponentID>& newComponents) noexcept
+{
+    // Pre-register the memory needed during resolve
+    const auto archetype{GetArchetypeFrom(id)};
+    if (archetype)
+    {
+        Vector<ComponentID> combinedIDs{archetype->GetComponentVec()};
+        combinedIDs.insert(combinedIDs.end(), newComponents.begin(), newComponents.end());
+
+        const size_t requiredSize =
+            std::accumulate(combinedIDs.begin(), combinedIDs.end(), size_t(0),
+                            [](std::size_t sum, const ComponentID &id) { return sum + ComponentInfo::GetSize(id); });
+
+        m_MemoryDuringResolve += requiredSize;
+        
+        return;
+    }
+
+    const size_t requiredSize = std::accumulate(newComponents.begin(), newComponents.end(), size_t(0),
+        [](std::size_t sum, const ComponentID &id) { return sum + ComponentInfo::GetSize(id); });
+
+    m_MemoryDuringResolve += requiredSize;
+    
+}
+
+void ECSManager::ResolveEntities() noexcept
+{
+    if(m_AwaitEntitiesCollection.empty() && m_AwaitActions.empty())
+        return;
+
+    {
+        std::pmr::monotonic_buffer_resource tempResource{m_MemoryDuringResolve};
+
+        for (auto &[entityID, components] : m_AwaitEntitiesCollection)
+        {
+            if (const auto archetype{GetArchetypeFrom(entityID)}; archetype)
+            {
+                // pull the components out if this entity has a component
+                ComponentStorage outComponents{};
+                archetype->Remove(entityID, outComponents, &tempResource);
+
+                components.insert(components.end(), outComponents.begin(), outComponents.end());
+            }
+
+            Vector<ComponentID> compIDs{};
+            for(auto& [componentID,component] : components)
+            {
+                compIDs.emplace_back(componentID);
+            }
+
+            const auto archetype{CreateArchetype(compIDs)};
+            archetype->Insert(entityID, std::move(components));
+        }
+    }
+
+    for(auto& action : m_AwaitActions)
+    {
+        action(*this); 
+    }
+
+    m_MemoryDuringResolve = 0;
 }

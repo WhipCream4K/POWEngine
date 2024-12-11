@@ -43,6 +43,8 @@ void Scene::Exit()
 
 void Scene::Update(float deltaTime)
 {
+    m_ECSManager->ResolveEntities();
+    
     if (!m_UnsequenceSystems.empty())
     {
         auto parUnseqSystem{[this, deltaTime]() {
@@ -57,10 +59,14 @@ void Scene::Update(float deltaTime)
         }
     }
 
+    m_ECSManager->Lock();
+
     for (auto &system : m_SequenceSystems)
     {
         system->OnUpdate(*this, deltaTime);
     }
+
+    m_ECSManager->Unlock();
 }
 
 void Scene::SceduleSystem(const SharedPtr<SceneSystem> &system, SchedulePolicy policy) noexcept

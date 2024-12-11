@@ -1,10 +1,6 @@
 #include "pch.h"
 #include "RenderGraph.h"
-#include "RenderPass.h"
-
-powe::SceneRenderGraph::SceneRenderGraph(uint32_t)
-{
-}
+#include "RenderPass.h" 
 
 void powe::SceneRenderGraph::Execute(RenderContext& ctx)
 {

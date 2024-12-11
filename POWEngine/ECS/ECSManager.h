@@ -49,7 +49,12 @@ namespace powe
 			return archetype->HasComponents(MakeComponentSet<Args...>());
 		}
 
-		void Step(float deltaTime);
+		void ResolveEntities() noexcept;
+
+		void Lock() noexcept { m_IsUpdating = true; }
+		void Unlock() noexcept { m_IsUpdating = false; }
+
+		void CalculateMemoryForResolve(EntityID id,const Vector<ComponentID>& newComponents) noexcept;
 
 		template<typename... Args>
 		void AddComponents(EntityID entityID, Args&&... args) noexcept
@@ -121,6 +126,8 @@ namespace powe
     		};
 
 			(addComponent(std::forward<Args>(args)), ...);
+
+			CalculateMemoryForResolve(entityID, MakeComponentVec<Args...>());
 		}
 
 		template<typename... Args> requires (ComponentConcept<Args> && ...)
@@ -157,7 +164,7 @@ namespace powe
 					}
 				}
 
-				// find this entity new home
+				// find this entity a new home
 				archetype = manager.CreateArchetype(Vector<ComponentID>(compIDs.begin(), compIDs.end()));
 				archetype->InsertNoSort(entityID, std::move(outComponents));
 
@@ -247,6 +254,7 @@ namespace powe
  
 		Vector<std::function<void(ECSManager&)>> m_AwaitActions;
 		UnOrderedMap<EntityID, ComponentStorage> m_AwaitEntitiesCollection;
+		size_t m_MemoryDuringResolve{};
 
 		UnOrderedMap<EntityID, SharedPtr<Archetype>> m_EntityToArchetype;
 		std::atomic<EntityID> m_CurrentEntityID{};
