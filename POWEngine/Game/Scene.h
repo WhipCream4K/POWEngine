@@ -2,7 +2,6 @@
 
 #include <future>
 
-
 namespace powe
 {
     class ECSManager;
@@ -33,19 +32,17 @@ namespace powe
         void Start();
         void Exit();
         void Update(float deltaTime);
+        float GetDeltaTime() const noexcept;
 
         void SceduleSystem(const SharedPtr<SceneSystem>& system, 
         SchedulePolicy policy = SchedulePolicy::Sequence) noexcept;
-        
 
         ECSManager& GetECSManager() const { return *m_ECSManager.get(); }
         Game& GetGameModule() const noexcept { return m_Game; }
         std::string_view GetName() const noexcept;
-        SharedPtr<PMRResource> GetResource() const noexcept;
 
     private:
 
-        
         Vector<SharedPtr<SceneSystem>> m_SequenceSystems;
 
         Vector<SharedPtr<SceneSystem>> m_UnsequenceSystems;

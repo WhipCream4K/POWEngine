@@ -10,7 +10,7 @@ powe::ECSManager::ECSManager()
     const AllocatorContext context{};
     auto *upStream{context.GetResource()};
 
-    m_Archetypes = IndexedMultimap<SharedPtr<Archetype>>(upStream);
+    m_Archetypes = ComponentSetMultimap<SharedPtr<Archetype>>(upStream);
     m_AwaitActions = Vector<std::function<void(ECSManager &)>>{upStream};
     m_AwaitEntitiesCollection = UnOrderedMap<EntityID, ComponentStorage>(upStream);
 }
@@ -96,6 +96,12 @@ void ECSManager::GetArchetypes(const Set<ComponentID> &query,
     }
 }
 
+void ECSManager::GetArchetypes(const Vector<ComponentID> &query,
+                               Vector<SharedPtr<Archetype>> &outArchetypes) const noexcept
+{
+    GetArchetypes(Set<ComponentID>{query.begin(), query.end()}, outArchetypes);
+}
+
 bool ECSManager::Contains(const Set<ComponentID> &query) const noexcept
 {
     return GetArchetypeFrom(query) != nullptr;
@@ -124,7 +130,7 @@ void ECSManager::CalculateMemoryForResolve(EntityID id,const Vector<ComponentID>
             std::accumulate(combinedIDs.begin(), combinedIDs.end(), size_t(0),
                             [](std::size_t sum, const ComponentID &id) { return sum + ComponentInfo::GetSize(id); });
 
-        m_MemoryDuringResolve += requiredSize;
+        m_EstimatedMemDuringResolve += requiredSize;
         
         return;
     }
@@ -132,7 +138,7 @@ void ECSManager::CalculateMemoryForResolve(EntityID id,const Vector<ComponentID>
     const size_t requiredSize = std::accumulate(newComponents.begin(), newComponents.end(), size_t(0),
         [](std::size_t sum, const ComponentID &id) { return sum + ComponentInfo::GetSize(id); });
 
-    m_MemoryDuringResolve += requiredSize;
+    m_EstimatedMemDuringResolve += requiredSize;
     
 }
 
@@ -142,7 +148,7 @@ void ECSManager::ResolveEntities() noexcept
         return;
 
     {
-        std::pmr::monotonic_buffer_resource tempResource{m_MemoryDuringResolve};
+        std::pmr::monotonic_buffer_resource tempResource{m_EstimatedMemDuringResolve};
 
         for (auto &[entityID, components] : m_AwaitEntitiesCollection)
         {
@@ -171,5 +177,8 @@ void ECSManager::ResolveEntities() noexcept
         action(*this); 
     }
 
-    m_MemoryDuringResolve = 0;
+    m_AwaitActions.clear();
+    m_AwaitEntitiesCollection.clear();
+
+    m_EstimatedMemDuringResolve = 0;
 }

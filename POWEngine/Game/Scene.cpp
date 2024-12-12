@@ -35,16 +35,12 @@ void Scene::Start()
 
 void Scene::Exit()
 {
-    for (auto &system : m_SequenceSystems)
-    {
-        system->OnExit(*this);
-    }
 }
 
 void Scene::Update(float deltaTime)
 {
     m_ECSManager->ResolveEntities();
-    
+
     if (!m_UnsequenceSystems.empty())
     {
         auto parUnseqSystem{[this, deltaTime]() {
@@ -61,11 +57,6 @@ void Scene::Update(float deltaTime)
 
     m_ECSManager->Lock();
 
-    for (auto &system : m_SequenceSystems)
-    {
-        system->OnUpdate(*this, deltaTime);
-    }
-
     m_ECSManager->Unlock();
 }
 
@@ -79,11 +70,6 @@ void Scene::SceduleSystem(const SharedPtr<SceneSystem> &system, SchedulePolicy p
 	{
 		m_UnsequenceSystems.emplace_back(system);
 	}
-}
-
-SharedPtr<PMRResource> Scene::GetResource() const noexcept
-{
-    return m_Game->GetResource();
 }
 
 std::string_view Scene::GetName() const noexcept

@@ -16,7 +16,7 @@ Archetype::Archetype(const Vector<ComponentID>& components) noexcept
 
     m_ComponentData = Vector<std::byte>(upStream);
     m_ComponentIDs = Vector<ComponentID>(upStream);
-    m_EntityToIndex = UnOrderedMap<EntityID, uint32_t>(upStream);
+    m_EntityToIndex = UnOrderedMap<EntityID, size_t>(upStream);
 
     m_ComponentBlockSize = std::accumulate(components.begin(), components.end(), size_t(0), 
     [](size_t acc, ComponentID id)
@@ -28,6 +28,12 @@ Archetype::Archetype(const Vector<ComponentID>& components) noexcept
 Archetype::Archetype(const Set<ComponentID>& components) noexcept
     : Archetype{Vector<ComponentID>{components.begin(), components.end()}}
 {
+}
+
+Archetype::~Archetype()
+{
+    m_ToBeRemoved = true;
+    CallInvalidCallees();
 }
 
 const std::byte* Archetype::GetComponentPos(EntityID id) const noexcept
@@ -55,16 +61,21 @@ bool Archetype::GetComponents(const Set<ComponentID>& query, Vector<CompAddress>
     
     const Vector<ComponentID> queryVec{query.begin(), query.end()};
 
+    return GetComponents(queryVec, outAddress);
+}
+
+bool Archetype::GetComponents(const Vector<ComponentID>& query, Vector<CompAddress>& outAddress) noexcept
+{
     // query all the components in the archetype that match with the query
-    for(const auto& [id,idx] : m_EntityToIndex)
+    for(const auto& [_,idx] : m_EntityToIndex)
     {
-        std::byte* src{ GetComponentPos(idx) };
+        std::byte* src{m_ComponentData.data() + (idx * m_ComponentBlockSize)};
 
         for(size_t i = 0; i < m_ComponentIDs.size(); ++i)
         {
             const auto compID{ m_ComponentIDs[i] };
 
-            if(std::find(queryVec.begin(), queryVec.end(), compID) == queryVec.end())
+            if(std::find(query.begin(), query.end(), compID) == query.end())
             {
                 src += ComponentInfo::GetSize(compID);
                 continue;
@@ -72,7 +83,6 @@ bool Archetype::GetComponents(const Set<ComponentID>& query, Vector<CompAddress>
 
             outAddress.emplace_back(src);
         }
-
     }
 
     return true;
@@ -110,6 +120,8 @@ void Archetype::Remove(EntityID id, ComponentStorage &outComponents, PMRResource
         m_ComponentData.erase(
             m_ComponentData.begin() + (findItr->second * m_ComponentBlockSize), // first pos
             m_ComponentData.begin() + ((findItr->second + 1) * m_ComponentBlockSize)); // last pos
+
+        CallInvalidCallees();
     }
 }
 
@@ -121,7 +133,19 @@ void Archetype::Remove(EntityID id) noexcept
         m_ComponentData.erase(
             m_ComponentData.begin() + (findItr->second * m_ComponentBlockSize),
             m_ComponentData.begin() + ((findItr->second + 1) * m_ComponentBlockSize));
+
+        CallInvalidCallees();
     }
+}
+
+void Archetype::SortBlock(ComponentStorage &inComponents) const noexcept
+{
+    std::sort(inComponents.begin(), inComponents.end(),
+    [this](const auto& a, const auto& b) {
+        auto findA = std::find(m_ComponentIDs.begin(), m_ComponentIDs.end(), a.first);
+        auto findB = std::find(m_ComponentIDs.begin(), m_ComponentIDs.end(), b.first);
+        return findA < findB;
+    });
 }
 
 void Archetype::Insert(EntityID id, ComponentStorage &&inComponents) noexcept
@@ -150,4 +174,24 @@ void Archetype::InsertNoSort(EntityID id, ComponentStorage &&inComponents) noexc
         moveOp(inComponents[i].second.get(), dest);
         dest += ComponentInfo::GetSize(compID);
     }
+
+    CallInvalidCallees();
+}
+
+size_t Archetype::RegisterInvalidCallee(InvalidCallback callee) noexcept
+{
+    const size_t id{m_InvalidCallbacks.size()};
+    m_InvalidCallbacks.try_emplace(m_InvalidCallbacks.size(), callee);
+    return id;
+}
+
+void Archetype::RemoveInvalidCallee(size_t id) noexcept
+{
+    m_InvalidCallbacks.erase(id);
+}
+
+void Archetype::CallInvalidCallees() noexcept
+{
+    for(auto& callee : m_InvalidCallbacks)
+        callee.second(*this);
 }

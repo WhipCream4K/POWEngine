@@ -46,7 +46,10 @@ namespace powe
 	};
 
 	template<typename Val>
-	using IndexedMultimap = std::pmr::multimap<Set<ComponentID>, Val, EqualOp>;
+	using ComponentSetMultimap = std::pmr::unordered_multimap<Set<ComponentID>, Val, SetHasher,EqualOp>;
+
+	template<typename Val>
+	using ComponentSetMap = std::pmr::unordered_map<Set<ComponentID>, Val, SetHasher,EqualOp>;
 
 	// Check if a single type satisfies the conditions
 	template <typename T>
@@ -81,7 +84,6 @@ namespace powe
 	// Helper variable template
 	template <typename T>
 	constexpr bool check_conditions_v = check_conditions<T>::value;
-
 
 	// Component concept accepts type and also tuple packs
 	template<typename T>

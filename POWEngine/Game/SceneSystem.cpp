@@ -11,4 +11,3 @@ ECSManager& SceneSystem::GetECSManager() const noexcept
 {
     return m_Scene->GetECSManager();
 }
-

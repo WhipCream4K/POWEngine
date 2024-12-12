@@ -6,42 +6,59 @@ namespace powe
 {
     class ComponentView final
     {
+        using IndexAndSize = std::pair<size_t, size_t>;
+
+        struct ArchetypeViewHandle
+        {
+            Archetype* archetype;
+            size_t index;
+            size_t size;
+        };
+
     public:
-
-        using ArchetypeComponentHandle = UnOrderedMap<WeakPtr<Archetype>, Vector<CompAddress>>;
-
+    
         ComponentView(ECSManager& manager,
                       const Vector<ComponentID>& compIDs);
 
-        ArchetypeComponentHandle& GetComponentsAddresses() { return m_ComponentsAddresses; }
-        const Vector<ComponentID>& GetComponentIDs() const { return m_ComponentIDs; }
+        ~ComponentView();
+
+        const Vector<ComponentID>& GetComponentIDs() const noexcept { return m_ComponentIDs; }
 
         template<typename... Args>
         class Iterator
         {
         public:
 
-            Iterator(ArchetypeComponentHandle::iterator componentView)
-                : m_ArchetypeIterator{componentView}
+            Iterator(ComponentView& cv,size_t archetypeIndex)
+                : m_ComponentView{cv}
+                , m_ArchetypeIndex(archetypeIndex)
+                , m_EntityIndex()
             {
             }
 
             Iterator& operator++()
             {
-                ++m_ArchetypeIterator;
+                // increment the entity index first and check if it is out of range from ArchetypeViews or not
+                // if it is out of range, increment the archetype index and set the entity index to 0
+                ++m_EntityIndex;
+                if(m_EntityIndex >= m_ComponentView.m_ArchetypeViews[m_ArchetypeIndex].size)
+                {
+                    ++m_ArchetypeIndex;
+                    m_EntityIndex = 0;
+                }
                 return *this;
             }
 
             Iterator operator++(int)
             {
                 Iterator temp{ *this };
-                ++m_ArchetypeIterator;
+                ++(*this);
                 return temp;
             }
 
             bool operator==(const Iterator& other) const
             {
-                return m_ArchetypeIterator == other.m_ArchetypeIterator;
+                return m_ArchetypeIndex == other.m_ArchetypeIndex && m_EntityIndex == other.m_EntityIndex;
             }
 
             bool operator!=(const Iterator& other) const
@@ -53,60 +70,57 @@ namespace powe
             {
                 // return std tie of m_Address in an index sequence of size of Args
                 // m_Iterator + index of Args
-                return TieWithIndex(m_ArchetypeIterator, std::make_index_sequence<sizeof...(Args)>{});
+                return TieWithIndex(GetCurrentAddress(), std::make_index_sequence<sizeof...(Args)>{});
             }
 
         private:
 
+            Vector<CompAddress>::iterator GetCurrentAddress() noexcept
+            {
+                return m_ComponentView.m_ComponentsAddresses.begin() + 
+                m_ComponentView.m_ArchetypeViews[m_ArchetypeIndex].index + 
+                m_EntityIndex;
+            }
+
             // Helper function to generate the sequence of indices
             template <std::size_t... Is>
             std::tuple<std::add_lvalue_reference_t<Args>...> TieWithIndex(
-                ArchetypeComponentHandle::iterator archetypeIterator,
+                Vector<CompAddress>::iterator archetypeIterator,
                 std::index_sequence<Is...>)
             {
-                // return std::tie(*static_cast<Args*>(archetypeIterator->second[iteratorIndex + Is])...);
-                return std::tie(*static_cast<Args*>(archetypeIterator->second[Is])...);
+                return std::tie(*static_cast<Args*>(archetypeIterator[Is])...);
             }
 
-            ArchetypeComponentHandle::iterator m_ArchetypeIterator;
+            ComponentView& m_ComponentView;
+            size_t m_ArchetypeIndex{};
+            size_t m_EntityIndex{};
         };
-
-
-        template<typename Visitor>
-        constexpr void Visit(Visitor&& visitor)
-        {
-            using FI = FuncInfo<Visitor>;
-            using TupleArgsTypes = FI::arg_types;
-            for(auto it = begin<TupleArgsTypes>(); it != end<TupleArgsTypes>(); ++it)
-            {
-                std::apply(visitor, *it);
-            }
-        }
 
         bool empty() const noexcept
         { 
-            return m_ComponentsAddresses.empty(); 
+            return m_ComponentsAddresses.empty();
         }
 
         template<typename... Args>
-        Iterator<Args...> begin() noexcept
+        auto View()
         {
-            return Iterator<Args...>(m_ComponentsAddresses.begin());
-        }
+            struct Iterable
+            {
+                ComponentView& cv;
+                auto begin() { return Iterator<Args...>(cv, 0); }
+                auto end() { return Iterator<Args...>(cv, cv.m_ArchetypeViews.size()); }
+            };
 
-        template<typename... Args>
-        Iterator<Args...> end() noexcept
-        {
-            return Iterator<Args...>(m_ComponentsAddresses.end());
+            return Iterable{ *this };
         }
 
 
 
     private:
 
-        void ResetComponentAddresses(Archetype* archetype);
-
         Vector<ComponentID> m_ComponentIDs;
-        ArchetypeComponentHandle m_ComponentsAddresses;
+        Vector<CompAddress> m_ComponentsAddresses;
+        Vector<ArchetypeViewHandle> m_ArchetypeViews;
+        size_t m_InvalidCalleeID{ 0 };
     };
 }

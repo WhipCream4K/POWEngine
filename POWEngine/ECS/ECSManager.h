@@ -29,6 +29,7 @@ namespace powe
 		SharedPtr<Archetype> GetArchetypeFrom(const Set<ComponentID>& components) const noexcept;
 		SharedPtr<Archetype> GetArchetypeFrom(const Vector<ComponentID>& components) const noexcept;
 		void GetArchetypes(const Set<ComponentID>& query,Vector<SharedPtr<Archetype>>& outArchetypes) const noexcept;
+		void GetArchetypes(const Vector<ComponentID>& query,Vector<SharedPtr<Archetype>>& outArchetypes) const noexcept;
 	
 		bool Contains(const Set<ComponentID>& query) const noexcept;
 		bool Contains(const Vector<ComponentID>& query) const noexcept;
@@ -235,9 +236,6 @@ namespace powe
 
 			auto* upStream{ context.GetResource() };
 
-			// const SharedPtr<Archetype> archetype{
-			// 	std::allocate_shared<Archetype>(upStream, components)};
-
 			const SharedPtr<Archetype> archetype{AllocateShared<Archetype>(upStream,components)};
 
 			return archetype;
@@ -250,11 +248,11 @@ namespace powe
 	
 		void InsertArchetype(const SharedPtr<Archetype>& archetype);
 
-		IndexedMultimap<SharedPtr<Archetype>> m_Archetypes;
+		ComponentSetMultimap<SharedPtr<Archetype>> m_Archetypes;
  
 		Vector<std::function<void(ECSManager&)>> m_AwaitActions;
 		UnOrderedMap<EntityID, ComponentStorage> m_AwaitEntitiesCollection;
-		size_t m_MemoryDuringResolve{};
+		size_t m_EstimatedMemDuringResolve{};
 
 		UnOrderedMap<EntityID, SharedPtr<Archetype>> m_EntityToArchetype;
 		std::atomic<EntityID> m_CurrentEntityID{};
