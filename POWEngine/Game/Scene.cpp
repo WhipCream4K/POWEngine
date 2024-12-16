@@ -35,11 +35,17 @@ void Scene::Start()
 
 void Scene::Exit()
 {
+    for(auto &system : m_SequenceSystems)
+    {
+        system->OnExit(*this);
+    }
 }
 
 void Scene::Update(float deltaTime)
 {
     m_ECSManager->ResolveEntities();
+
+    m_ECSManager->Lock();
 
     if (!m_UnsequenceSystems.empty())
     {
@@ -55,7 +61,10 @@ void Scene::Update(float deltaTime)
         }
     }
 
-    m_ECSManager->Lock();
+    for(auto &system : m_SequenceSystems)
+    {
+        system->OnUpdate(*this, deltaTime);
+    }
 
     m_ECSManager->Unlock();
 }

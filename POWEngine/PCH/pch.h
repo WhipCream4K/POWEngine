@@ -27,5 +27,6 @@
 #include "Core/Memory/MemoryManager.h"
 #include "Core/Memory/Allocator.h"
 #include "Logger/Logger.h"
+#include "Utils/Utils.h"
 
 #endif //PCH_H

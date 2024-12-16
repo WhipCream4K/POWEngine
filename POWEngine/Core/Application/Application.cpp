@@ -11,6 +11,7 @@
 #include "Core/Thread/SimpleThreadPool.h"
 #include "Game/Game.h"
 #include "Game/GameEvent.h"
+#include "Renderer/SceneRenderEvent.h"
 
 #include "Platform/common/GLFW/glfwModule.h"
 
@@ -50,6 +51,7 @@ powe::Application::Application(const AppDesc& appDesc)
     m_AppEventSetupLogic = [](powe::AppEventSetup& appEventSetup){
         appEventSetup.Add<glfwEvent>();
         appEventSetup.Add<GameEvent>();
+        appEventSetup.Add<SceneRenderEvent>();
     };
 
     // Assign Thread ID
