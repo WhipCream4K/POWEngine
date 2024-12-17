@@ -1,12 +1,14 @@
 #pragma once
 
 #include "Core/IModule.h"
+#include "Game/Input/InputManager.h"
 
 namespace powe
 {
     class Scene;
     class GameEvent;
     class Window;
+    class InputManager;
     class Game : public IModule
     {
     public:
@@ -31,10 +33,14 @@ namespace powe
         Window* GetBindWindow() const noexcept { return m_BindWindow; }
         SharedPtr<Viewport> GetSceneViewport() const noexcept { return m_SceneViewport; }
 
+        InputManager& GetInputManager() noexcept { return m_InputManager; }
+
     private:
 
         UnOrderedMap<std::string, UniquePtr<Scene>> m_SceneMap;
         SharedPtr<GameEvent> m_GameEvent;
+
+        InputManager m_InputManager;
 
         // TODO: Implement viewport of different scene
         SharedPtr<Viewport> m_SceneViewport;

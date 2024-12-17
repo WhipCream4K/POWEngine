@@ -14,8 +14,8 @@ namespace powe
     public:
 
         glfwInput(InputManager& inputManager);
-
         virtual ~glfwInput();
+
 
     private:
 

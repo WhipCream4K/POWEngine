@@ -67,15 +67,17 @@ void powe::WindowManager::DestroyWindow(std::string_view windowName)
     }));
 }
 
-void powe::WindowManager::RemoveObserver(const SharedPtr<IWindowObserver>& observer) noexcept
-{
-    m_Observers.erase(std::ranges::find(m_Observers, observer));
-}
-
 void powe::WindowManager::NotifyObserverOfResize(uint32_t width, uint32_t height) noexcept
 {
-    for(const auto& observer : m_Observers)
+    for(auto it = m_Observers.begin(); it != m_Observers.end();)
     {
-        observer->OnWindowResized(width, height);
+        auto& weakObserver = *it;
+        if(const auto observer{ weakObserver.lock() }; observer)
+        {
+            observer->OnWindowResized(width, height);
+        }
+        else {
+            it = m_Observers.erase(it);
+        }
     }
 }

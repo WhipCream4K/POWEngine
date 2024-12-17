@@ -6,12 +6,14 @@
 #include "Core/Application/Application.h"
 #include "Core/ModulesManager.h"
 #include "Core/Memory/AllocatorContext.h"
+#include "Game/Input/InputManager.h"
 #include "SceneViewport.h"
 
 using namespace powe;
 
 Game::Game()
     : IModule("Game")
+    , m_InputManager(*this)
 {
 }
 
@@ -28,6 +30,7 @@ void Game::OnCreate(ModulesManager* modulesManager)
 
     // Set default bind window to the main window
     SetBindWindow(app.GetAppWindow());
+
 }
 
 Scene* Game::CreateScene(std::string_view sceneName) noexcept

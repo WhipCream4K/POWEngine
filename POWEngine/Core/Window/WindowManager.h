@@ -25,7 +25,6 @@ namespace powe
         void DestroyWindow(std::string_view windowName);
 
         void AddObserver(const SharedPtr<IWindowObserver>& observer) noexcept { m_Observers.emplace_back(observer); }
-        void RemoveObserver(const SharedPtr<IWindowObserver>& observer) noexcept;
 
         void NotifyObserverOfResize(uint32_t width, uint32_t height) noexcept;
 
@@ -33,6 +32,6 @@ namespace powe
     
         UniquePtr<Window> m_MainWindow;
         Vector<UniquePtr<Window>> m_ChildWindows;
-        Vector<SharedPtr<IWindowObserver>> m_Observers;
+        Vector<WeakPtr<IWindowObserver>> m_Observers;
     };
 }

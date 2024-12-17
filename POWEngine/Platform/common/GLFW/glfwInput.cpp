@@ -4,7 +4,7 @@
 #include "Game/Game.h"
 #include "Game/Scene.h"
 #include "glfwWindow.h"
-
+#include "Game/Input/InputObserver.h"
 
 #include <GLFW/glfw3.h>
 
@@ -22,6 +22,7 @@ glfwInput::glfwInput(InputManager &inputManager)
     : InputSubsystem(inputManager)
 {
     auto bindWindow{inputManager.GetGameModule().GetBindWindow()};
+
     if (auto glfwWindowPtr{dynamic_cast<glfwWindow*>(bindWindow)}; glfwWindowPtr)
     {
         m_WindowHandle = glfwWindowPtr->GetHandle();
@@ -30,17 +31,29 @@ glfwInput::glfwInput(InputManager &inputManager)
         {
             if(window == m_WindowHandle)
             {
-                auto& keyBindinds{m_InputManager->GetKeyBindings()};
-
-                // not sure if it can be call unsequential and parallel then
-                for(const auto& keyBinding : keyBindinds)
+                Input::KeyBinding binding{ key, (uint8_t)mods, static_cast<Input::State>(action) };
+                
+                // not sure if it can be call unsequential and parallel
+                auto oberservers{m_InputManager->GetObservers(binding)};
+                if(oberservers)
                 {
-                    if (keyBinding.key == key && keyBinding.state == action && keyBinding.modifiers == mods)
+                    for(const auto& weakObserver: *oberservers)
                     {
-                        keyBinding.callback(*m_InputManager->GetGameModule().GetActiveScene());
-                        return;
+                        if(const auto& observer{weakObserver.lock()}; observer)
+                        {
+                            observer->Execute(*m_InputManager->GetGameModule().GetActiveScene());
+                        }
                     }
                 }
+
+                // for(const auto& keyBinding : oberservers)
+                // {
+                //     if (keyBinding.key == key && keyBinding.state == action && keyBinding.modifiers == mods)
+                //     {
+                //         keyBinding.callback(*m_InputManager->GetGameModule().GetActiveScene());
+                //         return;
+                //     }
+                // }
 
                 // std::for_each(std::execution::par_unseq, keyBindinds.begin(), keyBindinds.end(), 
                 // [this,key, action,mods](Input::KeyBinding &keyBinding)

@@ -1,10 +1,10 @@
 ﻿#pragma once
 
-#include <functional>
 
 namespace powe
 {
     class Scene;
+    class InputObserver;
 
     struct Input
     {
@@ -20,15 +20,21 @@ namespace powe
             int key;
             uint8_t modifiers;
             State state;
-            std::function<void(Scene&)> callback;
-            bool isValid;
+
+            bool operator==(const KeyBinding& rhs) const noexcept { 
+                return key == rhs.key && modifiers == rhs.modifiers && state == rhs.state; 
+            }
         };
+
+        using KeyBindingObservers = Vector<std::pair<Input::KeyBinding, Vector<WeakPtr<InputObserver>>>>;
     };
     
     class InputSubsystem;
     class Game;
     class InputManager
     {
+
+
     public:
 
         InputManager(Game& gameModule);
@@ -41,22 +47,21 @@ namespace powe
         Game& GetGameModule() const noexcept { return *m_GameModule; }
 
         /// @brief Registers a key binding
+        /// @param observer
         /// @param key The key to bind normally uses GLFW keys value
         /// @param state The state of the key
         /// @param callback The function to call
         /// @return
-        void AddKeyBinding(int key, Input::State state, std::function<void(Scene&)> callback, uint8_t modifiers = 0) noexcept;
-
-
+        void AddKeyBinding(const SharedPtr<InputObserver>& observer,int key, Input::State state, uint8_t modifiers = 0) noexcept;
+        void RemoveObserver(const SharedPtr<InputObserver>& observer) noexcept;
+        const Vector<WeakPtr<InputObserver>>* GetObservers(const Input::KeyBinding& binding) const noexcept;
+        
         void Update() noexcept;
-        const Vector<Input::KeyBinding>& GetKeyBindings() const noexcept { return m_KeyBindings; }
-
-        // TODO: Also do the key binding detach
 
     private:
 
         RefWrap<Game> m_GameModule;
-        Vector<Input::KeyBinding> m_KeyBindings;
+        Input::KeyBindingObservers m_Observers;
         UniquePtr<InputSubsystem> m_InputSubsystem;
     };
 }
