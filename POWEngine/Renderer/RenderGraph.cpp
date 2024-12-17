@@ -4,12 +4,16 @@
 
 void powe::SceneRenderGraph::Execute(RenderContext& ctx)
 {
+    m_Viewport->Bind(ctx);
+
     ResolvePass();
 
     for(auto& pass : m_RenderPasses)
     {
         pass->Execute(ctx, *this);
     }
+
+    m_Viewport->Present(ctx);
 }
 
 void powe::SceneRenderGraph::ResolvePass()

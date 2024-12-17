@@ -7,13 +7,16 @@ namespace powe
     class Viewport;
     class Window;
     class Buffer;
-    // Abstract class to separate the render engine from RHIs
+    class Texture;
+    class Shader;
+
+    // Abstract class to comnbine different RHIs
     class RenderContext
     {
     public:
 
-        virtual void Initialize() = 0;
-        virtual void Shutdown() = 0;
+        RenderContext() = default;
+        virtual ~RenderContext() = default;
     
         virtual void BeginFrame() = 0;
         virtual void EndFrame() = 0;
@@ -21,19 +24,19 @@ namespace powe
         virtual void Clear(const glm::fvec4&) = 0;
         virtual void SetViewport(const Viewport& viewport) = 0;
     
-        virtual Buffer* CreateBuffer(size_t size, const void* data, bool isDynamic = false) = 0;
-        virtual void UpdateBuffer(Buffer* buffer, const void* data, size_t size) = 0;
-        virtual void DeleteBuffer(Buffer* buffer) = 0;
+        // virtual SharedPtr<Buffer> CreateBuffer(size_t size, const void* data, bool isDynamic = false) = 0;
+        // virtual void UpdateBuffer(const SharedPtr<Buffer>& buffer, const void* data, size_t size) = 0;
+        // virtual void DeleteBuffer(const SharedPtr<Buffer>& buffer) = 0;
     
-        virtual Texture* CreateTexture(int width, int height, int channels, const void* data) = 0;
-        virtual void UpdateTexture(Texture* texture, const void* data) = 0;
-        virtual void DeleteTexture(Texture* texture) = 0;
+        // virtual SharedPtr<Texture> CreateTexture(int width, int height, int channels, const void* data) = 0;
+        // virtual void UpdateTexture(const SharedPtr<Texture>& texture, const void* data) = 0;
+        // virtual void DeleteTexture(const SharedPtr<Texture>& texture) = 0;
     
-        virtual Shader* CreateShader(const std::string& vertexShaderSource, const std::string& fragmentShaderSource) = 0;
-        virtual void DeleteShader(Shader* shader) = 0;
+        // virtual SharedPtr<Shader> CreateShader(const std::string& vertexShaderSource, const std::string& fragmentShaderSource) = 0;
+        // virtual void DeleteShader(const SharedPtr<Shader>& shader) = 0;
     
-        virtual void SetVertexBuffer(Buffer* buffer) = 0;
-        virtual void SetIndexBuffer(Buffer* buffer) = 0;
+        virtual void SetVertexBuffer(const SharedPtr<Buffer>& buffer) = 0;
+        virtual void SetIndexBuffer(const SharedPtr<Buffer>& buffer) = 0;
 
         // TODO: Implement
         // virtual void SetShader(Shader* shader) = 0;

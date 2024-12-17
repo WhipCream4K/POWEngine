@@ -45,6 +45,7 @@ void powe::SceneRenderer::Run()
 
             if (m_ThreadStop)
                 break;
+
             
             m_SceneRenderGraph.Execute(*m_RenderContext);
 

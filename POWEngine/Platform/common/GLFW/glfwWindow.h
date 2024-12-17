@@ -6,7 +6,7 @@
 
 namespace powe
 {
-    class glfwWindow : public powe::Window
+    class glfwWindow : public Window
     {
     public:
 

@@ -13,17 +13,8 @@ powe::WindowManager::WindowManager()
     m_ChildWindows = Vector<UniquePtr<Window>>{upStream};
 }
 
-powe::WindowManager::~WindowManager() = default;
-
-void powe::WindowManager::Init()
+powe::WindowManager::~WindowManager()
 {
-    // glfw Window Subsystem
-    // glfwWindow::Init();
-}
-
-void powe::WindowManager::Shutdown() noexcept
-{
-    // triggers subsystem dtor
     m_MainWindow.reset();
     m_ChildWindows.clear();
 }
