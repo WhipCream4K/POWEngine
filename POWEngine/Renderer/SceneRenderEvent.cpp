@@ -27,6 +27,7 @@ void SceneRenderEvent::OnUpdate(float)
 {   
     SceneRenderGraph& renderGraph{m_SceneRenderer->GetSceneRenderGraph()};
     renderGraph.SetDrawScene(m_GameModule->GetActiveScene());
+    renderGraph.SetViewport(m_GameModule->GetSceneViewport().get());
 
     m_SceneRenderer->Draw();
 }

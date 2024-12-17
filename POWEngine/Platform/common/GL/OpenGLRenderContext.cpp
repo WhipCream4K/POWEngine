@@ -2,20 +2,18 @@
 
 #include "OpenGLRenderContext.h"
 #include "Platform/common/GLFW/glfwModule.h"
-#include "Core/Memory/AllocatorContext.h"
 #include "Renderer/Viewport.h"
 
 #include <GLFW/glfw3.h>
 
 using namespace powe;
 
-OpenGLRenderContext::OpenGLRenderContext(uint32_t renderBufferCount)
+OpenGLRenderContext::OpenGLRenderContext()
 {
-
     auto glfwDependency{Application::GetModule<glfwModule>()};
     if (!glfwDependency)
     {
-        powe::Error("GLFW module not found, cannot initialize OpenGL render context");
+        powe::Error("This version of openGL only supports GLFW for now and it cannot find GLFW module");
         throw std::runtime_error("GLFW module not found, cannot initialize OpenGL render context");
         return;
     }
@@ -31,15 +29,11 @@ OpenGLRenderContext::OpenGLRenderContext(uint32_t renderBufferCount)
     
     powe::Info("OpenGL render context initialized");
 
-    // Allocate render buffers
-    AllocatorContext allocContext{};
-    auto* allocator{allocContext.GetResource()};
-    m_RenderBuffers = Vector<GLuint>{allocator};
-    m_RenderBuffers.resize(renderBufferCount, 0);
-    m_Context.GenRenderbuffers(renderBufferCount, m_RenderBuffers.data());
-    m_ActiveRenderBuffer = 0;
+    // !! OpenGL leave the window's framebuffer presentation to the driver
+    // so no render buffers will be generated for drawing !!
 
-    // m_Context.RenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, 800, 600);
+    // Pale Turquoise
+    m_ClearColor = glm::fvec4(0.686f, 0.933f, 0.933f, 1.0f);
 
     // Culling and Depth test
     m_Context.Enable(GL_DEPTH_TEST);
@@ -59,14 +53,23 @@ OpenGLRenderContext::OpenGLRenderContext(uint32_t renderBufferCount)
     m_Context.PrimitiveRestartIndex(0xFFFF);
 }
 
-void OpenGLRenderContext::SetViewport(const Viewport& viewport)
+void OpenGLRenderContext::SetViewport(const Viewport& viewport) noexcept
 {
     m_Context.Viewport(viewport.GetPosition().x, viewport.GetPosition().y
     , viewport.GetSize().x, viewport.GetSize().y);
 }
 
+void OpenGLRenderContext::BeginFrame()
+{
+    m_Context.ClearColor(m_ClearColor.r, m_ClearColor.g, m_ClearColor.b, m_ClearColor.a);
+    m_Context.Clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void OpenGLRenderContext::SetClearColor(const glm::fvec4& color) noexcept
+{
+    m_ClearColor = color;
+}
+
 OpenGLRenderContext::~OpenGLRenderContext()
 {
-    m_Context.DeleteFramebuffers(m_RenderBuffers.size(), m_RenderBuffers.data());
-    m_RenderBuffers.clear();
 }

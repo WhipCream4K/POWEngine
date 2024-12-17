@@ -5,6 +5,7 @@
 #include "Core/Window/Window.h"
 #include "Logger/Logger.h"
 #include "Core/Memory/AllocatorContext.h"
+#include "IWindowObserver.h"
 
 powe::WindowManager::WindowManager()
 {
@@ -21,12 +22,13 @@ powe::WindowManager::~WindowManager()
 
 powe::Window* powe::WindowManager::CreateWindow(std::string_view windowName, uint32_t width, uint32_t height)
 {
-    // Using glfw module
     const AllocatorContext context{};
     auto* upStream{context.GetResource()};
 
     auto window{Window::Create(upStream, windowName, width, height)};
     
+    window->OnCreate(this);
+
     if(!m_MainWindow)
     {
         m_MainWindow = std::move(window);
@@ -63,4 +65,17 @@ void powe::WindowManager::DestroyWindow(std::string_view windowName)
     {
         return window->GetTitle() == windowName;
     }));
+}
+
+void powe::WindowManager::RemoveObserver(const SharedPtr<IWindowObserver>& observer) noexcept
+{
+    m_Observers.erase(std::ranges::find(m_Observers, observer));
+}
+
+void powe::WindowManager::NotifyObserverOfResize(uint32_t width, uint32_t height) noexcept
+{
+    for(const auto& observer : m_Observers)
+    {
+        observer->OnWindowResized(width, height);
+    }
 }

@@ -3,6 +3,8 @@
 
 namespace powe
 {
+    class Viewport;
+    
     // Interface for Window Subsystem
     class Window
     {
@@ -23,16 +25,17 @@ namespace powe
         
         static UniquePtr<Window> Create(PMRResource* allocator,std::string_view windowName, uint32_t width, uint32_t height);
 
-        virtual void SetFullscreen(bool fullscreen, bool borderless) = 0;
-        virtual void SetTitle(std::string_view title)= 0;
-        virtual void Resize(uint32_t width, uint32_t height) = 0;
-        
+        virtual void SetFullscreen(bool fullscreen, bool borderless) noexcept = 0;
+        virtual void SetTitle(std::string_view title) noexcept = 0;
+        virtual void Resize(uint32_t width, uint32_t height) noexcept = 0;
+        virtual void OnCreate(WindowManager* windowManager) noexcept = 0;
         virtual bool IsClosed() const noexcept = 0;
         virtual bool IsFocused() const noexcept = 0;
         virtual uint32_t GetWidth() const noexcept = 0;
         virtual uint32_t GetHeight() const noexcept = 0;
         virtual bool IsFullscreen() const noexcept = 0;
         virtual std::string_view GetTitle() const noexcept = 0;
+        virtual SharedPtr<Viewport> GetViewport() const noexcept = 0;
 
     };
 }

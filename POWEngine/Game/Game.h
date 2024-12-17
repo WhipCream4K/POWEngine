@@ -27,15 +27,17 @@ namespace powe
 
         std::string_view GetSceneName(const Scene* scene) const noexcept;
 
-        void SetBindWindow(Window* window) noexcept { m_BindWindow = window; }
+        void SetBindWindow(Window* window) noexcept;
         Window* GetBindWindow() const noexcept { return m_BindWindow; }
-
-        SharedPtr<PMRResource> GetResource() const noexcept;
+        SharedPtr<Viewport> GetSceneViewport() const noexcept { return m_SceneViewport; }
 
     private:
 
         UnOrderedMap<std::string, UniquePtr<Scene>> m_SceneMap;
         SharedPtr<GameEvent> m_GameEvent;
+
+        // TODO: Implement viewport of different scene
+        SharedPtr<Viewport> m_SceneViewport;
 
         // The window that the scene is bound to
         Window* m_BindWindow;

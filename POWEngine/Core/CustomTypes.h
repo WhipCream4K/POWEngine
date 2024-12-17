@@ -107,7 +107,7 @@ namespace powe
     {
     public:
         
-        explicit RefWrap(T& ref) : m_Ref(ref)
+        constexpr explicit RefWrap(T& ref) : m_Ref(ref)
         {
         }
         

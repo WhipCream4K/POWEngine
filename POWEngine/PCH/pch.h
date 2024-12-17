@@ -26,6 +26,7 @@
 #include "Core/ModulesManager.h"
 #include "Core/Memory/MemoryManager.h"
 #include "Core/Memory/Allocator.h"
+#include "Core/Memory/AllocatorContext.h"
 #include "Logger/Logger.h"
 #include "Utils/Utils.h"
 

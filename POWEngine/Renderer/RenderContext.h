@@ -20,9 +20,8 @@ namespace powe
     
         virtual void BeginFrame() = 0;
         virtual void EndFrame() = 0;
-    
-        virtual void Clear(const glm::fvec4&) = 0;
-        virtual void SetViewport(const Viewport& viewport) = 0;
+        virtual void SetClearColor(const glm::fvec4& color) noexcept = 0;
+        virtual void SetViewport(const Viewport& viewport) noexcept = 0;
     
         // virtual SharedPtr<Buffer> CreateBuffer(size_t size, const void* data, bool isDynamic = false) = 0;
         // virtual void UpdateBuffer(const SharedPtr<Buffer>& buffer, const void* data, size_t size) = 0;

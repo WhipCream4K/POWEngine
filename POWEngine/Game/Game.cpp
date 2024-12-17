@@ -6,6 +6,7 @@
 #include "Core/Application/Application.h"
 #include "Core/ModulesManager.h"
 #include "Core/Memory/AllocatorContext.h"
+#include "SceneViewport.h"
 
 using namespace powe;
 
@@ -20,19 +21,13 @@ void Game::OnCreate(ModulesManager* modulesManager)
 
     m_SceneMap = UnOrderedMap<std::string, UniquePtr<Scene>>{ resource.get() };
 
-    // m_GameEvent = std::allocate_shared<GameEvent>(resource, *this);
     m_GameEvent = AllocateShared<GameEvent>(resource.get());
 
     auto& app{Application::Get()};
     app.RegisterAppEvent(m_GameEvent);
 
     // Set default bind window to the main window
-    m_BindWindow = app.GetAppWindow();
-}
-
-SharedPtr<PMRResource> Game::GetResource() const noexcept
-{
-    return Application::Get().GetModulesManager().GetModuleResource<Game>();
+    SetBindWindow(app.GetAppWindow());
 }
 
 Scene* Game::CreateScene(std::string_view sceneName) noexcept
@@ -85,6 +80,22 @@ void Game::SetActiveScene(Scene* scene) noexcept
 Scene* Game::GetActiveScene() const noexcept
 {
     return m_GameEvent->GetActiveScene();
+}
+
+void Game::SetBindWindow(Window* window) noexcept
+{
+    m_BindWindow = window;
+    auto windowViewport{ window->GetViewport() };
+
+    auto allocator{Application::Get().GetModulesManager().GetModuleResource<Game>() };
+    
+    // default game viewport
+    auto sceneViewport = AllocateShared<SceneViewport>(allocator.get(), 
+    windowViewport->GetPosition(), windowViewport->GetSize());
+
+    sceneViewport->BindWindow(window);
+
+    m_SceneViewport = std::move(sceneViewport);
 }
 
 void Game::OnExit(ModulesManager*)

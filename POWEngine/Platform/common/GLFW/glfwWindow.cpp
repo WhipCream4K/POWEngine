@@ -1,7 +1,9 @@
 ﻿#include "pch.h"
 #include "glfwWindow.h"
 
-#include "Utils/Utils.h"
+#include "glfwWindowViewport.h"
+
+#include "Platform/common/GL/OpenGLModule.h"
 
 powe::glfwWindow::glfwWindow(std::string_view title, int width, int height)
     : m_Title(title)
@@ -12,15 +14,48 @@ powe::glfwWindow::glfwWindow(std::string_view title, int width, int height)
     glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
     glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_NATIVE_CONTEXT_API);
     glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
-    glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+
+    // check if opengl exist
+    auto openGLModule{ Application::GetModule<OpenGLModule>() };
+    if(!openGLModule)
+    {
+        glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);      
+    }
+    else 
+    {
+        glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
+    }
+
     
     m_WindowHandle = glfwCreateWindow( width, height, m_Title.c_str(), glfwGetPrimaryMonitor(), nullptr);
 
     glfwSetWindowUserPointer(m_WindowHandle,this);
+    
+    AllocatorContext context{};
+    auto* upStream{context.GetResource()};
+
+    m_Viewport = AllocateShared<glfwWindowViewport>(
+        upStream, *this, 
+    glm::uvec2{0u,0u}, 
+    glm::uvec2{m_Width, m_Height});
+
+}
+
+void powe::glfwWindow::OnCreate(WindowManager *windowManager) noexcept
+{
+    m_WindowManager = windowManager;
+    
+    glfwSetWindowSizeCallback(m_WindowHandle,[](GLFWwindow* window, int width, int height)
+    {
+        auto* self = static_cast<glfwWindow*>(glfwGetWindowUserPointer(window));
+        self->ResizeCallback(width, height);
+        self->m_WindowManager->NotifyObserverOfResize(width, height);
+    });
+
 }
 
 
-void powe::glfwWindow::SetTitle(std::string_view title)
+void powe::glfwWindow::SetTitle(std::string_view title) noexcept
 {
     m_Title = title;
 
@@ -31,7 +66,13 @@ void powe::glfwWindow::SetTitle(std::string_view title)
 
 }
 
-void powe::glfwWindow::Resize(uint32_t width, uint32_t height) 
+void powe::glfwWindow::ResizeCallback(uint32_t width, uint32_t height) noexcept
+{
+    m_Width = width;
+    m_Height = height;
+}
+
+void powe::glfwWindow::Resize(uint32_t width, uint32_t height) noexcept
 {
     m_Width = width;
     m_Height = height;

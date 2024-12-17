@@ -6,6 +6,7 @@ namespace powe
 {
     class WindowEvent;
     class WindowSubsystem;
+    class IWindowObserver;
     class WindowManager final
     {
     public:
@@ -23,11 +24,15 @@ namespace powe
         Window* GetMainWindow() noexcept { return m_MainWindow.get(); }
         void DestroyWindow(std::string_view windowName);
 
-    private:
+        void AddObserver(const SharedPtr<IWindowObserver>& observer) noexcept { m_Observers.emplace_back(observer); }
+        void RemoveObserver(const SharedPtr<IWindowObserver>& observer) noexcept;
 
-        // SharedPtr<PMRResource> GetResource() const noexcept;
+        void NotifyObserverOfResize(uint32_t width, uint32_t height) noexcept;
+
+    private:
     
         UniquePtr<Window> m_MainWindow;
         Vector<UniquePtr<Window>> m_ChildWindows;
+        Vector<SharedPtr<IWindowObserver>> m_Observers;
     };
 }

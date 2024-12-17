@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "RenderGraph.h"
 #include "RenderPass.h" 
+#include "RenderContext.h"
 
 void powe::SceneRenderGraph::Execute(RenderContext& ctx)
 {
@@ -8,10 +9,14 @@ void powe::SceneRenderGraph::Execute(RenderContext& ctx)
 
     ResolvePass();
 
+    ctx.BeginFrame();
+
     for(auto& pass : m_RenderPasses)
     {
         pass->Execute(ctx, *this);
     }
+
+    ctx.EndFrame();
 
     m_Viewport->Present(ctx);
 }
