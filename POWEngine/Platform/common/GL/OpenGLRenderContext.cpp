@@ -47,7 +47,7 @@ OpenGLRenderContext::OpenGLRenderContext()
     m_Context.BlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     // Set up primitive restart
-    // From Claude 3.5 Sonnet: What is Primitive Restart? Primitive restart is a mechanism that allows you to insert a special index value into your index buffer. 
+    // Primitive restart is a mechanism that allows you to insert a special index value into your index buffer. 
     // When the GPU encounters this special value during rendering, it treats it as a signal to end the current primitive and start a new one, without the need for a new draw call.
     m_Context.Enable(GL_PRIMITIVE_RESTART);
     m_Context.PrimitiveRestartIndex(0xFFFF);

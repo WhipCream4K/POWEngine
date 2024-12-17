@@ -9,8 +9,12 @@ namespace powe
     {
     public:
     
+        OpenGLModule();
+
         virtual void OnCreate(ModulesManager*) override;
         virtual void OnExit(ModulesManager*) override;
+
+        const SharedPtr<OpenGLRenderContext>& GetRenderContext() const noexcept { return m_RenderContext; }
 
     private:
 

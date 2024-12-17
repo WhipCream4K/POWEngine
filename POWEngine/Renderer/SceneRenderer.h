@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-#include <future>
 
 #include "RenderPass.h"
 #include "Viewport.h"
@@ -23,6 +22,7 @@ namespace powe
         ~SceneRenderer() override;
 
         void OnCreate(ModulesManager* manager) override;
+        void OnExit(ModulesManager*) override {}
         void SetRenderContext(RenderContext* context) noexcept { m_RenderContext = context; }
         SceneRenderGraph& GetSceneRenderGraph() { return m_SceneRenderGraph; }
         void Draw();

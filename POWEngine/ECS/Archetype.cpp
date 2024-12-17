@@ -98,7 +98,7 @@ void Archetype::Remove(EntityID id, ComponentStorage &outComponents, PMRResource
 {
     if (auto findItr{m_EntityToIndex.find(id)}; findItr != m_EntityToIndex.end())
     {
-        std::byte* src = GetComponentPos(findItr->second);
+        std::byte* src{m_ComponentData.data() + (findItr->second * m_ComponentBlockSize)};
         
         for(size_t i = 0; i < m_ComponentIDs.size(); ++i)
         {

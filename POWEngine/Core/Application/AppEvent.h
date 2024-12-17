@@ -11,5 +11,6 @@ namespace powe
 
         virtual void OnSetup() = 0;
         virtual void OnUpdate(float) = 0;
+        virtual bool ShouldUpdate() const noexcept { return true; }
     };
 }

@@ -12,6 +12,7 @@
 #include "Game/Game.h"
 #include "Game/GameEvent.h"
 #include "Renderer/SceneRenderEvent.h"
+#include "Renderer/SceneRenderer.h"
 
 #include "Platform/common/GL/OpenGLModule.h"
 #include "Platform/common/GLFW/glfwModule.h"
@@ -50,6 +51,9 @@ powe::Application::Application(const AppDesc& appDesc)
     // Game module
     const auto gameResource{MemoryManager::Get()->NewAllocator("Game")};
     m_AppModules->CreateModule<Game>(gameResource);
+
+    // Scene Rendering module
+    m_AppModules->CreateModule<SceneRenderer>(gameResource);
 
     // Default AppEvent setup
     m_AppEventSetupLogic = [](powe::AppEventSetup& appEventSetup){

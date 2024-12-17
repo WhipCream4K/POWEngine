@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.24)
 
 # dependencies provider
-set(CMAKE_PROJECT_TOP_LEVEL_INCLUDES POWEngine_dependencies_provider.cmake)
+# set(CMAKE_PROJECT_TOP_LEVEL_INCLUDES POWEngine_dependencies_provider.cmake)
 
 # define x86 or x64 architecture
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
@@ -18,7 +18,9 @@ add_library(POWEngine STATIC ${SRCS})
 
 target_compile_features(POWEngine PRIVATE cxx_std_20)
 
-target_include_directories(POWEngine PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/PCH)
+target_include_directories(POWEngine PRIVATE 
+    ${CMAKE_CURRENT_SOURCE_DIR} 
+    ${CMAKE_CURRENT_SOURCE_DIR}/PCH)
 
 # set output directory
 set(OUTPUT ${PROJECT_SOURCE_DIR}/bin/POWEngine/${ARCHITECTURE}/$<IF:$<CONFIG:Debug>,Debug,Release>)

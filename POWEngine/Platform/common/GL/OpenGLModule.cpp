@@ -5,6 +5,11 @@
 
 using namespace powe;
 
+OpenGLModule::OpenGLModule()
+    : IModule("OpenGLModule")
+{
+}
+
 void OpenGLModule::OnCreate(ModulesManager* modulesManager)
 {
     auto appResource{ modulesManager->GetModuleResource<OpenGLModule>() };

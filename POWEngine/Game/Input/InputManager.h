@@ -42,7 +42,7 @@ namespace powe
         InputManager& operator=(const InputManager&) = delete;
         InputManager(InputManager&&) = default;
         InputManager& operator=(InputManager&&) = default;
-        ~InputManager() = default;
+        ~InputManager();
 
         Game& GetGameModule() const noexcept { return *m_GameModule; }
 

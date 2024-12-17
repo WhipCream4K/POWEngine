@@ -17,6 +17,8 @@ InputManager::InputManager(Game& gameModule)
     m_Observers = Vector<std::pair<Input::KeyBinding, Vector<WeakPtr<InputObserver>>>>{upStream};
 }
 
+InputManager::~InputManager() = default;
+
 
 void InputManager::AddKeyBinding(const SharedPtr<InputObserver>& observer,int key, Input::State state, uint8_t modifiers) noexcept
 {

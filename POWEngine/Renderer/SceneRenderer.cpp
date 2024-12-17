@@ -6,7 +6,10 @@
 #include "SceneRenderEvent.h"
 
 
-powe::SceneRenderer::SceneRenderer() : IModule("SceneRenderer"), m_RenderFlag(), m_ThreadStop(false)
+powe::SceneRenderer::SceneRenderer() 
+    : IModule("SceneRenderer")
+    , m_RenderFlag()
+    , m_ThreadStop(false)
 {
     m_RenderThread = std::jthread(&powe::SceneRenderer::Run, this);
 }
