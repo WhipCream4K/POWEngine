@@ -29,7 +29,7 @@ namespace powe
         
     private:
 
-        static std::atomic_uint32_t m_ModulesID;
+        static inline std::atomic_uint32_t m_ModulesID{};
 
         std::string m_Name;
     };

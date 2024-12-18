@@ -8,23 +8,22 @@ target_include_directories(POWEngine PRIVATE ${GLM_DIR})
 # glfw
 set(GLFW_DIR ${PROJECT_SOURCE_DIR}/vendor/glfw)
 
-# find_package(glfw3 HINTS ${GLFW_DIR}/bin QUIET)
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
+
 FetchContent_Declare(
-    glfw3
+    glfw
     SOURCE_DIR ${GLFW_DIR}
     BINARY_DIR ${GLFW_DIR}/build
     FIND_PACKAGE_ARGS HINTS ${GLFW_DIR}/bin QUIET
 )
 
-set(GLFW_BUILD_DOCS OFF)
-set(GLFW_BUILD_TESTS OFF)
-set(GLFW_BUILD_EXAMPLES OFF)
-set(GLFW_INSTALL OFF)
-
-FetchContent_MakeAvailable(glfw3)
+FetchContent_MakeAvailable(glfw)
 
 target_include_directories(POWEngine PRIVATE ${GLFW_DIR}/include)
-target_link_libraries(POWEngine glfw3)
+target_link_libraries(POWEngine INTERFACE glfw)
 
 # glad
 set(GLAD_DIR ${PROJECT_SOURCE_DIR}/vendor/glad)
@@ -38,4 +37,4 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(glad)
 
 target_include_directories(POWEngine PRIVATE ${GLAD_DIR}/include)
-target_link_libraries(POWEngine glad::glad)
+target_link_libraries(POWEngine PRIVATE glad::glad)

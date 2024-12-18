@@ -17,6 +17,8 @@
 #include "Platform/common/GL/OpenGLModule.h"
 #include "Platform/common/GLFW/glfwModule.h"
 
+powe::Application* powe::Application::m_Instance = nullptr;
+
 powe::Application::Application(const AppDesc& appDesc)
     : m_AppDesc(appDesc)
 {

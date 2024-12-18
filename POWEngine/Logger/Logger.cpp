@@ -15,6 +15,8 @@ Logger::Logger()
     m_LogSubsystem = AllocateUnique<ConsoleLogger>(upStream);
 }
 
+Logger::~Logger() = default;
+
 void Logger::OnCreate(ModulesManager*)
 {
 }

@@ -5,6 +5,10 @@
 
 #include "Platform/common/GL/OpenGLModule.h"
 
+#include <GLFW/glfw3.h>
+
+using namespace powe;
+
 powe::glfwWindow::glfwWindow(std::string_view title, int width, int height)
     : m_Title(title)
     , m_Width(width)
@@ -39,6 +43,12 @@ powe::glfwWindow::glfwWindow(std::string_view title, int width, int height)
     glm::uvec2{0u,0u}, 
     glm::uvec2{m_Width, m_Height});
 
+}
+
+powe::glfwWindow::~glfwWindow()
+{
+    glfwDestroyWindow(m_WindowHandle);
+    m_WindowHandle = nullptr;
 }
 
 void powe::glfwWindow::OnCreate(WindowManager *windowManager) noexcept
@@ -88,10 +98,28 @@ bool powe::glfwWindow::IsClosed() const noexcept
     return glfwWindowShouldClose(m_WindowHandle);
 }
 
-powe::glfwWindow::~glfwWindow()
+bool powe::glfwWindow::IsFullscreen() const noexcept
 {
-    glfwDestroyWindow(m_WindowHandle);
-    m_WindowHandle = nullptr;
+    return glfwGetWindowMonitor(m_WindowHandle) != nullptr;
+}
+
+bool glfwWindow::IsFocused() const noexcept
+{
+    return glfwGetWindowAttrib(m_WindowHandle, GLFW_FOCUSED);
+}
+
+void powe::glfwWindow::SetFullscreen(bool fullscreen, [[maybe_unused]] bool borderless) noexcept
+{
+    if(fullscreen)
+    {
+        auto monitor{ glfwGetWindowMonitor(m_WindowHandle) };
+        auto videoMode{ glfwGetVideoMode(monitor) };
+
+        glfwSetWindowMonitor(m_WindowHandle, monitor, 0, 0, videoMode->width, videoMode->height, GLFW_DONT_CARE);
+    }
+    else {
+        glfwSetWindowMonitor(m_WindowHandle, nullptr, 0, 0, m_Width, m_Height, GLFW_DONT_CARE);
+    }
 }
 
 // #endif

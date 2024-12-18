@@ -59,6 +59,16 @@ void OpenGLRenderContext::SetViewport(const Viewport& viewport) noexcept
     , viewport.GetSize().x, viewport.GetSize().y);
 }
 
+void OpenGLRenderContext::SetVertexBuffer(const SharedPtr<Buffer>& )
+{
+
+}
+
+void OpenGLRenderContext::SetIndexBuffer(const SharedPtr<Buffer>& )
+{
+    
+}
+
 void OpenGLRenderContext::BeginFrame()
 {
     m_Context.ClearColor(m_ClearColor.r, m_ClearColor.g, m_ClearColor.b, m_ClearColor.a);

@@ -17,6 +17,8 @@ Game::Game()
 {
 }
 
+Game::~Game() = default;
+
 void Game::OnCreate(ModulesManager* modulesManager)
 {
     const auto resource{ modulesManager->GetModuleResource<Game>() };

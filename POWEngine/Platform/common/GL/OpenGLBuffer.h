@@ -12,8 +12,8 @@ namespace powe
         OpenGLBuffer(GladGLContext* context,size_t size, Type type, Usage usage);
         virtual ~OpenGLBuffer();
 
-        void* Map() noexcept override;
-        void Unmap() noexcept override;
+        void* Map() noexcept override {return nullptr;}
+        void Unmap() noexcept override {}
         void Update(const void* data, size_t size, size_t offset = 0) noexcept override;
 
     private:

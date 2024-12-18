@@ -2,7 +2,8 @@
 
 
 #include "Core/Window/Window.h"
-#include <GLFW/glfw3.h>
+
+struct GLFWwindow;
 
 namespace powe
 {
@@ -14,14 +15,13 @@ namespace powe
         glfwWindow(std::string_view title, int width, int height);
         ~glfwWindow();
 
-        virtual void SetFullscreen(bool fullscreen, bool borderless = false) noexcept override;
         virtual void SetTitle(std::string_view title) noexcept override;
         virtual void Resize(uint32_t width, uint32_t height) noexcept override;
-
+        void SetFullscreen(bool fullscreen, bool borderless) noexcept override;
         virtual bool IsClosed() const noexcept override;
         virtual bool IsFocused() const noexcept override;
-        virtual uint32_t GetWidth() const noexcept override;
-        virtual uint32_t GetHeight() const noexcept override;
+        virtual uint32_t GetWidth() const noexcept override { return m_Width; }
+        virtual uint32_t GetHeight() const noexcept override { return m_Height; }
         virtual bool IsFullscreen() const noexcept override;
         virtual void OnCreate(WindowManager *windowManager) noexcept override;
         virtual std::string_view GetTitle() const noexcept override { return m_Title; }

@@ -11,15 +11,17 @@ namespace powe
     public:
 
         virtual void OnSetup() override {}
-        virtual void OnUpdate(float) override;
+        virtual void OnUpdate(float) override;  
 
     };
+
 
     class glfwModule : public IModule
     {
     public:
 
         glfwModule();
+        ~glfwModule() override = default;
 
         virtual void OnCreate(ModulesManager*) override;
         virtual void OnExit(ModulesManager*) override;

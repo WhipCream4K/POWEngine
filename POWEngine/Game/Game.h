@@ -16,7 +16,7 @@ namespace powe
         using SceneItem = std::pair<std::string, UniquePtr<Scene>>;
 
         Game();
-        ~Game();
+        ~Game() override;
 
         virtual void OnCreate(ModulesManager* modulesManager) override;
         virtual void OnExit(ModulesManager* modulesManager) override;

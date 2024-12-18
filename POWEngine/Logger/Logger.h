@@ -20,7 +20,7 @@ namespace powe
         Logger& operator=(const Logger&) = delete;
         Logger(Logger&&) noexcept = default;
         Logger& operator=(Logger&&) noexcept = default;
-        ~Logger() override = default;
+        ~Logger() override;
 
         void OnCreate(ModulesManager*) override;
         void OnExit(ModulesManager*) override;
@@ -28,8 +28,6 @@ namespace powe
         BaseLogger* GetLogSubsystem() const { return m_LogSubsystem.get(); }
     
     private:
-
-
 
         UniquePtr<BaseLogger> m_LogSubsystem;
 

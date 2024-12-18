@@ -10,12 +10,11 @@ namespace powe
 	{
 	public:
 
-		MemoryManager(); 
+		MemoryManager() = default;
 		MemoryManager(const MemoryManager&) = delete;
 		MemoryManager& operator=(const MemoryManager&) = delete;
 		MemoryManager(MemoryManager&&) = delete;
 		MemoryManager& operator=(MemoryManager&&) = delete;
-
 		virtual ~MemoryManager() = default;
 
 		// Pretty much just register the allocator that will use for creating new allocator 

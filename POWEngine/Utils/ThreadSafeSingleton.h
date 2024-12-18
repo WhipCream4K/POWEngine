@@ -26,13 +26,19 @@ namespace powe
             }
             return m_Instance;
         }
+        
+        virtual ~ThreadSafeSingleton() = default;
          
     protected:
+
         ThreadSafeSingleton() = default;
 
-        static SharedPtr<T> m_Instance;
+        static inline SharedPtr<T> m_Instance{};
 
     private:
-        static std::mutex m_Mutex;
+
+        static inline std::mutex m_Mutex{};
     };    
+
+    
 }
