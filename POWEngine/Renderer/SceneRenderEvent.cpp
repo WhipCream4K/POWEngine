@@ -3,9 +3,7 @@
 #include "RenderGraph.h"
 #include "Game/Game.h"
 #include "SceneRenderer.h"
-
-#include "Platform/common/GL/OpenGLModule.h"
-#include "Platform/common/GL/OpenGLRenderContext.h"
+#include "RenderContextModule.h"
 
 using namespace powe;
 
@@ -25,12 +23,18 @@ void SceneRenderEvent::OnSetup()
 
     m_GameModule = gameModuel.get();
 
-    // just default to OpenGL rendering
-    const auto glModule{ Application::GetModule<OpenGLModule>() };
-    if(glModule)
+
+    // Get the main rendering module
+    auto renderContextModule{ Application::GetModule<RenderContextModule>() };
+    if(renderContextModule)
     {
-        m_SceneRenderer->SetRenderContext(glModule->GetRenderContext().get());  
+        m_SceneRenderer->SetRenderContext(renderContextModule->GetMainRenderContext());
     }
+    else
+    {
+        powe::Error("RenderContextModule not found, cannot setup SceneRenderer");
+    }
+    
 }
 
 void SceneRenderEvent::OnUpdate(float)

@@ -3,7 +3,7 @@
 
 using namespace powe;
 
-SharedPtr<IModule> ModulesManager::GetModule(uint32_t id)
+SharedPtr<IModule> ModulesManager::GetModule(uint32_t id) const noexcept
 {
     const auto it{ m_Modules.find(id) };
     if (it != m_Modules.end())
@@ -14,7 +14,7 @@ SharedPtr<IModule> ModulesManager::GetModule(uint32_t id)
     return nullptr;
 }
 
-SharedPtr<PMRResource> ModulesManager::GetModuleResource(uint32_t id) const noexcept
+PMRResource* ModulesManager::GetModuleResource(uint32_t id) const noexcept
 {
     const auto it{ m_Modules.find(id) };
     if (it != m_Modules.end())
@@ -22,7 +22,7 @@ SharedPtr<PMRResource> ModulesManager::GetModuleResource(uint32_t id) const noex
         auto& [ _, resource ] = it->second;
         return resource;
     }
-    return nullptr;
+    return GetAppResource();
 }
 
 void ModulesManager::Clear()

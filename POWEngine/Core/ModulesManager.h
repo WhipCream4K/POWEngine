@@ -29,10 +29,10 @@ namespace powe
             return nullptr;
         }
 
-        SharedPtr<IModule> GetModule(uint32_t id);
+        SharedPtr<IModule> GetModule(uint32_t id) const noexcept;
 
         template<ModuleConcept T,typename ...Args>
-        SharedPtr<T> CreateModule(const SharedPtr<PMRResource>& memResource = nullptr,Args&&... args)
+        SharedPtr<T> CreateModule(PMRResource* memResource = nullptr,Args&&... args) noexcept
         {
             const uint32_t moduleID{ IModule::GetID<T>() };
             const auto it{ m_Modules.find(moduleID) };
@@ -41,27 +41,24 @@ namespace powe
                 return std::static_pointer_cast<T>(it->second.first);
             }
 
-            SharedPtr<PMRResource> resc{ memResource }; // Copy the resource
             // PMRResource* resc{memResource.get()};
 
-            if(resc == nullptr)
+            if(memResource == nullptr)
             {
-                resc.reset(GetAppResource());
+                memResource = GetAppResource();
             }
 
-            // SharedPtr<IModule> module{ std::allocate_shared<T>(resc, std::forward<Args>(args)...) };
-            SharedPtr<T> module{AllocateShared<T>(resc.get(), std::forward<Args>(args)...)};
-
+            SharedPtr<T> module{AllocateShared<T>(memResource, std::forward<Args>(args)...)};
+            m_Modules.try_emplace(moduleID, std::make_pair(module, memResource));
             module->OnCreate(this);
 
-            m_Modules.try_emplace(moduleID, std::make_pair(module, resc));
             return module;
         }
 
-        SharedPtr<PMRResource> GetModuleResource(uint32_t id) const noexcept;
+        PMRResource* GetModuleResource(uint32_t id) const noexcept;
 
         template<ModuleConcept T>
-        SharedPtr<PMRResource> GetModuleResource() const noexcept
+        PMRResource* GetModuleResource() const noexcept
         { 
             return GetModuleResource(IModule::GetID<T>()); 
         }
@@ -70,7 +67,12 @@ namespace powe
         
     private:
 
-        using ModulePair = std::pair<SharedPtr<IModule>, SharedPtr<PMRResource>>;
+        // The allocator will exist for the lifetime of the application
+        // since removing allocators during runtime is not feasible for run-time environment
+        // so if we are going to store allocators reference it should be a raw pointer
+        // to save memory overhead and ease of use and the only class that manages the allocators
+        // should be the MemoryManager
+        using ModulePair = std::pair<SharedPtr<IModule>, PMRResource*>;
 
         UnOrderedMap<uint32_t,ModulePair> m_Modules;
         uint32_t m_CurrentActiveModules;

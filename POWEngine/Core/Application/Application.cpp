@@ -13,8 +13,8 @@
 #include "Game/GameEvent.h"
 #include "Renderer/SceneRenderEvent.h"
 #include "Renderer/SceneRenderer.h"
+#include "Renderer/RenderContextModule.h"
 
-#include "Platform/common/GL/OpenGLModule.h"
 #include "Platform/common/GLFW/glfwModule.h"
 
 powe::Application* powe::Application::m_Instance = nullptr;
@@ -29,6 +29,8 @@ powe::Application::Application(const AppDesc& appDesc)
     m_AppAllocator = appResource.get();
 
     MemoryManager::Init(appResource);
+
+    MemoryManager::Get()->RegisterAllocator("Application", appResource);
 
     // Init WindowManager
     m_WindowManager = AllocateUnique<WindowManager>(appResource);
@@ -47,12 +49,12 @@ powe::Application::Application(const AppDesc& appDesc)
     // GLFW module
     m_AppModules->CreateModule<glfwModule>();
 
-    // OpenGL module
-    m_AppModules->CreateModule<OpenGLModule>();
-
     // Game module
     const auto gameResource{MemoryManager::Get()->NewAllocator("Game")};
     m_AppModules->CreateModule<Game>(gameResource);
+
+    // Render context module
+    m_AppModules->CreateModule<RenderContextModule>(gameResource); 
 
     // Scene Rendering module
     m_AppModules->CreateModule<SceneRenderer>(gameResource);
@@ -61,6 +63,7 @@ powe::Application::Application(const AppDesc& appDesc)
     m_AppEventSetupLogic = [](powe::AppEventSetup& appEventSetup){
         appEventSetup.Add<glfwEvent>();
         appEventSetup.Add<GameEvent>();
+        appEventSetup.Add<RenderContextEvent>();
         appEventSetup.Add<SceneRenderEvent>();
     };
 

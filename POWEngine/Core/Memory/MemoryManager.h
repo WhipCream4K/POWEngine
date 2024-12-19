@@ -19,19 +19,21 @@ namespace powe
 
 		// Pretty much just register the allocator that will use for creating new allocator 
 		static void Init(const SharedPtr<PMRResource>& memResource);
+		static void Init(PMRResource* memResource);
 
 		// SharedPtr<PMRResource> GetAllocator(std::string_view name) const;
 		PMRResource* GetAllocator(std::string_view name) const noexcept;
-		void RegisterAllocator(std::string_view name, PMRResource* allocator);
-		void RegisterAllocator(std::string_view name, SharedPtr<PMRResource> allocator);
+		SharedPtr<PMRResource> GetSharedAllocator(std::string_view name) const noexcept;
+		void RegisterAllocator(std::string_view name, PMRResource* allocator) noexcept;
+		void RegisterAllocator(std::string_view name, SharedPtr<PMRResource> allocator) noexcept;
 
 		// Provide a default allocator when called
-		SharedPtr<PMRResource> NewAllocator(std::string_view name);
+		PMRResource* NewAllocator(std::string_view name) noexcept;
 	
 	private:
 
 		UnOrderedMap<std::string, SharedPtr<PMRResource>> m_AllocatorMap;
-		SharedPtr<PMRResource> m_Allocator;
+		PMRResource* m_ManagerAllocator;
 	};
 
 }

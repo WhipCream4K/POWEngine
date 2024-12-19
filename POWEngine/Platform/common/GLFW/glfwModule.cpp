@@ -17,7 +17,7 @@ glfwModule::glfwModule()
         glfwGetError(&description);
         if(description)
         {
-            powe::Info(std::string("Failed to initialize GLFW: ") + description);
+            powe::Error(std::string("Failed to initialize GLFW: ") + description);
         }
         throw std::runtime_error("Failed to initialize GLFW");
     }
@@ -27,7 +27,7 @@ void glfwModule::OnCreate(ModulesManager* modulesManager)
 {
     auto appResource{ modulesManager->GetModuleResource<glfwModule>() };
 
-    m_GlfwEvent = AllocateShared<glfwEvent>(appResource.get());
+    m_GlfwEvent = AllocateShared<glfwEvent>(appResource);
         
     Application::Get().RegisterAppEvent(m_GlfwEvent);
 }

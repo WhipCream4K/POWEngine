@@ -24,7 +24,7 @@ powe::SceneRenderer::~SceneRenderer()
 void powe::SceneRenderer::OnCreate(ModulesManager *modulesManager)
 {
     auto resc{modulesManager->GetModuleResource<SceneRenderer>()};
-    m_SceneRenderEvent = AllocateShared<SceneRenderEvent>(resc.get(), *this);
+    m_SceneRenderEvent = AllocateShared<SceneRenderEvent>(resc, *this);
 
     Application::Get().RegisterAppEvent(m_SceneRenderEvent);
 }

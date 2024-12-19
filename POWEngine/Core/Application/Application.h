@@ -49,8 +49,7 @@ namespace powe
 		// App Events
 		Vector<SharedPtr<AppEvent>> m_AppEvents;
 		std::function<void(AppEventSetup&)> m_AppEventSetupLogic;
-
-		// Core components
+		
 		Clock m_Clock;
 		UniquePtr<WindowManager> m_WindowManager;
 		UniquePtr<ModulesManager> m_AppModules;

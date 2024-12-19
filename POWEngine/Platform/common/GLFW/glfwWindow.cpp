@@ -2,8 +2,7 @@
 #include "glfwWindow.h"
 
 #include "glfwWindowViewport.h"
-
-#include "Platform/common/GL/OpenGLModule.h"
+#include "Renderer/RenderContextModule.h"
 
 #include <GLFW/glfw3.h>
 
@@ -20,7 +19,7 @@ powe::glfwWindow::glfwWindow(std::string_view title, int width, int height)
     glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
 
     // check if opengl exist
-    auto openGLModule{ Application::GetModule<OpenGLModule>() };
+    auto openGLModule{ Application::GetModule<RenderContextModule>() };
     if(!openGLModule)
     {
         glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);      

@@ -13,3 +13,4 @@ powe::PMRResource* powe::GetAppResource() noexcept
 {
     return MemoryManager::Get()->GetAllocator("Application");
 }
+

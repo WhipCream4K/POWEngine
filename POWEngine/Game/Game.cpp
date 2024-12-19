@@ -23,9 +23,9 @@ void Game::OnCreate(ModulesManager* modulesManager)
 {
     const auto resource{ modulesManager->GetModuleResource<Game>() };
 
-    m_SceneMap = UnOrderedMap<std::string, UniquePtr<Scene>>{ resource.get() };
+    m_SceneMap = UnOrderedMap<std::string, UniquePtr<Scene>>{ resource };
 
-    m_GameEvent = AllocateShared<GameEvent>(resource.get());
+    m_GameEvent = AllocateShared<GameEvent>(resource);
 
     auto& app{Application::Get()};
     app.RegisterAppEvent(m_GameEvent);
@@ -95,7 +95,7 @@ void Game::SetBindWindow(Window* window) noexcept
     auto allocator{Application::Get().GetModulesManager().GetModuleResource<Game>() };
     
     // default game viewport
-    auto sceneViewport = AllocateShared<SceneViewport>(allocator.get(), 
+    auto sceneViewport = AllocateShared<SceneViewport>(allocator, 
     windowViewport->GetPosition(), windowViewport->GetSize());
 
     sceneViewport->BindWindow(window);
